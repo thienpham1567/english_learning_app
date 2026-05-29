@@ -26,6 +26,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 import {
@@ -159,13 +160,12 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex items-center gap-3 shrink-0 relative z-10">
-              <Link
-                href="/daily-challenge"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
-              >
-                <Flame className="h-4 w-4 fill-current text-fire animate-pulse" />
-                <span>Daily Challenge</span>
-              </Link>
+              <Button asChild size="lg" className="px-5 py-3 rounded-xl">
+                <Link href="/daily-challenge">
+                  <Flame className="h-4 w-4 fill-current text-fire animate-pulse" />
+                  <span>Daily Challenge</span>
+                </Link>
+              </Button>
             </div>
           </Card>
         </motion.div>
@@ -520,7 +520,7 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
         {score.components && (
           <div className="grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-border pt-4">
             {[
-              { k: "Grammar", v: score.components.grammar, color: "bg-purple-500" },
+              { k: "Grammar", v: score.components.grammar, color: "bg-[var(--module-grammar)]" },
               { k: "Listening", v: score.components.listeningAccuracy, color: "bg-info" },
               { k: "Vocabulary", v: score.components.vocabulary, color: "bg-xp" },
               { k: "Strengths", v: score.components.topScores, color: "bg-success" },
@@ -609,20 +609,18 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
       </p>
 
       <div className="flex gap-3 justify-center flex-wrap w-full">
-        <Link
-          href="/toeic/skills?tab=part5"
-          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
-        >
-          <HelpCircle className="h-3.5 w-3.5" />
-          <span>Grammar Quiz</span>
-        </Link>
-        <Link
-          href="/toeic/skills"
-          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-black border-2 border-border bg-surface text-text-primary shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
-        >
-          <Target className="h-3.5 w-3.5" />
-          <span>Practice Listening</span>
-        </Link>
+        <Button asChild className="flex-1 min-w-[130px]">
+          <Link href="/toeic/skills?tab=part5">
+            <HelpCircle className="h-3.5 w-3.5" />
+            <span>Grammar Quiz</span>
+          </Link>
+        </Button>
+        <Button asChild variant="outline" className="flex-1 min-w-[130px]">
+          <Link href="/toeic/skills">
+            <Target className="h-3.5 w-3.5" />
+            <span>Practice Listening</span>
+          </Link>
+        </Button>
       </div>
     </div>
   );

@@ -108,7 +108,7 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
               {metrics.alignment.addedWords.slice(0, 8).map((w) => (
                 <span
                   key={w}
-                  className="bg-purple-500/15 text-purple-600 py-0.5 px-2 inline-block"
+                  className="bg-[var(--module-grammar)]/15 text-[var(--module-grammar)] py-0.5 px-2 inline-block"
                   style={{ margin: "2px 4px 2px 0" }}
                 >
                   {w}

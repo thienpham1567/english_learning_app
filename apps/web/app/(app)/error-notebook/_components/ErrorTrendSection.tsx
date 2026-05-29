@@ -100,7 +100,7 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
           {!trend.confident && (
             <span className="relative group">
               <Info className="h-3 w-3 text-text-muted cursor-help" />
-              <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+              <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
                 More data needed for an accurate assessment
               </span>
             </span>

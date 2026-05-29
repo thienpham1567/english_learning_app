@@ -25,13 +25,9 @@ type PassageDetail = {
   isRead: boolean;
 };
 
-const LEVEL_COLORS: Record<string, string> = {
-  A2: "var(--success)",
-  B1: "var(--info)",
-  B2: "var(--info)",
-  C1: "var(--accent)",
-  C2: "var(--module-grammar)",
-};
+import { CEFR_COLORS } from "@/lib/constants/cefr";
+import { Button } from "@/components/ui/button";
+
 
 export default function GradedPassagePage() {
   const { id } = useParams<{ id: string }>();
@@ -97,13 +93,9 @@ export default function GradedPassagePage() {
     <div className="anim-fade-up h-full overflow-y-auto p-6">
       <div className="w-full max-w-[720px] mx-auto flex flex-col gap-5">
         {/* Back button */}
-        <button
-          type="button"
-          onClick={() => router.push("/reading/graded")}
-          className="text-text-muted text-[13px] self-start rounded-[10px] bg-transparent border-none cursor-pointer flex items-center gap-1.5"
-        >
-          <ArrowLeft size={12} /> Back to List
-        </button>
+          <Button variant="link" onClick={() => router.push("/reading/graded")} className="text-text-muted text-[13px] self-start bg-transparent border-none">
+            <ArrowLeft size={12} /> Back to List
+          </Button>
 
         {/* Article header card */}
         <div className="overflow-hidden rounded-[20px] border border-border">
@@ -111,14 +103,14 @@ export default function GradedPassagePage() {
           <div
             className="py-5 px-6 pb-4"
             style={{
-              background: `linear-gradient(135deg, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}20, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}08)`,
+              background: `linear-gradient(135deg, ${CEFR_COLORS[passage.cefrLevel] || "var(--accent)"}20, ${CEFR_COLORS[passage.cefrLevel] || "var(--accent)"}08)`,
             }}
           >
             <div className="flex items-center gap-2 mb-3">
               <span
                 className="m-0 font-bold text-[11px] rounded-lg border-none py-0.5 px-3"
                 style={{
-                  background: LEVEL_COLORS[passage.cefrLevel],
+                  background: CEFR_COLORS[passage.cefrLevel],
                   color: "var(--text-on-accent)",
                 }}
               >
@@ -165,13 +157,9 @@ export default function GradedPassagePage() {
         {/* Actions */}
         <div className="flex flex-wrap gap-3">
           {!marked ? (
-            <button
-              type="button"
-              onClick={markRead}
-              className="rounded-xl font-semibold h-11 px-7 border-none bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2"
-            >
+            <Button size="xl" onClick={markRead}>
               <CheckCircle size={16} /> Mark as Read
-            </button>
+            </Button>
           ) : (
             <div
               className="rounded-2xl w-full border-none py-5 px-6"

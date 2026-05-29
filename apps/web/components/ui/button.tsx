@@ -20,6 +20,11 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive border-border text-white shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
         link: "text-ink underline underline-offset-4 hover:text-accent cursor-pointer duration-100 transition-all",
+        /* ── New Neo-Brutalist Variants ── */
+        subtle:
+          "bg-accent-light border border-border/40 text-accent-active shadow-none hover:border-accent/40 cursor-pointer duration-100 transition-all",
+        dashed:
+          "bg-transparent border-2 border-dashed border-border text-text-secondary shadow-none hover:border-accent hover:text-accent cursor-pointer duration-100 transition-all",
       },
       size: {
         default:
@@ -27,6 +32,7 @@ const buttonVariants = cva(
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        xl: "h-11 gap-2 px-5 text-[15px] has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
         icon: "size-8",
         "icon-xs":
           "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
@@ -47,10 +53,13 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  accentColor,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    /** Dynamic accent color for module/topic-colored buttons (CSS color value) */
+    accentColor?: string;
   }) {
   const Comp = asChild ? Slot.Root : "button";
 
@@ -60,6 +69,16 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
+      style={
+        accentColor
+          ? ({
+              "--btn-accent": accentColor,
+              background: "var(--btn-accent)",
+              borderColor: "var(--border)",
+              color: "var(--ink)",
+            } as React.CSSProperties)
+          : undefined
+      }
       {...props}
     />
   );

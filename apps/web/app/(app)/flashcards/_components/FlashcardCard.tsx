@@ -7,25 +7,18 @@ import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamil
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import type { DueCard } from "@/lib/flashcard/types";
+import { CEFR_COLORS } from "@/lib/constants/cefr";
 import { Card } from "@/components/ui/card";
 
-const LEVEL_COLORS: Record<string, string> = {
-  A1: "var(--success)",
-  A2: "var(--success)",
-  B1: "var(--accent-active)",
-  B2: "var(--accent-active)",
-  C1: "var(--error)",
-  C2: "var(--error)",
+const CEFR_GRADIENTS: Record<string, string> = {
+  A1: "linear-gradient(135deg, color-mix(in srgb, var(--cefr-a1) 6%, var(--surface)), var(--surface))",
+  A2: "linear-gradient(135deg, color-mix(in srgb, var(--cefr-a2) 8%, var(--surface)), var(--surface))",
+  B1: "linear-gradient(135deg, color-mix(in srgb, var(--cefr-b1) 6%, var(--surface)), var(--surface))",
+  B2: "linear-gradient(135deg, color-mix(in srgb, var(--cefr-b2) 8%, var(--surface)), var(--surface))",
+  C1: "linear-gradient(135deg, color-mix(in srgb, var(--cefr-c1) 6%, var(--surface)), var(--surface))",
+  C2: "linear-gradient(135deg, color-mix(in srgb, var(--cefr-c2) 8%, var(--surface)), var(--surface))",
 };
 
-const CEFR_GRADIENTS: Record<string, string> = {
-  A1: "linear-gradient(135deg, color-mix(in srgb, var(--success) 6%, var(--surface)), var(--surface))",
-  A2: "linear-gradient(135deg, color-mix(in srgb, var(--success) 8%, var(--surface)), var(--surface))",
-  B1: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
-  B2: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
-  C1: "linear-gradient(135deg, color-mix(in srgb, var(--error) 6%, var(--surface)), var(--surface))",
-  C2: "linear-gradient(135deg, color-mix(in srgb, var(--error) 8%, var(--surface)), var(--surface))",
-};
 const DEFAULT_GRADIENT = "linear-gradient(135deg, var(--surface-alt), var(--surface))";
 
 type Props = {
@@ -47,7 +40,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
   };
 
   const firstSense = card.senses[0];
-  const levelColor = LEVEL_COLORS[card.level ?? ""] ?? "var(--text-muted)";
+  const levelColor = CEFR_COLORS[card.level ?? ""] ?? "var(--text-muted)";
 
   return (
     <div className="w-full max-w-[520px] mx-auto flex flex-col items-stretch">

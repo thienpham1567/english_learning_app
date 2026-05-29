@@ -16,14 +16,7 @@ type Props = {
 
 type Status = "idle" | "loading" | "ok" | "error";
 
-const LEVEL_COLORS: Record<string, string> = {
-  A1: "text-success dark:text-success border-success/30 bg-success/5",
-  A2: "text-info dark:text-info border-info/30 bg-info/5",
-  B1: "text-warning dark:text-warning border-warning/30 bg-xp/5",
-  B2: "text-fire dark:text-fire border-fire/30 bg-fire/5",
-  C1: "text-purple-700 dark:text-purple-400 border-purple-500/30 bg-purple-500/5",
-  C2: "text-error dark:text-error border-error/30 bg-error/5",
-};
+import { CEFR_BADGE_CLASSES } from "@/lib/constants/cefr";
 
 function getTypeLabel(data: Vocabulary): string {
   if (data.entryType === "idiom") return "idiom";
@@ -62,7 +55,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
     };
   }, [query]);
 
-  const levelStyle = data?.level ? LEVEL_COLORS[data.level] : null;
+  const levelStyle = data?.level ? CEFR_BADGE_CLASSES[data.level] : null;
 
   return (
     <AnimatePresence>
@@ -83,7 +76,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 220 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-[400px] bg-surface border-l-2 border-border shadow-2xl z-50 flex flex-col overflow-hidden"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-[400px] bg-surface border-l-2 border-border shadow-[var(--shadow-xl)] z-50 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4.5 border-b-2 border-border bg-surface shrink-0">

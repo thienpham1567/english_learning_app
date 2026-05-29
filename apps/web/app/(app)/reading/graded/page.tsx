@@ -35,13 +35,8 @@ type PassageItem = {
 
 const LEVELS = ["", "A2", "B1", "B2", "C1", "C2"] as const;
 
-const LEVEL_COLORS: Record<string, string> = {
-  A2: "var(--success)",
-  B1: "var(--info)",
-  B2: "var(--info)",
-  C1: "var(--accent)",
-  C2: "var(--module-grammar)",
-};
+import { CEFR_COLORS } from "@/lib/constants/cefr";
+
 
 const LEVEL_LABELS: Record<string, string> = {
   "": "All Levels",
@@ -138,7 +133,7 @@ export default function GradedReaderPage() {
             <Filter className="text-text-muted text-sm" />
             {LEVELS.map((lv) => {
               const active = level === lv;
-              const color = LEVEL_COLORS[lv] || "var(--accent)";
+              const color = CEFR_COLORS[lv] || "var(--accent)";
               return (
                 <button
                   key={lv}
@@ -184,7 +179,7 @@ export default function GradedReaderPage() {
                     style={{
                       background: p.isRead
                         ? "linear-gradient(135deg, var(--success)20, var(--success)10)"
-                        : `linear-gradient(135deg, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}15, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}08)`,
+                        : `linear-gradient(135deg, ${CEFR_COLORS[p.cefrLevel] || "var(--accent)"}15, ${CEFR_COLORS[p.cefrLevel] || "var(--accent)"}08)`,
                     }}
                   >
                     {p.isRead ? (
@@ -192,7 +187,7 @@ export default function GradedReaderPage() {
                     ) : (
                       <FileText
                         className="text-lg"
-                        style={{ color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)" }}
+                        style={{ color: CEFR_COLORS[p.cefrLevel] || "var(--accent)" }}
                       />
                     )}
                   </div>
@@ -206,8 +201,8 @@ export default function GradedReaderPage() {
                       <span
                         className="m-0 text-[10px] font-bold rounded-md border-none py-px px-1.5"
                         style={{
-                          background: LEVEL_COLORS[p.cefrLevel] || undefined,
-                          color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined,
+                          background: CEFR_COLORS[p.cefrLevel] || undefined,
+                          color: CEFR_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined,
                         }}
                       >
                         {p.cefrLevel}

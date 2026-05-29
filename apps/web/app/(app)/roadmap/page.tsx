@@ -32,6 +32,7 @@ import {
 } from "@/lib/curriculum/data";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const SKILL_ICONS: Record<
   Skill,
@@ -386,15 +387,14 @@ export default function RoadmapPage() {
                                 ))}
 
                                 {/* Go to week detail */}
-                                <Link
-                                  href={`/roadmap/week/${week.weekNumber}`}
-                                  className="no-underline"
-                                >
-                                  <div className="flex items-center justify-center gap-1.5 px-4 py-2 mt-2 rounded-xl border-2 border-dashed border-border text-xs font-black text-text-secondary hover:border-accent hover:text-accent transition-colors cursor-pointer">
+                                <Button asChild variant="dashed" size="sm" className="mt-2 w-full">
+                                  <Link
+                                    href={`/roadmap/week/${week.weekNumber}`}
+                                  >
                                     View Full Week Details
                                     <ChevronRight size={14} />
-                                  </div>
-                                </Link>
+                                  </Link>
+                                </Button>
                               </div>
                             )}
                           </div>
@@ -425,11 +425,11 @@ export default function RoadmapPage() {
                             {phase.checkpoint.description}
                           </div>
                         </div>
-                        <Link href={phase.checkpoint.routePath} className="no-underline shrink-0">
-                          <div className="rounded-xl border-2 border-border px-3.5 py-2 text-xs font-black text-ink cursor-pointer hover:border-accent hover:text-accent transition-colors">
+                        <Button asChild variant="outline" size="sm">
+                          <Link href={phase.checkpoint.routePath}>
                             Take Test
-                          </div>
-                        </Link>
+                          </Link>
+                        </Button>
                       </div>
                     </div>
                   )}

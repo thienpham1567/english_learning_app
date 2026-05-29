@@ -5,6 +5,7 @@ import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 type WordForm = {
   word: string;
@@ -58,22 +59,18 @@ export function WordFamilyExplorer({ word }: { word: string }) {
 
   if (!data && !loading) {
     return (
-      <button
-        type="button"
+      <Button
+        variant="subtle"
+        size="sm"
+        className="mt-2 w-full"
         onClick={(e) => {
           e.stopPropagation();
           fetchWordFamily();
         }}
-        className="mt-2 w-full flex items-center justify-center gap-1.5 cursor-pointer text-xs font-bold py-2.5 px-4 rounded-[10px] transition-all duration-200 hover:opacity-80"
-        style={{
-          border: "1.5px solid color-mix(in srgb, var(--secondary) 20%, var(--border))",
-          background: "color-mix(in srgb, var(--secondary) 4%, var(--surface))",
-          color: "var(--secondary, var(--accent-active))",
-        }}
       >
         <Network size={12} />
         Word Family Explorer
-      </button>
+      </Button>
     );
   }
 

@@ -209,7 +209,7 @@ function ExerciseFlow({
       <Button
         variant="outline"
         onClick={onSkip}
-        className="self-center flex items-center gap-2 text-xs px-6 py-2.5 rounded-xl border-2 border-border shadow-sm hover:translate-y-[-1px] hover:shadow active:translate-y-0 active:shadow-none transition-all cursor-pointer font-extrabold mt-2"
+        className="self-center mt-2"
       >
         <ArrowRight className="h-4 w-4" />
         <span>Skip this question</span>
@@ -410,7 +410,6 @@ export default function DailyChallengePage() {
                   </p>
                   <Button
                     onClick={() => window.location.reload()}
-                    className="px-5 py-2 rounded-xl border-2 border-border bg-accent text-ink shadow-sm hover:translate-y-[-1px] hover:shadow active:translate-y-0 active:shadow-none transition-all font-extrabold cursor-pointer"
                   >
                     <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Try reloading page
                   </Button>

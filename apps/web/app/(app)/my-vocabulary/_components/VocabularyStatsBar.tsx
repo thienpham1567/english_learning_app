@@ -2,18 +2,8 @@
 
 import { Star, Trophy } from "lucide-react";
 import * as m from "motion/react-client";
+import { CEFR_BADGE_CLASSES, CEFR_LEVELS } from "@/lib/constants/cefr";
 import { Card } from "@/components/ui/card";
-
-const LEVEL_COLORS: Record<string, string> = {
-  A1: "text-success dark:text-success border-success/30 bg-success/5",
-  A2: "text-info dark:text-info border-info/30 bg-info/5",
-  B1: "text-warning dark:text-warning border-warning/30 bg-xp/5",
-  B2: "text-fire dark:text-fire border-fire/30 bg-fire/5",
-  C1: "text-purple-700 dark:text-purple-400 border-purple-500/30 bg-purple-500/5",
-  C2: "text-error dark:text-error border-error/30 bg-error/5",
-};
-
-const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 type StatsEntry = { level: string | null; saved: boolean };
 type Props = { entries: StatsEntry[] };
@@ -77,7 +67,7 @@ export function VocabularyStatsBar({ entries }: Props) {
           <div className="flex flex-wrap gap-2">
             {CEFR_LEVELS.filter((l) => levelCounts[l]).map((level) => {
               const colorClass =
-                LEVEL_COLORS[level] ?? "text-text-secondary border-border/10 bg-bg-deep";
+                CEFR_BADGE_CLASSES[level] ?? "text-text-secondary border-border/10 bg-bg-deep";
               return (
                 <span
                   key={level}

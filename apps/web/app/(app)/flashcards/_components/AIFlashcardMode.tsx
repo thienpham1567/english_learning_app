@@ -21,6 +21,7 @@ import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
+import { Button } from "@/components/ui/button";
 
 /* ── Types ── */
 type AICard = {
@@ -62,12 +63,8 @@ const TYPE_OPTIONS: { value: CardType; label: string; icon: React.ReactNode }[] 
 
 const COUNT_OPTIONS = [5, 10, 15, 20];
 
-const LEVEL_COLORS: Record<string, string> = {
-  A2: "var(--success)",
-  B1: "var(--accent-active)",
-  B2: "var(--tertiary)",
-  C1: "var(--error)",
-};
+import { CEFR_COLORS } from "@/lib/constants/cefr";
+
 
 /* ── Main Component ── */
 export function AIFlashcardMode() {
@@ -465,8 +462,8 @@ export function AIFlashcardMode() {
                 <span
                   className="text-[10.5px] font-extrabold rounded-md py-0.5 px-2"
                   style={{
-                    color: LEVEL_COLORS[card.level] ?? "var(--text-muted)",
-                    background: `color-mix(in srgb, ${LEVEL_COLORS[card.level] ?? "var(--text-muted)"} 10%, var(--surface))`,
+                    color: CEFR_COLORS[card.level] ?? "var(--text-muted)",
+                    background: `color-mix(in srgb, ${CEFR_COLORS[card.level] ?? "var(--text-muted)"} 10%, var(--surface))`,
                   }}
                 >
                   {card.level}
@@ -645,23 +642,22 @@ export function AIFlashcardMode() {
           </h4>
           <p className="mb-3 text-[13px] text-text-secondary font-medium">Topic: {topicLabel}</p>
           <div className="flex gap-2 justify-center">
-            <m.button
-              whileTap={{ scale: 0.95 }}
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => {
                 setCurrentIdx(0);
                 setFlipped(false);
               }}
-              className="border-2 border-border bg-surface text-text-secondary cursor-pointer text-[13px] font-bold py-2 px-4.5 rounded-[10px] flex items-center gap-1.5"
             >
               <RefreshCw size={12} /> Review Again
-            </m.button>
-            <m.button
-              whileTap={{ scale: 0.95 }}
+            </Button>
+            <Button
+              size="sm"
               onClick={resetToTopics}
-              className="border-2 border-border cursor-pointer text-[13px] font-extrabold py-2 px-4.5 rounded-[10px] bg-accent text-white shadow-sm"
             >
               New Topic
-            </m.button>
+            </Button>
           </div>
         </m.div>
       )}

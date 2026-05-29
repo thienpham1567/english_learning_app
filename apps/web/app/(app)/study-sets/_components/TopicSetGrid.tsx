@@ -94,11 +94,8 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
 ];
 
-const LEVEL_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  A2: { bg: "color-mix(in srgb, var(--success) 8%, transparent)", text: "var(--success)", border: "color-mix(in srgb, var(--success) 20%, transparent)" },
-  B1: { bg: "var(--accent-light)", text: "var(--accent)", border: "var(--accent-muted)" },
-  B2: { bg: "color-mix(in srgb, var(--module-grammar) 8%, transparent)", text: "var(--xp)", border: "color-mix(in srgb, var(--module-grammar) 20%, transparent)" },
-};
+import { CEFR_COLORS } from "@/lib/constants/cefr";
+
 
 interface Props {
   onSelect: (topic: StudyTopic) => void;
@@ -160,10 +157,11 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
               {cat.topics.map((topic) => {
                 const isDone = completedTopics.has(topic.id);
                 const isHovered = hoveredTopic === topic.id;
-                const levelStyle = LEVEL_COLORS[topic.level] ?? {
-                  bg: "var(--surface-alt)",
-                  text: "var(--text-muted)",
-                  border: "var(--border)",
+                const cefrColor = CEFR_COLORS[topic.level] ?? "var(--text-muted)";
+                const levelStyle = {
+                  bg: `color-mix(in srgb, ${cefrColor} 8%, transparent)`,
+                  text: cefrColor,
+                  border: `color-mix(in srgb, ${cefrColor} 20%, transparent)`,
                 };
 
                 return (

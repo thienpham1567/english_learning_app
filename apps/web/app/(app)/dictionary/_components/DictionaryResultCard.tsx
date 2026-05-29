@@ -44,21 +44,15 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
         ))}
       </div>
       <span className="text-xs text-text-muted">{label}</span>
-      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
         {tooltipEn}
       </span>
     </div>
   );
 }
 
-const LEVEL_STYLES: Record<string, { bg: string; text: string; border: string }> = {
-  A1: { bg: "bg-success-bg", text: "text-success", border: "border-success" },
-  A2: { bg: "bg-success-bg", text: "text-success", border: "border-success" },
-  B1: { bg: "bg-warning-bg", text: "text-warning", border: "border-warning" },
-  B2: { bg: "bg-warning-bg", text: "text-warning", border: "border-warning" },
-  C1: { bg: "bg-error-bg", text: "text-error", border: "border-error" },
-  C2: { bg: "bg-error-bg", text: "text-error", border: "border-error" },
-};
+import { CEFR_BADGE_CLASSES } from "@/lib/constants/cefr";
+
 
 // Maps the prompt's allowed partOfSpeech values to learner-friendly labels.
 const POS_LABELS: Record<string, string> = {
@@ -208,7 +202,7 @@ export function DictionaryResultCard({
                 <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
                   {display}
                   {tooltip && (
-                    <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
+                    <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
                       {tooltip}
                     </span>
                   )}
@@ -225,10 +219,10 @@ export function DictionaryResultCard({
         <div className="flex flex-wrap items-center gap-2">
           {vocabulary.level &&
             (() => {
-              const style = LEVEL_STYLES[vocabulary.level];
+              const badgeClass = CEFR_BADGE_CLASSES[vocabulary.level] ?? "text-text-secondary border-border bg-bg-deep";
               return (
                 <span
-                  className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wide border ${style?.bg ?? "bg-bg-deep"} ${style?.text ?? "text-text-secondary"} ${style?.border ?? "border-border"}`}
+                  className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wide border ${badgeClass}`}
                 >
                   {vocabulary.level}
                 </span>
@@ -244,7 +238,7 @@ export function DictionaryResultCard({
               return (
                 <span className="relative group rounded-full px-3 py-0.5 text-xs border border-border text-text-primary bg-accent-light font-bold cursor-help">
                   {display}
-                  <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+                  <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
                     {tooltip}
                   </span>
                 </span>
