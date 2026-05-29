@@ -8,7 +8,7 @@ export default async function ToeicHubPage() {
 
   return (
     <div className="flex flex-col h-full flex-1 overflow-auto">
-      <div className="p-4 grid gap-4">
+      <div className="p-4 grid gap-4 max-w-6xl mx-auto w-full">
         <HubWidgets />
         <QuickActions />
       </div>

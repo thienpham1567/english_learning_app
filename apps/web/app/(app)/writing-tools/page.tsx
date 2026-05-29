@@ -57,7 +57,7 @@ export default function WritingToolsPage() {
   return (
     <div className="flex flex-col h-full flex-1 overflow-hidden">
       {/* ── Tab Switcher ── */}
-      <div className="shrink-0 px-4 pt-4 pb-2 max-w-4xl w-full mx-auto">
+      <div className="shrink-0 px-4 pt-4 pb-2 max-w-5xl w-full mx-auto">
         <Card
           shadowSize="sm"
           size="sm"
@@ -88,7 +88,7 @@ export default function WritingToolsPage() {
 
       {/* ── Active Tool ── */}
       <div className="flex-1 overflow-auto p-4 pb-12">
-        <div className="max-w-[800px] mx-auto w-full">
+        <div className="max-w-4xl mx-auto w-full">
           {active === "grammar" && <GrammarChecker />}
           {active === "paraphrase" && <Paraphraser />}
           {active === "tts" && <TtsReader />}

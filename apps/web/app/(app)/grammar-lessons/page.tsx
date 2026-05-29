@@ -123,7 +123,7 @@ export default function GrammarLessonsPage() {
         {/* Soft ambient glow */}
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,color-mix(in_srgb,var(--accent)_5%,transparent),transparent_70%)]" />
 
-        <div className="relative mx-auto max-w-[720px] w-full">
+        <div className={`relative mx-auto w-full ${activeTopic ? "max-w-[720px]" : "max-w-6xl"}`}>
           {activeTopic ? (
             <LessonView
               topicId={activeTopic.id}
@@ -137,7 +137,10 @@ export default function GrammarLessonsPage() {
               }}
             />
           ) : (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col lg:grid lg:grid-cols-[340px_1fr] lg:items-start gap-5">
+              {/* ── Left sidebar on desktop ── */}
+              <div className="flex flex-col gap-5 lg:sticky lg:top-0">
+
               {/* ── Hero Stats Dashboard ── */}
               <m.div
                 initial={{ opacity: 0, y: 16 }}
@@ -151,9 +154,9 @@ export default function GrammarLessonsPage() {
                   {/* Top accent gradient bar */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-secondary to-success" />
 
-                  <div className="flex items-center gap-6 flex-wrap">
+                  <div className="flex items-center gap-6 flex-wrap lg:flex-col lg:items-stretch">
                     {/* SVG Circle progress */}
-                    <div className="relative w-[88px] h-[88px] shrink-0">
+                    <div className="relative w-[88px] h-[88px] shrink-0 lg:mx-auto">
                       <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
                         <circle
                           cx="44"
@@ -187,7 +190,7 @@ export default function GrammarLessonsPage() {
                     </div>
 
                     {/* Stats grid */}
-                    <div className="flex-1 min-w-[200px] grid grid-cols-3 gap-3">
+                    <div className="flex-1 min-w-[200px] grid grid-cols-3 lg:grid-cols-1 gap-3">
                       <StatCard
                         icon={<BookOpen size={18} />}
                         color="accent"
@@ -292,6 +295,7 @@ export default function GrammarLessonsPage() {
                   desc="Real exam practice"
                 />
               </m.div>
+              </div>{/* end left sidebar */}
 
               {/* ── Topic Library ── */}
               <m.div

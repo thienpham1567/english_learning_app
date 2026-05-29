@@ -180,7 +180,11 @@ export default function GrammarRoadmapPage() {
 
   return (
     <div className="anim-fade-up h-full overflow-y-auto p-6">
-      <div className="w-full max-w-[900px] mx-auto">
+      <div className="w-full max-w-6xl mx-auto">
+        {/* ── Desktop 2-column layout ── */}
+        <div className="flex flex-col lg:grid lg:grid-cols-[340px_1fr] lg:items-start gap-5">
+        {/* ── Left sidebar: Overall Progress Card ── */}
+        <div className="lg:sticky lg:top-0 flex flex-col gap-5">
         {/* ── Overall Progress Card ── */}
         <m.div
           initial={{ opacity: 0, y: 16 }}
@@ -299,8 +303,10 @@ export default function GrammarRoadmapPage() {
             </div>
           </Card>
         </m.div>
+        </div>{/* end left sidebar */}
 
-        {/* ── Phase Accordion ── */}
+        {/* ── Right column: Phases + Tips + Links ── */}
+        <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4">
           {PHASE_CONFIG.map((phase, phaseIdx) => {
             const stats = getPhaseStats(phase.categoryIds);
@@ -522,6 +528,8 @@ export default function GrammarRoadmapPage() {
             className="flex-[1_1_200px]"
           />
         </m.div>
+        </div>{/* end right column */}
+        </div>{/* end 2-col grid */}
       </div>
     </div>
   );

@@ -636,19 +636,23 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                         className="font-bold m-0 flex-1 text-text-primary leading-normal"
                         style={{ fontSize: 14.5 }}
                       >
-                        {ex.en.split(ex.highlight).map((part, j, arr) => (
-                          <span key={j}>
-                            {part}
-                            {j < arr.length - 1 && (
-                              <strong
-                                className="text-accent-active"
-                                style={{ borderBottom: "1.5px solid var(--accent-active)" }}
-                              >
-                                {ex.highlight}
-                              </strong>
-                            )}
-                          </span>
-                        ))}
+                        {(() => {
+                          // Strip <highlight>...</highlight> tags from en text
+                          const cleanEn = ex.en.replace(/<\/?highlight>/gi, "");
+                          return cleanEn.split(ex.highlight).map((part, j, arr) => (
+                            <span key={j}>
+                              {part}
+                              {j < arr.length - 1 && (
+                                <strong
+                                  className="text-accent-active"
+                                  style={{ borderBottom: "1.5px solid var(--accent-active)" }}
+                                >
+                                  {ex.highlight}
+                                </strong>
+                              )}
+                            </span>
+                          ));
+                        })()}
                       </p>
                       <m.button
                         whileHover={{ scale: 1.05 }}

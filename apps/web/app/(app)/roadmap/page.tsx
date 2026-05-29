@@ -66,8 +66,9 @@ export default function RoadmapPage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
-      <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-6">
+      <div className="p-5 pb-16 max-w-6xl mx-auto w-full flex flex-col lg:grid lg:grid-cols-[320px_1fr] lg:items-start gap-6">
         {/* ─── Header ─── */}
+        <div className="flex flex-col gap-6 lg:sticky lg:top-0">
         <Card shadowSize="md" className="relative overflow-hidden">
           <div
             className="absolute top-0 left-0 right-0 h-[3px]"
@@ -146,6 +147,7 @@ export default function RoadmapPage() {
             </Link>
           </Card>
         </m.div>
+        </div>{/* end sidebar */}
 
         {/* ─── Phase Timeline ─── */}
         <div className="flex flex-col gap-4">

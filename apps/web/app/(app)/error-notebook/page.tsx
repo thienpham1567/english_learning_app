@@ -61,11 +61,11 @@ export default function ErrorNotebookPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
       {/* ─── Roadmap Context ─── */}
-      <RoadmapBanner className="relative z-[1] shrink-0 px-5 pt-3 max-w-lg" />
+      <RoadmapBanner className="relative z-[1] shrink-0 px-5 pt-3 max-w-6xl" />
 
       {/* ─── Tab switcher ─── */}
       <div className="relative z-[1] shrink-0 px-5 pt-3 pb-2">
-        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm max-w-lg overflow-x-auto scrollbar-none">
+        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm max-w-5xl overflow-x-auto scrollbar-none">
           {TABS.map((t) => (
             <m.button
               key={t.key}
@@ -92,7 +92,7 @@ export default function ErrorNotebookPage() {
 
       {/* ─── Content ─── */}
       <div className="flex-1 overflow-auto p-5 relative z-[1]">
-        <div className="max-w-[900px] mx-auto w-full">
+        <div className="max-w-6xl mx-auto w-full">
           {tab === "overview" && (
             <OverviewTab
               errors={errors}

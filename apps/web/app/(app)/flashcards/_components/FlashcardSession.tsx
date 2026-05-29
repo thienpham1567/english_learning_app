@@ -56,7 +56,7 @@ export function FlashcardSession() {
           }}
         />
 
-        <div className="relative mx-auto flex w-full max-w-[720px] flex-col min-h-full">
+        <div className="relative mx-auto flex w-full max-w-5xl flex-col min-h-full">
           {/* ── Tab Switcher ── */}
           {!isImmersive && (
             <m.div

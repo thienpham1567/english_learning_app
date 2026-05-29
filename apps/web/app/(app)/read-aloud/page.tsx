@@ -83,7 +83,7 @@ export default function ReadAloudPage() {
 
   return (
     <div className="read-aloud-page-root h-full overflow-y-auto p-4 md:p-6">
-      <div className="max-w-[1080px] mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* ─── Mode Tabs ─── */}
         <div className="read-aloud-mode-tabs flex gap-1.5 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm mb-6 max-w-2xl overflow-x-auto scrollbar-none">
           {MODE_TABS.map((tab) => {
@@ -124,7 +124,7 @@ export default function ReadAloudPage() {
 
         {/* ── Listen Mode ── */}
         {mode === "listen" && (
-          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
+          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
             {/* Left: Input & Samples */}
             <div className="flex flex-col gap-5">
               <TextInputPanel
@@ -170,7 +170,7 @@ export default function ReadAloudPage() {
 
         {/* ── Shadow Mode ── */}
         {mode === "shadow" && (
-          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
+          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
             <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
@@ -180,7 +180,7 @@ export default function ReadAloudPage() {
 
         {/* ── Dialogue Mode ── */}
         {mode === "dialogue" && (
-          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
+          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
             <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />

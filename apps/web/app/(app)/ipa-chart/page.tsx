@@ -143,7 +143,7 @@ export default function IpaChartPage() {
 
       {/* ─── Chart grid ─── */}
       <div className="flex-1 overflow-y-auto z-[1] py-6 px-5 pb-12">
-        <div className="w-full max-w-5xl mx-auto relative">
+        <div className="w-full max-w-7xl mx-auto relative">
           {tab === "consonants" ? (
             <div className="flex flex-col gap-8">
               {Object.entries(CONSONANT_SUBTYPE_LABELS).map(([key, label]) => {

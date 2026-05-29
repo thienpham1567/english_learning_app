@@ -88,7 +88,7 @@ export default function ReadingPage() {
 
       {/* Scrollable Container */}
       <div className="relative h-0 flex-1 overflow-y-auto z-[1] pt-6 px-5 pb-20">
-        <div className="w-[900px] mx-auto flex flex-col gap-5">
+        <div className="max-w-7xl w-full mx-auto flex flex-col gap-5">
           {/* Custom Category Segmented Switch */}
           <div className="flex gap-1.5 bg-[var(--surface)] border-2 border-border rounded-xl p-1 shadow-sm overflow-x-auto whitespace-nowrap">
             {SECTIONS.map((secItem) => {
