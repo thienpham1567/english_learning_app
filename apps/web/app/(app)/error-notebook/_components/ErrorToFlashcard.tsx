@@ -126,7 +126,7 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
                   <button
                     onClick={() => speak(card.front)}
                     disabled={isSpeaking}
-                    className="shrink-0 w-6 h-6 grid place-items-center rounded-md bg-surface-alt border border-border text-accent cursor-pointer text-xs"
+                    className="shrink-0 w-6 h-6 grid place-items-center rounded-md bg-surface-alt border-2 border-border text-accent cursor-pointer text-xs"
                   >
                     <Volume2 size={11} />
                   </button>
@@ -144,7 +144,7 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
               </div>
 
               {/* Example */}
-              <div className="px-3 py-2.5 rounded-lg bg-surface-alt border border-border">
+              <div className="px-3 py-2.5 rounded-lg bg-surface-alt border-2 border-border">
                 <span className="text-[9px] font-extrabold text-accent uppercase tracking-widest">
                   Example
                 </span>
@@ -155,7 +155,7 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
               </div>
 
               {/* Tip */}
-              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-xp/5 border border-warning/15">
+              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-xp/5 border-2 border-warning/15">
                 <Lightbulb size={13} className="text-xp shrink-0 mt-0.5" />
                 <p className="text-[12px] text-text-secondary font-medium m-0 leading-relaxed">
                   {card.tip}

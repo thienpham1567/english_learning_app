@@ -98,7 +98,7 @@ export default function GradedPassagePage() {
           </Button>
 
         {/* Article header card */}
-        <div className="overflow-hidden rounded-[20px] border border-border">
+        <div className="overflow-hidden rounded-[20px] border-2 border-border">
           {/* Gradient banner */}
           <div
             className="py-5 px-6 pb-4"

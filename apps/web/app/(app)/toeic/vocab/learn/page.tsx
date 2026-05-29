@@ -185,7 +185,7 @@ function LearnRunner() {
             </div>
             <div className="text-text-muted mt-1">{current.meaningEn}</div>
             {current.exampleEn && (
-              <div className="mt-3 p-3 bg-surface-alt rounded-lg border border-border/10">
+              <div className="mt-3 p-3 bg-surface-alt rounded-lg border-2 border-border/10">
                 <div className="italic">{current.exampleEn}</div>
                 {current.exampleVi && (
                   <div className="text-text-muted text-[13px] mt-1">{current.exampleVi}</div>

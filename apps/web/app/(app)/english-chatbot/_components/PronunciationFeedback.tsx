@@ -54,7 +54,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   // Loading state
   if (data.status === "loading") {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-chat-surface border-2 border-border text-text-secondary mt-1 animate-pulse">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs bg-chat-surface border-2 border-border text-text-secondary mt-1 animate-pulse">
         <Loader2 className="h-3 w-3 animate-text-accent" />
         <span>Analyzing pronunciation...</span>
       </div>
@@ -64,7 +64,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   // Error state
   if (data.status === "error") {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-error/10 border border-error/30 text-error mt-1">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs bg-error/10 border-2 border-error/30 text-error mt-1">
         <AlertCircle className="h-3 w-3" />
         <span>Could not analyze pronunciation</span>
       </div>
@@ -80,7 +80,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
       {/* Collapsed: Score badge */}
       <button
         onClick={() => setExpanded((e) => !e)}
-        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-98 shadow-sm ${badgeStyle}`}
+        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold border cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-98 shadow-sm ${badgeStyle}`}
       >
         <Volume2 className="h-3.5 w-3.5" />
         <span>

@@ -89,7 +89,7 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
   const IconComponent = CATEGORY_ICONS[trend.category.key] || HelpCircle;
 
   return (
-    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] bg-surface border-2 border-border transition-all duration-150 hover:shadow-sm">
+    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-surface border-2 border-border transition-all duration-150 hover:shadow-sm">
       <span className="shrink-0 w-7 h-7 rounded-lg bg-accent/5 grid place-items-center text-accent">
         <IconComponent className="h-4 w-4" />
       </span>
@@ -111,7 +111,7 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
 
       <div className="flex flex-col items-end gap-1 shrink-0">
         <span
-          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full"
+          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-lg"
           style={{ color: config.color, background: config.bg }}
         >
           {config.icon} {config.label}

@@ -95,7 +95,7 @@ export function VerbFormsSection({ verbForms }: Props) {
           <span className="text-[13px] font-black uppercase tracking-[0.12em] text-text-secondary">
             Verb Forms
           </span>
-          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-accent-light text-accent-active border border-accent/20">
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-accent-light text-accent-active border-2 border-accent/20">
             {verbForms.length} forms
           </span>
         </div>
@@ -109,9 +109,9 @@ export function VerbFormsSection({ verbForms }: Props) {
           {verbForms.map((vf, idx) => {
             const isInfinitive = idx === 0;
             const cardClass = isInfinitive
-              ? "bg-accent-light border border-accent/50 border-l-4 border-l-accent"
+              ? "bg-accent-light border-2 border-accent/50 border-l-4 border-l-accent"
               : vf.isIrregular
-                ? "bg-xp/5 border border-warning/20"
+                ? "bg-xp/5 border-2 border-warning/20"
                 : "bg-surface-alt border-2 border-border";
 
             return (
@@ -168,7 +168,7 @@ export function VerbFormsSection({ verbForms }: Props) {
                 {/* Footer: irregular badge — pushed to bottom */}
                 {vf.isIrregular && (
                   <div className="flex items-center gap-1.5 mt-auto pt-1">
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-warning/10 text-warning border border-warning/20 whitespace-nowrap">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-warning/10 text-warning border-2 border-warning/20 whitespace-nowrap">
                       Irregular
                     </span>
                   </div>

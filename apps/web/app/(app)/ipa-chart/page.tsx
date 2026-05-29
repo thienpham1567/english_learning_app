@@ -78,7 +78,7 @@ export default function IpaChartPage() {
               >
                 <span>{label}</span>
                 <span
-                  className={`text-[10px] rounded-full font-extrabold py-0.5 px-2 ${
+                  className={`text-[10px] rounded-lg font-extrabold py-0.5 px-2 ${
                     isActive ? "bg-black/15 text-text-on-accent" : "bg-bg-deep text-text-muted"
                   }`}
                 >
@@ -229,7 +229,7 @@ function SectionHeader({
         {label}
       </h3>
       <span
-        className="text-[10px] font-extrabold rounded-full py-0.5 px-2.5 border-2"
+        className="text-[10px] font-extrabold rounded-lg py-0.5 px-2.5 border-2"
         style={{
           background: `color-mix(in srgb, ${color} 8%, var(--surface-alt))`,
           color: color,

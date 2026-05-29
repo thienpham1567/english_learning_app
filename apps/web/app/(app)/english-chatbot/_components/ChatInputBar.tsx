@@ -172,7 +172,7 @@ export function ChatInputBar({
             {voice.isSupported && tts.isSupported && (
               <button
                 onClick={onToggleVoiceMode}
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   voiceMode
                     ? "border-accent bg-accent/10 text-accent font-bold"
                     : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
@@ -187,7 +187,7 @@ export function ChatInputBar({
             {voiceMode && (
               <button
                 onClick={onTogglePronEnabled}
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   pronEnabled
                     ? "border-success/50 bg-success/10 text-success font-bold"
                     : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"

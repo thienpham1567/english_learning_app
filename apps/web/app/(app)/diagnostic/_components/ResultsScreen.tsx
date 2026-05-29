@@ -70,10 +70,10 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
             </m.div>
 
             <div className="flex justify-center gap-3 mt-4">
-              <span className="rounded-full text-xs font-extrabold text-accent py-1 px-3.5 border-2 border-accent bg-accent-light shadow-sm">
+              <span className="rounded-lg text-xs font-extrabold text-accent py-1 px-3.5 border-2 border-accent bg-accent-light shadow-sm">
                 Confidence: {Math.round(result.confidence * 100)}%
               </span>
-              <span className="rounded-full text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border-2 border-[var(--xp)] bg-[color-mix(in srgb, var(--warning) 8%, transparent)] shadow-sm">
+              <span className="rounded-lg text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border-2 border-[var(--xp)] bg-[color-mix(in srgb, var(--warning) 8%, transparent)] shadow-sm">
                 +{result.xpAwarded} XP earned
               </span>
             </div>
@@ -109,7 +109,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
                       </span>
                       <div className="flex gap-2 items-center">
                         <span
-                          className="text-[11px] font-extrabold bg-surface-alt rounded-full py-0.5 px-2"
+                          className="text-[11px] font-extrabold bg-surface-alt rounded-lg py-0.5 px-2"
                           style={{
                             color: skillColor,
                             border: `2px solid ${skillColor}`,

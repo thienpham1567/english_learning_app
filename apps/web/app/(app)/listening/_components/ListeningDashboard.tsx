@@ -169,7 +169,7 @@ export function ListeningDashboard({
                 key={item.id}
                 className="flex items-center gap-2.5 rounded-lg text-xs py-2 px-2.5 bg-accent-muted"
               >
-                <span className="text-[9px] font-extrabold text-accent font-mono py-0.5 px-1.5 rounded-sm bg-accent-muted border border-accent/20">
+                <span className="text-[9px] font-extrabold text-accent font-mono py-0.5 px-1.5 rounded-sm bg-accent-muted border-2 border-accent/20">
                   {item.level}
                 </span>
                 <span className="flex-1 text-text-secondary font-medium">

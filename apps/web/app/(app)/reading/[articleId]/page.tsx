@@ -301,7 +301,7 @@ export default function ArticleReaderPage() {
                       setSpeakingIdx(null);
                     }
                   }}
-                  className="w-[140px] py-1 px-2 rounded-lg border border-border bg-surface-alt text-text-primary text-sm font-bold cursor-pointer outline-none"
+                  className="w-[140px] py-1 px-2 rounded-lg border-2 border-border bg-surface-alt text-text-primary text-sm font-bold cursor-pointer outline-none"
                 >
                   <option value="us">🇺🇸 US English</option>
                   <option value="uk">🇬🇧 UK English</option>
@@ -413,7 +413,7 @@ export default function ArticleReaderPage() {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                  className="fixed z-[901] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] bg-surface rounded-xl border border-border overflow-hidden shadow-xl"
+                  className="fixed z-[901] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] bg-surface rounded-xl border-2 border-border overflow-hidden shadow-xl"
                 >
                   {/* Header banner */}
                   <div
@@ -445,7 +445,7 @@ export default function ArticleReaderPage() {
                     {grammarResults[grammarPopup].map((pattern, pi) => (
                       <div
                         key={pi}
-                        className="rounded-lg bg-surface-alt border border-border py-3 px-3.5"
+                        className="rounded-lg bg-surface-alt border-2 border-border py-3 px-3.5"
                         style={{
                           borderLeft: `4.5px solid ${PATTERN_COLORS[pattern.color] ?? "var(--border)"}`,
                         }}

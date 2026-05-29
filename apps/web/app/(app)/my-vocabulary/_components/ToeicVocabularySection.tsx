@@ -202,14 +202,14 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  business: "text-indigo-600 dark:text-indigo-400",
-  office: "text-sky-600 dark:text-sky-400",
-  hr: "text-rose-600 dark:text-rose-400",
+  business: "text-accent-active",
+  office: "text-info",
+  hr: "text-error",
   finance: "text-warning dark:text-warning",
-  travel: "text-teal-600 dark:text-teal-400",
+  travel: "text-success",
   technology: "text-[var(--module-grammar)] dark:text-[var(--module-grammar)]",
-  marketing: "text-pink-600 dark:text-pink-400",
-  manufacturing: "text-stone-600 dark:text-stone-400",
+  marketing: "text-fire",
+  manufacturing: "text-text-muted",
 };
 
 type Props = {

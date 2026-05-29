@@ -322,7 +322,7 @@ export default function GrammarRoadmapPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 + phaseIdx * 0.1 }}
                 className={`bg-surface rounded-xl overflow-hidden ${
-                  isCurrentPhase ? "border-2" : "border border-border"
+                  isCurrentPhase ? "border-2" : "border-2 border-border"
                 }`}
                 style={{
                   borderColor: isCurrentPhase ? phase.color : undefined,
@@ -561,7 +561,7 @@ function CategoryCard({
         {/* Category header */}
         <div className="flex items-center gap-2.5 mb-3">
           <div
-            className="w-8 h-8 grid text-[15px] shrink-0 rounded-[10px] place-items-center"
+            className="w-8 h-8 grid text-[15px] shrink-0 rounded-xl place-items-center"
             style={{
               background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`,
               color: category.color,
@@ -603,7 +603,7 @@ function CategoryCard({
                 <m.div
                   whileHover={{ scale: 1.04, y: -1 }}
                   whileTap={{ scale: 0.97 }}
-                  className="flex items-center gap-[5px] py-1.5 px-3 text-xs font-bold cursor-pointer rounded-[10px] transition-all duration-150"
+                  className="flex items-center gap-[5px] py-1.5 px-3 text-xs font-bold cursor-pointer rounded-xl transition-all duration-150"
                   style={{
                     border: isDone
                       ? "1px solid color-mix(in srgb, var(--success) 30%, transparent)"

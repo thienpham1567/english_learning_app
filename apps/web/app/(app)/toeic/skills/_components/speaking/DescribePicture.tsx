@@ -264,7 +264,7 @@ export function DescribePicture() {
   return (
     <>
       {error && (
-        <div className="mx-3.5 mb-4 rounded-xl border border-error/30 bg-error/10 px-4 py-2.5 text-xs text-error">
+        <div className="mx-3.5 mb-4 rounded-xl border-2 border-error/30 bg-error/10 px-4 py-2.5 text-xs text-error">
           {error}
         </div>
       )}

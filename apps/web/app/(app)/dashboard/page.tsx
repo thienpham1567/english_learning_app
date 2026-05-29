@@ -27,6 +27,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { SectionHeader } from "@/components/ui/section-header";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 import {
@@ -66,9 +67,7 @@ const containerVariants = {
   },
 };
 
-const sectionLabelClass =
-  "flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-widest text-accent mb-4.5 font-display";
-const accentBarClass = "w-[3.5px] h-4 rounded-sm bg-accent shrink-0";
+
 
 // ── Component ────────────────────────────────────────────────────
 export default function DashboardPage() {
@@ -133,8 +132,6 @@ export default function DashboardPage() {
             {/* Subtle grid pattern background */}
             <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
-            {/* Accent decoration blur */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="flex items-start gap-4.5 relative z-10">
               <div className="w-14 h-14 rounded-2xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden group">
@@ -217,16 +214,12 @@ export default function DashboardPage() {
             transition={{ delay: 0.15 }}
           >
             <Card className="rounded-2xl relative overflow-hidden bg-surface">
-              <div className={sectionLabelClass}>
-                <div className={accentBarClass} />
-                <span>Predicted TOEIC Score</span>
-                <div className="flex-1 h-px bg-border ml-2" />
-              </div>
+              <SectionHeader>Predicted TOEIC Score</SectionHeader>
 
               {scoreLoading ? (
                 <div className="space-y-4 animate-pulse py-4">
-                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-3/4" />
-                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-1/2" />
+                  <div className="h-5 bg-bg-deep border-2 border-border/20 rounded-md w-3/4" />
+                  <div className="h-5 bg-bg-deep border-2 border-border/20 rounded-md w-1/2" />
                 </div>
               ) : score?.insufficient ? (
                 <InsufficientDataCard score={score} />
@@ -247,17 +240,13 @@ export default function DashboardPage() {
             transition={{ delay: 0.25 }}
           >
             <Card className="rounded-2xl relative overflow-hidden bg-surface">
-              <div className={sectionLabelClass}>
-                <div className={accentBarClass} />
-                <span>Today's Study Plan</span>
-                <div className="flex-1 h-px bg-border ml-2" />
-              </div>
+              <SectionHeader>Today's Study Plan</SectionHeader>
 
               {planState.status === "loading" ? (
                 <div className="space-y-3.5 animate-pulse py-2">
-                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-4/5" />
-                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-2/3" />
-                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-3/4" />
+                  <div className="h-5 bg-bg-deep border-2 border-border/20 rounded-md w-4/5" />
+                  <div className="h-5 bg-bg-deep border-2 border-border/20 rounded-md w-2/3" />
+                  <div className="h-5 bg-bg-deep border-2 border-border/20 rounded-md w-3/4" />
                 </div>
               ) : planReady ? (
                 <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
@@ -276,11 +265,7 @@ export default function DashboardPage() {
             transition={{ delay: 0.35 }}
           >
             <Card className="rounded-2xl relative overflow-hidden bg-surface">
-              <div className={sectionLabelClass}>
-                <div className={accentBarClass} />
-                <span>Quick Access</span>
-                <div className="flex-1 h-px bg-border ml-2" />
-              </div>
+              <SectionHeader>Quick Access</SectionHeader>
               <QuickActions dash={dash} />
             </Card>
           </motion.div>
@@ -305,11 +290,7 @@ export default function DashboardPage() {
               transition={{ delay: 0.4 }}
             >
               <Card className="rounded-2xl relative overflow-hidden bg-surface">
-                <div className={sectionLabelClass}>
-                  <div className={accentBarClass} />
-                  <span>Weekly Activity</span>
-                  <div className="flex-1 h-px bg-border ml-2" />
-                </div>
+                <SectionHeader>Weekly Activity</SectionHeader>
                 <WeeklyChart data={dash.weeklyActivity} />
               </Card>
             </motion.div>
@@ -333,11 +314,7 @@ export default function DashboardPage() {
               transition={{ delay: 0.55 }}
             >
               <Card className="rounded-2xl relative overflow-hidden bg-surface">
-                <div className={sectionLabelClass}>
-                  <div className={accentBarClass} />
-                  <span>Weekly XP Trend</span>
-                  <div className="flex-1 h-px bg-border ml-2" />
-                </div>
+                <SectionHeader>Weekly XP Trend</SectionHeader>
                 <ScoreTimeline data={score.weeklyXP} />
               </Card>
             </motion.div>
@@ -351,11 +328,7 @@ export default function DashboardPage() {
               transition={{ delay: 0.55 }}
             >
               <Card className="rounded-2xl relative overflow-hidden bg-surface">
-                <div className={sectionLabelClass}>
-                  <div className={accentBarClass} />
-                  <span>Unlocked Badges</span>
-                  <div className="flex-1 h-px bg-border ml-2" />
-                </div>
+                <SectionHeader>Unlocked Badges</SectionHeader>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {dash.badges
                     .filter((b) => b.unlocked)
@@ -456,7 +429,7 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
 
   return (
     <div className="flex items-center gap-6 flex-wrap md:flex-nowrap">
-      <div className="relative flex items-center justify-center w-[130px] h-[130px] mx-auto shrink-0 bg-surface rounded-full p-2 border border-border/10 shadow-sm">
+      <div className="relative flex items-center justify-center w-[130px] h-[130px] mx-auto shrink-0 bg-surface rounded-full p-2 border-2 border-border/10 shadow-sm">
         <svg height={130} width={130} className="transform -rotate-90">
           <defs>
             <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -530,7 +503,7 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
                   <span>{c.k}</span>
                   <span className="font-black text-text-primary">{c.v}%</span>
                 </div>
-                <div className="h-2 w-full rounded-full bg-bg-deep border border-border/60 overflow-hidden">
+                <div className="h-2 w-full rounded-full bg-bg-deep border-2 border-border/60 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${c.v}%` }}
@@ -810,7 +783,7 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
         const h = Math.max(6, (d.count / max) * 76);
         return (
           <div key={d.day} className="flex-1 flex flex-col items-center gap-2 group relative">
-            <div className="absolute bottom-full mb-1 bg-ink text-surface border border-border text-[9px] font-black font-mono px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 shadow-sm">
+            <div className="absolute bottom-full mb-1 bg-ink text-surface border-2 border-border text-[9px] font-black font-mono px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 shadow-sm">
               {d.count} actions
             </div>
 
@@ -826,7 +799,7 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
               style={{ height: `${h}px` }}
               className={`w-full max-w-[28px] rounded-t-lg transition-colors ${
                 d.count > 0
-                  ? "bg-gradient-to-t from-accent to-orange-500 border-2 border-border shadow-sm"
+                  ? "bg-gradient-to-t from-accent to-fire border-2 border-border shadow-sm"
                   : "bg-bg-deep border-2 border-border/10"
               }`}
             />
@@ -948,14 +921,12 @@ function RoadmapProgressCard() {
           }}
         />
 
-        <div className={sectionLabelClass}>
-          <div className={accentBarClass} />
-          <span>Learning Roadmap</span>
-          <span className="text-[9px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-1">
+        <SectionHeader>
+          Learning Roadmap
+          <span className="text-[9px] font-extrabold rounded-lg bg-accent/10 text-accent border-2 border-accent/20 px-2 py-0.5 ml-1">
             Week {currentWeek}/24
           </span>
-          <div className="flex-1 h-px bg-border ml-2" />
-        </div>
+        </SectionHeader>
 
         <div className="flex items-center gap-5">
           {/* Mini progress ring */}
@@ -995,7 +966,7 @@ function RoadmapProgressCard() {
 
             {/* Week progress bar */}
             <div className="flex items-center gap-2 mt-2">
-              <div className="flex-1 h-2 rounded-full bg-bg-deep overflow-hidden border border-border">
+              <div className="flex-1 h-2 rounded-full bg-bg-deep overflow-hidden border-2 border-border">
                 <div
                   className="h-full rounded-full bg-accent transition-all duration-500"
                   style={{ width: `${weekProg.percent}%` }}

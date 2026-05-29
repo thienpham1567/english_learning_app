@@ -152,7 +152,7 @@ export function ScoreSummary({
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="mt-3 items-center gap-1.5 rounded-full text-[13px] font-extrabold"
+          className="mt-3 items-center gap-1.5 rounded-lg text-[13px] font-extrabold"
           style={{
             display: "inline-flex",
             background: "var(--fire)",

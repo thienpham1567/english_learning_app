@@ -441,17 +441,17 @@ export function CompletedState({
                   </p>
                 )}
                 <div className="flex flex-wrap gap-2 mb-2.5">
-                  <span className="text-[10px] text-error bg-error/10 border border-error/20 rounded-lg font-black px-2.5 py-0.5 font-mono">
+                  <span className="text-[10px] text-error bg-error/10 border-2 border-error/20 rounded-lg font-black px-2.5 py-0.5 font-mono">
                     Your answer: {a.answer || "(blank)"}
                   </span>
                   {a.correctAnswer && (
-                    <span className="text-[10px] text-success bg-success-bg border border-success/20 rounded-lg font-black px-2.5 py-0.5 font-mono">
+                    <span className="text-[10px] text-success bg-success-bg border-2 border-success/20 rounded-lg font-black px-2.5 py-0.5 font-mono">
                       Correct answer: {a.correctAnswer}
                     </span>
                   )}
                 </div>
                 {a.explanation && a.explanation !== "Correct!" && (
-                  <div className="m-0 text-xs text-text-secondary leading-relaxed bg-surface-alt p-2.5 rounded-lg border border-border/40 flex items-start gap-1.5">
+                  <div className="m-0 text-xs text-text-secondary leading-relaxed bg-surface-alt p-2.5 rounded-lg border-2 border-border/40 flex items-start gap-1.5">
                     <span className="shrink-0 text-accent font-bold">💡</span>
                     <span>{a.explanation}</span>
                   </div>
@@ -484,7 +484,7 @@ export function CompletedState({
           <div className="text-xs text-text-secondary font-extrabold uppercase tracking-wider font-display">
             Next challenge in
           </div>
-          <span className="font-mono text-base font-black text-accent tracking-wider bg-bg-deep border border-border/20 px-3 py-1 rounded-xl shadow-sm">
+          <span className="font-mono text-base font-black text-accent tracking-wider bg-bg-deep border-2 border-border/20 px-3 py-1 rounded-xl shadow-sm">
             {formatCountdown(countdown)}
           </span>
         </Card>

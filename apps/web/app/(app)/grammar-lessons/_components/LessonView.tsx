@@ -833,7 +833,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               className="flex justify-center"
             >
               <span
-                className="items-center gap-1.5 rounded-full text-sm font-black"
+                className="items-center gap-1.5 rounded-lg text-sm font-black"
                 style={{
                   display: "inline-flex",
                   background: "linear-gradient(135deg, var(--fire), var(--xp))",
@@ -1034,7 +1034,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     whileTap={{ scale: 0.97 }}
                     onClick={handleWrittenAnswer}
                     disabled={!typedAnswer.trim()}
-                    className="border-none rounded-full text-[13px] font-extrabold"
+                    className="border-none rounded-lg text-[13px] font-extrabold"
                     style={{
                       alignSelf: "flex-end",
                       background: typedAnswer.trim() ? "var(--accent)" : "var(--border)",
@@ -1216,7 +1216,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
                 {xpAwarded > 0 && (
                   <div
-                    className="items-center gap-1.5 rounded-full text-accent-active text-base font-black mb-6"
+                    className="items-center gap-1.5 rounded-lg text-accent-active text-base font-black mb-6"
                     style={{
                       display: "inline-flex",
                       padding: "8px 20px",

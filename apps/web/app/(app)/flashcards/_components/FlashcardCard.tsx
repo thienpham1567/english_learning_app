@@ -75,7 +75,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             <div className="flex items-center gap-2 relative z-[2]">
               {card.level && (
                 <span
-                  className="text-[11px] font-extrabold bg-surface rounded-full py-0.5 px-2.5"
+                  className="text-[11px] font-extrabold bg-surface rounded-lg py-0.5 px-2.5"
                   style={{
                     color: levelColor,
                     border: `1px solid ${levelColor}`,
@@ -111,7 +111,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 tts.speak(card.headword);
               }}
               disabled={tts.isLoading || tts.isSpeaking}
-              className="mt-6 inline-flex items-center gap-2 rounded-full text-accent-active text-[13px] font-bold relative z-[2] py-2 px-5 shadow-sm transition-all duration-200"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg text-accent-active text-[13px] font-bold relative z-[2] py-2 px-5 shadow-sm transition-all duration-200"
               style={{
                 border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                 background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
@@ -174,7 +174,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                     {firstSense.collocations.slice(0, 4).map((c, i) => (
                       <span
                         key={i}
-                        className="font-bold text-success rounded-full text-[11.5px] py-0.5 px-2.5"
+                        className="font-bold text-success rounded-lg text-[11.5px] py-0.5 px-2.5"
                         style={{
                           background: "var(--success-bg)",
                           border: "1px solid color-mix(in srgb, var(--success) 20%, transparent)",
@@ -243,7 +243,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                     size="sm"
                     shadowSize="none"
                     bgType="alt"
-                    className="py-2.5 px-3.5 gap-1 border border-border/80"
+                    className="py-2.5 px-3.5 gap-1 border-2 border-border/80"
                   >
                     <div
                       dangerouslySetInnerHTML={{

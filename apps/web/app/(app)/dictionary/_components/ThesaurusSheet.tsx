@@ -95,7 +95,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-full bg-success/5 px-3 py-1 text-[13px] font-bold text-success border border-success/20 cursor-pointer transition-all duration-150 hover:bg-success/15 hover:border-success/40"
+                                className="rounded-lg bg-success/5 px-3 py-1 text-[13px] font-bold text-success border-2 border-success/20 cursor-pointer transition-all duration-150 hover:bg-success/15 hover:border-success/40"
                               >
                                 {word}
                               </button>
@@ -116,7 +116,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-full bg-xp/5 px-3 py-1 text-[13px] font-bold text-warning border border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
+                                className="rounded-lg bg-xp/5 px-3 py-1 text-[13px] font-bold text-warning border border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
                               >
                                 {word}
                               </button>

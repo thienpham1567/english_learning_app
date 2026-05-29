@@ -233,7 +233,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     className={`flex-1 rounded-xl font-extrabold text-sm cursor-pointer font-body py-2.5 transition-all ${
                       isActive
                         ? "border-2 border-border bg-accent text-ink shadow-sm"
-                        : "border border-border/40 bg-surface-alt text-text-secondary hover:bg-surface-hover"
+                        : "border-2 border-border/40 bg-surface-alt text-text-secondary hover:bg-surface-hover"
                     }`}
                   >
                     {n === 2 ? "2 Speakers" : "3 Speakers"}
@@ -257,7 +257,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     className={`flex-1 rounded-xl font-extrabold text-[13px] cursor-pointer font-body py-2.5 transition-all ${
                       isActive
                         ? "border-2 border-border bg-accent text-ink shadow-sm"
-                        : "border border-border/40 bg-surface-alt text-text-secondary hover:bg-surface-hover"
+                        : "border-2 border-border/40 bg-surface-alt text-text-secondary hover:bg-surface-hover"
                     }`}
                   >
                     {len === "short"

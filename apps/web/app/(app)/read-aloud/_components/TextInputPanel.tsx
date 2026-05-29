@@ -88,7 +88,7 @@ export function TextInputPanel({
           />
         </div>
         {wordCount > 0 && (
-          <div className="flex items-center gap-1.5 rounded-xl bg-accent-light border border-accent/20 py-1 px-2.5">
+          <div className="flex items-center gap-1.5 rounded-xl bg-accent-light border-2 border-accent/20 py-1 px-2.5">
             <Timer className="text-xs text-text-secondary" />
             <span className="text-xs text-text-secondary font-bold">
               Estimated duration: ~{estimatedMinutes} min
@@ -124,8 +124,8 @@ function ToolButton({
         active
           ? "border-2 border-border bg-accent text-ink shadow-sm"
           : danger
-            ? "border border-border bg-surface-alt text-error hover:border-error/50"
-            : "border border-border bg-surface-alt text-text-secondary hover:border-border-strong"
+            ? "border-2 border-border bg-surface-alt text-error hover:border-error/50"
+            : "border-2 border-border bg-surface-alt text-text-secondary hover:border-border-strong"
       }`}
     >
       {icon}

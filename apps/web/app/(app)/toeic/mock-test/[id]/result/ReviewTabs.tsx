@@ -52,29 +52,29 @@ export function ReviewTabs({
           return (
             <Card shadowSize="sm" className="p-4" key={q.id}>
               <div className="flex gap-2 items-center mb-2.5 flex-wrap">
-                <span className="bg-info/10 border border-info/20 text-info py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                <span className="bg-info/10 border-2 border-info/20 text-info py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                   Part {q.part}
                 </span>
-                <span className="bg-accent/15 border border-accent/30 text-accent py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                <span className="bg-accent/15 border-2 border-accent/30 text-accent py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                   Question {q.number}
                 </span>
                 {a?.flagged && (
-                  <span className="bg-warning/10 border border-warning/20 text-warning py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-warning/10 border-2 border-warning/20 text-warning py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Bookmarked
                   </span>
                 )}
                 {a?.isCorrect === false && (
-                  <span className="bg-error/10 border border-error/20 text-error py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-error/10 border-2 border-error/20 text-error py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Incorrect
                   </span>
                 )}
                 {a?.isCorrect === true && (
-                  <span className="bg-success/10 border border-success/20 text-success py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-success/10 border-2 border-success/20 text-success py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Correct
                   </span>
                 )}
                 {a?.isCorrect === null && (
-                  <span className="bg-accent/10 border border-accent/25 text-accent py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-accent/10 border-2 border-accent/25 text-accent py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Skipped
                   </span>
                 )}
@@ -110,12 +110,12 @@ export function ReviewTabs({
                       </span>
                       <div className="flex gap-1.5">
                         {isCorrect && (
-                          <span className="bg-success/10 border border-success/25 text-success py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
+                          <span className="bg-success/10 border-2 border-success/25 text-success py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
                             Correct Answer
                           </span>
                         )}
                         {isPick && !isCorrect && (
-                          <span className="bg-error/10 border border-error/25 text-error py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
+                          <span className="bg-error/10 border-2 border-error/25 text-error py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
                             Your Answer
                           </span>
                         )}
@@ -125,7 +125,7 @@ export function ReviewTabs({
                 })}
               </div>
               {q.explanationVi && (
-                <div className="mt-2.5 p-3 bg-surface-alt rounded-lg text-[13px] border border-border text-text-muted leading-relaxed font-medium">
+                <div className="mt-2.5 p-3 bg-surface-alt rounded-lg text-[13px] border-2 border-border text-text-muted leading-relaxed font-medium">
                   <strong className="text-text-primary">Explanation:</strong> {q.explanationVi}
                 </div>
               )}

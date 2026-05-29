@@ -283,7 +283,7 @@ export function AIFlashcardMode() {
                   key={opt.value}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setCardType(opt.value)}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 cursor-pointer text-xs font-bold rounded-[10px] ${
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 cursor-pointer text-xs font-bold rounded-xl ${
                     cardType === opt.value
                       ? "border-2 border-accent bg-accent-light text-ink font-extrabold"
                       : "border-2 border-border bg-surface text-text-secondary"
@@ -306,7 +306,7 @@ export function AIFlashcardMode() {
                   key={c}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setCardCount(c)}
-                  className={`flex-1 cursor-pointer text-[13px] font-extrabold py-2 rounded-[10px] ${
+                  className={`flex-1 cursor-pointer text-[13px] font-extrabold py-2 rounded-xl ${
                     cardCount === c
                       ? "border-2 border-accent bg-accent-light text-ink"
                       : "border-2 border-border bg-surface text-text-secondary"
@@ -321,7 +321,7 @@ export function AIFlashcardMode() {
 
         {/* Error */}
         {error && (
-          <div className="text-destructive text-[13px] font-semibold py-2.5 px-3.5 rounded-[10px] bg-[color-mix(in srgb, var(--error) 6%, transparent)] border-2 border-[color-mix(in srgb, var(--error) 15%, transparent)]">
+          <div className="text-destructive text-[13px] font-semibold py-2.5 px-3.5 rounded-xl bg-[color-mix(in srgb, var(--error) 6%, transparent)] border-2 border-[color-mix(in srgb, var(--error) 15%, transparent)]">
             {error}
           </div>
         )}
@@ -387,7 +387,7 @@ export function AIFlashcardMode() {
         <m.button
           whileTap={{ scale: 0.95 }}
           onClick={resetToTopics}
-          className="flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-border bg-surface text-text-secondary cursor-pointer text-xs font-bold rounded-[10px]"
+          className="flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-border bg-surface text-text-secondary cursor-pointer text-xs font-bold rounded-xl"
         >
           <ChevronLeft size={10} /> Choose another topic
         </m.button>
@@ -502,7 +502,7 @@ export function AIFlashcardMode() {
                   tts.speak(card.front);
                 }}
                 disabled={tts.isLoading || tts.isSpeaking}
-                className="mt-5 inline-flex items-center gap-2 rounded-full text-accent-active text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-sm transition-all duration-200"
+                className="mt-5 inline-flex items-center gap-2 rounded-lg text-accent-active text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-sm transition-all duration-200"
                 style={{
                   border: "2px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                   background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",

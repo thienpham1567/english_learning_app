@@ -36,7 +36,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
 
       {/* Context badge */}
       <div
-        className="items-center gap-1.5 rounded-full bg-surface-alt border-2 border-border mb-4 text-[11px] font-semibold text-text-secondary"
+        className="items-center gap-1.5 rounded-lg bg-surface-alt border-2 border-border mb-4 text-[11px] font-semibold text-text-secondary"
         style={{ display: "inline-flex", padding: "5px 14px" }}
       >
         <MessageSquare className="text-[11px] text-accent" />

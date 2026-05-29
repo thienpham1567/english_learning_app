@@ -117,7 +117,7 @@ export default function ClozeTestPage() {
         <button
           type="button"
           onClick={() => router.push(`/reading/graded/${id}`)}
-          className="text-text-muted text-[13px] self-start rounded-[10px] bg-transparent border-none cursor-pointer flex items-center gap-1.5"
+          className="text-text-muted text-[13px] self-start rounded-xl bg-transparent border-none cursor-pointer flex items-center gap-1.5"
         >
           <ArrowLeft size={12} /> Back to Passage
         </button>
@@ -148,7 +148,7 @@ export default function ClozeTestPage() {
               </h3>
             </div>
             <span
-              className="border-none font-bold text-[13px] ml-auto rounded-[10px] py-1 px-3.5"
+              className="border-none font-bold text-[13px] ml-auto rounded-xl py-1 px-3.5"
               style={{
                 background: "rgba(255,255,255,0.2)",
                 color: "var(--text-on-accent)",
@@ -209,7 +209,7 @@ export default function ClozeTestPage() {
               <button
                 type="button"
                 onClick={handleRetry}
-                className="rounded-[10px] border border-border bg-surface text-text-secondary font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
+                className="rounded-xl border-2 border-border bg-surface text-text-secondary font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
               >
                 <RefreshCw size={14} /> Retry
               </button>
@@ -218,7 +218,7 @@ export default function ClozeTestPage() {
                   type="button"
                   onClick={saveMissedToFlashcards}
                   disabled={savingFlashcards}
-                  className="rounded-[10px] border-none bg-accent text-[var(--text-on-accent)] font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
+                  className="rounded-xl border-none bg-accent text-[var(--text-on-accent)] font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
                 >
                   {savingFlashcards ? (
                     <Loader2 className="animate-spin" size={14} />

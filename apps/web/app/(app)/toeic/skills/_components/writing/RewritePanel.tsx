@@ -116,7 +116,7 @@ function VariantCard({ variant, original }: { variant: RewriteVariant; original:
         <div className="flex items-center gap-2">
           <span style={{ color: meta.color }}>{meta.icon}</span>
           <span
-            className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wider"
+            className="px-2.5 py-0.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider"
             style={{ backgroundColor: meta.color }}
           >
             {meta.label}
@@ -147,7 +147,7 @@ function VariantCard({ variant, original }: { variant: RewriteVariant; original:
           {variant.changes.map((change, i) => (
             <div
               key={i}
-              className="text-xs p-2.5 rounded-xl bg-surface-alt border border-border border-l-4"
+              className="text-xs p-2.5 rounded-xl bg-surface-alt border-2 border-border border-l-4"
               style={{ borderLeftColor: meta.color }}
             >
               <span className="line-through text-text-muted">{change.original}</span>
@@ -272,7 +272,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
 
       {/* Error */}
       {error && (
-        <div className="p-3 rounded-xl bg-error/10 border border-error/30 text-xs text-error">
+        <div className="p-3 rounded-xl bg-error/10 border-2 border-error/30 text-xs text-error">
           {error}
         </div>
       )}

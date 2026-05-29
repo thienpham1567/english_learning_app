@@ -133,7 +133,7 @@ export default function RoadmapPage() {
             <div className="flex items-center gap-2.5 mb-2">
               <Zap className="text-accent" size={18} />
               <span className="text-sm font-black text-ink font-display">Today&apos;s Focus</span>
-              <span className="text-[10px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-auto">
+              <span className="text-[10px] font-extrabold rounded-lg bg-accent/10 text-accent border-2 border-accent/20 px-2 py-0.5 ml-auto">
                 Week {currentWeek}
               </span>
             </div>
@@ -198,7 +198,7 @@ export default function RoadmapPage() {
                           {phase.title}
                         </span>
                         {isCurrent && (
-                          <span className="text-[9px] font-extrabold rounded-full bg-accent text-ink px-2 py-0.5 shadow-sm animate-pulse">
+                          <span className="text-[9px] font-extrabold rounded-lg bg-accent text-ink px-2 py-0.5 shadow-sm animate-pulse">
                             CURRENT
                           </span>
                         )}
@@ -272,7 +272,7 @@ export default function RoadmapPage() {
                                     {week.focusTopic}
                                   </span>
                                   {isCurrentWeek && (
-                                    <span className="text-[8px] font-black rounded-full bg-accent text-ink px-1.5 py-px shrink-0">
+                                    <span className="text-[8px] font-black rounded-lg bg-accent text-ink px-1.5 py-px shrink-0">
                                       📍
                                     </span>
                                   )}

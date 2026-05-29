@@ -195,7 +195,7 @@ export function ToeicVocabTab() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <span
-                className="w-6 h-6 rounded-lg flex items-center justify-center border border-border/10"
+                className="w-6 h-6 rounded-lg flex items-center justify-center border-2 border-border/10"
                 style={{ color: meta.color }}
               >
                 <meta.icon size={18} />
@@ -292,7 +292,7 @@ export function ToeicVocabTab() {
                         {/* IPA + Audio */}
                         <div className="flex items-center gap-2 mt-1">
                           {w.ipa && (
-                            <span className="rounded-lg bg-bg-deep border border-border/20 font-mono text-[11px] font-extrabold text-ink px-2.5 py-0.5">
+                            <span className="rounded-lg bg-bg-deep border-2 border-border/20 font-mono text-[11px] font-extrabold text-ink px-2.5 py-0.5">
                               /{w.ipa}/
                             </span>
                           )}
@@ -435,7 +435,7 @@ export function ToeicVocabTab() {
                     </div>
                   </div>
                 </div>
-                <div className="w-full h-2 rounded-full bg-bg-deep border border-border overflow-hidden relative">
+                <div className="w-full h-2 rounded-full bg-bg-deep border-2 border-border overflow-hidden relative">
                   <div
                     style={{ width: `${pct}%` }}
                     className={`h-full rounded-full transition-all duration-500 ${

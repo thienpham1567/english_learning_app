@@ -93,7 +93,7 @@ export function HistoryPanel({
                       className="flex items-center gap-3 rounded-lg border-2 border-border bg-surface-alt cursor-pointer py-3 px-3.5 transition-all duration-150"
                     >
                       {/* Voice flag */}
-                      <div className="w-9 h-9 bg-surface border-2 border-border grid place-items-center text-lg shrink-0 rounded-[10px]">
+                      <div className="w-9 h-9 bg-surface border-2 border-border grid place-items-center text-lg shrink-0 rounded-xl">
                         {voice?.flag ?? "🗣️"}
                       </div>
 
@@ -111,7 +111,7 @@ export function HistoryPanel({
                             {timeAgo(entry.createdAt)}
                           </span>
                           {cached && (
-                            <span className="font-extrabold rounded-md text-success text-[9.5px] py-px px-1.5 bg-[color-mix(in srgb, var(--success) 10%, transparent)] border border-[color-mix(in srgb, var(--success) 20%, transparent)]">
+                            <span className="font-extrabold rounded-md text-success text-[9.5px] py-px px-1.5 bg-[color-mix(in srgb, var(--success) 10%, transparent)] border-2 border-[color-mix(in srgb, var(--success) 20%, transparent)]">
                               ⚡ Cached
                             </span>
                           )}
@@ -127,7 +127,7 @@ export function HistoryPanel({
                           onDelete(entry.id);
                           toast.success("Deleted history entry");
                         }}
-                        className="grid place-items-center w-7 h-7 rounded-lg bg-transparent text-destructive text-xs cursor-pointer shrink-0 border border-[color-mix(in srgb, var(--error) 15%, transparent)] opacity-50 hover:opacity-100 hover:bg-[color-mix(in srgb, var(--error) 8%, transparent)] transition-all duration-150"
+                        className="grid place-items-center w-7 h-7 rounded-lg bg-transparent text-destructive text-xs cursor-pointer shrink-0 border-2 border-[color-mix(in srgb, var(--error) 15%, transparent)] opacity-50 hover:opacity-100 hover:bg-[color-mix(in srgb, var(--error) 8%, transparent)] transition-all duration-150"
                       >
                         <Trash2 />
                       </m.button>

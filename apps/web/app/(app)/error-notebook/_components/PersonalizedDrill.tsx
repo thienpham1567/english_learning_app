@@ -137,7 +137,7 @@ export function PersonalizedDrill() {
             <button
               type="button"
               onClick={generateDrill}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg border-2 border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
             >
               <RefreshCw className="h-3.5 w-3.5" /> Generate New Drill
             </button>
@@ -170,7 +170,7 @@ export function PersonalizedDrill() {
               Question {currentIndex + 1}/{drill.exercises.length}
             </span>
           </div>
-          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-accent-light text-accent-hover border border-accent/15">
+          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-accent-light text-accent-hover border-2 border-accent/15">
             {exercise.targetWeakness}
           </span>
         </div>
@@ -261,7 +261,7 @@ export function PersonalizedDrill() {
             <m.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-3.5 px-3.5 py-2.5 rounded-[10px] bg-accent/5 border border-accent/12 flex gap-2 items-start"
+              className="mt-3.5 px-3.5 py-2.5 rounded-xl bg-accent/5 border-2 border-accent/12 flex gap-2 items-start"
             >
               <Lightbulb className="h-3.5 w-3.5 text-accent mt-0.5 shrink-0" />
               <p className="text-xs leading-relaxed text-text-secondary m-0">{exercise.tip}</p>
@@ -274,7 +274,7 @@ export function PersonalizedDrill() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg border-none bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
               >
                 {currentIndex < drill.exercises.length - 1 ? "Next Question →" : "See Results"}
               </button>

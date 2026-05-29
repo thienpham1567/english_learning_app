@@ -78,7 +78,7 @@ export function QuestionCard({
           style={{ marginBottom: 14 }}
         >
           <span
-            className="items-center gap-1.5 rounded-full font-black"
+            className="items-center gap-1.5 rounded-lg font-black"
             style={{
               display: "inline-flex",
               background: "var(--fire)",

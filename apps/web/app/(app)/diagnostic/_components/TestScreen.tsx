@@ -71,7 +71,7 @@ export function TestScreen({
             </span>
             <div className="flex gap-1.5 items-center">
               <span
-                className="text-[10px] font-extrabold bg-surface rounded-full py-0.5 px-2"
+                className="text-[10px] font-extrabold bg-surface rounded-lg py-0.5 px-2"
                 style={{
                   color: levelColor,
                   border: `2px solid ${levelColor}`,

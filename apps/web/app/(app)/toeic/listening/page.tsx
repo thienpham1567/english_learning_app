@@ -67,7 +67,7 @@ export default async function ToeicListeningPage() {
             >
               <div className="flex justify-between items-center">
                 <strong className="font-extrabold text-[15px]">{c.title}</strong>
-                <span className="bg-accent-muted text-accent py-0.5 px-2.5 rounded-lg border border-accent/20 font-black text-xs inline-block">
+                <span className="bg-accent-muted text-accent py-0.5 px-2.5 rounded-lg border-2 border-accent/20 font-black text-xs inline-block">
                   {c.count} items
                 </span>
               </div>

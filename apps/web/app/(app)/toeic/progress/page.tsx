@@ -135,7 +135,7 @@ export default async function ToeicProgressPage() {
                   <div className="text-lg font-black text-ink font-display mb-1">
                     Predicted TOEIC Score
                   </div>
-                  <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2.5 py-0.5">
+                  <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border-2 border-warning/20 px-2.5 py-0.5">
                     {bandLabel(predicted.total)}
                   </span>
 
@@ -359,7 +359,7 @@ function SkillPanel({
                       {pct}/100
                     </span>
                   </div>
-                  <div className="h-2 rounded-full bg-border overflow-hidden border border-border">
+                  <div className="h-2 rounded-full bg-border overflow-hidden border-2 border-border">
                     <div
                       className="h-full rounded-full transition-all duration-500 ease-out"
                       style={{ width: `${pct}%`, background: accentColor }}

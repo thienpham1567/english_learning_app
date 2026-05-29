@@ -41,7 +41,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
     >
       <motion.div
         variants={itemVariants}
-        className="flex items-center gap-2 mb-2 text-accent bg-accent/5 px-3 py-1 rounded-full border border-accent/10"
+        className="flex items-center gap-2 mb-2 text-accent bg-accent/5 px-3 py-1 rounded-lg border-2 border-accent/10"
       >
         <Sparkles className="h-3.5 w-3.5 animate-pulse" />
         <span className="text-[10px] font-semibold uppercase tracking-widest font-mono">
@@ -91,7 +91,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
               whileTap={{ scale: 0.98 }}
               key={prompt}
               onClick={() => onSuggestedPrompt(prompt)}
-              className="px-4 py-2 rounded-full border-2 border-border bg-chat-surface-hover text-xs font-semibold text-text-secondary hover:border-border-strong hover:text-ink transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
+              className="px-4 py-2 rounded-lg border-2 border-border bg-chat-surface-hover text-xs font-semibold text-text-secondary hover:border-border-strong hover:text-ink transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
             >
               {prompt}
             </motion.button>
@@ -135,7 +135,7 @@ function PersonaCard({
       <div className="flex flex-col items-center gap-1.5">
         <span className="text-sm font-semibold text-ink leading-none">{persona.label}</span>
         <span
-          className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide transition-colors ${
+          className={`inline-block px-2.5 py-0.5 rounded-lg text-[9px] font-bold tracking-wide transition-colors ${
             isSelected ? "bg-accent text-white" : "bg-bg-deep text-text-secondary"
           }`}
         >

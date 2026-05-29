@@ -174,7 +174,7 @@ export function ReviewTab() {
                 {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
               </span>
               {error.grammarTopic && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border border-accent/15">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border-2 border-accent/15">
                   {error.grammarTopic}
                 </span>
               )}
@@ -199,7 +199,7 @@ export function ReviewTab() {
                     return (
                       <div
                         key={i}
-                        className={`px-3.5 py-2 rounded-[10px] text-sm ${
+                        className={`px-3.5 py-2 rounded-xl text-sm ${
                           isCorrect
                             ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-2 border-success text-success font-bold"
                             : isWrong
@@ -245,7 +245,7 @@ export function ReviewTab() {
               >
                 {/* Answer comparison */}
                 <div className="flex gap-2 mb-4">
-                  <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-2.5 rounded-xl bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-error uppercase mb-1 flex items-center gap-1">
                       <XCircle className="h-2.5 w-2.5" /> Your Answer
                     </div>
@@ -253,7 +253,7 @@ export function ReviewTab() {
                       {error.userAnswer || "(Empty)"}
                     </div>
                   </div>
-                  <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-2.5 rounded-xl bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-success uppercase mb-1 flex items-center gap-1">
                       <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                     </div>

@@ -99,7 +99,7 @@ export default async function MockTestHubPage() {
               </div>
 
               <div className="flex flex-wrap gap-1.5">
-                <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2 py-0.5">
+                <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border-2 border-warning/20 px-2 py-0.5">
                   Part 1: no content yet
                 </span>
               </div>
@@ -130,7 +130,7 @@ export default async function MockTestHubPage() {
               </div>
 
               <div className="flex flex-wrap gap-1.5">
-                <span className="text-[10px] font-extrabold rounded-lg bg-success/10 text-success border border-warning/20 px-2 py-0.5">
+                <span className="text-[10px] font-extrabold rounded-lg bg-success/10 text-success border-2 border-warning/20 px-2 py-0.5">
                   Recommended
                 </span>
               </div>

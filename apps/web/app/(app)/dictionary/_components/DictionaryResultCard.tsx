@@ -199,7 +199,7 @@ export function DictionaryResultCard({
               const display = posEn ?? posKey ?? "word";
               const tooltip = posKey && posEn ? posKey : null;
               return (
-                <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
+                <span className="relative group rounded-lg px-3.5 py-1 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
                   {display}
                   {tooltip && (
                     <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
@@ -210,7 +210,7 @@ export function DictionaryResultCard({
               );
             })()}
             {numberLabel && (
-              <span className="rounded-full px-2.5 py-0.5 text-xs font-medium text-text-muted border-2 border-border whitespace-nowrap">
+              <span className="rounded-lg px-2.5 py-0.5 text-xs font-medium text-text-muted border-2 border-border whitespace-nowrap">
                 {numberLabel}
               </span>
             )}
@@ -222,7 +222,7 @@ export function DictionaryResultCard({
               const badgeClass = CEFR_BADGE_CLASSES[vocabulary.level] ?? "text-text-secondary border-border bg-bg-deep";
               return (
                 <span
-                  className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wide border ${badgeClass}`}
+                  className={`rounded-lg px-3 py-0.5 text-xs font-bold tracking-wide border ${badgeClass}`}
                 >
                   {vocabulary.level}
                 </span>
@@ -236,7 +236,7 @@ export function DictionaryResultCard({
                 ? `${vocabulary.register} — ${info.tooltipEn}`
                 : vocabulary.register;
               return (
-                <span className="relative group rounded-full px-3 py-0.5 text-xs border border-border text-text-primary bg-accent-light font-bold cursor-help">
+                <span className="relative group rounded-lg px-3 py-0.5 text-xs border-2 border-border text-text-primary bg-accent-light font-bold cursor-help">
                   {display}
                   <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
                     {tooltip}
@@ -249,7 +249,7 @@ export function DictionaryResultCard({
               type="button"
               onClick={onOpenThesaurus}
               aria-label="Thesaurus"
-              className="flex items-center gap-1.5 rounded-full bg-accent-light px-3 py-1 text-xs font-bold text-ink border-2 border-border cursor-pointer transition-colors duration-200 hover:bg-accent/15 shadow-sm"
+              className="flex items-center gap-1.5 rounded-lg bg-accent-light px-3 py-1 text-xs font-bold text-ink border-2 border-border cursor-pointer transition-colors duration-200 hover:bg-accent/15 shadow-sm"
             >
               <BookOpen className="h-3 w-3 text-accent" />
               Thesaurus
@@ -275,7 +275,7 @@ export function DictionaryResultCard({
               <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">
                 US
               </span>
-              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border border-border/10">
+              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border-2 border-border/10">
                 {vocabulary.phoneticsUs}
               </span>
               <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
@@ -289,7 +289,7 @@ export function DictionaryResultCard({
               <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">
                 UK
               </span>
-              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border border-border/10">
+              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border-2 border-border/10">
                 {vocabulary.phoneticsUk}
               </span>
               <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
@@ -322,7 +322,7 @@ export function DictionaryResultCard({
               type="button"
               aria-selected={activeKey === sense.id}
               onClick={() => setActiveKey(sense.id)}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-bold border-2 transition-all duration-200 ${
+              className={`shrink-0 rounded-lg px-4 py-1.5 text-sm font-bold border-2 transition-all duration-200 ${
                 activeKey === sense.id
                   ? "bg-accent border-border text-ink shadow-sm cursor-default"
                   : "bg-transparent border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-alt cursor-pointer"

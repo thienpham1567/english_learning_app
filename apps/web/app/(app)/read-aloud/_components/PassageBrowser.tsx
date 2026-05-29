@@ -72,7 +72,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
           whileTap={{ scale: 0.97 }}
           onClick={generateAiPassages}
           disabled={aiLoading}
-          className={`flex items-center gap-1.5 rounded-xl text-accent font-bold font-body py-1.5 px-4 text-[12.5px] border border-accent bg-accent-light transition-all duration-200 ${
+          className={`flex items-center gap-1.5 rounded-xl text-accent font-bold font-body py-1.5 px-4 text-[12.5px] border-2 border-accent bg-accent-light transition-all duration-200 ${
             aiLoading ? "cursor-wait opacity-60" : "cursor-pointer opacity-100"
           }`}
         >
@@ -146,7 +146,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
               }}
               className="flex items-start gap-3 rounded-lg border-2 border-border bg-surface-alt cursor-pointer py-3 px-3.5 transition-all duration-150"
             >
-              <div className="w-9 h-9 border-2 border-border grid place-items-center text-lg shrink-0 rounded-[10px] bg-accent-light">
+              <div className="w-9 h-9 border-2 border-border grid place-items-center text-lg shrink-0 rounded-xl bg-accent-light">
                 {sample.icon}
               </div>
               <div className="flex-1 min-w-0">
@@ -208,10 +208,10 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full cursor-pointer font-body py-1 px-3 text-[11.5px] whitespace-nowrap transition-all duration-200 ${
+      className={`rounded-lg cursor-pointer font-body py-1 px-3 text-[11.5px] whitespace-nowrap transition-all duration-200 ${
         active
-          ? "border border-accent bg-accent-muted text-accent font-bold"
-          : "border border-border bg-transparent text-text-muted font-medium"
+          ? "border-2 border-accent bg-accent-muted text-accent font-bold"
+          : "border-2 border-border bg-transparent text-text-muted font-medium"
       }`}
     >
       {label}

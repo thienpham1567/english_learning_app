@@ -548,7 +548,7 @@ export default function EssayScorePage() {
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
                     <span
                       key={cat}
-                      className="text-[9px] bg-gray-500/10 text-gray-600 py-0.5 px-2 inline-block"
+                      className="text-[9px] bg-bg-deep text-text-muted py-0.5 px-2 inline-block"
                       style={{ borderColor: color, color }}
                     >
                       {cat}

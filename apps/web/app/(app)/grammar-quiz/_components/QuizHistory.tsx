@@ -124,7 +124,7 @@ export function QuizHistory({ open, onClose }: Props) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.04 }}
-                        className="flex items-center justify-between rounded-lg border border-border bg-surface-alt py-3 px-3.5 shadow-sm"
+                        className="flex items-center justify-between rounded-lg border-2 border-border bg-surface-alt py-3 px-3.5 shadow-sm"
                       >
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-1.5">

@@ -88,7 +88,7 @@ export function ListTab() {
                 <button
                   key={opt.value}
                   onClick={() => list.setFilter("resolved", opt.value)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 cursor-pointer transition-all duration-150 ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 cursor-pointer transition-all duration-150 ${
                     list.filters.resolved === opt.value
                       ? "border-accent bg-accent text-text-on-accent"
                       : "border-border bg-transparent text-text-secondary hover:border-accent/40"
@@ -105,7 +105,7 @@ export function ListTab() {
                 <button
                   key={opt.value}
                   onClick={() => list.setFilter("module", opt.value)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 cursor-pointer transition-all duration-150 ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 cursor-pointer transition-all duration-150 ${
                     list.filters.module === opt.value
                       ? "border-accent bg-accent-light text-ink font-extrabold"
                       : "border-border bg-transparent text-text-secondary hover:border-accent/40"
@@ -121,7 +121,7 @@ export function ListTab() {
               <select
                 value={list.filters.topic}
                 onChange={(e) => list.setFilter("topic", e.target.value)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 border-border cursor-pointer outline-none ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-border cursor-pointer outline-none ${
                   list.filters.topic ? "bg-accent-light text-ink" : "bg-surface text-text-secondary"
                 }`}
               >
@@ -147,7 +147,7 @@ export function ListTab() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={list.resolveAll}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-success/35 bg-success-bg text-success text-xs font-bold cursor-pointer font-body"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-success/35 bg-success-bg text-success text-xs font-bold cursor-pointer font-body"
             >
               <CheckCircle className="h-3.5 w-3.5" /> Mark all as resolved
             </m.button>

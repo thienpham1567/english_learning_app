@@ -41,7 +41,7 @@ export function SpeakerLegend({ turns }: Props) {
       {entries.map(([id, turn]) => (
         <span key={id} className="inline-flex items-center gap-1.5">
           <span
-            className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold text-ink ${SPEAKER_BG[id]}`}
+            className={`inline-flex items-center justify-center w-5 h-5 rounded-lg text-[11px] font-bold text-ink ${SPEAKER_BG[id]}`}
           >
             {id}
           </span>
@@ -65,7 +65,7 @@ export function DialogueTranscript({ turns }: TranscriptProps) {
       {turns.map((t, i) => (
         <div key={i} className="flex gap-2.5 items-start">
           <span
-            className={`inline-flex items-center justify-center w-[26px] h-[26px] rounded-full text-xs font-bold text-ink shrink-0 ${SPEAKER_BG[t.speaker]}`}
+            className={`inline-flex items-center justify-center w-[26px] h-[26px] rounded-lg text-xs font-bold text-ink shrink-0 ${SPEAKER_BG[t.speaker]}`}
           >
             {t.speaker}
           </span>

@@ -38,9 +38,9 @@ const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; col
       colorClass: "text-warning dark:text-warning border-warning/30 bg-xp/5",
     },
     learning: {
-      icon: <RefreshCw size={11} className="text-sky-700 dark:text-sky-400" />,
+      icon: <RefreshCw size={11} className="text-info" />,
       label: "Learning",
-      colorClass: "text-sky-700 dark:text-sky-400 border-sky-500/30 bg-sky-500/5",
+      colorClass: "text-info border-info/30 bg-info/5",
     },
     mastered: {
       icon: <CircleCheckBig size={11} className="text-success dark:text-success" />,

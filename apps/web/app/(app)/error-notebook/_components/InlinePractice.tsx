@@ -53,7 +53,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
       <button
         type="button"
         onClick={generate}
-        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-accent/25 bg-card-bg cursor-pointer text-xs font-semibold text-accent-active transition-all duration-200 hover:bg-accent/8 hover:border-accent"
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-accent/25 bg-card-bg cursor-pointer text-xs font-semibold text-accent-active transition-all duration-200 hover:bg-accent/8 hover:border-accent"
       >
         <Zap className="h-3.5 w-3.5" /> Practice Again
       </button>

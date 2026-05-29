@@ -97,7 +97,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center gap-2 py-2 px-3 cursor-pointer text-[11px] font-bold text-accent-active uppercase tracking-[.08em] rounded-[10px]"
+        className="w-full flex items-center gap-2 py-2 px-3 cursor-pointer text-[11px] font-bold text-accent-active uppercase tracking-[.08em] rounded-xl"
         style={{
           border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
           background: "color-mix(in srgb, var(--accent) 4%, var(--surface))",
@@ -128,12 +128,12 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                   size="sm"
                   shadowSize="none"
                   bgType="muted"
-                  className="py-2.5 px-3 gap-0.5 border-2 rounded-[10px]"
+                  className="py-2.5 px-3 gap-0.5 border-2 rounded-xl"
                 >
                   <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                     <span className="font-bold text-ink text-sm">{form.word}</span>
                     <span
-                      className="text-[10px] font-bold rounded-full py-0.5 px-2"
+                      className="text-[10px] font-bold rounded-lg py-0.5 px-2"
                       style={{
                         color: posColor,
                         background: `color-mix(in srgb, ${posColor} 10%, var(--surface))`,
@@ -172,7 +172,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                       {form.commonCollocations.map((c) => (
                         <span
                           key={c}
-                          className="text-[9px] rounded-full py-0.5 px-2 bg-surface-alt border border-border text-text-muted font-medium"
+                          className="text-[9px] rounded-lg py-0.5 px-2 bg-surface-alt border-2 border-border text-text-muted font-medium"
                         >
                           {c}
                         </span>
@@ -190,7 +190,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
               size="sm"
               shadowSize="none"
               bgType="accent-light"
-              className="py-2 px-3 border border-accent/15 rounded-lg gap-1"
+              className="py-2 px-3 border-2 border-accent/15 rounded-lg gap-1"
             >
               {data.tip && (
                 <p className="text-[11px] text-text-secondary leading-normal m-0 mb-1">

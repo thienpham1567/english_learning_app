@@ -68,7 +68,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
     <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-surface rounded-xl border border-border p-5 flex flex-col gap-5"
+      className="bg-surface rounded-xl border-2 border-border p-5 flex flex-col gap-5"
     >
       {/* Overall Score Ring */}
       <div className="flex items-center gap-5">
@@ -112,7 +112,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
           return (
             <div
               key={s.label}
-              className="py-2.5 px-3.5 rounded-xl bg-surface-alt border border-border"
+              className="py-2.5 px-3.5 rounded-xl bg-surface-alt border-2 border-border"
             >
               <div className="flex justify-between items-center">
                 <span className="text-xs font-semibold text-text-secondary flex items-center gap-1">
@@ -171,7 +171,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                 .map((w, i) => (
                   <div
                     key={i}
-                    className="py-2 px-3 rounded-[10px] bg-surface-alt border border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
+                    className="py-2 px-3 rounded-xl bg-surface-alt border-2 border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
                   >
                     <span
                       className={`font-extrabold shrink-0 ${
@@ -196,7 +196,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       )}
 
       {/* Transcript comparison */}
-      <div className="py-3 px-3.5 rounded-xl bg-surface-alt border border-border">
+      <div className="py-3 px-3.5 rounded-xl bg-surface-alt border-2 border-border">
         <span className="text-[11px] font-bold text-text-muted uppercase flex items-center gap-1 mb-1.5">
           <Target size={12} />
           Reference Sentence

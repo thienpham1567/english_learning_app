@@ -81,7 +81,7 @@ export default function ErrorNotebookPage() {
               <span className="truncate">{t.label}</span>
               {/* Due badge on Review tab */}
               {t.key === "review" && dueCount > 0 && (
-                <span className="text-[9px] font-black px-1.5 rounded-full bg-error text-white min-w-[16px] text-center leading-4">
+                <span className="text-[9px] font-black px-1.5 rounded-lg bg-error text-white min-w-[16px] text-center leading-4">
                   {dueCount > 99 ? "99+" : dueCount}
                 </span>
               )}

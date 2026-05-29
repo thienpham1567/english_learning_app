@@ -102,7 +102,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
         {buttonIcon}
         {buttonLabel}
         {isRevealed && (
-          <span className="text-[10px] rounded-full font-bold py-0.5 px-1.5 bg-warning-bg text-[var(--warning)]">
+          <span className="text-[10px] rounded-lg font-bold py-0.5 px-1.5 bg-warning-bg text-[var(--warning)]">
             -30% XP
           </span>
         )}
@@ -154,7 +154,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
               <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold text-text-muted uppercase tracking-widest">
                 <FileText size={13} /> Script
                 {revealLevel === "keywords" && (
-                  <span className="text-[10px] rounded-full text-accent font-semibold ml-1 py-0.5 px-1.5 bg-accent-muted">
+                  <span className="text-[10px] rounded-lg text-accent font-semibold ml-1 py-0.5 px-1.5 bg-accent-muted">
                     Keywords
                   </span>
                 )}

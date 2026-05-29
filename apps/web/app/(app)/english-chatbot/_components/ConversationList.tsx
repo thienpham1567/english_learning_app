@@ -87,7 +87,7 @@ export function ConversationList({ activeId }: Props) {
               return (
                 <div
                   key={conv.id}
-                  className="flex items-center gap-2 rounded-xl border border-error bg-error/10 p-2.5 animate-in fade-in zoom-in-95 duration-150"
+                  className="flex items-center gap-2 rounded-xl border-2 border-error bg-error/10 p-2.5 animate-in fade-in zoom-in-95 duration-150"
                 >
                   <span className="flex-1 text-xs font-semibold text-error">Delete?</span>
                   <button

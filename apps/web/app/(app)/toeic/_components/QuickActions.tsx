@@ -47,7 +47,7 @@ export function QuickActions() {
             <m.div key={a.href} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href={a.href}
-                className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-[10px] bg-surface-hover border border-border text-ink no-underline text-center cursor-pointer transition-all duration-200 hover:border-accent"
+                className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-xl bg-surface-hover border-2 border-border text-ink no-underline text-center cursor-pointer transition-all duration-200 hover:border-accent"
               >
                 <Icon size={20} className="text-accent" />
                 <div className="text-[13px] font-bold">{a.label}</div>
@@ -56,7 +56,7 @@ export function QuickActions() {
           ) : (
             <div
               key={a.href}
-              className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-[10px] bg-surface border border-border text-text-muted text-center cursor-not-allowed"
+              className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-xl bg-surface border-2 border-border text-text-muted text-center cursor-not-allowed"
               title="Coming Soon"
             >
               <Icon size={20} />

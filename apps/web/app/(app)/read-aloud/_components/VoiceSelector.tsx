@@ -83,7 +83,7 @@ function VoiceCard({
             className={`text-[9.5px] rounded-md font-extrabold inline-flex items-center gap-0.5 py-0.5 px-1.5 border ${
               v.gender === "m"
                 ? "bg-info/10 text-info border-info/20"
-                : "bg-pink-500/10 text-pink-600 border-pink-500/20"
+                : "bg-fire/10 text-fire border-fire/20"
             }`}
           >
             <User size={9} />

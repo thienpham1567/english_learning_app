@@ -71,7 +71,7 @@ export function WritingTab() {
         {activeTab === "practice" && (
           <div>
             {error && (
-              <div className="mb-4 rounded-xl border border-error/30 bg-error/10 px-4 py-2.5 text-xs text-error text-center">
+              <div className="mb-4 rounded-xl border-2 border-error/30 bg-error/10 px-4 py-2.5 text-xs text-error text-center">
                 {error}
               </div>
             )}
@@ -104,10 +104,10 @@ export function WritingTab() {
             {state === "reviewing" && (
               <div className="flex flex-col items-center gap-4 py-16 text-center">
                 <div className="w-full max-w-md space-y-3 animate-pulse">
-                  <div className="h-4 bg-bg-deep border border-border/20 rounded w-3/4 mx-auto"></div>
-                  <div className="h-3 bg-bg-deep border border-border/20 rounded w-5/6 mx-auto"></div>
-                  <div className="h-3 bg-bg-deep border border-border/20 rounded w-4/5 mx-auto"></div>
-                  <div className="h-3 bg-bg-deep border border-border/20 rounded w-3/5 mx-auto"></div>
+                  <div className="h-4 bg-bg-deep border-2 border-border/20 rounded w-3/4 mx-auto"></div>
+                  <div className="h-3 bg-bg-deep border-2 border-border/20 rounded w-5/6 mx-auto"></div>
+                  <div className="h-3 bg-bg-deep border-2 border-border/20 rounded w-4/5 mx-auto"></div>
+                  <div className="h-3 bg-bg-deep border-2 border-border/20 rounded w-3/5 mx-auto"></div>
                 </div>
                 <p className="text-xs text-text-muted font-bold mt-2">
                   Christine Ho is grading your writing...

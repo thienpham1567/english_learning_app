@@ -64,7 +64,7 @@ export function ErrorPatternSummary({ errors }: Props) {
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-warning font-display">
           Common Error Patterns
         </span>
-        <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-warning/10 text-warning border border-warning/20">
+        <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-warning/10 text-warning border-2 border-warning/20">
           {patterns.length} patterns
         </span>
         <div className="flex-1 h-px bg-border" />
@@ -100,13 +100,13 @@ export function ErrorPatternSummary({ errors }: Props) {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {pattern.unresolvedCount > 0 && (
-                    <span className="text-xs font-extrabold min-w-[22px] text-center px-2 py-0.5 rounded-full bg-error-bg text-error">
+                    <span className="text-xs font-extrabold min-w-[22px] text-center px-2 py-0.5 rounded-lg bg-error-bg text-error">
                       {pattern.unresolvedCount}
                     </span>
                   )}
                   <Link
                     href={pattern.nextAction.href}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-full border-2 border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-lg border-2 border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
                   >
                     {actionLabel} <ChevronRight className="h-2.5 w-2.5" />
                   </Link>

@@ -99,7 +99,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                     return (
                       <div
                         key={i}
-                        className={`px-3.5 py-2.5 rounded-[10px] text-sm ${
+                        className={`px-3.5 py-2.5 rounded-xl text-sm ${
                           isCorrect
                             ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-2 border-success text-success font-bold"
                             : isWrong
@@ -119,7 +119,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               {/* Answer comparison (when no options) */}
               {(!error.options || error.options.length === 0) && (
                 <div className="flex gap-2 mb-5">
-                  <div className="flex-1 px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-3 rounded-xl bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-error uppercase mb-1 flex items-center gap-1">
                       <XCircle className="h-2.5 w-2.5" /> Your Answer
                     </div>
@@ -127,7 +127,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                       {error.userAnswer || "(Empty)"}
                     </div>
                   </div>
-                  <div className="flex-1 px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-3 rounded-xl bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-success uppercase mb-1 flex items-center gap-1">
                       <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                     </div>
@@ -157,7 +157,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               </div>
 
               {/* Meta info */}
-              <div className="px-3.5 py-3 rounded-[10px] bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1.5">
+              <div className="px-3.5 py-3 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5" />
                   <span>

@@ -177,7 +177,7 @@ export function HeatmapCalendar() {
               key={i}
               className={`w-2.5 h-2.5 rounded-[2px] ${
                 pct === 0
-                  ? "bg-heatmap-0 border border-border/20"
+                  ? "bg-heatmap-0 border-2 border-border/20"
                   : pct <= 0.25
                     ? "bg-heatmap-1"
                     : pct <= 0.5

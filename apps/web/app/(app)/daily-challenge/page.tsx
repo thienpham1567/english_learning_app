@@ -72,7 +72,7 @@ function StepIndicator({
           <span className="text-[10px] font-bold text-text-muted">{pct}%</span>
           <span
             style={{ color: activeColor }}
-            className="font-black font-mono text-xs leading-none bg-accent-light px-2 py-0.5 rounded-lg border border-accent/15"
+            className="font-black font-mono text-xs leading-none bg-accent-light px-2 py-0.5 rounded-lg border-2 border-accent/15"
           >
             {current + 1} / {total}
           </span>
@@ -140,7 +140,7 @@ function ExerciseFlow({
         <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-warning border-2 border-border self-start shadow-sm text-black"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-warning border-2 border-border self-start shadow-sm text-black"
         >
           <Zap className="h-3.5 w-3.5 fill-current text-black animate-pulse" />
           <span className="text-[10px] font-extrabold uppercase tracking-widest font-mono">
@@ -192,11 +192,7 @@ function ExerciseFlow({
             }}
             className="absolute top-0 left-0 right-0 h-1 group-hover:h-1.5 transition-all"
           />
-          {/* Subtle glow behind the card */}
-          <div
-            className="absolute -top-12 left-1/2 -translate-x-1/2 w-[60%] h-24 rounded-full blur-3xl opacity-[0.06] pointer-events-none"
-            style={{ background: activeColor }}
-          />
+
           <ExerciseCard
             exercise={challenge.exercises[currentExercise] as any}
             onAnswer={handleAnswer}
@@ -388,9 +384,9 @@ export default function DailyChallengePage() {
               {state === "loading" && (
                 <div className="min-h-[320px] flex flex-col justify-center py-6 animate-in fade-in duration-250">
                   <div className="w-full space-y-3.5 animate-pulse">
-                    <div className="h-4 bg-bg-deep border border-border/20 rounded-lg w-1/3" />
-                    <div className="h-28 bg-bg-deep border border-border/20 rounded-2xl w-full" />
-                    <div className="h-10 bg-bg-deep border border-border/20 rounded-xl w-1/2 mx-auto" />
+                    <div className="h-4 bg-bg-deep border-2 border-border/20 rounded-lg w-1/3" />
+                    <div className="h-28 bg-bg-deep border-2 border-border/20 rounded-2xl w-full" />
+                    <div className="h-10 bg-bg-deep border-2 border-border/20 rounded-xl w-1/2 mx-auto" />
                   </div>
                 </div>
               )}

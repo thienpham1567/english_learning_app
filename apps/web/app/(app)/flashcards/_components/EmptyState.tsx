@@ -77,7 +77,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="inline-flex items-center gap-2 bg-surface-alt border-2 border-border rounded-full py-2 px-4.5 shadow-sm"
+      className="inline-flex items-center gap-2 bg-surface-alt border-2 border-border rounded-lg py-2 px-4.5 shadow-sm"
     >
       <Clock className="text-accent text-[13px]" />
       <span className="font-bold text-text-secondary text-[12.5px]">

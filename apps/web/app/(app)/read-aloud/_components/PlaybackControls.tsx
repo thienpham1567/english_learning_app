@@ -81,7 +81,7 @@ export function PlaybackControls({
                 className={`flex-1 text-[11px] font-extrabold rounded-lg cursor-pointer py-1 transition-all duration-200 ${
                   speed === preset
                     ? "border-2 border-border bg-accent text-ink shadow-sm"
-                    : "border border-border bg-surface-alt text-text-secondary hover:border-border-strong"
+                    : "border-2 border-border bg-surface-alt text-text-secondary hover:border-border-strong"
                 }`}
               >
                 {preset === 1.0 ? "Normal" : `${preset}x`}

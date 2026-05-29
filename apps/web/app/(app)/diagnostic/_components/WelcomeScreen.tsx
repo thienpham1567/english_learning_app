@@ -130,7 +130,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
                               {SKILL_LABELS[skill] ?? skill}
                             </span>
                             <span
-                              className="text-[11px] font-extrabold bg-surface rounded-full py-0.5 px-2"
+                              className="text-[11px] font-extrabold bg-surface rounded-lg py-0.5 px-2"
                               style={{
                                 color: skillColor,
                                 border: `2px solid ${skillColor}`,

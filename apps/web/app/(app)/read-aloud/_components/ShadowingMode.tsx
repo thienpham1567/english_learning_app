@@ -199,10 +199,10 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               }}
               className={`w-6 h-6 rounded-md text-[10px] font-bold cursor-pointer grid place-items-center transition-all duration-150 ${
                 sentenceResults[i]
-                  ? "border border-success/30 bg-success/15 text-success"
+                  ? "border-2 border-success/30 bg-success/15 text-success"
                   : i === currentIdx
                     ? "border-2 border-border bg-accent text-ink shadow-sm"
-                    : "border border-border/40 bg-surface-alt text-text-muted hover:border-border/60"
+                    : "border-2 border-border/40 bg-surface-alt text-text-muted hover:border-border/60"
               }`}
             >
               {sentenceResults[i] ? <CircleCheckBig size={11} /> : i + 1}
@@ -290,7 +290,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={playReference}
-                  className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body shrink-0"
+                  className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body shrink-0"
                 >
                   <PlayCircle size={13} /> Listen Again
                 </m.button>
@@ -370,7 +370,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={retry}
-                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-border bg-surface text-text-primary text-sm font-bold cursor-pointer font-body hover:bg-surface-hover transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-surface text-text-primary text-sm font-bold cursor-pointer font-body hover:bg-surface-hover transition-colors"
               >
                 <Redo size={13} /> Retry
               </m.button>

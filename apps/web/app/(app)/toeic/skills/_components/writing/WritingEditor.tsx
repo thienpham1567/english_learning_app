@@ -194,7 +194,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
         <div className="mt-2">
           <div className="flex items-center gap-3">
             {/* Progress bar */}
-            <div className="flex-1 h-1.5 rounded-full bg-bg-deep border border-border/20 overflow-hidden">
+            <div className="flex-1 h-1.5 rounded-full bg-bg-deep border-2 border-border/20 overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-300 ease-out ${progressBgClass}`}
                 style={{

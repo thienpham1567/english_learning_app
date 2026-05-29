@@ -440,10 +440,10 @@ export function ExamWordLists({ onSelect }: Props) {
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span
-                    className={`text-[11px] font-extrabold px-2 py-0.5 rounded-full ${
+                    className={`text-[11px] font-extrabold px-2 py-0.5 rounded-lg ${
                       isExpanded
-                        ? "bg-accent text-ink border border-border"
-                        : "bg-bg-deep text-text-muted border border-border/20"
+                        ? "bg-accent text-ink border-2 border-border"
+                        : "bg-bg-deep text-text-muted border-2 border-border/20"
                     }`}
                   >
                     {cat.words.length}
@@ -461,7 +461,7 @@ export function ExamWordLists({ onSelect }: Props) {
                       key={word}
                       type="button"
                       onClick={() => onSelect(word)}
-                      className="rounded-full border-2 border-border bg-surface px-3 py-1 text-xs text-text-secondary font-bold cursor-pointer transition-all duration-150 whitespace-nowrap hover:border-accent hover:text-ink hover:bg-accent-light"
+                      className="rounded-lg border-2 border-border bg-surface px-3 py-1 text-xs text-text-secondary font-bold cursor-pointer transition-all duration-150 whitespace-nowrap hover:border-accent hover:text-ink hover:bg-accent-light"
                     >
                       {word}
                     </button>

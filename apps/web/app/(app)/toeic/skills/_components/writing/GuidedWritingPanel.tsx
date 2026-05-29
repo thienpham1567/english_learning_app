@@ -241,7 +241,7 @@ export function GuidedWritingPanel() {
     <div className="flex flex-col gap-4">
       {/* Error */}
       {error && (
-        <div className="p-3 rounded-xl bg-error-bg border border-error text-xs text-error shadow-sm">
+        <div className="p-3 rounded-xl bg-error-bg border-2 border-error text-xs text-error shadow-sm">
           {error}
         </div>
       )}
@@ -591,7 +591,7 @@ export function GuidedWritingPanel() {
                     {c.label}
                   </p>
                   <span
-                    className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider text-black border border-border/10"
+                    className="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold tracking-wider text-black border-2 border-border/10"
                     style={{ backgroundColor: scoreColor(s.score) }}
                   >
                     {s.score}

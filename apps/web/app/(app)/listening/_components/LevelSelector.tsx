@@ -115,7 +115,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     initial={{ scale: 0.9 }}
                     animate={{ scale: [0.9, 1.05, 0.9] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute -top-2 -right-2 rounded-full text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border-2 border-border shadow-sm z-10"
+                    className="absolute -top-2 -right-2 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border-2 border-border shadow-sm z-10"
                   >
                     <Star size={9} className="fill-current" />
                     <span>Rec</span>

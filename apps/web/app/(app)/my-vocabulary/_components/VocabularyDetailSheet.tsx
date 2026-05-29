@@ -121,12 +121,12 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             <div className="flex-1 overflow-y-auto p-6 flex flex-col">
               {status === "loading" && (
                 <div className="space-y-4 animate-pulse py-4">
-                  <div className="h-6 bg-bg-deep border border-border/20 rounded-md w-3/4" />
-                  <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-1/2" />
+                  <div className="h-6 bg-bg-deep border-2 border-border/20 rounded-md w-3/4" />
+                  <div className="h-4 bg-bg-deep border-2 border-border/20 rounded-md w-1/2" />
                   <div className="space-y-3 mt-8">
-                    <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-full" />
-                    <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-5/6" />
-                    <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-2/3" />
+                    <div className="h-4 bg-bg-deep border-2 border-border/20 rounded-md w-full" />
+                    <div className="h-4 bg-bg-deep border-2 border-border/20 rounded-md w-5/6" />
+                    <div className="h-4 bg-bg-deep border-2 border-border/20 rounded-md w-2/3" />
                   </div>
                 </div>
               )}
@@ -168,7 +168,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     <div className="flex gap-3.5 bg-surface-alt rounded-xl border-2 border-border p-3.5 shadow-sm">
                       {data.phoneticsUs && (
                         <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
-                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">
+                          <span className="px-1.5 py-0.5 rounded bg-surface border-2 border-border/60 text-[9px] text-text-muted font-black">
                             US
                           </span>
                           <span className="font-mono">/{data.phoneticsUs}/</span>
@@ -176,7 +176,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                       )}
                       {data.phoneticsUk && (
                         <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
-                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">
+                          <span className="px-1.5 py-0.5 rounded bg-surface border-2 border-border/60 text-[9px] text-text-muted font-black">
                             UK
                           </span>
                           <span className="font-mono">/{data.phoneticsUk}/</span>

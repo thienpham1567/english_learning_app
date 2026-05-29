@@ -100,7 +100,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               key={meaning}
               className={
                 i === 0
-                  ? "rounded-full border-2 border-border bg-accent-light px-3.5 py-1 text-sm font-extrabold font-display text-ink whitespace-nowrap shadow-sm"
+                  ? "rounded-lg border-2 border-border bg-accent-light px-3.5 py-1 text-sm font-extrabold font-display text-ink whitespace-nowrap shadow-sm"
                   : "text-sm text-text-secondary font-semibold leading-snug"
               }
             >
@@ -200,7 +200,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                 key={expr}
                 type="button"
                 onClick={() => onSearch?.(expr)}
-                className="rounded-full border-2 border-border bg-surface px-3.5 py-1 text-[13px] font-bold font-display text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
+                className="rounded-lg border-2 border-border bg-surface px-3.5 py-1 text-[13px] font-bold font-display text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
               >
                 {expr}
               </button>
@@ -252,7 +252,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               type="button"
               aria-expanded={isCollocationsOpen}
               onClick={() => setIsCollocationsOpen((open) => !open)}
-              className="inline-flex items-center rounded-full border-2 border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
+              className="inline-flex items-center rounded-lg border-2 border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
             >
               {isCollocationsOpen ? "Show Less" : `Show More (${collocations.length - 3})`}
             </button>
