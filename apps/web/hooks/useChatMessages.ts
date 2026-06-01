@@ -14,6 +14,10 @@ const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử 
 
 // Module-level flag — survives component remounts caused by router.replace()
 let _justCreatedConvId: string | null = null;
+/** Guard: true while send() is in progress (survives re-renders + route changes) */
+let _isSending = false;
+/** Preserve messages across the route transition so they don't flash away */
+let _pendingMessages: PageMessage[] | null = null;
 
 export type UseChatMessagesOptions = {
   conversationId: string | null;
@@ -35,9 +39,17 @@ export function useChatMessages({
   const router = useRouter();
   const { conversations, setConversations, loadConversations } = useChatConversations();
 
-  const [messages, setMessages] = useState<PageMessage[]>([]);
+  const [messages, setMessages] = useState<PageMessage[]>(() => {
+    // Restore pending messages if we're remounting after router.replace()
+    if (_pendingMessages) {
+      const restored = _pendingMessages;
+      _pendingMessages = null;
+      return restored;
+    }
+    return [];
+  });
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(_isSending);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,8 +62,9 @@ export function useChatMessages({
   // ── Load messages when conversationId changes ──
   useEffect(() => {
     if (!conversationId) {
-      // Only clear if not currently sending (prevents race condition)
-      if (!isLoading) {
+      // Don't clear messages if we're in the middle of sending
+      // (router.replace hasn't completed yet, intermediate null state)
+      if (!_isSending) {
         setMessages([]);
         setError(null);
       }
@@ -61,6 +74,11 @@ export function useChatMessages({
     // Skip loading if we just created this conversation in send()
     if (_justCreatedConvId === conversationId) {
       _justCreatedConvId = null;
+      return;
+    }
+
+    // Skip loading if we're currently sending (race condition guard)
+    if (_isSending) {
       return;
     }
 
@@ -99,6 +117,9 @@ export function useChatMessages({
       const t = (text ?? input).trim();
       if (!t || isLoading) return;
 
+      // Set module-level guard BEFORE any async work
+      _isSending = true;
+
       let convId = conversationId;
       if (!convId) {
         try {
@@ -121,6 +142,11 @@ export function useChatMessages({
             ...curr,
           ]);
           _justCreatedConvId = created.id;
+          // Preserve current messages so they survive the route transition remount
+          _pendingMessages = [
+            ...messages,
+            { id: crypto.randomUUID(), role: "user" as const, text: t },
+          ];
           router.replace(`/english-chatbot/${created.id}`, { scroll: false });
         } catch {
           // proceed without persistence
@@ -205,6 +231,8 @@ export function useChatMessages({
         }
       } finally {
         abortCtrlRef.current = null;
+        _isSending = false;
+        _pendingMessages = null;
         setIsLoading(false);
         onSendComplete?.({
           userMessageId: userMessage.id,
