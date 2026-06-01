@@ -896,12 +896,18 @@ body {
 }
 
 /* ── Accessibility: Focus-visible rings ── */
-/* Restore keyboard focus visibility even when inline styles set outline:none */
+/* Apply keyboard-focus outlines only to inputs/textareas that don't already
+   have custom focus styling (i.e., those without `outline-none` in class). */
 input:focus-visible,
-textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--accent) !important;
   outline-offset: 2px;
+}
+
+/* Textareas and inputs with .outline-none opt out — their container
+   already provides visual focus indication (e.g., focus-within:border). */
+.outline-none:focus-visible {
+  outline: none !important;
 }
 
 button:focus-visible {
