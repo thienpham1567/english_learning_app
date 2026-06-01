@@ -12,12 +12,20 @@ import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
-// Module-level flag — survives component remounts caused by router.replace()
+// ── Module-level state (survives component remounts) ──
 let _justCreatedConvId: string | null = null;
-/** Guard: true while send() is in progress (survives re-renders + route changes) */
 let _isSending = false;
-/** Preserve messages across the route transition so they don't flash away */
 let _pendingMessages: PageMessage[] | null = null;
+
+/**
+ * Module-level setMessages ref — always points to the CURRENT component's setter.
+ * This is critical: when router.replace() remounts the component, the old closure's
+ * setMessages writes to a dead state. By using this ref, the streaming loop always
+ * writes to the live component's state.
+ */
+let _setMessagesFn: React.Dispatch<React.SetStateAction<PageMessage[]>> | null = null;
+let _setIsLoadingFn: React.Dispatch<React.SetStateAction<boolean>> | null = null;
+let _setErrorFn: React.Dispatch<React.SetStateAction<string | null>> | null = null;
 
 export type UseChatMessagesOptions = {
   conversationId: string | null;
@@ -53,6 +61,12 @@ export function useChatMessages({
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // ── Keep module-level refs pointing to the CURRENT component's setters ──
+  // This ensures streaming writes survive router.replace() remounts
+  _setMessagesFn = setMessages;
+  _setIsLoadingFn = setIsLoading;
+  _setErrorFn = setError;
+
   const abortCtrlRef = useRef<AbortController | null>(null);
   const lastSendRef = useRef<string | null>(null);
   const lastVoiceTextRef = useRef<string | null>(null);
@@ -63,7 +77,6 @@ export function useChatMessages({
   useEffect(() => {
     if (!conversationId) {
       // Don't clear messages if we're in the middle of sending
-      // (router.replace hasn't completed yet, intermediate null state)
       if (!_isSending) {
         setMessages([]);
         setError(null);
@@ -106,9 +119,12 @@ export function useChatMessages({
 
   // ── Remove empty assistant placeholder on error ──
   const removeEmptyAssistantMessage = useCallback((messageId: string) => {
-    setMessages((curr) =>
+    // Use module-level ref to ensure we write to the LIVE component
+    const setter = _setMessagesFn ?? setMessages;
+    setter((curr) =>
       curr.filter((m) => m.id !== messageId || (m.role !== "divider" && m.text.trim().length > 0)),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Send message ──
@@ -142,12 +158,6 @@ export function useChatMessages({
             ...curr,
           ]);
           _justCreatedConvId = created.id;
-          // Preserve current messages so they survive the route transition remount
-          _pendingMessages = [
-            ...messages,
-            { id: crypto.randomUUID(), role: "user" as const, text: t },
-          ];
-          router.replace(`/english-chatbot/${created.id}`, { scroll: false });
         } catch {
           // proceed without persistence
         }
@@ -168,15 +178,33 @@ export function useChatMessages({
       );
       const isFirstExchange = messages.length === 0;
 
-      setMessages((curr) => [
-        ...curr,
+      // Build the new messages array including user + assistant placeholder
+      const newMessages: PageMessage[] = [
+        ...messages,
         userMessage,
-        { id: assistantMessageId, role: "assistant", text: "" },
-      ]);
+        { id: assistantMessageId, role: "assistant" as const, text: "" },
+      ];
+
+      // Set pending messages BEFORE router.replace so they survive remount
+      if (_justCreatedConvId) {
+        _pendingMessages = newMessages;
+      }
+
+      // Use module-level setter to ensure state writes survive remounts
+      const liveSetMessages = () => _setMessagesFn ?? setMessages;
+      const liveSetIsLoading = () => _setIsLoadingFn ?? setIsLoading;
+      const liveSetError = () => _setErrorFn ?? setError;
+
+      liveSetMessages()(newMessages);
       setInput("");
-      setError(null);
-      setIsLoading(true);
+      liveSetError()(null);
+      liveSetIsLoading()(true);
       lastSendRef.current = t;
+
+      // Navigate AFTER setting state
+      if (_justCreatedConvId) {
+        router.replace(`/english-chatbot/${_justCreatedConvId}`, { scroll: false });
+      }
 
       const controller = new AbortController();
       abortCtrlRef.current = controller;
@@ -198,7 +226,8 @@ export function useChatMessages({
           response,
           {
             onDelta: (delta) => {
-              setMessages((curr) =>
+              // Always use the LIVE component's setter
+              (_setMessagesFn ?? setMessages)((curr) =>
                 curr.map((m) => (m.id === assistantMessageId ? { ...m, text: m.text + delta } : m)),
               );
             },
@@ -214,11 +243,11 @@ export function useChatMessages({
               }
             },
             onError: (msg) => {
-              setError(msg);
+              (_setErrorFn ?? setError)(msg);
               removeEmptyAssistantMessage(assistantMessageId);
             },
             onPersistError: (msg) => {
-              setError(msg);
+              (_setErrorFn ?? setError)(msg);
             },
           },
           controller.signal,
@@ -226,14 +255,14 @@ export function useChatMessages({
       } catch (streamError) {
         if (!controller.signal.aborted) {
           console.error("Chat stream error:", streamError);
-          setError(CHAT_ERROR_MESSAGE);
+          (_setErrorFn ?? setError)(CHAT_ERROR_MESSAGE);
           removeEmptyAssistantMessage(assistantMessageId);
         }
       } finally {
         abortCtrlRef.current = null;
         _isSending = false;
         _pendingMessages = null;
-        setIsLoading(false);
+        (_setIsLoadingFn ?? setIsLoading)(false);
         onSendComplete?.({
           userMessageId: userMessage.id,
           userText: t,
