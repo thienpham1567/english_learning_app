@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { db, smartReaderHistory } from "@repo/database";
+import { eq, and, desc, sql, gte } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
@@ -8,6 +9,7 @@ import { openAiConfig } from "@/lib/openai/config";
 const log = routeLogger("smart-reader");
 
 const MAX_INPUT_LENGTH = 3000;
+const DAILY_RATE_LIMIT = 30;
 
 const SYSTEM_PROMPT = `You are a premium English-to-Vietnamese reading comprehension assistant. Your job is to help Vietnamese learners deeply understand English text.
 
@@ -37,6 +39,15 @@ Rules:
 - Keep vocabulary to 4-8 most useful words
 - Respond ONLY with valid JSON, no markdown, no explanation outside JSON`;
 
+/** Simple SHA-256 hash using Web Crypto API */
+async function hashText(text: string): Promise<string> {
+  const data = new TextEncoder().encode(text.toLowerCase().trim());
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
@@ -56,6 +67,70 @@ export async function POST(request: Request) {
     );
   }
 
+  const userId = session.user.id;
+
+  // ── Rate limiting: count today's requests ──
+  try {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const [countResult] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(smartReaderHistory)
+      .where(
+        and(
+          eq(smartReaderHistory.userId, userId),
+          gte(smartReaderHistory.createdAt, todayStart),
+        ),
+      );
+    if (countResult && countResult.count >= DAILY_RATE_LIMIT) {
+      return Response.json(
+        { error: `Daily limit reached (${DAILY_RATE_LIMIT} analyses/day). Try again tomorrow.` },
+        { status: 429 },
+      );
+    }
+  } catch (err) {
+    log.error({ err }, "smart-reader.rate-limit.check.failed");
+    // Don't block on rate limit check failure
+  }
+
+  // ── Cache check: hash sourceText and look for existing result ──
+  const textHash = await hashText(text);
+  try {
+    const [cached] = await db
+      .select({
+        id: smartReaderHistory.id,
+        result: smartReaderHistory.result,
+      })
+      .from(smartReaderHistory)
+      .where(eq(smartReaderHistory.sourceTextHash, textHash))
+      .orderBy(desc(smartReaderHistory.createdAt))
+      .limit(1);
+
+    if (cached) {
+      log.info({ hash: textHash.slice(0, 8) }, "smart-reader.cache.hit");
+
+      // Save a new history entry for this user (reusing cached result)
+      try {
+        const [saved] = await db.insert(smartReaderHistory).values({
+          userId,
+          sourceText: text,
+          sourceTextHash: textHash,
+          result: cached.result,
+          difficultyLevel: (cached.result as Record<string, string>).difficultyLevel || "intermediate",
+          preview: text.slice(0, 100),
+        }).returning({ id: smartReaderHistory.id });
+
+        return Response.json({ ...cached.result, id: saved.id, cached: true });
+      } catch {
+        return Response.json({ ...cached.result, cached: true });
+      }
+    }
+  } catch (err) {
+    log.error({ err }, "smart-reader.cache.check.failed");
+    // Fall through to AI call
+  }
+
+  // ── Call AI ──
   try {
     const completion = await openAiClient.chat.completions.create({
       model: openAiConfig.smartReaderModel,
@@ -100,11 +175,12 @@ export async function POST(request: Request) {
       readingTips: parsed.readingTips || "",
     };
 
-    // Save to DB for history
+    // Save to DB with hash for future cache hits
     try {
       const [saved] = await db.insert(smartReaderHistory).values({
-        userId: session.user.id,
+        userId,
         sourceText: text,
+        sourceTextHash: textHash,
         result,
         difficultyLevel: result.difficultyLevel,
         preview: text.slice(0, 100),
@@ -113,7 +189,6 @@ export async function POST(request: Request) {
       return Response.json({ ...result, id: saved.id });
     } catch (dbErr) {
       log.error({ err: dbErr }, "smart-reader.db.save.failed");
-      // Still return the result even if DB save fails
       return Response.json(result);
     }
   } catch (err) {

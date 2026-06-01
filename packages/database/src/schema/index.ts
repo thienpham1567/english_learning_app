@@ -1119,6 +1119,8 @@ export const smartReaderHistory = pgTable("smart_reader_history", {
   userId: text("user_id").notNull(),
   /** Original English text that was analyzed */
   sourceText: text("source_text").notNull(),
+  /** SHA-256 hash of sourceText for cache lookup */
+  sourceTextHash: text("source_text_hash"),
   /** Full structured JSON response from the AI */
   // biome-ignore lint/suspicious/noExplicitAny: jsonb stores the full SmartReaderResponse
   result: jsonb("result").notNull().$type<Record<string, any>>(),
@@ -1129,6 +1131,7 @@ export const smartReaderHistory = pgTable("smart_reader_history", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("smart_reader_history_user_created_idx").on(table.userId, table.createdAt),
+  index("smart_reader_history_hash_idx").on(table.sourceTextHash),
 ]);
 
 export type SmartReaderHistoryRow = typeof smartReaderHistory.$inferSelect;

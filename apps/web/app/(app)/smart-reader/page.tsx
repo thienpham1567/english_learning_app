@@ -3,7 +3,7 @@
 import { Clock, Loader2, Sparkles, Trash2, Volume2, X } from "lucide-react";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { SmartReaderResult } from "./_components/SmartReaderResult";
@@ -58,6 +58,13 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   advanced: "text-error",
 };
 
+const DIFFICULTY_LABELS: Record<string, string> = {
+  all: "All",
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  advanced: "Advanced",
+};
+
 function formatRelativeDate(dateStr: string): string {
   const date = new Date(dateStr);
   const now = new Date();
@@ -72,6 +79,8 @@ function formatRelativeDate(dateStr: string): string {
   return date.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" });
 }
 
+const MAX_INPUT_LENGTH = 3000;
+
 export default function SmartReaderPage() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<SmartReaderResponse | null>(null);
@@ -81,7 +90,15 @@ export default function SmartReaderPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [activeSourceText, setActiveSourceText] = useState<string | null>(null);
+  const [historyFilter, setHistoryFilter] = useState<string>("all");
   const tts = useTextToSpeech();
+  const abortRef = useRef<AbortController | null>(null);
+
+  // Auto-clear error when input changes
+  useEffect(() => {
+    if (error) setError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input]);
 
   // Load history
   const loadHistory = useCallback(async () => {
@@ -103,7 +120,17 @@ export default function SmartReaderPage() {
   const analyze = useCallback(
     async (text?: string) => {
       const t = (text ?? input).trim();
-      if (!t || isLoading) return;
+      if (!t) return;
+
+      // Abort any in-flight request
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+      const ctrl = new AbortController();
+      abortRef.current = ctrl;
+
+      // Stop TTS if playing
+      tts.stop?.();
 
       setIsLoading(true);
       setError(null);
@@ -112,21 +139,22 @@ export default function SmartReaderPage() {
 
       try {
         const data = await api.post<SmartReaderResponse>("/smart-reader", { text: t });
+        if (ctrl.signal.aborted) return;
         setResult(data);
         if (text) setInput(text);
-        // Reload history to include the new entry
         loadHistory();
       } catch (err) {
+        if (ctrl.signal.aborted) return;
         const message =
           err && typeof err === "object" && "message" in err
             ? (err as { message: string }).message
             : "Analysis failed. Please try again.";
         setError(message);
       } finally {
-        setIsLoading(false);
+        if (!ctrl.signal.aborted) setIsLoading(false);
       }
     },
-    [input, isLoading, loadHistory],
+    [input, loadHistory, tts],
   );
 
   const loadHistoryEntry = useCallback(
@@ -153,17 +181,21 @@ export default function SmartReaderPage() {
     [],
   );
 
+  // Optimistic delete
   const deleteHistoryEntry = useCallback(
     async (id: string, e: React.MouseEvent) => {
       e.stopPropagation();
+      // Optimistic: remove immediately
+      const prev = history;
+      setHistory((h) => h.filter((x) => x.id !== id));
       try {
         await api.delete(`/smart-reader/history/${id}`);
-        setHistory((prev) => prev.filter((h) => h.id !== id));
       } catch {
-        // ignore
+        // Revert on failure
+        setHistory(prev);
       }
     },
-    [],
+    [history],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -172,6 +204,13 @@ export default function SmartReaderPage() {
       analyze();
     }
   };
+
+  // Filter history by difficulty
+  const filteredHistory = historyFilter === "all"
+    ? history
+    : history.filter((h) => h.difficultyLevel === historyFilter);
+
+  const hasResult = !!result && !isLoading;
 
   return (
     <div className="flex min-h-full flex-col">
@@ -190,16 +229,17 @@ export default function SmartReaderPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Paste English text here to analyze..."
-                rows={5}
+                rows={hasResult ? 2 : 5}
+                maxLength={MAX_INPUT_LENGTH}
                 disabled={isLoading}
-                className="w-full resize-none border-0 bg-transparent p-4 text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none"
+                className={`w-full resize-none border-0 bg-transparent p-4 text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none transition-all duration-300 ${hasResult ? "max-h-[80px]" : "max-h-[200px]"}`}
               />
 
               {/* Bottom toolbar */}
               <div className="flex items-center justify-between border-t border-border/50 px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono text-text-muted">
-                    {input.length} / 3,000
+                  <span className={`text-[10px] font-mono ${input.length >= MAX_INPUT_LENGTH ? "text-error font-bold" : "text-text-muted"}`}>
+                    {input.length} / {MAX_INPUT_LENGTH.toLocaleString()}
                   </span>
                   {input.trim() && (
                     <button
@@ -285,17 +325,41 @@ export default function SmartReaderPage() {
                     </button>
                   </div>
 
+                  {/* Difficulty filter chips */}
+                  <div className="flex items-center gap-1.5 px-4 py-2 border-b border-border/30">
+                    {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => (
+                      <button
+                        key={key}
+                        onClick={() => setHistoryFilter(key)}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                          historyFilter === key
+                            ? "bg-accent/15 text-accent border border-accent/30"
+                            : "text-text-muted hover:text-ink hover:bg-surface-hover border border-transparent"
+                        }`}
+                      >
+                        {label}
+                        {key !== "all" && (
+                          <span className="ml-1 opacity-60">
+                            {history.filter((h) => key === "all" || h.difficultyLevel === key).length}
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
                   {isLoadingHistory ? (
                     <div className="flex justify-center py-8">
                       <Loader2 className="h-5 w-5 animate-spin text-accent" />
                     </div>
-                  ) : history.length === 0 ? (
+                  ) : filteredHistory.length === 0 ? (
                     <div className="py-8 text-center text-xs text-text-muted">
-                      No translations yet. Try analyzing some text!
+                      {history.length === 0
+                        ? "No translations yet. Try analyzing some text!"
+                        : "No translations at this level."}
                     </div>
                   ) : (
                     <div className="max-h-[280px] overflow-y-auto divide-y divide-border/30">
-                      {history.map((entry) => (
+                      {filteredHistory.map((entry) => (
                         <button
                           key={entry.id}
                           onClick={() => loadHistoryEntry(entry.id)}
