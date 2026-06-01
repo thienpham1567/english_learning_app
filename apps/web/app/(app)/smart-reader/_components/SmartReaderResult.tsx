@@ -1,10 +1,11 @@
 "use client";
 
-import { ChevronDown, ChevronUp, Lightbulb, Volume2 } from "lucide-react";
+import { BookOpenCheck, ChevronDown, ChevronUp, Lightbulb, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import type { SmartReaderResponse } from "../page";
 import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { lookupWord } from "@/components/shared/FloatingDictionaryWidget";
 
 type Props = {
   result: SmartReaderResponse;
@@ -146,21 +147,25 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
-                    className="group rounded-xl border-2 border-border p-3 hover:border-accent/30 hover:bg-accent/3 transition-all"
+                    onClick={() => lookupWord(item.word)}
+                    className="group rounded-xl border-2 border-border p-3 hover:border-accent/30 hover:bg-accent/5 transition-all cursor-pointer active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-bold text-ink">{item.word}</span>
+                      <span className="text-sm font-bold text-ink group-hover:text-accent transition-colors">{item.word}</span>
                       <span className="text-[9px] font-bold text-text-muted bg-bg-deep px-1.5 py-0.5 rounded-md uppercase font-mono">
                         {item.pos}
                       </span>
-                      <button
-                        onClick={() => tts.speak(item.word)}
-                        disabled={tts.isLoading}
-                        className="text-text-muted hover:text-accent transition-colors cursor-pointer ml-auto"
-                        aria-label={`Listen to "${item.word}"`}
-                      >
-                        <Volume2 className="h-3 w-3" />
-                      </button>
+                      <div className="flex items-center gap-1 ml-auto">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); tts.speak(item.word); }}
+                          disabled={tts.isLoading}
+                          className="text-text-muted hover:text-accent transition-colors cursor-pointer"
+                          aria-label={`Listen to "${item.word}"`}
+                        >
+                          <Volume2 className="h-3 w-3" />
+                        </button>
+                        <BookOpenCheck className="h-3 w-3 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
                     </div>
                     <p className="text-xs text-text-secondary">{item.meaning}</p>
                     {item.example && (

@@ -15,6 +15,13 @@ import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
+/** Trigger dictionary lookup from anywhere in the app */
+export function lookupWord(word: string) {
+  window.dispatchEvent(
+    new CustomEvent("dictionary:lookup", { detail: { word } }),
+  );
+}
+
 function useIsMobile(bp = 768) {
   const [m, setM] = useState(() =>
     typeof window === "undefined" ? false : window.innerWidth <= bp,
@@ -95,6 +102,16 @@ export function FloatingDictionaryWidget() {
       if (reqId === reqIdRef.current) setIsSearching(false);
     }
   }, []);
+
+  // Listen for programmatic lookup events from other components
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const word = (e as CustomEvent<{ word: string }>).detail?.word;
+      if (word) search(word);
+    };
+    window.addEventListener("dictionary:lookup", handler);
+    return () => window.removeEventListener("dictionary:lookup", handler);
+  }, [search]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
