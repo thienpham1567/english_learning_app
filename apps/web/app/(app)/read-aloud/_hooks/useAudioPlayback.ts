@@ -2,26 +2,26 @@
 
 import { toast } from "sonner";
 import { useCallback, useRef, useState } from "react";
+import {
+  getCachedAudio,
+  setCachedAudio,
+  makeCacheKey,
+  clearAllCachedAudio,
+} from "../_lib/audio-cache";
 
 const MAX_CHARS = 10_000;
 const LRU_MAX = 15;
 
-/* ── LRU blob cache ── */
+/* ── In-memory blob URL cache (L0 — same session, instant) ── */
 const lruKeys: string[] = [];
 const blobCache = new Map<string, string>(); // cacheKey → objectURL
 
-function makeCacheKey(text: string, voice: string, speed: number): string {
-  return `${voice}|${speed}|${text.trim()}`;
-}
-
-function setCached(key: string, url: string) {
-  // If already exists, move to end (most recent)
+function setMemCached(key: string, url: string) {
   const idx = lruKeys.indexOf(key);
   if (idx >= 0) lruKeys.splice(idx, 1);
   lruKeys.push(key);
   blobCache.set(key, url);
 
-  // Evict oldest if over limit
   while (lruKeys.length > LRU_MAX) {
     const evictKey = lruKeys.shift()!;
     const evictUrl = blobCache.get(evictKey);
@@ -30,7 +30,7 @@ function setCached(key: string, url: string) {
   }
 }
 
-function getCached(key: string): string | undefined {
+function getMemCached(key: string): string | undefined {
   return blobCache.get(key);
 }
 
@@ -40,6 +40,8 @@ export function clearBlobCache() {
   }
   blobCache.clear();
   lruKeys.length = 0;
+  // Also clear persistent caches
+  clearAllCachedAudio().catch(() => {});
 }
 
 export function isCached(text: string, voice: string, speed: number): boolean {
@@ -75,11 +77,11 @@ export function useAudioPlayback() {
 
     const cacheKey = makeCacheKey(text, voiceRole, speed);
 
-    // Check client blob cache first
-    const cachedUrl = getCached(cacheKey);
-    if (cachedUrl) {
-      setAudioUrl(cachedUrl);
-      const audio = new Audio(cachedUrl);
+    // ── L0: In-memory blob cache (same tab, instant) ──
+    const memUrl = getMemCached(cacheKey);
+    if (memUrl) {
+      setAudioUrl(memUrl);
+      const audio = new Audio(memUrl);
       audioRef.current = audio;
       audio.onended = () => setPlaying(false);
       audio.onerror = () => {
@@ -99,6 +101,34 @@ export function useAudioPlayback() {
       }
     }
 
+    // ── L1+L2: Persistent cache (IndexedDB → DB) ──
+    const cached = await getCachedAudio(cacheKey);
+    if (cached) {
+      const url = URL.createObjectURL(cached.blob);
+      setAudioUrl(url);
+      setMemCached(cacheKey, url);
+
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onended = () => setPlaying(false);
+      audio.onerror = () => {
+        setPlaying(false);
+        toast.error("Audio playback failed.");
+      };
+      try {
+        await audio.play();
+        setPlaying(true);
+        setLoading(false);
+        return true; // cached from L1/L2
+      } catch {
+        setPlaying(false);
+        setLoading(false);
+        toast.error("Could not play cached audio.");
+        return;
+      }
+    }
+
+    // ── L3: Call Groq TTS (expensive — last resort) ──
     abortRef.current = new AbortController();
 
     try {
@@ -121,7 +151,14 @@ export function useAudioPlayback() {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
-      setCached(cacheKey, url);
+      setMemCached(cacheKey, url);
+
+      // Save to persistent caches (L1 + L2, non-blocking)
+      setCachedAudio(cacheKey, blob, {
+        text: text.trim(),
+        voiceRole,
+        speed,
+      }).catch(() => {});
 
       const audio = new Audio(url);
       audioRef.current = audio;
@@ -132,11 +169,10 @@ export function useAudioPlayback() {
       };
       await audio.play();
       setPlaying(true);
-      return false; // not cached
+      return false; // fresh from Groq
     } catch (err: unknown) {
       if (err instanceof Error && err.name === "AbortError") return;
       const message = err instanceof Error ? err.message : "Could not generate audio.";
-      // Surface user-friendly messages for known errors
       if (message.includes("429") || message.includes("giới hạn") || message.includes("rate")) {
         toast.error("Rate limit reached. Please wait a moment and try again.", {
           description: "The voice synthesis service is temporarily busy.",

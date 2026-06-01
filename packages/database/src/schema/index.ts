@@ -1086,3 +1086,29 @@ export const readAloudSession = pgTable("read_aloud_session", {
 ]);
 
 export type ReadAloudSessionRow = typeof readAloudSession.$inferSelect;
+
+/** TTS Audio Cache — persists Groq TTS audio across sessions to avoid duplicate API calls.
+ *  Key = hash(text + voice + speed). Stores base64-encoded audio.
+ *  Critical for free-plan users to minimize Groq API usage. */
+export const ttsAudioCache = pgTable("tts_audio_cache", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  /** Deterministic hash: SHA-256 of `${voice}|${speed}|${text}` */
+  cacheKey: text("cache_key").notNull(),
+  /** Base64-encoded audio data */
+  audioBase64: text("audio_base64").notNull(),
+  mimeType: text("mime_type").notNull().default("audio/wav"),
+  /** First 100 chars of original text for debugging */
+  textPreview: text("text_preview"),
+  voiceRole: text("voice_role").notNull(),
+  speed: real("speed").notNull().default(1.0),
+  sizeBytes: integer("size_bytes").notNull().default(0),
+  /** LRU tracking — updated on every cache hit */
+  lastUsedAt: timestamp("last_used_at", { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("tts_audio_cache_user_key_idx").on(table.userId, table.cacheKey),
+  index("tts_audio_cache_user_lru_idx").on(table.userId, table.lastUsedAt),
+]);
+
+export type TtsAudioCacheRow = typeof ttsAudioCache.$inferSelect;

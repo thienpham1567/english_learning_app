@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/lib/api-client";
 import { VOICES } from "../_data/voices";
+import { getCachedAudio, setCachedAudio, makeCacheKey } from "../_lib/audio-cache";
 
 export interface DialogueLine {
   speaker: string; // "A" | "B" | "C"
@@ -232,21 +233,32 @@ export function useDialogue() {
       const getVoiceRole = (line: DialogueLine) =>
         assignments.find((a) => a.speaker === line.speaker)?.voiceRole ?? assignments[0].voiceRole;
 
-      // Check which lines are already cached on the client
+      // Check which lines are already cached (L0 in-memory + L1 IndexedDB + L2 DB)
       const uncachedIndices: number[] = [];
+      const resolvedUrls: (string | null)[] = new Array(lines.length).fill(null);
+
       for (let i = 0; i < lines.length; i++) {
-        const cacheKey = `${lines[i].speaker}|${lines[i].text}|${getVoiceRole(lines[i])}|${speed}`;
-        if (!audioCacheRef.current.has(cacheKey)) {
-          uncachedIndices.push(i);
+        const memKey = `${lines[i].speaker}|${lines[i].text}|${getVoiceRole(lines[i])}|${speed}`;
+        // L0: in-memory
+        if (audioCacheRef.current.has(memKey)) {
+          resolvedUrls[i] = audioCacheRef.current.get(memKey)!;
+          continue;
         }
+        // L1+L2: persistent cache
+        const persistKey = makeCacheKey(lines[i].text, getVoiceRole(lines[i]), speed);
+        const cached = await getCachedAudio(persistKey);
+        if (cached) {
+          const url = URL.createObjectURL(cached.blob);
+          audioCacheRef.current.set(memKey, url);
+          resolvedUrls[i] = url;
+          continue;
+        }
+        uncachedIndices.push(i);
       }
 
       // If everything is cached, return immediately
       if (uncachedIndices.length === 0) {
-        return lines.map((line) => {
-          const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
-          return audioCacheRef.current.get(cacheKey)!;
-        });
+        return resolvedUrls as string[];
       }
 
       // Build batch request for uncached lines only
@@ -271,27 +283,34 @@ export function useDialogue() {
 
       const data: { segments: string[] } = await res.json();
 
-      // Decode base64 segments → blob URLs and cache them
+      // Decode base64 segments → blob URLs, cache in all layers
       for (let j = 0; j < uncachedIndices.length; j++) {
         const i = uncachedIndices[j];
         const line = lines[i];
-        const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
+        const voiceRole = getVoiceRole(line);
+        const memKey = `${line.speaker}|${line.text}|${voiceRole}|${speed}`;
 
         const binary = atob(data.segments[j]);
         const bytes = new Uint8Array(binary.length);
         for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
         const blob = new Blob([bytes], { type: "audio/wav" });
         const url = URL.createObjectURL(blob);
-        audioCacheRef.current.set(cacheKey, url);
+
+        // L0: in-memory
+        audioCacheRef.current.set(memKey, url);
+        resolvedUrls[i] = url;
+
+        // L1+L2: persistent cache (fire-and-forget)
+        const persistKey = makeCacheKey(line.text, voiceRole, speed);
+        setCachedAudio(persistKey, blob, {
+          text: line.text,
+          voiceRole,
+          speed,
+        }).catch(() => {});
       }
 
       setBatchProgress(null);
-
-      // Return all URLs in order
-      return lines.map((line) => {
-        const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
-        return audioCacheRef.current.get(cacheKey)!;
-      });
+      return resolvedUrls as string[];
     },
     [],
   );
@@ -315,6 +334,13 @@ export function useDialogue() {
       speed: number,
       signal: AbortSignal,
     ): Promise<string> => {
+      // Check persistent cache first
+      const persistKey = makeCacheKey(text, voiceRole, speed);
+      const cached = await getCachedAudio(persistKey);
+      if (cached) {
+        return URL.createObjectURL(cached.blob);
+      }
+
       const res = await fetch("/api/read-aloud", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -323,6 +349,10 @@ export function useDialogue() {
       });
       if (!res.ok) throw new Error("TTS failed");
       const blob = await res.blob();
+
+      // Save to persistent cache (fire-and-forget)
+      setCachedAudio(persistKey, blob, { text, voiceRole, speed }).catch(() => {});
+
       return URL.createObjectURL(blob);
     },
     [],

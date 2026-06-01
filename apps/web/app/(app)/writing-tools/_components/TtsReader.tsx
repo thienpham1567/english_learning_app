@@ -6,6 +6,11 @@ import * as m from "motion/react-client";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  getCachedAudio,
+  setCachedAudio,
+  makeCacheKey,
+} from "@/app/(app)/read-aloud/_lib/audio-cache";
 
 type Accent = "us" | "uk" | "au";
 type Gender = "male" | "female";
@@ -55,6 +60,29 @@ export function TtsReader() {
         audioUrlRef.current = null;
       }
 
+      // Build cache key using accent+gender as voice identifier
+      const voiceKey = `${accent}-${gender}`;
+      const cacheKey = makeCacheKey(text.trim(), voiceKey, speed);
+
+      // Check persistent cache (IndexedDB → DB)
+      const cached = await getCachedAudio(cacheKey);
+      if (cached) {
+        const audioUrl = URL.createObjectURL(cached.blob);
+        audioUrlRef.current = audioUrl;
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
+        audio.addEventListener("playing", () => setPlaying(true));
+        audio.addEventListener("ended", () => setPlaying(false));
+        audio.addEventListener("pause", () => setPlaying(false));
+        audio.addEventListener("error", () => {
+          setError("Error playing audio file.");
+          setPlaying(false);
+        });
+        await audio.play();
+        return;
+      }
+
+      // No cache — call API
       const res = await fetch("/api/voice/synthesize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,6 +102,13 @@ export function TtsReader() {
       const blob = await res.blob();
       const audioUrl = URL.createObjectURL(blob);
       audioUrlRef.current = audioUrl;
+
+      // Save to persistent cache (fire-and-forget)
+      setCachedAudio(cacheKey, blob, {
+        text: text.trim(),
+        voiceRole: voiceKey,
+        speed,
+      }).catch(() => {});
 
       const audio = new Audio(audioUrl);
       audioRef.current = audio;
