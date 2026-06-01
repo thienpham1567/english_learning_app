@@ -151,7 +151,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,color-mix(in srgb, var(--warning) 6%, transparent),transparent_70%)] z-0" />
 
         <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col z-10">
-          {chat.isLoadingMessages && conversationId && <ChatSkeleton />}
+          {/* Skeleton only for truly empty loads (no cached messages to show) */}
+          {chat.isLoadingMessages && !hasMessages && conversationId && <ChatSkeleton />}
 
           {!hasMessages && !chat.isLoadingMessages && (
             <EmptyState
@@ -164,8 +165,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             />
           )}
 
-          {hasMessages && !chat.isLoadingMessages && (
-            <div className="flex flex-col">
+          {hasMessages && (
+            <div
+              className="flex flex-col transition-opacity duration-200"
+              style={{ opacity: chat.isLoadingMessages ? 0.4 : 1 }}
+            >
               {chat.messages.map((m, index) => (
                 <div key={m.id} className={getMessageSpacingClass(m, chat.messages[index - 1])}>
                   <ChatMessage

@@ -96,17 +96,23 @@ export function useChatMessages({
     }
 
     let cancelled = false;
+    // Don't clear messages immediately — keep old messages visible
+    // until new ones arrive for smooth transition
     setIsLoadingMessages(true);
+    setError(null);
     (async () => {
       try {
         const rows = await api.get<
           Array<{ id: string; role: "user" | "assistant"; content: string }>
         >(`/conversations/${conversationId}/messages`);
         if (cancelled) return;
+        // Atomic swap — old messages replaced in one render
         setMessages(rows.map((r) => ({ id: r.id, role: r.role, text: r.content })));
-        setError(null);
       } catch {
-        if (!cancelled) setError("Không thể tải cuộc trò chuyện này.");
+        if (!cancelled) {
+          setMessages([]);
+          setError("Không thể tải cuộc trò chuyện này.");
+        }
       } finally {
         if (!cancelled) setIsLoadingMessages(false);
       }
