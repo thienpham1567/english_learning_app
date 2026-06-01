@@ -34,10 +34,10 @@ export function getOpenAiConfig(): OpenAiConfig {
   return {
     apiKey,
     baseURL: process.env.OPENAI_BASE_URL ?? "https://openrouter.ai/api/v1",
-    chatModel: process.env.OPENAI_CHAT_MODEL ?? "google/gemini-3.1-flash-lite-preview",
-    dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "google/gemini-3.1-flash-lite-preview",
-    listeningModel: process.env.OPENAI_LISTENING_MODEL ?? "google/gemini-2.5-flash",
-    smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "google/gemini-2.5-flash",
+    chatModel: process.env.OPENAI_CHAT_MODEL ?? "deepseek/deepseek-v4-0324",
+    dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "deepseek/deepseek-v4-0324",
+    listeningModel: process.env.OPENAI_LISTENING_MODEL ?? "deepseek/deepseek-v4-0324",
+    smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "deepseek/deepseek-v4-0324",
     dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(process.env.DICTIONARY_CACHE_TTL_MS),
   };
 }
