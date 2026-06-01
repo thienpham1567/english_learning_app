@@ -37,7 +37,7 @@ export function getOpenAiConfig(): OpenAiConfig {
     chatModel: process.env.OPENAI_CHAT_MODEL ?? "google/gemini-3.1-flash-lite-preview",
     dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "google/gemini-3.1-flash-lite-preview",
     listeningModel: process.env.OPENAI_LISTENING_MODEL ?? "google/gemini-2.5-flash",
-    smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "qwen/qwen3-30b-a3b",
+    smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "google/gemini-2.5-flash",
     dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(process.env.DICTIONARY_CACHE_TTL_MS),
   };
 }

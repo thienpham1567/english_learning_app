@@ -64,7 +64,6 @@ export async function POST(request: Request) {
       ],
       temperature: 0.3,
       max_tokens: 2000,
-      response_format: { type: "json_object" },
     });
 
     const raw = completion.choices[0]?.message?.content;
@@ -72,8 +71,24 @@ export async function POST(request: Request) {
       throw new Error("Empty response from model");
     }
 
-    // Parse and validate JSON
-    const parsed = JSON.parse(raw);
+    // Strip markdown code fences if model wraps JSON in ```json ... ```
+    let jsonStr = raw.trim();
+    if (jsonStr.startsWith("```")) {
+      jsonStr = jsonStr
+        .replace(/^```(?:json)?\s*\n?/, "")
+        .replace(/\n?\s*```\s*$/, "");
+    }
+
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(jsonStr);
+    } catch (parseErr) {
+      log.error({ raw: raw.slice(0, 500) }, "smart-reader.json.parse.failed");
+      return Response.json(
+        { error: "Failed to parse AI response. Please try again." },
+        { status: 502 },
+      );
+    }
 
     // Ensure required fields exist
     const result = {
@@ -87,13 +102,6 @@ export async function POST(request: Request) {
     return Response.json(result);
   } catch (err) {
     log.error({ err }, "smart-reader.analysis.failed");
-
-    if (err instanceof SyntaxError) {
-      return Response.json(
-        { error: "Failed to parse AI response. Please try again." },
-        { status: 502 },
-      );
-    }
 
     const message = err instanceof Error ? err.message : "Unknown error";
     if (message.includes("429") || message.includes("rate")) {
