@@ -2,6 +2,7 @@
 
 import {
   BookOpen,
+  BookOpenCheck,
   BookOpenText,
   ChevronDown,
   CircleCheckBig,
@@ -90,6 +91,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Tools",
     items: [
       { href: "/english-chatbot", label: "AI Chatbot", icon: MessageSquare },
+      { href: "/smart-reader", label: "Smart Reader", icon: BookOpenCheck },
       { href: "/read-aloud", label: "Read Aloud", icon: Volume2 },
       { href: "/ipa-chart", label: "IPA Chart", icon: Languages },
       { href: "/writing-tools", label: "Writing Tools", icon: Pencil },
