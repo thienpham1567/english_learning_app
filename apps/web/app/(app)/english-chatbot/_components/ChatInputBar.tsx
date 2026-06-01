@@ -49,7 +49,7 @@ export function ChatInputBar({
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 160) + "px";
+    el.style.height = Math.min(el.scrollHeight, 200) + "px";
   }, []);
 
   const handleKeyDown = useCallback(
@@ -75,129 +75,138 @@ export function ChatInputBar({
     textareaRef.current.style.height = "auto";
   }
 
+  const hasInput = input.trim().length > 0;
+
   return (
-    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t-2 border-border bg-chat-surface">
-      <div className="mx-auto max-w-3xl flex flex-col gap-3">
-        {/* Input Bar Container */}
-        <div className="flex items-end gap-2.5 rounded-2xl border-2 border-border bg-chat-input-bg p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
-          <div className="pb-1">
-            <PersonaSwitcher
-              value={selectedPersonaId}
-              onChange={onPersonaChange}
-              disabled={isLoading}
-            />
-          </div>
+    <div className="flex-shrink-0 z-25 relative">
+      {/* Gradient fade from chat area */}
+      <div className="absolute -top-8 left-0 right-0 h-8 bg-gradient-to-t from-chat-bg to-transparent pointer-events-none" />
 
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Ask in English or choose a tutor on the left..."
-            disabled={isLoading}
-            rows={1}
-            className="flex-1 min-h-[38px] max-h-[160px] resize-none border-0 bg-transparent py-2 px-2 text-xs md:text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none"
-          />
+      <div className="px-4 pb-4 pt-2 md:px-6 md:pb-6">
+        <div className="mx-auto max-w-2xl flex flex-col gap-2.5">
+          {/* ── Main Input Container ── */}
+          <div className="rounded-2xl border-2 border-border bg-chat-surface shadow-lg focus-within:border-accent/50 focus-within:shadow-accent/5 transition-all duration-200">
+            {/* Textarea */}
+            <div className="flex items-end gap-2 p-3">
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Message..."
+                disabled={isLoading}
+                rows={1}
+                className="flex-1 min-h-[42px] max-h-[200px] resize-none border-0 bg-transparent py-2 px-1 text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none"
+              />
 
-          {/* Mic Button */}
-          {voice.isSupported && (
-            <button
-              onClick={() => {
-                if (voice.isListening) {
-                  voice.stop();
-                } else if (!voice.isTranscribing) {
-                  voice.start();
-                }
-              }}
-              disabled={isLoading || voice.isTranscribing}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 transition-all duration-200 cursor-pointer shadow-sm relative active:scale-95 ${
-                voice.isListening
-                  ? "border-error text-error bg-error/10 animate-pulse"
-                  : voice.isTranscribing
-                    ? "border-accent text-accent bg-accent/10"
-                    : "border-border text-text-secondary bg-chat-surface-hover hover:border-border-strong hover:text-text-primary"
-              } disabled:opacity-40 disabled:cursor-not-allowed`}
-              aria-label={
-                voice.isListening
-                  ? "Stop recording"
-                  : voice.isTranscribing
-                    ? "Transcribing..."
-                    : "Speak English"
-              }
-            >
-              {voice.isListening ? (
-                <MicOff className="h-4 w-4" />
-              ) : voice.isTranscribing ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Mic className="h-4 w-4" />
-              )}
-            </button>
-          )}
+              {/* Right-side buttons */}
+              <div className="flex items-center gap-1.5 pb-1">
+                {/* Mic Button */}
+                {voice.isSupported && (
+                  <button
+                    onClick={() => {
+                      if (voice.isListening) {
+                        voice.stop();
+                      } else if (!voice.isTranscribing) {
+                        voice.start();
+                      }
+                    }}
+                    disabled={isLoading || voice.isTranscribing}
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 transition-all duration-200 cursor-pointer active:scale-95 ${
+                      voice.isListening
+                        ? "border-error text-error bg-error/10 animate-pulse"
+                        : voice.isTranscribing
+                          ? "border-accent text-accent bg-accent/10"
+                          : "border-border text-text-muted bg-transparent hover:text-text-primary hover:border-border-strong"
+                    } disabled:opacity-40 disabled:cursor-not-allowed`}
+                    aria-label={
+                      voice.isListening
+                        ? "Stop recording"
+                        : voice.isTranscribing
+                          ? "Transcribing..."
+                          : "Speak English"
+                    }
+                  >
+                    {voice.isListening ? (
+                      <MicOff className="h-3.5 w-3.5" />
+                    ) : voice.isTranscribing ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Mic className="h-3.5 w-3.5" />
+                    )}
+                  </button>
+                )}
 
-          {/* Send / Stop button */}
-          {isLoading ? (
-            <button
-              onClick={onStop}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-error hover:bg-error text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
-              aria-label="Stop response"
-              title="Stop response"
-            >
-              <Square className="h-4 w-4 fill-current" />
-            </button>
-          ) : (
-            <button
-              onClick={onSend}
-              disabled={!input.trim()}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
-                input.trim()
-                  ? "bg-accent text-white hover:bg-accent-hover"
-                  : "bg-chat-surface-hover border-2 border-border text-text-muted cursor-not-allowed opacity-50"
-              }`}
-            >
-              <Send className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+                {/* Send / Stop */}
+                {isLoading ? (
+                  <button
+                    onClick={onStop}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-error text-white transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+                    aria-label="Stop response"
+                  >
+                    <Square className="h-3.5 w-3.5 fill-current" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={onSend}
+                    disabled={!hasInput}
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-200 cursor-pointer active:scale-95 ${
+                      hasInput
+                        ? "bg-accent text-white shadow-sm hover:brightness-110"
+                        : "bg-transparent border-2 border-border text-text-muted cursor-not-allowed opacity-40"
+                    }`}
+                  >
+                    <Send className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
 
-        {/* Hints and pill controls row */}
-        <div className="flex items-center justify-between gap-4 flex-wrap text-[10px] text-text-muted font-semibold px-1">
-          <span className="hidden sm:inline font-mono">
-            Enter to send · Shift+Enter for new line
-          </span>
-          <span className="sm:hidden font-mono">Press Enter to send</span>
+            {/* ── Bottom toolbar ── */}
+            <div className="flex items-center justify-between border-t border-border/50 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <PersonaSwitcher
+                  value={selectedPersonaId}
+                  onChange={onPersonaChange}
+                  disabled={isLoading}
+                />
 
-          <div className="flex items-center gap-2">
-            {/* Voice Mode toggle pill */}
-            {voice.isSupported && tts.isSupported && (
-              <button
-                onClick={onToggleVoiceMode}
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
-                  voiceMode
-                    ? "border-accent bg-accent/10 text-accent font-bold"
-                    : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
-                }`}
-              >
-                <Mic className="h-3 w-3" />
-                <span>{voiceMode ? `Voice Mode (${voiceExchanges})` : "Voice Mode"}</span>
-              </button>
-            )}
+                {/* Voice Mode pill */}
+                {voice.isSupported && tts.isSupported && (
+                  <button
+                    onClick={onToggleVoiceMode}
+                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                      voiceMode
+                        ? "border-accent/50 bg-accent/10 text-accent"
+                        : "border-border bg-transparent text-text-muted hover:text-text-primary hover:border-border-strong"
+                    }`}
+                  >
+                    <Mic className="h-3 w-3" />
+                    <span>{voiceMode ? `Voice (${voiceExchanges})` : "Voice"}</span>
+                  </button>
+                )}
 
-            {/* Pronunciation Feedback toggle pill */}
-            {voiceMode && (
-              <button
-                onClick={onTogglePronEnabled}
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
-                  pronEnabled
-                    ? "border-success/50 bg-success/10 text-success font-bold"
-                    : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
-                }`}
-              >
-                <Volume2 className="h-3 w-3" />
-                <span>Pronunciation feedback</span>
-                {pronEnabled && <Check className="h-3 w-3 text-success" />}
-              </button>
-            )}
+                {/* Pronunciation pill */}
+                {voiceMode && (
+                  <button
+                    onClick={onTogglePronEnabled}
+                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                      pronEnabled
+                        ? "border-success/50 bg-success/10 text-success"
+                        : "border-border bg-transparent text-text-muted hover:text-text-primary hover:border-border-strong"
+                    }`}
+                  >
+                    <Volume2 className="h-3 w-3" />
+                    <span>Pronunciation</span>
+                    {pronEnabled && <Check className="h-3 w-3" />}
+                  </button>
+                )}
+              </div>
+
+              <span className="hidden sm:inline text-[10px] text-text-muted font-mono">
+                ↵ Send · ⇧↵ New line
+              </span>
+            </div>
           </div>
         </div>
       </div>

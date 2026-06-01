@@ -631,15 +631,15 @@ body {
 }
 
 
-/* ── Markdown rendering in chat ── */
+/* ── Markdown rendering in chat — Premium Typography ── */
 .chat-markdown p {
   margin: 0;
 }
 .chat-markdown p:not(:last-child) {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .chat-markdown strong {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ink);
 }
 .chat-markdown em {
@@ -647,25 +647,133 @@ body {
   color: var(--text-secondary);
 }
 .chat-markdown code {
-  border-radius: 5px;
+  border-radius: 6px;
   background: var(--bg-deep);
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
   padding: 2px 6px;
   font-family: var(--font-mono);
-  font-size: 0.86em;
+  font-size: 0.85em;
   color: var(--accent-active);
 }
 .chat-markdown ul {
   margin: 8px 0;
-  list-style: disc;
-  padding-left: 20px;
+  list-style: none;
+  padding-left: 18px;
+}
+.chat-markdown ul li {
+  position: relative;
+  line-height: 1.75;
+}
+.chat-markdown ul li::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--accent);
+  opacity: 0.6;
 }
 .chat-markdown ol {
   margin: 8px 0;
-  list-style: decimal;
-  padding-left: 20px;
+  list-style: none;
+  padding-left: 22px;
+  counter-reset: md-ol;
 }
-.chat-markdown li {
+.chat-markdown ol li {
+  position: relative;
   line-height: 1.75;
+  counter-increment: md-ol;
+}
+.chat-markdown ol li::before {
+  content: counter(md-ol) ".";
+  position: absolute;
+  left: -22px;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.7;
+  font-family: var(--font-mono);
+}
+/* Headings */
+.chat-markdown h1,
+.chat-markdown h2,
+.chat-markdown h3,
+.chat-markdown h4 {
+  color: var(--ink);
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.chat-markdown h1 { font-size: 1.25em; }
+.chat-markdown h2 { font-size: 1.15em; }
+.chat-markdown h3 { font-size: 1.05em; }
+.chat-markdown h4 { font-size: 1em; }
+/* Blockquotes */
+.chat-markdown blockquote {
+  margin: 10px 0;
+  padding: 10px 16px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+  border-radius: 0 8px 8px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.chat-markdown blockquote p {
+  margin: 0;
+}
+/* Tables */
+.chat-markdown table {
+  width: 100%;
+  margin: 10px 0;
+  border-collapse: collapse;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.88em;
+}
+.chat-markdown th {
+  background: var(--bg-deep);
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--border);
+  color: var(--ink);
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.chat-markdown td {
+  padding: 7px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  color: var(--text-primary);
+}
+.chat-markdown tr:last-child td {
+  border-bottom: none;
+}
+.chat-markdown tr:hover td {
+  background: color-mix(in srgb, var(--surface-hover) 50%, transparent);
+}
+/* Links */
+.chat-markdown a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.chat-markdown a:hover {
+  border-bottom-color: var(--accent);
+}
+/* Horizontal rule */
+.chat-markdown hr {
+  margin: 16px 0;
+  border: none;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
 }
 
 /* ── Grain texture overlay ── */

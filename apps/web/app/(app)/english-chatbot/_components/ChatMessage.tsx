@@ -16,15 +16,58 @@ export type DividerMessage = {
 
 export type PageMessage = AppChatMessage | DividerMessage;
 
-function formatTime() {
-  try {
-    return new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-  } catch {
-    return "";
+/* ── Utility: extract text from ReactNode tree ── */
+function extractText(children: ReactNode): string {
+  if (typeof children === "string") return children;
+  if (typeof children === "number") return String(children);
+  if (Array.isArray(children)) return children.map(extractText).join("");
+  if (children && typeof children === "object" && "props" in children) {
+    return extractText(
+      (children as unknown as { props?: { children?: ReactNode } }).props?.children,
+    );
   }
+  return "";
 }
 
-function CopyButton({ text }: { text: string }) {
+/* ── Action Button (ghost style) ── */
+function ActionButton({
+  icon: Icon,
+  label,
+  onClick,
+  active,
+  loading,
+  className = "",
+}: {
+  icon: React.ElementType;
+  label: string;
+  onClick: () => void;
+  active?: boolean;
+  loading?: boolean;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      aria-label={label}
+      title={label}
+      className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-all duration-150 cursor-pointer active:scale-95 ${
+        active
+          ? "text-accent bg-accent/10"
+          : "text-text-muted hover:text-text-primary hover:bg-chat-surface-hover"
+      } ${className}`}
+    >
+      {loading ? (
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+      ) : (
+        <Icon className="h-3.5 w-3.5" />
+      )}
+    </button>
+  );
+}
+
+/* ── Copy Button with feedback ── */
+function CopyAction({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -34,54 +77,16 @@ function CopyButton({ text }: { text: string }) {
   };
 
   return (
-    <button
-      className="rounded-full p-1.5 text-text-muted hover:bg-chat-surface-hover hover:text-text-primary transition-all cursor-pointer"
+    <ActionButton
+      icon={copied ? Check : Copy}
+      label={copied ? "Copied!" : "Copy"}
       onClick={handleCopy}
-      aria-label="Copy"
-    >
-      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-    </button>
+      active={copied}
+    />
   );
 }
 
-function SpeakButton({
-  text,
-  onSpeak,
-  isSpeaking,
-  isLoading,
-  onStop,
-}: {
-  text: string;
-  onSpeak: (text: string) => void;
-  isSpeaking: boolean;
-  isLoading?: boolean;
-  onStop: () => void;
-}) {
-  const active = isSpeaking || isLoading;
-  return (
-    <button
-      className={`rounded-full p-1.5 transition-all cursor-pointer ${
-        active
-          ? "text-accent bg-accent/10 animate-pulse"
-          : "text-text-muted hover:bg-chat-surface-hover hover:text-text-primary"
-      }`}
-      onClick={() => (active ? onStop() : onSpeak(text))}
-      disabled={isLoading}
-      aria-label={
-        isSpeaking ? "Stop playback" : isLoading ? "Loading..." : "Listen to pronunciation"
-      }
-    >
-      {isLoading ? (
-        <Loader2 className="h-3 w-3 animate-spin" />
-      ) : isSpeaking ? (
-        <Pause className="h-3 w-3" />
-      ) : (
-        <Volume2 className="h-3 w-3" />
-      )}
-    </button>
-  );
-}
-
+/* ── User Avatar ── */
 function UserAvatar() {
   const user = useUser();
 
@@ -90,7 +95,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="w-8 h-8 rounded-full object-cover border-2 border-border shadow-sm"
+        className="w-6 h-6 rounded-lg object-cover border-2 border-border"
         referrerPolicy="no-referrer"
       />
     );
@@ -104,33 +109,22 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid place-items-center w-8 h-8 rounded-full bg-chat-surface border-2 border-border text-[10px] font-bold text-text-secondary shadow-sm">
+    <div className="grid place-items-center w-6 h-6 rounded-lg bg-accent/10 border-2 border-border text-[9px] font-bold text-accent">
       {initials}
     </div>
   );
 }
 
-// Helper to extract text content safely for copy/tts functions
-function extractText(children: ReactNode): string {
-  if (typeof children === "string") return children;
-  if (typeof children === "number") return String(children);
-  if (Array.isArray(children)) return children.map(extractText).join("");
-  if (children && typeof children === "object" && "props" in children) {
-    return extractText(
-      (children as unknown as { props?: { children?: ReactNode } }).props?.children,
-    );
-  }
-  return "";
-}
-
+/* ── Inline code ── */
 function InlineCode({ children }: { children: ReactNode }) {
   return (
-    <code className="px-1.5 py-0.5 rounded bg-chat-code-bg text-ink font-mono text-[0.85em]">
+    <code className="px-1.5 py-0.5 rounded-md bg-chat-code-bg border border-border/50 text-ink font-mono text-[0.85em]">
       {children}
     </code>
   );
 }
 
+/* ── Code Block with header + copy ── */
 function CodeBlock({ children, className }: { children: ReactNode; className?: string }) {
   const [copied, setCopied] = useState(false);
   const text = extractText(children);
@@ -147,38 +141,26 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   };
 
   return (
-    <div className="relative my-2.5 rounded-xl border-2 border-border bg-chat-code-bg overflow-hidden shadow-sm">
+    <div className="relative my-3 rounded-xl border-2 border-border bg-chat-code-bg overflow-hidden shadow-sm">
       <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border bg-chat-code-header text-[10px] text-text-muted font-mono font-bold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
           onClick={onCopy}
-          className="flex items-center gap-1 hover:text-ink transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 hover:text-ink transition-colors cursor-pointer"
           aria-label="Copy"
         >
           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
           <span>{copied ? "Copied" : "Copy"}</span>
         </button>
       </div>
-      <pre className="m-0 p-3.5 overflow-x-auto text-[12px] leading-relaxed font-mono text-text-primary">
+      <pre className="m-0 p-4 overflow-x-auto text-[12px] leading-relaxed font-mono text-text-primary">
         <code className={className}>{children}</code>
       </pre>
     </div>
   );
 }
 
-function RegenerateButton({ onRegenerate }: { onRegenerate: () => void }) {
-  return (
-    <button
-      className="rounded-full p-1.5 text-text-muted hover:bg-chat-surface-hover hover:text-text-primary transition-all cursor-pointer"
-      onClick={onRegenerate}
-      aria-label="Regenerate"
-      title="Regenerate response"
-    >
-      <RotateCcw className="h-3 w-3" />
-    </button>
-  );
-}
-
+/* ── Main ChatMessage Component ── */
 export function ChatMessage({
   message,
   isStreaming = false,
@@ -200,14 +182,15 @@ export function ChatMessage({
   onRegenerate?: () => void;
   isLastAssistant?: boolean;
 }) {
+  /* ── Divider ── */
   if (message.role === "divider") {
     return (
-      <div className="flex items-center gap-4 py-3">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-[10px] font-bold tracking-wider uppercase text-text-muted font-mono">
+      <div className="flex items-center gap-4 py-4 my-2">
+        <div className="h-0.5 flex-1 bg-border" />
+        <span className="text-[10px] font-bold tracking-wider uppercase text-text-muted font-mono px-2">
           {message.text}
         </span>
-        <div className="h-px flex-1 bg-border" />
+        <div className="h-0.5 flex-1 bg-border" />
       </div>
     );
   }
@@ -216,85 +199,100 @@ export function ChatMessage({
   const text = message.text.trim();
   if (!text && !isStreaming) return null;
 
-  const time = formatTime();
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 260, damping: 25 }}
-      className={`group flex items-end gap-3 w-full ${isUser ? "justify-end" : "justify-start"}`}
+      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      className={`group relative w-full py-3 ${
+        isUser ? "bg-chat-surface/30" : ""
+      }`}
     >
-      {!isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border-2 border-border shadow-sm">
-          {persona ? (
-            <persona.avatar size={32} />
-          ) : (
-            <div className="bg-chat-surface w-full h-full" />
-          )}
-        </div>
-      )}
+      <div className="mx-auto max-w-2xl px-2">
+        {/* ── Row: Avatar + Content ── */}
+        <div className="flex gap-3">
+          {/* Avatar column — 24px icon */}
+          <div className="shrink-0 pt-0.5">
+            {isUser ? (
+              <UserAvatar />
+            ) : persona ? (
+              <div className="w-6 h-6 rounded-lg overflow-hidden border-2 border-border">
+                <persona.avatar size={24} />
+              </div>
+            ) : (
+              <div className="w-6 h-6 rounded-lg bg-chat-surface border-2 border-border" />
+            )}
+          </div>
 
-      <div className={`flex flex-col gap-1.5 max-w-[80%] ${isUser ? "items-end" : "items-start"}`}>
-        <div
-          className={`rounded-2xl px-4 py-3 text-sm shadow-sm leading-relaxed ${
-            isUser
-              ? "rounded-br-sm bg-accent text-white font-medium"
-              : "rounded-bl-sm border-2 border-border bg-chat-bubble-ai text-text-primary"
-          }`}
-        >
-          {isUser ? (
-            <span className="whitespace-pre-wrap">{text}</span>
-          ) : (
-            <div className="chat-markdown prose prose-sm max-w-none text-text-primary dark:prose-invert">
-              <ReactMarkdown
-                components={{
-                  code: ({ className, children }) =>
-                    className ? (
-                      <CodeBlock className={className}>{children}</CodeBlock>
-                    ) : (
-                      <InlineCode>{children}</InlineCode>
-                    ),
-                  pre: ({ children }) => <>{children}</>,
-                }}
-              >
-                {text}
-              </ReactMarkdown>
-
+          {/* Content column */}
+          <div className="min-w-0 flex-1">
+            {/* Sender label */}
+            <div className="mb-1.5 flex items-center gap-2">
+              <span className="text-xs font-bold text-ink leading-none">
+                {isUser ? "You" : persona?.label.split(" —")[0] ?? "Tutor"}
+              </span>
               {isStreaming && (
-                <span
-                  className="inline-block h-3.5 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
-                  aria-hidden="true"
-                />
+                <span className="text-[10px] font-semibold text-accent animate-pulse">
+                  typing...
+                </span>
               )}
             </div>
-          )}
-        </div>
 
-        {/* Metadata section (fades in on hover of message container) */}
-        <div className="flex items-center gap-2 text-[10px] font-semibold text-text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
-          {time && <span>{time}</span>}
-          {!isUser && onSpeak && onStopSpeak && (
-            <SpeakButton
-              text={text}
-              onSpeak={onSpeak}
-              isSpeaking={isSpeaking}
-              isLoading={isTtsLoading}
-              onStop={onStopSpeak}
-            />
-          )}
-          {!isUser && isLastAssistant && onRegenerate && !isStreaming && (
-            <RegenerateButton onRegenerate={onRegenerate} />
-          )}
-          {!isUser && <CopyButton text={text} />}
+            {/* Message body */}
+            {isUser ? (
+              <div className="text-sm leading-relaxed text-text-primary whitespace-pre-wrap">
+                {text}
+              </div>
+            ) : (
+              <div className="chat-markdown text-sm leading-relaxed text-text-primary">
+                <ReactMarkdown
+                  components={{
+                    code: ({ className, children }) =>
+                      className ? (
+                        <CodeBlock className={className}>{children}</CodeBlock>
+                      ) : (
+                        <InlineCode>{children}</InlineCode>
+                      ),
+                    pre: ({ children }) => <>{children}</>,
+                  }}
+                >
+                  {text}
+                </ReactMarkdown>
+
+                {isStreaming && (
+                  <span
+                    className="inline-block h-4 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+            )}
+
+            {/* ── Action bar — visible on hover ── */}
+            {!isStreaming && text && (
+              <div className="mt-2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                {!isUser && onSpeak && onStopSpeak && (
+                  <ActionButton
+                    icon={isSpeaking ? Pause : Volume2}
+                    label={isSpeaking ? "Stop" : "Listen"}
+                    onClick={() => (isSpeaking ? onStopSpeak() : onSpeak(text))}
+                    active={isSpeaking}
+                    loading={isTtsLoading}
+                  />
+                )}
+                {!isUser && isLastAssistant && onRegenerate && (
+                  <ActionButton
+                    icon={RotateCcw}
+                    label="Regenerate"
+                    onClick={onRegenerate}
+                  />
+                )}
+                <CopyAction text={text} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {isUser && (
-        <div className="shrink-0">
-          <UserAvatar />
-        </div>
-      )}
     </motion.div>
   );
 }

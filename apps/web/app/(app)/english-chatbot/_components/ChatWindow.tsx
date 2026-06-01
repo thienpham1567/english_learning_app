@@ -19,27 +19,29 @@ import { useChatVoice } from "@/hooks/useChatVoice";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 
 export function getMessageSpacingClass(
-  currentMessage: PageMessage,
-  previousMessage?: PageMessage,
+  _currentMessage: PageMessage,
+  _previousMessage?: PageMessage,
 ): string {
-  if (!previousMessage) return "";
-  return currentMessage.role === previousMessage.role ? "mt-1.5" : "mt-6";
+  // Full-width layout — messages handle their own vertical padding
+  return "";
 }
 
 function ChatSkeleton() {
   return (
-    <div className="max-w-2xl w-full mx-auto py-6 space-y-6">
+    <div className="max-w-2xl w-full mx-auto py-6 space-y-4">
       <div className="flex gap-3">
-        <div className="w-8 h-8 rounded-lg bg-chat-surface border-2 border-border shrink-0 animate-pulse" />
+        <div className="w-6 h-6 rounded-lg bg-chat-surface border-2 border-border shrink-0 animate-pulse" />
         <div className="flex-1 flex flex-col gap-2">
+          <div className="h-3 w-20 rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
           <div className="h-4 w-[75%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
           <div className="h-4 w-[50%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
         </div>
       </div>
-      <div className="flex justify-end">
-        <div className="w-[66%] flex flex-col gap-2 items-end">
-          <div className="h-4 w-full rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
-          <div className="h-4 w-[80%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
+      <div className="flex gap-3">
+        <div className="w-6 h-6 rounded-lg bg-chat-surface border-2 border-border shrink-0 animate-pulse" />
+        <div className="flex-1 flex flex-col gap-2">
+          <div className="h-3 w-12 rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
+          <div className="h-4 w-[60%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
         </div>
       </div>
     </div>
@@ -205,8 +207,13 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               ))}
 
               {chat.isLoading && !streamingHasStarted && (
-                <div className="mt-6">
-                  <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
+                <div className="py-3">
+                  <div className="mx-auto max-w-2xl px-2">
+                    <div className="flex gap-3">
+                      <div className="w-6" />
+                      <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
