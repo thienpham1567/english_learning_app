@@ -2,9 +2,10 @@
 
 import { Loader2, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import type { TtsAccent } from "@/hooks/useTextToSpeech";
+import { getPairsForPhoneme } from "../_data/minimal-pairs";
 import type { IpaPhoneme } from "../_data/phonemes";
 
 type Props = {
@@ -18,6 +19,10 @@ type Props = {
 export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) {
   const { symbol, exampleWord, exampleHighlight, tip, voiced, subtype } = phoneme;
   const [pulsing, setPulsing] = useState(false);
+  const [showPairs, setShowPairs] = useState(false);
+
+  const pairs = useMemo(() => getPairsForPhoneme(symbol), [symbol]);
+  const hasPairs = pairs.length > 0;
 
   const idx = exampleWord.toLowerCase().indexOf(exampleHighlight.toLowerCase());
   const before = idx > 0 ? exampleWord.slice(0, idx) : "";
@@ -159,6 +164,57 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
             );
           })}
         </div>
+
+        {/* Minimal pairs toggle */}
+        {hasPairs && (
+          <m.button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPairs((p) => !p);
+            }}
+            whileTap={{ scale: 0.96 }}
+            className="w-full mt-2 text-[9px] font-black uppercase tracking-wider text-text-muted cursor-pointer bg-transparent border-none hover:text-accent transition-colors py-1"
+          >
+            {showPairs ? "▾ Hide" : "▸ Minimal pairs"} ({pairs.length})
+          </m.button>
+        )}
+
+        {/* Minimal pairs list */}
+        {showPairs && hasPairs && (
+          <m.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="w-full overflow-hidden"
+          >
+            <div className="flex flex-col gap-1 pt-1 border-t-2 border-border mt-1">
+              {pairs.map((pair, pi) => {
+                const otherSymbol = pair.phonemeA === symbol ? pair.phonemeB : pair.phonemeA;
+                return (
+                  <div
+                    key={pi}
+                    className="flex items-center gap-1 text-[10px]"
+                  >
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onSpeak(pair.wordA, accent); }}
+                      className="font-bold text-accent cursor-pointer bg-transparent border-none hover:underline p-0"
+                    >
+                      {pair.wordA}
+                    </button>
+                    <span className="text-text-muted">vs</span>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onSpeak(pair.wordB, accent); }}
+                      className="font-bold text-accent cursor-pointer bg-transparent border-none hover:underline p-0"
+                    >
+                      {pair.wordB}
+                    </button>
+                    <span className="text-text-muted ml-auto text-[8px] font-mono">/{otherSymbol}/</span>
+                  </div>
+                );
+              })}
+            </div>
+          </m.div>
+        )}
       </Card>
     </m.div>
   );

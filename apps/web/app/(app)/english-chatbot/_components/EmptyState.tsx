@@ -29,6 +29,17 @@ const itemVariants = {
   },
 };
 
+const TOPIC_STARTERS = [
+  { emoji: "✈️", label: "Travel", prompt: "Let's practice travel English — I'm planning a trip!" },
+  { emoji: "💼", label: "Work", prompt: "Help me practice workplace conversations and emails" },
+  { emoji: "☕", label: "Daily Life", prompt: "Let's have a casual chat about daily routines" },
+  { emoji: "🎬", label: "Movies", prompt: "Let's discuss movies — recommend me something good!" },
+  { emoji: "📝", label: "Grammar", prompt: "Quiz me on common grammar mistakes" },
+  { emoji: "🌍", label: "Culture", prompt: "Tell me about cultural differences in English-speaking countries" },
+  { emoji: "🍜", label: "Food", prompt: "Let's talk about cooking and favorite foods" },
+  { emoji: "📰", label: "News", prompt: "Let's discuss a current event in English" },
+];
+
 export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedPrompt }: Props) {
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
 
@@ -79,11 +90,13 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
         ))}
       </motion.div>
 
-      {/* Suggested prompts */}
-      <motion.div variants={itemVariants} className="mt-10 flex w-full flex-col items-center gap-3">
+      {/* Topic-categorized suggested prompts */}
+      <motion.div variants={itemVariants} className="mt-10 flex w-full flex-col items-center gap-4">
         <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted font-mono">
-          Suggested Prompts
+          Quick Starters
         </span>
+
+        {/* Persona-specific prompts */}
         <div className="flex flex-wrap justify-center gap-2 max-w-xl">
           {activePersona.suggestedPrompts.map((prompt) => (
             <motion.button
@@ -94,6 +107,22 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
               className="px-4 py-2 rounded-lg border-2 border-border bg-chat-surface-hover text-xs font-semibold text-text-secondary hover:border-border-strong hover:text-ink transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
             >
               {prompt}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Topic categories */}
+        <div className="flex flex-wrap justify-center gap-2 max-w-xl mt-1">
+          {TOPIC_STARTERS.map((topic) => (
+            <motion.button
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              key={topic.prompt}
+              onClick={() => onSuggestedPrompt(topic.prompt)}
+              className="px-3 py-1.5 rounded-lg border-2 border-border bg-surface text-[11px] font-bold text-text-muted hover:border-accent/40 hover:text-accent hover:bg-accent/5 transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <span>{topic.emoji}</span>
+              <span>{topic.label}</span>
             </motion.button>
           ))}
         </div>
@@ -118,7 +147,7 @@ function PersonaCard({
       whileHover={{ y: -4, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       onClick={onSelect}
-      className={`flex flex-col items-center gap-3.5 rounded-2xl border p-5 text-center transition-all duration-300 cursor-pointer shadow-sm relative ${
+      className={`flex flex-col items-center gap-3.5 rounded-2xl border-2 p-5 text-center transition-all duration-300 cursor-pointer shadow-sm relative ${
         isSelected
           ? "border-accent bg-accent/5 ring-1 ring-accent text-ink"
           : "border-border bg-chat-bubble-ai text-text-secondary hover:border-border-strong hover:bg-chat-surface-hover"
@@ -128,7 +157,7 @@ function PersonaCard({
         <span className="absolute top-3 right-3 flex h-2 w-2 rounded-full bg-accent" />
       )}
 
-      <div className="p-1 rounded-full bg-chat-bg/40">
+      <div className="p-1 rounded-xl bg-chat-bg/40">
         <Avatar size={48} />
       </div>
 

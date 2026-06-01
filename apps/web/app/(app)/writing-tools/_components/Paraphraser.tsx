@@ -319,7 +319,7 @@ export function Paraphraser() {
       </Card>
 
       {/* Split panels */}
-      <div className="paraphraser-panels grid gap-4" style={{ gridTemplateColumns: "1fr 1fr" }}>
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {/* Left: Input */}
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between items-center">
@@ -406,14 +406,6 @@ export function Paraphraser() {
         </div>
       </div>
 
-      {/* Mobile responsive style */}
-      <style>{`
-        @media (max-width: 768px) {
-          .paraphraser-panels {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
 
       {/* Action bar */}
       <div className="flex items-center gap-2.5">

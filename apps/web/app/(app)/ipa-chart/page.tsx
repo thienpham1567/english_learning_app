@@ -1,6 +1,6 @@
 "use client";
 
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, Search, X } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -52,10 +52,49 @@ export default function IpaChartPage() {
   const consonantGroups = useMemo(() => groupBy(CONSONANTS, (p) => p.subtype), []);
   const vowelGroups = useMemo(() => groupBy(VOWELS, (p) => p.subtype), []);
 
+  // Search by word — filter phonemes whose exampleWord matches
+  const [search, setSearch] = useState("");
+  const searchLower = search.trim().toLowerCase();
+
+  const filterPhonemes = useCallback(
+    (items: IpaPhoneme[]) =>
+      searchLower
+        ? items.filter(
+            (p) =>
+              p.exampleWord.toLowerCase().includes(searchLower) ||
+              p.symbol.toLowerCase().includes(searchLower) ||
+              p.tip.toLowerCase().includes(searchLower),
+          )
+        : items,
+    [searchLower],
+  );
+
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
       {/* ─── Control bar ─── */}
       <div className="flex items-center gap-3 flex-wrap shrink-0 z-[1] py-3 px-5">
+        {/* Search */}
+        <div className="relative">
+          <Search
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search phoneme, word, or tip..."
+            className="pl-8 pr-8 py-2 text-xs font-bold rounded-xl border-2 border-border bg-surface text-ink placeholder-text-muted focus:border-accent/40 focus:ring-1 focus:ring-accent/20 outline-none transition-all w-[220px]"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-ink cursor-pointer bg-transparent border-none p-0.5"
+            >
+              <X size={12} />
+            </button>
+          )}
+        </div>
         {/* Tab switcher */}
         <Card shadowSize="sm" size="sm" className="flex flex-row gap-1 p-1">
           {(
@@ -147,8 +186,8 @@ export default function IpaChartPage() {
           {tab === "consonants" ? (
             <div className="flex flex-col gap-8">
               {Object.entries(CONSONANT_SUBTYPE_LABELS).map(([key, label]) => {
-                const items = consonantGroups[key];
-                if (!items?.length) return null;
+                const items = filterPhonemes(consonantGroups[key] ?? []);
+                if (!items.length) return null;
                 return (
                   <section key={key}>
                     <SectionHeader label={label} count={items.length} />
@@ -167,12 +206,15 @@ export default function IpaChartPage() {
                   </section>
                 );
               })}
+              {searchLower && filterPhonemes(CONSONANTS).length === 0 && (
+                <p className="text-center text-text-muted text-sm py-8 font-bold">No consonants match "{search}"</p>
+              )}
             </div>
           ) : (
             <div className="flex flex-col gap-8">
               {Object.entries(VOWEL_SUBTYPE_LABELS).map(([key, label]) => {
-                const items = vowelGroups[key];
-                if (!items?.length) return null;
+                const items = filterPhonemes(vowelGroups[key] ?? []);
+                if (!items.length) return null;
                 return (
                   <section key={key}>
                     <SectionHeader label={label} count={items.length} color={VOWEL_COLORS[key]} />
@@ -191,6 +233,9 @@ export default function IpaChartPage() {
                   </section>
                 );
               })}
+              {searchLower && filterPhonemes(VOWELS).length === 0 && (
+                <p className="text-center text-text-muted text-sm py-8 font-bold">No vowels match "{search}"</p>
+              )}
             </div>
           )}
         </div>
@@ -224,7 +269,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-1.5 h-5 rounded-full shrink-0" style={{ background: color }} />
+      <div className="w-1.5 h-5 rounded-sm shrink-0" style={{ background: color }} />
       <h3 className="m-0 font-black text-ink font-display text-sm uppercase tracking-wide">
         {label}
       </h3>

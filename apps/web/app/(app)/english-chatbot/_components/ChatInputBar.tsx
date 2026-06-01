@@ -110,7 +110,7 @@ export function ChatInputBar({
                 }
               }}
               disabled={isLoading || voice.isTranscribing}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-200 cursor-pointer shadow-sm relative active:scale-95 ${
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-2 transition-all duration-200 cursor-pointer shadow-sm relative active:scale-95 ${
                 voice.isListening
                   ? "border-error text-error bg-error/10 animate-pulse"
                   : voice.isTranscribing
@@ -139,7 +139,7 @@ export function ChatInputBar({
           {isLoading ? (
             <button
               onClick={onStop}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-error hover:bg-error text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-error hover:bg-error text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
               aria-label="Stop response"
               title="Stop response"
             >
@@ -149,7 +149,7 @@ export function ChatInputBar({
             <button
               onClick={onSend}
               disabled={!input.trim()}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
                 input.trim()
                   ? "bg-accent text-white hover:bg-accent-hover"
                   : "bg-chat-surface-hover border-2 border-border text-text-muted cursor-not-allowed opacity-50"
@@ -172,7 +172,7 @@ export function ChatInputBar({
             {voice.isSupported && tts.isSupported && (
               <button
                 onClick={onToggleVoiceMode}
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   voiceMode
                     ? "border-accent bg-accent/10 text-accent font-bold"
                     : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
@@ -187,7 +187,7 @@ export function ChatInputBar({
             {voiceMode && (
               <button
                 onClick={onTogglePronEnabled}
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   pronEnabled
                     ? "border-success/50 bg-success/10 text-success font-bold"
                     : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"

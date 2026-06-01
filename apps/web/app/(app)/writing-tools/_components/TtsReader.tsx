@@ -87,8 +87,8 @@ export function TtsReader() {
       });
 
       await audio.play();
-    } catch (err: any) {
-      setError(err.message || "Connection error occurred.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Connection error occurred.");
       setPlaying(false);
     } finally {
       setLoading(false);

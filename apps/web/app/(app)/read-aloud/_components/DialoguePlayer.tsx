@@ -736,7 +736,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 <m.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="w-[12px] h-[12px] rounded-full bg-accent"
+                  className="w-[12px] h-[12px] rounded-sm bg-accent"
                 />
                 <span className="text-sm font-black text-accent-active">
                   Listening to speaker...
@@ -750,7 +750,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   <m.div
                     animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
-                    className="w-[14px] h-[14px] rounded-full bg-error"
+                    className="w-[14px] h-[14px] rounded-sm bg-error"
                   />
                   <span className="text-sm font-bold text-destructive">
                     Your turn! Read your line

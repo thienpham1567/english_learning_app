@@ -30,7 +30,7 @@ function ChatSkeleton() {
   return (
     <div className="max-w-2xl w-full mx-auto py-6 space-y-6">
       <div className="flex gap-3">
-        <div className="w-8 h-8 rounded-full bg-chat-surface border-2 border-border shrink-0 animate-pulse" />
+        <div className="w-8 h-8 rounded-lg bg-chat-surface border-2 border-border shrink-0 animate-pulse" />
         <div className="flex-1 flex flex-col gap-2">
           <div className="h-4 w-[75%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
           <div className="h-4 w-[50%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />

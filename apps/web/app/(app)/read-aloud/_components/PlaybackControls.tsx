@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, PauseCircle, PlayCircle, Undo, Volume2, Settings } from "lucide-react";
+import { Download, Loader2, PauseCircle, PlayCircle, Undo, Volume2, Settings } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { SPEED_PRESETS, type VoiceOption } from "../_data/voices";
@@ -144,6 +144,21 @@ export function PlaybackControls({
                   className="flex items-center justify-center rounded-xl text-destructive text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-error/10 hover:bg-error/20 shadow-sm"
                 >
                   <Undo size={16} />
+                </m.button>
+                <m.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    if (!audioUrl) return;
+                    const a = document.createElement("a");
+                    a.href = audioUrl;
+                    a.download = `read-aloud-${Date.now()}.mp3`;
+                    a.click();
+                  }}
+                  className="flex items-center justify-center rounded-xl text-accent text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-accent/10 hover:bg-accent/20 shadow-sm"
+                  title="Download audio"
+                >
+                  <Download size={16} />
                 </m.button>
               </m.div>
             )}
