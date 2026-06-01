@@ -9,6 +9,7 @@ import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
 type Props = {
   result: SmartReaderResponse;
   tts: ReturnType<typeof useTextToSpeech>;
+  sourceText?: string | null;
 };
 
 const DIFFICULTY_CONFIG = {
@@ -17,7 +18,7 @@ const DIFFICULTY_CONFIG = {
   advanced: { label: "Advanced", color: "text-error bg-error/10 border-error/30" },
 };
 
-export function SmartReaderResult({ result, tts }: Props) {
+export function SmartReaderResult({ result, tts, sourceText }: Props) {
   const [expandedBreakdown, setExpandedBreakdown] = useState(true);
   const [expandedVocab, setExpandedVocab] = useState(true);
 

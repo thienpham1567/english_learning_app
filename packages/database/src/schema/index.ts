@@ -1112,3 +1112,23 @@ export const ttsAudioCache = pgTable("tts_audio_cache", {
 ]);
 
 export type TtsAudioCacheRow = typeof ttsAudioCache.$inferSelect;
+
+/** Smart Reader History — saves translation analysis results to avoid re-calling the AI. */
+export const smartReaderHistory = pgTable("smart_reader_history", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  /** Original English text that was analyzed */
+  sourceText: text("source_text").notNull(),
+  /** Full structured JSON response from the AI */
+  // biome-ignore lint/suspicious/noExplicitAny: jsonb stores the full SmartReaderResponse
+  result: jsonb("result").notNull().$type<Record<string, any>>(),
+  /** Difficulty level for filtering */
+  difficultyLevel: text("difficulty_level").notNull().default("intermediate"),
+  /** First 100 chars of source text for list preview */
+  preview: text("preview"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("smart_reader_history_user_created_idx").on(table.userId, table.createdAt),
+]);
+
+export type SmartReaderHistoryRow = typeof smartReaderHistory.$inferSelect;

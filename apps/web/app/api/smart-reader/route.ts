@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { db, smartReaderHistory } from "@repo/database";
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
@@ -95,11 +96,26 @@ export async function POST(request: Request) {
       naturalTranslation: parsed.naturalTranslation || "",
       breakdown: Array.isArray(parsed.breakdown) ? parsed.breakdown : [],
       vocabulary: Array.isArray(parsed.vocabulary) ? parsed.vocabulary : [],
-      difficultyLevel: parsed.difficultyLevel || "intermediate",
+      difficultyLevel: (parsed.difficultyLevel as string) || "intermediate",
       readingTips: parsed.readingTips || "",
     };
 
-    return Response.json(result);
+    // Save to DB for history
+    try {
+      const [saved] = await db.insert(smartReaderHistory).values({
+        userId: session.user.id,
+        sourceText: text,
+        result,
+        difficultyLevel: result.difficultyLevel,
+        preview: text.slice(0, 100),
+      }).returning({ id: smartReaderHistory.id });
+
+      return Response.json({ ...result, id: saved.id });
+    } catch (dbErr) {
+      log.error({ err: dbErr }, "smart-reader.db.save.failed");
+      // Still return the result even if DB save fails
+      return Response.json(result);
+    }
   } catch (err) {
     log.error({ err }, "smart-reader.analysis.failed");
 

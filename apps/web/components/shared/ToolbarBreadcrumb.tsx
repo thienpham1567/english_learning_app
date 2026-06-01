@@ -2,6 +2,7 @@
 
 import {
   BookOpen,
+  BookOpenCheck,
   BookOpenText,
   CircleCheckBig,
   ClipboardList,
@@ -59,6 +60,7 @@ const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
   "/read-aloud": { eyebrow: "Tools", title: "Read Aloud", icon: <Volume2 /> },
   "/writing-tools": { eyebrow: "Tools", title: "Writing Tools", icon: <Pencil /> },
   "/english-chatbot": { eyebrow: "Tools", title: "AI Chatbot", icon: <MessageSquare /> },
+  "/smart-reader": { eyebrow: "Tools", title: "Smart Reader", icon: <BookOpenCheck /> },
   "/listening": { eyebrow: "TOEIC Listening", title: "Listening Practice", icon: <Mic /> },
   "/roadmap": { eyebrow: "Study Plan", title: "Learning Roadmap", icon: <Target /> },
 };
