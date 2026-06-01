@@ -190,6 +190,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     }
                     isLastAssistant={m.id === lastAssistantId}
                     onRegenerate={chat.regenerate}
+                    onSendMessage={(text) => {
+                      chat.setInput(text);
+                      setTimeout(() => chat.send(text), 50);
+                    }}
+                    isChatLoading={chat.isLoading}
                   />
 
                   {/* Inline pronunciation feedback for voice messages */}

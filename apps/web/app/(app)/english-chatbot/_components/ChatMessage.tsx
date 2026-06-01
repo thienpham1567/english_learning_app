@@ -2,11 +2,12 @@
 
 import { Check, Copy, Loader2, Pause, RotateCcw, Volume2 } from "lucide-react";
 import { motion } from "motion/react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useUser } from "@/components/shared/UserContext";
 import type { Persona } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
+import { ExerciseCard, hasExercisePattern, splitExerciseBlocks } from "./ExerciseCard";
 
 export type DividerMessage = {
   id: string;
@@ -160,6 +161,87 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   );
 }
 
+/* ── MessageBody: splits AI text into markdown + interactive exercises ── */
+function MessageBody({
+  text,
+  isStreaming,
+  onSendMessage,
+  isChatLoading,
+}: {
+  text: string;
+  isStreaming?: boolean;
+  onSendMessage?: (text: string) => void;
+  isChatLoading?: boolean;
+}) {
+  const segments = useMemo(() => {
+    // Don't split while streaming — wait for complete message
+    if (isStreaming || !hasExercisePattern(text)) {
+      return null;
+    }
+    return splitExerciseBlocks(text);
+  }, [text, isStreaming]);
+
+  // Simple markdown rendering (no exercise splitting)
+  if (!segments) {
+    return (
+      <div className="chat-markdown text-sm leading-relaxed text-text-primary">
+        <ReactMarkdown
+          components={{
+            code: ({ className, children }) =>
+              className ? (
+                <CodeBlock className={className}>{children}</CodeBlock>
+              ) : (
+                <InlineCode>{children}</InlineCode>
+              ),
+            pre: ({ children }) => <>{children}</>,
+          }}
+        >
+          {text}
+        </ReactMarkdown>
+
+        {isStreaming && (
+          <span
+            className="inline-block h-4 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Mixed rendering: markdown + exercise cards
+  return (
+    <div className="chat-markdown text-sm leading-relaxed text-text-primary">
+      {segments.map((seg, i) =>
+        seg.type === "exercise" ? (
+          <ExerciseCard
+            key={i}
+            text={seg.content}
+            title={seg.title}
+            onSubmitAnswers={onSendMessage}
+            isLoading={isChatLoading}
+          />
+        ) : (
+          <ReactMarkdown
+            key={i}
+            components={{
+              code: ({ className, children }) =>
+                className ? (
+                  <CodeBlock className={className}>{children}</CodeBlock>
+                ) : (
+                  <InlineCode>{children}</InlineCode>
+                ),
+              pre: ({ children }) => <>{children}</>,
+            }}
+          >
+            {seg.content}
+          </ReactMarkdown>
+        ),
+      )}
+    </div>
+  );
+}
+
 /* ── Main ChatMessage Component ── */
 export function ChatMessage({
   message,
@@ -171,6 +253,8 @@ export function ChatMessage({
   onStopSpeak,
   onRegenerate,
   isLastAssistant = false,
+  onSendMessage,
+  isChatLoading = false,
 }: {
   message: PageMessage;
   isStreaming?: boolean;
@@ -181,6 +265,8 @@ export function ChatMessage({
   onStopSpeak?: () => void;
   onRegenerate?: () => void;
   isLastAssistant?: boolean;
+  onSendMessage?: (text: string) => void;
+  isChatLoading?: boolean;
 }) {
   /* ── Divider ── */
   if (message.role === "divider") {
@@ -244,28 +330,12 @@ export function ChatMessage({
                 {text}
               </div>
             ) : (
-              <div className="chat-markdown text-sm leading-relaxed text-text-primary">
-                <ReactMarkdown
-                  components={{
-                    code: ({ className, children }) =>
-                      className ? (
-                        <CodeBlock className={className}>{children}</CodeBlock>
-                      ) : (
-                        <InlineCode>{children}</InlineCode>
-                      ),
-                    pre: ({ children }) => <>{children}</>,
-                  }}
-                >
-                  {text}
-                </ReactMarkdown>
-
-                {isStreaming && (
-                  <span
-                    className="inline-block h-4 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
+              <MessageBody
+                text={text}
+                isStreaming={isStreaming}
+                onSendMessage={onSendMessage}
+                isChatLoading={isChatLoading}
+              />
             )}
 
             {/* ── Action bar — visible on hover ── */}
