@@ -143,7 +143,7 @@ export function FloatingDictionaryWidget() {
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.85, x: 20 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="flex items-center gap-1.5 bg-surface rounded-2xl py-1.5 pl-4 pr-1.5 border-2 border-accent shadow-lg origin-right"
+              className="flex items-center gap-1.5 bg-surface rounded-2xl py-1.5 pl-4 pr-1.5 border-2 border-border shadow-lg origin-right backdrop-blur-sm focus-within:border-accent/50 transition-all duration-200"
             >
               <Search className="text-accent shrink-0" size={15} />
               <input
