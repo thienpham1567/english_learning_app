@@ -74,7 +74,7 @@ function FloatingCards() {
         <m.div
           animate={{ y: [0, -6, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
+          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border-2 border-white/10 rounded-xl shadow-2xl"
         >
           {/* Circular Progress */}
           <div className="relative w-16 h-16 shrink-0">
@@ -125,7 +125,7 @@ function FloatingCards() {
         <m.div
           animate={{ y: [0, 5, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-          className="flex flex-col gap-3 items-stretch p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
+          className="flex flex-col gap-3 items-stretch p-5 bg-black/70 backdrop-blur-xl border-2 border-white/10 rounded-xl shadow-2xl"
         >
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase text-mockup-text-muted">
@@ -158,9 +158,9 @@ function FloatingCards() {
         <m.div
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
+          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border-2 border-white/10 rounded-xl shadow-2xl"
         >
-          <div className="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-accent/12 border border-accent/20 text-accent">
+          <div className="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-accent/12 border-2 border-accent/20 text-accent">
             <Bot size={18} />
           </div>
           <div className="flex flex-col gap-1">
@@ -367,7 +367,7 @@ export default function SignInPage() {
           {/* Eyebrow */}
           <m.div
             variants={fadeUp}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold tracking-wide text-accent bg-accent/10 border border-accent/20 rounded-full mb-7"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold tracking-wide text-accent bg-accent/10 border-2 border-accent/20 rounded-lg mb-7"
           >
             <CheckCircle size={14} />
             <span>Trusted by 10,000+ learners</span>

@@ -143,7 +143,7 @@ export function QuizHistory({ open, onClose }: Props) {
                           </span>
                         </div>
                         <div
-                          className="w-[38px] h-[38px] rounded-full grid place-items-center text-xs font-extrabold shrink-0"
+                          className="w-[38px] h-[38px] rounded-lg grid place-items-center text-xs font-extrabold shrink-0"
                           style={{
                             background: scoreBg,
                             border: `1.5px solid ${scoreColor}`,

@@ -139,8 +139,8 @@ function NavLink({
         aria-current={active ? "page" : undefined}
         className={`sidebar-nav-link flex items-center gap-3 overflow-hidden relative cursor-pointer transition-all duration-200 ${
           indented
-            ? "py-[8px] px-3 text-[13px] rounded-xl"
-            : "py-[9px] px-3 text-[13.5px] rounded-xl"
+            ? "py-[8px] px-3 text-[13px] rounded-lg"
+            : "py-[9px] px-3 text-[13.5px] rounded-lg"
         } ${
           active
             ? "font-bold bg-[var(--sidebar-active-bg)] text-[var(--accent)]"
@@ -151,7 +151,7 @@ function NavLink({
         {active && (
           <m.div
             layoutId="sidebar-active-indicator"
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] rounded-r-full bg-[var(--accent)]"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] rounded-r-sm bg-[var(--accent)]"
             transition={{ type: "spring", stiffness: 350, damping: 30 }}
           />
         )}
@@ -239,7 +239,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           className="text-xs leading-none ml-auto"
         >
           {badges.dailyChallengeCompleted ? (
-            <CircleCheckBig className="text-emerald-500" size={14} />
+            <CircleCheckBig className="text-success" size={14} />
           ) : (
             <Flame className="text-[var(--fire)]" size={14} />
           )}
@@ -254,7 +254,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
       initial={false}
       animate={{ width: isExpanded ? 252 : 66 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-3.5 px-2 border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] relative"
+      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-3.5 px-2 border-r-2 border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] relative"
     >
       {/* Subtle accent glow at top */}
       <div
@@ -300,7 +300,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               whileTap={{ scale: 0.9 }}
               onClick={onToggle}
               aria-label="Expand sidebar"
-              className="mx-auto grid place-items-center w-10 h-10 shrink-0 bg-none border-none cursor-pointer rounded-xl text-[var(--sidebar-text)] transition-colors"
+              className="mx-auto grid place-items-center w-10 h-10 shrink-0 bg-none border-none cursor-pointer rounded-lg text-[var(--sidebar-text)] transition-colors"
             >
               <PanelLeftOpen size={16} />
             </m.button>
@@ -358,7 +358,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             return (
               <div key={group.key} className="mt-1">
                 {/* Thin separator line */}
-                <div className="mx-3 mb-1.5 h-px bg-[var(--sidebar-border)] opacity-60" />
+                <div className="mx-3 mb-1.5 h-px bg-[var(--sidebar-border)]" />
                 {group.items.map((item, itemIndex) => {
                   const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   const link = (
@@ -400,7 +400,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               >
                 <span className="shrink-0 flex items-center gap-1.5">
                   <span
-                    className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-50"
+                    className="w-1 h-1 rounded-sm bg-[var(--accent)] opacity-50"
                     aria-hidden
                   />
                   {group.label}

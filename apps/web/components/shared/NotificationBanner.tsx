@@ -80,7 +80,7 @@ export function NotificationBanner() {
 
       <div className="flex-1 min-w-0">
         {subscribed ? (
-          <div className="text-sm font-semibold text-emerald-500">
+          <div className="text-sm font-semibold text-success">
             <CheckCircle className="mr-1 inline" size={14} /> Notifications enabled!
           </div>
         ) : (

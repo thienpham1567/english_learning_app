@@ -195,7 +195,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                       </span>
                       {isDone ? (
                         <span
-                          className="w-[20px] h-[20px] rounded-full grid shrink-0"
+                          className="w-[20px] h-[20px] rounded-lg grid shrink-0"
                           style={{ background: "var(--success)", placeItems: "center" }}
                         >
                           <CheckCircle

@@ -205,7 +205,7 @@ export function SessionSummary({
                 border: "2px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
               }}
             >
-              <div className="w-11 h-11 rounded-full grid shrink-0 place-items-center bg-[color-mix(in srgb, var(--warning) 8%, transparent)]">
+              <div className="w-11 h-11 rounded-xl grid shrink-0 place-items-center bg-[color-mix(in srgb, var(--warning) 8%, transparent)]">
                 <Flame className="text-2xl text-[var(--xp)]" />
               </div>
               <div className="flex-1">

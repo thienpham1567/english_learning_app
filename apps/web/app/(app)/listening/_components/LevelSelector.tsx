@@ -201,7 +201,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 500, damping: 20 }}
-                    className="w-[22px] h-[22px] rounded-full grid shrink-0 bg-accent place-items-center"
+                    className="w-[22px] h-[22px] rounded-lg grid shrink-0 bg-accent place-items-center"
                   >
                     <Check size={11} className="text-ink" />
                   </motion.span>

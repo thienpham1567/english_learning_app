@@ -16,7 +16,7 @@ export default function ToeicError({
 
   return (
     <div className="flex flex-col items-center justify-center text-center flex-1 min-h-[300px] py-12 px-6">
-      <div className="w-14 h-14 rounded-full grid place-items-center mb-4 bg-error-bg border-2 border-border shadow-sm">
+      <div className="w-14 h-14 rounded-xl grid place-items-center mb-4 bg-error-bg border-2 border-border shadow-sm">
         <AlertTriangle className="w-6 h-6 text-destructive" />
       </div>
       <h3 className="mb-2 text-lg font-black text-ink font-display">Unable to load page</h3>

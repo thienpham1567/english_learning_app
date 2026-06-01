@@ -124,7 +124,7 @@ export function TestScreen({
               >
                 {/* Circle label */}
                 <span
-                  className={`w-[26px] h-[26px] rounded-full grid place-items-center shrink-0 text-[11px] font-extrabold transition-all duration-150 ${
+                  className={`w-[26px] h-[26px] rounded-lg grid place-items-center shrink-0 text-[11px] font-extrabold transition-all duration-150 ${
                     isSelected
                       ? "bg-accent text-[var(--text-on-accent)]"
                       : "bg-border text-text-secondary"

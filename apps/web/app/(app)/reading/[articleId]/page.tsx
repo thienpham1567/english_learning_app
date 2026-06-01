@@ -351,7 +351,7 @@ export default function ArticleReaderPage() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     title="Analyze grammar"
-                    className="w-[26px] h-[26px] rounded-full border-2 border-border flex items-center justify-center"
+                    className="w-[26px] h-[26px] rounded-lg border-2 border-border flex items-center justify-center"
                     style={{
                       background: grammarResults[idx]?.length
                         ? "linear-gradient(135deg, var(--accent), var(--secondary))"
@@ -375,7 +375,7 @@ export default function ArticleReaderPage() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     title="Listen to this paragraph"
-                    className="w-[26px] h-[26px] rounded-full border-2 border-border flex items-center justify-center"
+                    className="w-[26px] h-[26px] rounded-lg border-2 border-border flex items-center justify-center"
                     style={{
                       background:
                         speakingIdx === idx

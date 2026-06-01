@@ -357,7 +357,7 @@ export function AIFlashcardMode() {
         <m.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 rounded-full grid place-items-center bg-accent-light"
+          className="w-16 h-16 rounded-xl grid place-items-center bg-accent-light"
         >
           <Loader2 className="animate-spin text-accent" size={28} />
         </m.div>

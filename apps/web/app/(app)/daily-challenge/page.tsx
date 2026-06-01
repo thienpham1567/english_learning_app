@@ -355,7 +355,7 @@ export default function DailyChallengePage() {
               <motion.div
                 animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
-                className="w-16 h-16 rounded-full border-2 border-border flex items-center justify-center bg-card shadow-sm"
+                className="w-16 h-16 rounded-xl border-2 border-border flex items-center justify-center bg-card shadow-sm"
               >
                 <Check className="h-6 w-6 text-warning" />
               </motion.div>
@@ -429,7 +429,7 @@ export default function DailyChallengePage() {
                   <motion.div
                     animate={{ scale: [1, 1.08, 1] }}
                     transition={{ repeat: Infinity, duration: 1.2 }}
-                    className="w-16 h-16 rounded-full border-2 border-border bg-card flex items-center justify-center shadow-sm"
+                    className="w-16 h-16 rounded-xl border-2 border-border bg-card flex items-center justify-center shadow-sm"
                   >
                     <Check className="h-6 w-6 text-accent" />
                   </motion.div>

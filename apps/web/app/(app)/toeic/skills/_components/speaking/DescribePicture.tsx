@@ -273,7 +273,7 @@ export function DescribePicture() {
       {state === "gallery" && (
         <div className="animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="text-center mb-6">
-            <div className="w-14 h-14 rounded-full bg-accent/10 text-accent flex items-center justify-center mx-auto mb-3 shadow-xs">
+            <div className="w-14 h-14 rounded-xl bg-accent/10 text-accent flex items-center justify-center mx-auto mb-3 shadow-xs">
               <ImageIcon className="h-6 w-6" />
             </div>
             <h3 className="m-0 mb-1.5 text-lg font-bold font-display text-ink">
@@ -322,7 +322,7 @@ export function DescribePicture() {
       {selectedPic && (state === "viewing" || state === "recording" || state === "evaluating") && (
         <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div
-            className={`rounded-2xl overflow-hidden border ${
+            className={`rounded-2xl overflow-hidden border-2 ${
               state === "recording" ? "border-error ring-2 ring-error/20" : "border-border"
             }`}
           >
@@ -370,7 +370,7 @@ export function DescribePicture() {
               <>
                 <button
                   onClick={startRecording}
-                  className="w-[72px] h-[72px] rounded-full border-none bg-linear-to-br from-red-500 to-red-600 text-white flex items-center justify-center text-2xl cursor-pointer shadow-lg shadow-red-500/20 hover:opacity-90 active:scale-95 transition-all"
+                  className="w-[72px] h-[72px] rounded-xl border-2 border-error bg-error text-white flex items-center justify-center text-2xl cursor-pointer shadow-sm hover:opacity-90 active:scale-95 transition-all"
                 >
                   <Mic className="h-7 w-7" />
                 </button>
@@ -389,7 +389,7 @@ export function DescribePicture() {
               <>
                 <button
                   onClick={stopRecording}
-                  className="w-[72px] h-[72px] rounded-full border-3 border-error bg-surface text-error flex items-center justify-center text-xl cursor-pointer animate-pulse hover:opacity-90 active:scale-95 transition-all"
+                  className="w-[72px] h-[72px] rounded-xl border-3 border-error bg-surface text-error flex items-center justify-center text-xl cursor-pointer animate-pulse hover:opacity-90 active:scale-95 transition-all"
                 >
                   <Pause className="h-6 w-6 fill-current" />
                 </button>

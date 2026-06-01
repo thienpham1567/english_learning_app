@@ -41,7 +41,7 @@ export function ExpressOpinion() {
   return (
     <div className="px-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
       <div className="text-center mb-5">
-        <div className="w-12 h-12 rounded-full bg-info/10 text-info flex items-center justify-center mx-auto mb-2.5">
+        <div className="w-12 h-12 rounded-xl bg-info/10 text-info flex items-center justify-center mx-auto mb-2.5">
           <Mic className="h-5 w-5" />
         </div>
         <h3 className="m-0 mb-1 text-base font-bold text-ink">Express an Opinion · Part 5</h3>

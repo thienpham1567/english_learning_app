@@ -119,7 +119,7 @@ export function CEFRPath({
                   className="flex flex-col items-center gap-1.5 bg-none border-none cursor-pointer p-0"
                 >
                   <div
-                    className="w-8 h-8 rounded-full grid place-items-center transition-all duration-200"
+                    className="w-8 h-8 rounded-lg grid place-items-center transition-all duration-200"
                     style={{
                       border: `2px solid ${isSelected ? tierColor : "var(--border)"}`,
                       background: isSelected ? tierColor : "var(--surface-alt)",

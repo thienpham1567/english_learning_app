@@ -94,7 +94,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
                 <div className="flex flex-col gap-3.5">
                   <div className="flex items-center gap-3.5">
                     <div
-                      className="text-4xl font-black bg-surface-alt w-[58px] h-[58px] rounded-full grid font-display border-2 place-items-center"
+                      className="text-4xl font-black bg-surface-alt w-[58px] h-[58px] rounded-xl grid font-display border-2 place-items-center"
                       style={{
                         color: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)",
                         borderColor: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)",

@@ -331,7 +331,7 @@ export default function ShadowingMode({ examMode }: Props) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label="Record"
-                  className="w-20 h-20 rounded-full border-2 border-border text-3xl cursor-pointer bg-[var(--error)] text-white shadow-md hover:shadow-lg transition-shadow"
+                  className="w-20 h-20 rounded-xl border-2 border-border text-3xl cursor-pointer bg-[var(--error)] text-white shadow-sm transition-shadow"
                 >
                   <Mic size={28} className="mx-auto" />
                 </motion.button>
@@ -345,7 +345,7 @@ export default function ShadowingMode({ examMode }: Props) {
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ repeat: Infinity, duration: 1 }}
                   aria-label="Stop recording"
-                  className="w-20 h-20 rounded-full border-3 border-[var(--error)] text-[var(--error)] text-xl cursor-pointer bg-surface"
+                  className="w-20 h-20 rounded-xl border-3 border-[var(--error)] text-[var(--error)] text-xl cursor-pointer bg-surface"
                 >
                   <Square size={24} className="mx-auto" />
                 </motion.button>

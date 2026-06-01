@@ -126,7 +126,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
               }}
             >
               <span
-                className="w-[26px] h-[26px] rounded-full grid shrink-0 text-[11px] font-extrabold"
+                className="w-[26px] h-[26px] rounded-lg grid shrink-0 text-[11px] font-extrabold"
                 style={{
                   placeItems: "center",
                   background: isSelected ? "var(--accent)" : "var(--border)",

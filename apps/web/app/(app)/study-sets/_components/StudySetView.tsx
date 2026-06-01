@@ -307,7 +307,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                     onClick={() => speakTts(w.word)}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="border-none rounded-full w-[24px] h-[24px] grid cursor-pointer text-accent"
+                    className="border-none rounded-lg w-[24px] h-[24px] grid cursor-pointer text-accent"
                     style={{ background: "var(--accent-light)", placeItems: "center", padding: 0 }}
                   >
                     <Volume2 size={12} />
@@ -416,7 +416,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 onClick={() => speakTts(data.grammar.topicExample)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="border-none bg-surface rounded-full w-[24px] h-[24px] grid cursor-pointer text-accent"
+                className="border-none bg-surface rounded-lg w-[24px] h-[24px] grid cursor-pointer text-accent"
                 style={{ placeItems: "center", boxShadow: "var(--shadow-sm)", padding: 0 }}
               >
                 <Volume2 size={12} />

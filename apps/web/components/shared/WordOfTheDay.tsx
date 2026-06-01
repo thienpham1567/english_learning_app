@@ -206,9 +206,9 @@ export function WordOfTheDay() {
               whileTap={!isSaved ? { scale: 0.98 } : {}}
               onClick={saveWord}
               disabled={isSaved || saving}
-              className={`flex items-center gap-2.5 py-3 px-5 text-sm font-bold w-full justify-center relative z-[1] rounded-[14px] transition-all duration-300 ${
+              className={`flex items-center gap-2.5 py-3 px-5 text-sm font-bold w-full justify-center relative z-[1] rounded-xl transition-all duration-300 ${
                 isSaved
-                  ? "border border-success/30 bg-success-bg text-success cursor-default shadow-none"
+                  ? "border-2 border-success/30 bg-success-bg text-success cursor-default shadow-none"
                   : "border-2 border-border bg-accent text-[var(--text-on-accent)] cursor-pointer shadow-[3px_3px_0px_var(--ink)] hover:bg-accent-hover hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
               }`}
             >

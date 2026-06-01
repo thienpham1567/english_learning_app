@@ -59,7 +59,7 @@ export function QuestionCards({
                   }`}
                 >
                   <span
-                    className={`w-[22px] h-[22px] rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 transition-all duration-100 ${
+                    className={`w-[22px] h-[22px] rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0 transition-all duration-100 ${
                       isSelected
                         ? "border-2 border-accent bg-accent text-ink"
                         : "border-2 border-border bg-transparent text-text-muted"

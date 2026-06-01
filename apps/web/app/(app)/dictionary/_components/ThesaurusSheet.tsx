@@ -116,7 +116,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-lg bg-xp/5 px-3 py-1 text-[13px] font-bold text-warning border border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
+                                className="rounded-lg bg-xp/5 px-3 py-1 text-[13px] font-bold text-warning border-2 border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
                               >
                                 {word}
                               </button>
