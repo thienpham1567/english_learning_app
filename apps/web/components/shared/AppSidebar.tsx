@@ -8,7 +8,6 @@ import {
   CircleCheckBig,
   FileWarning,
   Flame,
-  GitBranch,
   GraduationCap,
   Languages,
   LayoutDashboard,
@@ -60,13 +59,8 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Foundation",
     items: [
       {
-        href: "/grammar-roadmap",
-        label: "Grammar Roadmap",
-        icon: GitBranch,
-      },
-      {
         href: "/grammar-lessons",
-        label: "Grammar Lessons",
+        label: "Grammar",
         icon: GraduationCap,
       },
       { href: "/toeic/vocab", label: "TOEIC Vocab", icon: BookOpenText },
@@ -401,10 +395,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 className="sidebar-group-label flex items-center w-full border-none bg-none text-[10px] font-extrabold uppercase cursor-pointer py-0.5 tracking-[0.1em] text-[var(--sidebar-text-muted)]"
               >
                 <span className="shrink-0 flex items-center gap-1.5">
-                  <span
-                    className="w-1 h-1 rounded-sm bg-[var(--accent)] opacity-50"
-                    aria-hidden
-                  />
+                  <span className="w-1 h-1 rounded-sm bg-[var(--accent)] opacity-50" aria-hidden />
                   {group.label}
                 </span>
                 <m.span

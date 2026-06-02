@@ -4,7 +4,6 @@ import {
   BookOpenText,
   FileWarning,
   Flame,
-  GitBranch,
   GraduationCap,
   HelpCircle,
   Languages,
@@ -105,13 +104,7 @@ const MORE_HUB_ITEMS: HubItem[] = [
     accent: "var(--accent)",
   },
   {
-    label: "Grammar Roadmap",
-    icon: <GitBranch size={22} />,
-    href: "/grammar-roadmap",
-    accent: "var(--module-grammar)",
-  },
-  {
-    label: "Grammar Lessons",
+    label: "Grammar",
     icon: <GraduationCap size={22} />,
     href: "/grammar-lessons",
     accent: "var(--module-grammar)",
@@ -162,7 +155,6 @@ function getActiveTab(pathname: string): string {
   if (
     pathname.startsWith("/english-chatbot") ||
     pathname.startsWith("/read-aloud") ||
-    pathname.startsWith("/grammar-roadmap") ||
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/my-vocabulary") ||
     pathname.startsWith("/ipa-chart") ||
