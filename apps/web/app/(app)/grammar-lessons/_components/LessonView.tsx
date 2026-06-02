@@ -56,11 +56,20 @@ interface Props {
   topicTitle: string;
   level: string;
   examMode: string;
+  focusNote?: string;
   onBack: () => void;
   onComplete: (topicId: string, progress: GrammarLessonProgressItem) => void;
 }
 
-export function LessonView({ topicId, topicTitle, level, examMode, onBack, onComplete }: Props) {
+export function LessonView({
+  topicId,
+  topicTitle,
+  level,
+  examMode,
+  focusNote,
+  onBack,
+  onComplete,
+}: Props) {
   const router = useRouter();
   const { completeUnit } = useRoadmap();
   const [state, setState] = useState<LessonState>("loading");
@@ -89,10 +98,11 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         topicTitle,
         examMode,
         level,
+        focusNote,
         forceRefresh,
       });
     },
-    [examMode, level, topicId, topicTitle],
+    [examMode, level, topicId, topicTitle, focusNote],
   );
 
   const generateLesson = useCallback(

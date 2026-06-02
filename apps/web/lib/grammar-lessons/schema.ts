@@ -71,6 +71,7 @@ export const GrammarLessonGenerateRequestSchema = z.object({
   topicTitle: z.string().min(1),
   examMode: z.enum(["toeic", "ielts"]).default("toeic"),
   level: z.string().default("B1"),
+  focusNote: z.string().optional(),
   forceRefresh: z.boolean().optional().default(false),
 });
 
