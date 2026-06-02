@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { topic, topicTitle, examMode, level, forceRefresh } = parsed.data;
+  const { topic, topicTitle, examMode, level, focusNote, forceRefresh } = parsed.data;
   const lessonVersion = "4";
   const now = new Date();
 
@@ -177,6 +177,10 @@ CRITICAL Rules:
 - "examples": exactly 6, all in ${examContext} settings
 - Keep everything practical, exam-relevant, and accessible to Vietnamese learners`;
 
+  const focusedSystemPrompt = focusNote
+    ? `${systemPrompt}\n\nIMPORTANT TOEIC FOCUS — prioritize these points in the explanation, examples, and exercises:\n${focusNote}`
+    : systemPrompt;
+
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const completion = await openAiClient.chat.completions.create({
@@ -184,7 +188,7 @@ CRITICAL Rules:
         temperature: 0.5,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: focusedSystemPrompt },
           { role: "user", content: `Generate a grammar lesson for: ${topicTitle} (${level})` },
         ],
       });
