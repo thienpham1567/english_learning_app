@@ -203,10 +203,11 @@ export const PRIORITY_TIERS: PriorityTier[] = [
 export function getTierTopicIds(tier: PriorityTier): string[] {
   const ids: string[] = [];
   for (const point of tier.points) {
-    if (point.ref.kind === "direct") {
-      ids.push(point.ref.topicId);
+    const ref = point.ref;
+    if (ref.kind === "direct") {
+      ids.push(ref.topicId);
     } else {
-      const cat = GRAMMAR_TOPIC_CATEGORIES.find((c) => c.id === point.ref.categoryId);
+      const cat = GRAMMAR_TOPIC_CATEGORIES.find((c) => c.id === ref.categoryId);
       if (cat) ids.push(...cat.topics.map((t) => t.id));
     }
   }
