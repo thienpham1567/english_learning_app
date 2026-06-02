@@ -7,6 +7,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { AppSidebar } from "@/components/shared/AppSidebar";
 import { BottomTabBar } from "@/components/shared/BottomTabBar";
 import { FloatingDictionaryWidget } from "@/components/shared/FloatingDictionaryWidget";
+import { FloatingSmartReaderWidget } from "@/components/shared/FloatingSmartReaderWidget";
 import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
 import { UserProvider } from "@/components/shared/UserContext";
 import { UserMenu } from "@/components/shared/UserMenu";
@@ -80,6 +81,7 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
           {isMobile === true && <BottomTabBar />}
 
           <FloatingDictionaryWidget />
+          <FloatingSmartReaderWidget />
         </UserProvider>
       </div>
     </div>
