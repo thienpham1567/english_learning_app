@@ -97,6 +97,12 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
         level: "B1",
         exams: ["toeic"],
       },
+      {
+        id: "participles",
+        title: "Participles (V-ing vs V-ed)",
+        level: "B1",
+        exams: ["toeic"],
+      },
     ],
   },
   {
@@ -108,6 +114,12 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
       { id: "can-could-may", title: "Can / Could / May", level: "A2", exams: ["toeic", "ielts"] },
       { id: "must-have-to", title: "Must / Have to", level: "B1", exams: ["toeic", "ielts"] },
       { id: "should-ought", title: "Should / Ought to", level: "B1", exams: ["toeic", "ielts"] },
+      {
+        id: "subjunctive",
+        title: "Subjunctive (suggest that he go)",
+        level: "B2",
+        exams: ["toeic"],
+      },
     ],
   },
   {
@@ -172,6 +184,18 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
         title: "Paired Conjunctions (not only...but also, either...or)",
         level: "B2",
         exams: ["toeic", "ielts"],
+      },
+      {
+        id: "conj-vs-prep",
+        title: "Conjunction vs Preposition (because vs because of)",
+        level: "B1",
+        exams: ["toeic"],
+      },
+      {
+        id: "parallel-structure",
+        title: "Parallel Structure (both...and / not only...but also)",
+        level: "B2",
+        exams: ["toeic"],
       },
     ],
   },
@@ -342,6 +366,55 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
         title: "Both / Either / Neither",
         level: "B1",
         exams: ["toeic", "ielts"],
+      },
+    ],
+  },
+
+  {
+    id: "inversion-toeic",
+    title: "Đảo ngữ (Inversion)",
+    color: "var(--error)",
+    exams: ["toeic"],
+    topics: [
+      {
+        id: "inversion-toeic",
+        title: "Inversion (Never / Rarely / Not only / Under no circumstances)",
+        level: "B2",
+        exams: ["toeic"],
+      },
+    ],
+  },
+  {
+    id: "part6-skills",
+    title: "Kỹ năng Part 6",
+    color: "var(--accent)",
+    exams: ["toeic"],
+    topics: [
+      {
+        id: "sentence-insertion",
+        title: "Sentence Insertion (Part 6)",
+        level: "B2",
+        exams: ["toeic"],
+      },
+    ],
+  },
+  {
+    id: "speech-forms",
+    title: "Lời nói gián tiếp & Câu hỏi đuôi",
+    color: "var(--secondary)",
+    exams: ["toeic"],
+    topics: [
+      {
+        id: "reported-speech",
+        title: "Reported Speech",
+        level: "B2",
+        exams: ["toeic"],
+      },
+      {
+        id: "tag-questions",
+        title: "Tag Questions",
+        level: "A2",
+        exams: ["toeic"],
       },
     ],
   },
