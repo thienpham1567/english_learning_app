@@ -25,6 +25,7 @@ import { useCallback, useState } from "react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useDialogue } from "../_hooks/useDialogue";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
+import { getVoiceByRole } from "../_data/voices";
 
 const SPEAKER_COLORS: Record<
   string,
@@ -57,14 +58,15 @@ const SPEAKER_COLORS: Record<
 };
 
 interface DialoguePlayerProps {
-  voiceRole: string;
+  voiceRoles: string[];
   speed: number;
+  speakerCount: 2 | 3;
+  onSpeakerCountChange: (count: 2 | 3) => void;
 }
 
-export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
+export function DialoguePlayer({ voiceRoles, speed, speakerCount, onSpeakerCountChange }: DialoguePlayerProps) {
   const dlg = useDialogue();
   const [topic, setTopic] = useState("");
-  const [speakers, setSpeakers] = useState<2 | 3>(2);
   const [length, setLength] = useState<"short" | "medium" | "long">("medium");
 
   // Role-play state
@@ -81,8 +83,27 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
   const handleGenerate = useCallback(async () => {
     setHasListenedOnce(false);
     setIsListeningPreview(false);
-    await dlg.generate({ topic: topic || undefined, speakers, length, primaryVoice: voiceRole });
-  }, [dlg, topic, speakers, length, voiceRole]);
+    // Build voice config from the selected voice roles
+    const voiceConfig = voiceRoles.map((role, i) => {
+      const v = getVoiceByRole(role);
+      return {
+        speaker: String.fromCharCode(65 + i),
+        voiceRole: v.role,
+        voiceName: v.name,
+        voiceId: v.voiceId,
+        provider: v.provider,
+        flag: v.flag,
+        avatar: v.avatar,
+      };
+    });
+    await dlg.generate({
+      topic: topic || undefined,
+      speakers: speakerCount,
+      length,
+      primaryVoice: voiceRoles[0],
+      voiceConfig,
+    });
+  }, [dlg, topic, speakerCount, length, voiceRoles]);
 
   /* ── Listen preview: hear full dialogue before role-playing ── */
   const listenPreview = useCallback(async () => {
@@ -224,12 +245,12 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             <span className="text-xs font-bold text-text-muted block mb-1.5">Speakers</span>
             <div className="flex gap-2">
               {([2, 3] as const).map((n) => {
-                const isActive = speakers === n;
+                const isActive = speakerCount === n;
                 return (
                   <button
                     key={n}
                     type="button"
-                    onClick={() => setSpeakers(n)}
+                    onClick={() => onSpeakerCountChange(n)}
                     className={`flex-1 rounded-xl font-extrabold text-sm cursor-pointer font-body py-2.5 transition-all ${
                       isActive
                         ? "border-2 border-border bg-accent text-ink shadow-sm"
