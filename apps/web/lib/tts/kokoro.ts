@@ -61,7 +61,12 @@ export async function synthesizeKokoroTts(args: {
   }
 
   const apiKey = process.env.KOKORO_API_KEY || "not-needed";
-  const kokoroVoice = KOKORO_VOICE_MAP[args.voice] || "af_heart";
+  // If voice is already a native Kokoro ID (e.g., "am_adam", "bf_emma"), use directly.
+  // Otherwise, map from Groq voice name (e.g., "austin" → "am_adam").
+  const isNativeKokoroId = /^[ab][fm]_/.test(args.voice);
+  const kokoroVoice = isNativeKokoroId
+    ? args.voice
+    : (KOKORO_VOICE_MAP[args.voice] || "af_heart");
   const speed = Math.max(0.25, Math.min(args.speed ?? 1, 4.0));
   const format = args.format ?? "wav";
 
