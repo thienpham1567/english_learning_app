@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
-import { synthesizeTtsForVoice, VOICE_BY_ROLE, type VoiceRole } from "@/lib/tts/groq";
+import { synthesizeTtsForVoice, VOICE_BY_ROLE, VOICE_ROLES, type VoiceRole } from "@/lib/tts/groq";
 
 /**
  * POST /api/read-aloud/batch
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     return Response.json({ error: `Tối đa ${MAX_LINES} dòng mỗi batch` }, { status: 400 });
   }
 
-  const validRoles: VoiceRole[] = ["us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f"];
+
   const speed = typeof body.speed === "number" ? Math.max(0.5, Math.min(body.speed, 2.0)) : 1;
   const log = routeLogger("read-aloud-batch", { userId, lineCount: body.lines.length, speed });
 
@@ -79,8 +79,8 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    if (!validRoles.includes(line.voice as VoiceRole)) {
-      return Response.json({ error: `Voice không hợp lệ ở dòng ${i + 1}` }, { status: 400 });
+    if (!(VOICE_ROLES as readonly string[]).includes(line.voice)) {
+      return Response.json({ error: `Invalid voice at line ${i + 1}` }, { status: 400 });
     }
   }
 

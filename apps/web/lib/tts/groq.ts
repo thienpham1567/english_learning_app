@@ -27,9 +27,14 @@ export function parseAccent(value: unknown): Accent {
  *
  * Available English voices: autumn, diana, hannah, austin, daniel, troy
  */
-export type VoiceRole = "us-m" | "us-f" | "uk-m" | "uk-f" | "au-m" | "au-f";
+export type VoiceRole =
+  | "us-m" | "us-f" | "uk-m" | "uk-f" | "au-m" | "au-f"
+  | "groq-us-m" | "groq-us-f" | "groq-uk-m" | "groq-uk-f" | "groq-au-m" | "groq-au-f";
 
-export const VOICE_ROLES: readonly VoiceRole[] = ["us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f"];
+export const VOICE_ROLES: readonly VoiceRole[] = [
+  "us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f",
+  "groq-us-m", "groq-us-f", "groq-uk-m", "groq-uk-f", "groq-au-m", "groq-au-f",
+];
 
 export const VOICE_BY_ROLE: Record<VoiceRole, string> = {
   "us-m": "austin",
@@ -38,6 +43,13 @@ export const VOICE_BY_ROLE: Record<VoiceRole, string> = {
   "uk-f": "diana",
   "au-m": "troy",
   "au-f": "hannah",
+  // New groq-prefixed keys (same mappings)
+  "groq-us-m": "austin",
+  "groq-us-f": "autumn",
+  "groq-uk-m": "daniel",
+  "groq-uk-f": "diana",
+  "groq-au-m": "troy",
+  "groq-au-f": "hannah",
 };
 
 /** Friendly display name used by the UI speaker legend. */
@@ -48,6 +60,12 @@ export const ROLE_DISPLAY_NAME: Record<VoiceRole, string> = {
   "uk-f": "UK Female",
   "au-m": "AU Male",
   "au-f": "AU Female",
+  "groq-us-m": "US Male",
+  "groq-us-f": "US Female",
+  "groq-uk-m": "UK Male",
+  "groq-uk-f": "UK Female",
+  "groq-au-m": "AU Male",
+  "groq-au-f": "AU Female",
 };
 
 /** Legacy accent → default voice (single-speaker path). */

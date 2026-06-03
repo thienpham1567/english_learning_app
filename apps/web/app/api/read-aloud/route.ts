@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
-import { synthesizeTtsForVoice, VOICE_BY_ROLE, type VoiceRole } from "@/lib/tts/groq";
+import { synthesizeTtsForVoice, VOICE_BY_ROLE, VOICE_ROLES, type VoiceRole } from "@/lib/tts/groq";
 
 /**
  * POST /api/read-aloud
@@ -62,9 +62,8 @@ export async function POST(request: Request) {
   }
 
   const voiceRole = body?.voice as VoiceRole;
-  const validRoles: VoiceRole[] = ["us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f"];
-  if (!validRoles.includes(voiceRole)) {
-    return Response.json({ error: "Voice không hợp lệ" }, { status: 400 });
+  if (!VOICE_ROLES.includes(voiceRole)) {
+    return Response.json({ error: "Invalid voice" }, { status: 400 });
   }
 
   const voiceName = VOICE_BY_ROLE[voiceRole];
