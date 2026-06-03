@@ -25,7 +25,6 @@ import { useCallback, useState } from "react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useDialogue } from "../_hooks/useDialogue";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
-import { ALL_VOICES, type VoiceOption } from "../_data/voices";
 
 const SPEAKER_COLORS: Record<
   string,
@@ -68,20 +67,6 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
   const [speakers, setSpeakers] = useState<2 | 3>(2);
   const [length, setLength] = useState<"short" | "medium" | "long">("medium");
 
-  // Voice selection per speaker (A, B, C)
-  const [speakerVoices, setSpeakerVoices] = useState<Record<string, VoiceOption>>({
-    A: ALL_VOICES[0],
-    B: ALL_VOICES[1],
-    C: ALL_VOICES[2],
-  });
-
-  const handleSpeakerVoiceChange = useCallback((speaker: string, voiceRole: string) => {
-    const voice = ALL_VOICES.find((v) => v.role === voiceRole);
-    if (voice) {
-      setSpeakerVoices((prev) => ({ ...prev, [speaker]: voice }));
-    }
-  }, []);
-
   // Role-play state
   const [rolePlaySpeaker, setRolePlaySpeaker] = useState<string | null>(null);
   const [rolePlayStep, setRolePlayStep] = useState<
@@ -96,28 +81,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
   const handleGenerate = useCallback(async () => {
     setHasListenedOnce(false);
     setIsListeningPreview(false);
-    // Build voice config per speaker
-    const voiceConfig = Array.from({ length: speakers }, (_, i) => {
-      const key = String.fromCharCode(65 + i); // A, B, C
-      const voice = speakerVoices[key];
-      return {
-        speaker: key,
-        voiceRole: voice.role,
-        voiceName: voice.name,
-        voiceId: voice.voiceId,
-        provider: voice.provider,
-        flag: voice.flag,
-        avatar: voice.avatar,
-      };
-    });
-    await dlg.generate({
-      topic: topic || undefined,
-      speakers,
-      length,
-      primaryVoice: voiceRole,
-      voiceConfig,
-    });
-  }, [dlg, topic, speakers, length, voiceRole, speakerVoices]);
+    await dlg.generate({ topic: topic || undefined, speakers, length, primaryVoice: voiceRole });
+  }, [dlg, topic, speakers, length, voiceRole]);
 
   /* ── Listen preview: hear full dialogue before role-playing ── */
   const listenPreview = useCallback(async () => {
@@ -301,60 +266,6 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                         ? "Medium (~10 lines)"
                         : "Long (~16 lines)"}
                   </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Voice selection per speaker */}
-          <div>
-            <span className="text-xs font-bold text-text-muted block mb-1.5">
-              <Users size={12} className="inline" /> Assign Voice per Speaker
-            </span>
-            <div className="flex flex-col gap-2">
-              {Array.from({ length: speakers }, (_, i) => {
-                const key = String.fromCharCode(65 + i);
-                const voice = speakerVoices[key];
-                const colors = SPEAKER_COLORS[key] ?? SPEAKER_COLORS.A;
-                return (
-                  <div
-                    key={key}
-                    className={`flex items-center gap-3 rounded-xl border-2 p-2.5 ${colors.tw}`}
-                  >
-                    <span
-                      className="text-xs font-extrabold w-[70px] shrink-0"
-                      style={{ color: colors.text }}
-                    >
-                      Speaker {key}
-                    </span>
-                    <select
-                      value={voice.role}
-                      onChange={(e) => handleSpeakerVoiceChange(key, e.target.value)}
-                      className="flex-1 rounded-lg border-2 border-border bg-surface text-text-primary text-[12px] font-bold font-body px-2.5 py-1.5 outline-none focus:border-accent cursor-pointer appearance-none"
-                    >
-                      <optgroup label="⚡ Groq Orpheus">
-                        {ALL_VOICES.filter((v) => v.provider === "groq").map((v) => (
-                          <option key={v.role} value={v.role}>
-                            {v.flag} {v.name} ({v.voiceId})
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="🖥 Kokoro">
-                        {ALL_VOICES.filter((v) => v.provider === "kokoro").map((v) => (
-                          <option key={v.role} value={v.role}>
-                            {v.flag} {v.name} ({v.voiceId})
-                          </option>
-                        ))}
-                      </optgroup>
-                    </select>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md ${
-                      voice.provider === "kokoro"
-                        ? "bg-[#4ade80]/15 text-[#4ade80]"
-                        : "bg-[#f77f00]/15 text-[#f77f00]"
-                    }`}>
-                      {voice.provider === "kokoro" ? "Kokoro" : "Groq"}
-                    </span>
-                  </div>
                 );
               })}
             </div>

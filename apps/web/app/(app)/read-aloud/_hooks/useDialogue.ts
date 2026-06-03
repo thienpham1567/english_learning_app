@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/lib/api-client";
-import { VOICES, type TtsProvider } from "../_data/voices";
+import { ALL_VOICES, VOICES, getVoicesByProvider, type TtsProvider } from "../_data/voices";
 import { getCachedAudio, setCachedAudio, makeCacheKey } from "../_lib/audio-cache";
 
 export interface DialogueLine {
@@ -70,12 +70,17 @@ export function useDialogue() {
   /* ── Audio cache: lineIndex → objectURL ── */
   const audioCacheRef = useRef<Map<string, string>>(new Map());
 
-  /* ── Auto-assign voices: match by character name → TTS voice name ── */
+  /* ── Auto-assign voices using the same provider as primaryRole ── */
   const assignVoices = useCallback((lines: DialogueLine[], primaryRole: string) => {
     const speakers = [...new Set(lines.map((l) => l.speaker))];
 
-    // Build a name → voice lookup from the 6 Groq voices
-    const nameToVoice = new Map(VOICES.map((v) => [v.name.toLowerCase(), v]));
+    // Determine which provider the selected voice belongs to
+    const selectedVoice = ALL_VOICES.find((v) => v.role === primaryRole);
+    const provider = selectedVoice?.provider ?? "groq";
+    const providerVoices = getVoicesByProvider(provider);
+
+    // Build a name → voice lookup from provider's voices
+    const nameToVoice = new Map(providerVoices.map((v) => [v.name.toLowerCase(), v]));
 
     // Try to find each speaker's character name in the dialogue lines
     const assignments: VoiceAssignment[] = speakers.map((s) => {
@@ -88,17 +93,21 @@ export function useDialogue() {
           speaker: s,
           voiceRole: matchedVoice.role,
           voiceName: matchedVoice.name,
+          voiceId: matchedVoice.voiceId,
+          provider: matchedVoice.provider,
           flag: matchedVoice.flag,
           avatar: matchedVoice.avatar,
         };
       }
 
-      // Fallback: assign by index (for old dialogues with non-matching names)
-      const fallback = VOICES[speakers.indexOf(s) % VOICES.length];
+      // Fallback: assign by index from the same provider
+      const fallback = providerVoices[speakers.indexOf(s) % providerVoices.length];
       return {
         speaker: s,
         voiceRole: fallback.role,
         voiceName: fallback.name,
+        voiceId: fallback.voiceId,
+        provider: fallback.provider,
         flag: fallback.flag,
         avatar: fallback.avatar,
       };
