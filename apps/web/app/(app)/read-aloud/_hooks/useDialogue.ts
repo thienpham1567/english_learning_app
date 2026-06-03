@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/lib/api-client";
-import { VOICES } from "../_data/voices";
+import { VOICES, type TtsProvider } from "../_data/voices";
 import { getCachedAudio, setCachedAudio, makeCacheKey } from "../_lib/audio-cache";
 
 export interface DialogueLine {
@@ -22,6 +22,8 @@ interface VoiceAssignment {
   speaker: string;
   voiceRole: string;
   voiceName: string;
+  voiceId?: string;
+  provider?: TtsProvider;
   flag: string;
   avatar: string;
 }
@@ -131,6 +133,7 @@ export function useDialogue() {
       speakers?: 2 | 3;
       length?: "short" | "medium" | "long";
       primaryVoice: string;
+      voiceConfig?: VoiceAssignment[];
     }) => {
       setGenerating(true);
       try {
@@ -147,7 +150,10 @@ export function useDialogue() {
         if (!res.ok) throw new Error("Failed");
         const data: Dialogue = await res.json();
         setDialogue(data);
-        const assignments = assignVoices(data.lines, options.primaryVoice);
+        // Use pre-configured voiceConfig if provided, otherwise auto-assign
+        const assignments = options.voiceConfig
+          ? (() => { setVoiceAssignments(options.voiceConfig); return options.voiceConfig; })()
+          : assignVoices(data.lines, options.primaryVoice);
         /* toast: success */
 
         // Auto-save to DB
@@ -222,7 +228,7 @@ export function useDialogue() {
     }
   }, []);
 
-  /* ── Batch TTS: fetch ALL lines in one API call ── */
+  /* ── Batch TTS: fetch ALL lines, routing per provider ── */
   const batchFetchAudio = useCallback(
     async (
       lines: DialogueLine[],
@@ -230,22 +236,23 @@ export function useDialogue() {
       speed: number,
       signal: AbortSignal,
     ): Promise<string[]> => {
-      const getVoiceRole = (line: DialogueLine) =>
-        assignments.find((a) => a.speaker === line.speaker)?.voiceRole ?? assignments[0].voiceRole;
+      const getAssignment = (line: DialogueLine) =>
+        assignments.find((a) => a.speaker === line.speaker) ?? assignments[0];
 
       // Check which lines are already cached (L0 in-memory + L1 IndexedDB + L2 DB)
       const uncachedIndices: number[] = [];
       const resolvedUrls: (string | null)[] = new Array(lines.length).fill(null);
 
       for (let i = 0; i < lines.length; i++) {
-        const memKey = `${lines[i].speaker}|${lines[i].text}|${getVoiceRole(lines[i])}|${speed}`;
+        const a = getAssignment(lines[i]);
+        const memKey = `${lines[i].speaker}|${lines[i].text}|${a.voiceRole}|${speed}`;
         // L0: in-memory
         if (audioCacheRef.current.has(memKey)) {
           resolvedUrls[i] = audioCacheRef.current.get(memKey)!;
           continue;
         }
         // L1+L2: persistent cache
-        const persistKey = makeCacheKey(lines[i].text, getVoiceRole(lines[i]), speed);
+        const persistKey = makeCacheKey(lines[i].text, a.voiceRole, speed);
         const cached = await getCachedAudio(persistKey);
         if (cached) {
           const url = URL.createObjectURL(cached.blob);
@@ -261,52 +268,68 @@ export function useDialogue() {
         return resolvedUrls as string[];
       }
 
-      // Build batch request for uncached lines only
-      const batchLines = uncachedIndices.map((i) => ({
-        text: lines[i].text,
-        voice: getVoiceRole(lines[i]),
-      }));
-
       setBatchProgress({ loaded: lines.length - uncachedIndices.length, total: lines.length });
 
-      const res = await fetch("/api/read-aloud/batch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lines: batchLines, speed }),
-        signal,
-      });
+      // Split uncached by provider
+      const groqIndices = uncachedIndices.filter((i) => getAssignment(lines[i]).provider !== "kokoro");
+      const kokoroIndices = uncachedIndices.filter((i) => getAssignment(lines[i]).provider === "kokoro");
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: "Unknown error" }));
-        throw new Error(err.error || `HTTP ${res.status}`);
-      }
-
-      const data: { segments: string[] } = await res.json();
-
-      // Decode base64 segments → blob URLs, cache in all layers
-      for (let j = 0; j < uncachedIndices.length; j++) {
-        const i = uncachedIndices[j];
+      // Helper to cache a decoded blob
+      const cacheBlob = (i: number, blob: Blob) => {
         const line = lines[i];
-        const voiceRole = getVoiceRole(line);
-        const memKey = `${line.speaker}|${line.text}|${voiceRole}|${speed}`;
-
-        const binary = atob(data.segments[j]);
-        const bytes = new Uint8Array(binary.length);
-        for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
-        const blob = new Blob([bytes], { type: "audio/wav" });
+        const a = getAssignment(line);
+        const memKey = `${line.speaker}|${line.text}|${a.voiceRole}|${speed}`;
         const url = URL.createObjectURL(blob);
-
-        // L0: in-memory
         audioCacheRef.current.set(memKey, url);
         resolvedUrls[i] = url;
+        const persistKey = makeCacheKey(line.text, a.voiceRole, speed);
+        setCachedAudio(persistKey, blob, { text: line.text, voiceRole: a.voiceRole, speed }).catch(() => {});
+      };
 
-        // L1+L2: persistent cache (fire-and-forget)
-        const persistKey = makeCacheKey(line.text, voiceRole, speed);
-        setCachedAudio(persistKey, blob, {
-          text: line.text,
-          voiceRole,
-          speed,
-        }).catch(() => {});
+      // Fetch Groq lines via batch API
+      if (groqIndices.length > 0) {
+        const batchLines = groqIndices.map((i) => ({
+          text: lines[i].text,
+          voice: getAssignment(lines[i]).voiceRole,
+        }));
+
+        const res = await fetch("/api/read-aloud/batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lines: batchLines, speed }),
+          signal,
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ error: "Unknown error" }));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+
+        const data: { segments: string[] } = await res.json();
+
+        for (let j = 0; j < groqIndices.length; j++) {
+          const binary = atob(data.segments[j]);
+          const bytes = new Uint8Array(binary.length);
+          for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
+          const blob = new Blob([bytes], { type: "audio/wav" });
+          cacheBlob(groqIndices[j], blob);
+        }
+      }
+
+      // Fetch Kokoro lines individually (no batch API for Kokoro)
+      for (const i of kokoroIndices) {
+        if (signal.aborted) break;
+        const a = getAssignment(lines[i]);
+        const res = await fetch("/api/read-aloud/kokoro", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: lines[i].text.trim(), voice: a.voiceId || "af_heart", speed }),
+          signal,
+        });
+        if (!res.ok) throw new Error("Kokoro TTS failed");
+        const blob = await res.blob();
+        cacheBlob(i, blob);
+        setBatchProgress({ loaded: lines.length - uncachedIndices.length + kokoroIndices.indexOf(i) + 1, total: lines.length });
       }
 
       setBatchProgress(null);
@@ -333,6 +356,8 @@ export function useDialogue() {
       voiceRole: string,
       speed: number,
       signal: AbortSignal,
+      provider?: TtsProvider,
+      voiceId?: string,
     ): Promise<string> => {
       // Check persistent cache first
       const persistKey = makeCacheKey(text, voiceRole, speed);
@@ -341,10 +366,15 @@ export function useDialogue() {
         return URL.createObjectURL(cached.blob);
       }
 
-      const res = await fetch("/api/read-aloud", {
+      // Route to correct API based on provider
+      const isKokoro = provider === "kokoro";
+      const endpoint = isKokoro ? "/api/read-aloud/kokoro" : "/api/read-aloud";
+      const voice = isKokoro && voiceId ? voiceId : voiceRole;
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text.trim(), voice: voiceRole, speed }),
+        body: JSON.stringify({ text: text.trim(), voice, speed }),
         signal,
       });
       if (!res.ok) throw new Error("TTS failed");
@@ -425,7 +455,14 @@ export function useDialogue() {
 
         if (!url) {
           setIsLoading(true);
-          url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
+          url = await ttsLine(
+            line.text,
+            assignment.voiceRole,
+            speed,
+            abortRef.current.signal,
+            assignment.provider,
+            assignment.voiceId,
+          );
           audioCacheRef.current.set(cacheKey, url);
         }
 
