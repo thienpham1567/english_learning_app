@@ -329,10 +329,12 @@ export function useDialogue() {
       for (const i of kokoroIndices) {
         if (signal.aborted) break;
         const a = getAssignment(lines[i]);
+        const kokoroVoice = a.voiceId || "af_heart";
+        console.log(`[Kokoro TTS] Line ${i}: speaker=${a.speaker}, voiceRole=${a.voiceRole}, voiceId=${a.voiceId}, sending=${kokoroVoice}`);
         const res = await fetch("/api/read-aloud/kokoro", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: lines[i].text.trim(), voice: a.voiceId || "af_heart", speed }),
+          body: JSON.stringify({ text: lines[i].text.trim(), voice: kokoroVoice, speed }),
           signal,
         });
         if (!res.ok) throw new Error("Kokoro TTS failed");
@@ -401,6 +403,8 @@ export function useDialogue() {
   const playAll = useCallback(
     async (speed: number, startIndex = 0) => {
       if (!dialogue || voiceAssignments.length === 0) return;
+
+      console.log("[playAll] voiceAssignments:", JSON.stringify(voiceAssignments, null, 2));
 
       stoppedRef.current = false;
       setIsPlaying(true);
