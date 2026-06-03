@@ -1,15 +1,34 @@
 "use client";
 
-import { Info, User, Volume2 } from "lucide-react";
+import { Info, User, Volume2, Zap, Cpu } from "lucide-react";
 import * as m from "motion/react-client";
-import { VOICES, type VoiceOption } from "../_data/voices";
+import {
+  GROQ_VOICES,
+  KOKORO_VOICES,
+  type TtsProvider,
+  type VoiceOption,
+} from "../_data/voices";
 
 interface VoiceSelectorProps {
   selectedRole: string;
   onSelectRole: (role: string) => void;
+  provider: TtsProvider;
+  onProviderChange: (provider: TtsProvider) => void;
 }
 
-export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps) {
+const PROVIDERS: { key: TtsProvider; label: string; icon: typeof Zap; desc: string }[] = [
+  { key: "groq", label: "Groq Orpheus", icon: Zap, desc: "Cloud · Fast · 10 RPM" },
+  { key: "kokoro", label: "Kokoro", icon: Cpu, desc: "Self-hosted · Unlimited" },
+];
+
+export function VoiceSelector({
+  selectedRole,
+  onSelectRole,
+  provider,
+  onProviderChange,
+}: VoiceSelectorProps) {
+  const voices = provider === "groq" ? GROQ_VOICES : KOKORO_VOICES;
+
   return (
     <m.div
       initial={{ opacity: 0, y: 15 }}
@@ -28,8 +47,38 @@ export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps
         Select Voice
       </span>
 
+      {/* ── Provider Toggle ── */}
+      <div className="flex gap-1.5 bg-surface-alt rounded-xl p-1 border border-border">
+        {PROVIDERS.map((p) => {
+          const isActive = provider === p.key;
+          return (
+            <m.button
+              key={p.key}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onProviderChange(p.key)}
+              className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                isActive
+                  ? "bg-accent text-text-on-accent shadow-sm"
+                  : "bg-transparent text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              <p.icon size={14} />
+              <div className="text-left min-w-0">
+                <div className={`text-[11px] ${isActive ? "font-extrabold" : "font-bold"}`}>
+                  {p.label}
+                </div>
+                <div className={`text-[9px] ${isActive ? "opacity-70" : "opacity-50"}`}>
+                  {p.desc}
+                </div>
+              </div>
+            </m.button>
+          );
+        })}
+      </div>
+
+      {/* ── Voice List ── */}
       <div className="flex flex-col gap-2">
-        {VOICES.map((v) => (
+        {voices.map((v) => (
           <VoiceCard
             key={v.role}
             voice={v}
@@ -95,7 +144,7 @@ function VoiceCard({
             isActive ? "text-text-secondary font-semibold" : "text-text-muted"
           }`}
         >
-          {v.accentLabel} • {v.label}
+          {v.accentLabel} • {v.voiceId}
         </span>
       </div>
 

@@ -56,7 +56,13 @@ export function useAudioPlayback() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const generate = useCallback(async (text: string, voiceRole: string, speed: number) => {
+  const generate = useCallback(async (
+    text: string,
+    voiceRole: string,
+    speed: number,
+    provider: "groq" | "kokoro" = "groq",
+    voiceId?: string,
+  ) => {
     if (!text.trim()) {
       toast.warning("Please enter some text first.");
       return;
@@ -132,12 +138,13 @@ export function useAudioPlayback() {
     abortRef.current = new AbortController();
 
     try {
-      const res = await fetch("/api/read-aloud", {
+      const endpoint = provider === "kokoro" ? "/api/read-aloud/kokoro" : "/api/read-aloud";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           text: text.trim(),
-          voice: voiceRole,
+          voice: provider === "kokoro" ? voiceId : voiceRole,
           speed,
         }),
         signal: abortRef.current.signal,

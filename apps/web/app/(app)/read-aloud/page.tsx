@@ -9,7 +9,7 @@ import { PlaybackControls } from "./_components/PlaybackControls";
 import { ShadowingMode } from "./_components/ShadowingMode";
 import { TextInputPanel } from "./_components/TextInputPanel";
 import { VoiceSelector } from "./_components/VoiceSelector";
-import { getVoiceByRole } from "./_data/voices";
+import { getVoiceByRole, getVoicesByProvider, type TtsProvider } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare } from "lucide-react";
@@ -41,8 +41,16 @@ const MODE_TABS = [
 export default function ReadAloudPage() {
   const [mode, setMode] = useState<AppMode>("listen");
   const [text, setText] = useState("");
-  const [selectedRole, setSelectedRole] = useState<string>("us-m");
+  const [provider, setProvider] = useState<TtsProvider>("groq");
+  const [selectedRole, setSelectedRole] = useState<string>("groq-austin");
   const [speed, setSpeed] = useState(1);
+
+  // Auto-select first voice when provider changes
+  const handleProviderChange = useCallback((p: TtsProvider) => {
+    setProvider(p);
+    const voices = getVoicesByProvider(p);
+    if (voices.length > 0) setSelectedRole(voices[0].role);
+  }, []);
   const [showHistory, setShowHistory] = useState(false);
 
   const audio = useAudioPlayback();
@@ -52,7 +60,8 @@ export default function ReadAloudPage() {
 
   /* ── Generate handler ── */
   const handleGenerate = useCallback(async () => {
-    const wasCached = await audio.generate(text, selectedRole, speed);
+    const voice = getVoiceByRole(selectedRole);
+    const wasCached = await audio.generate(text, selectedRole, speed, voice.provider, voice.voiceId);
     // Add to history (whether cached or fresh)
     if (wasCached !== undefined) {
       history.add(text, selectedRole, speed);
@@ -151,7 +160,12 @@ export default function ReadAloudPage() {
 
             {/* Right: Voice & Playback */}
             <div className="flex flex-col gap-5">
-              <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
+              <VoiceSelector
+                selectedRole={selectedRole}
+                onSelectRole={setSelectedRole}
+                provider={provider}
+                onProviderChange={handleProviderChange}
+              />
               <PlaybackControls
                 loading={audio.loading}
                 playing={audio.playing}
@@ -173,7 +187,12 @@ export default function ReadAloudPage() {
           <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
             <div className="flex flex-col gap-5">
-              <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
+              <VoiceSelector
+                selectedRole={selectedRole}
+                onSelectRole={setSelectedRole}
+                provider={provider}
+                onProviderChange={handleProviderChange}
+              />
             </div>
           </div>
         )}
@@ -183,7 +202,12 @@ export default function ReadAloudPage() {
           <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
             <div className="flex flex-col gap-5">
-              <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
+              <VoiceSelector
+                selectedRole={selectedRole}
+                onSelectRole={setSelectedRole}
+                provider={provider}
+                onProviderChange={handleProviderChange}
+              />
             </div>
           </div>
         )}
