@@ -9,6 +9,7 @@ const log = routeLogger("chat");
 import { conversation, message } from "@repo/database";
 import { buildChatRequest } from "@/lib/chat/build-chat-input";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
+import { buildLearnerProfile } from "@/lib/chat/learner-profile";
 import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 import type { ChatMessage } from "@/lib/chat/types";
 import { openAiClient } from "@/lib/openai/client";
@@ -165,6 +166,16 @@ export async function POST(req: Request) {
     log.info({ personaId, messageCount: messages.length }, "chat.request");
 
     const { instructions, input } = buildChatRequest(messages, personaId);
+
+    // Personalize: inject a short Learner Profile block when we have a session +
+    // any learner data. Fail-open — buildLearnerProfile never throws and returns
+    // null for new users, leaving instructions unchanged.
+    let finalInstructions = instructions;
+    if (session) {
+      const profile = await buildLearnerProfile(session.user.id);
+      if (profile) finalInstructions = `${instructions}\n\n${profile}`;
+    }
+
     const encoder = new TextEncoder();
     const signal = req.signal;
 
@@ -173,7 +184,13 @@ export async function POST(req: Request) {
         async start(controller) {
           let result: Awaited<ReturnType<typeof streamOpenAiToSse>> | null = null;
           try {
-            result = await streamOpenAiToSse({ controller, encoder, instructions, input, signal });
+            result = await streamOpenAiToSse({
+              controller,
+              encoder,
+              instructions: finalInstructions,
+              input,
+              signal,
+            });
           } catch (error) {
             if (!signal.aborted) {
               log.error({ err: error }, "chat.stream.error");
