@@ -94,7 +94,7 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json({ error: "Quá giới hạn. Vui lòng thử lại sau." }, { status: 429 });
+      return Response.json({ error: "Rate limit exceeded. Please try again later." }, { status: 429 });
     }
     entry.count++;
   } else {
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
 
 ${topicInstruction}
 
-CRITICAL: All dialogue lines in "text" fields MUST be in ENGLISH. Only "title" and "context" are in Vietnamese.
+CRITICAL: ALL fields including "title", "context", and "text" MUST be in ENGLISH.
 
 Requirements:
 - Exactly ${speakers} speakers: ${speakerNames}
@@ -172,14 +172,14 @@ Requirements:
 - Speakers should share personal experiences, opinions, and ask each other questions
 - Vocabulary level: B1-B2 (intermediate English learner friendly)
 - Make it feel like overhearing a real conversation between friends or colleagues
-- "title": a Vietnamese title describing the scene
-- "context": a brief Vietnamese context description (1 sentence)
+- "title": a short English title describing the conversation topic
+- "context": a brief English context description (1 sentence)
 - "text": MUST BE IN ENGLISH — this is for English listening practice
 
 Return ONLY valid JSON:
 {
-  "title": "Tiêu đề tiếng Việt",
-  "context": "Mô tả ngữ cảnh bằng tiếng Việt (1 câu)",
+  "title": "Short English title",
+  "context": "Brief English context (1 sentence)",
   "lines": [
 ${speakerExamples}
   ]
@@ -218,7 +218,7 @@ ${speakerExamples}
     } catch {
       log.error({ preview: cleaned.slice(0, 120) }, "dialogue.json.parse.failed");
       return Response.json(
-        { error: "Không thể tạo hội thoại. Vui lòng thử lại." },
+        { error: "Failed to generate dialogue. Please try again." },
         { status: 502 },
       );
     }
@@ -240,13 +240,13 @@ ${speakerExamples}
 
     if (lines.length < 2) {
       log.error({ parsed }, "dialogue.empty");
-      return Response.json({ error: "Không thể tạo hội thoại." }, { status: 502 });
+      return Response.json({ error: "Failed to generate dialogue." }, { status: 502 });
     }
 
     log.info({ userId, speakers, length, lines: lines.length }, "dialogue.generated");
 
     return Response.json({
-      title: String(parsed.title ?? "Hội thoại").slice(0, 100),
+      title: String(parsed.title ?? "Dialogue").slice(0, 100),
       context: String(parsed.context ?? "").slice(0, 200),
       lines,
     });
@@ -254,7 +254,7 @@ ${speakerExamples}
     const aborted = err instanceof Error && err.name === "AbortError";
     log.error({ err, aborted }, aborted ? "dialogue.timeout" : "dialogue.error");
     return Response.json(
-      { error: aborted ? "Tạo hội thoại quá thời gian." : "Không thể tạo hội thoại" },
+      { error: aborted ? "Dialogue generation timed out." : "Failed to generate dialogue" },
       { status: aborted ? 504 : 502 },
     );
   } finally {
