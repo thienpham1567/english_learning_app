@@ -4,7 +4,12 @@
  * Uses the OpenAI-compatible endpoint: https://api.groq.com/openai/v1/audio/speech
  * Model: canopylabs/orpheus-v1-english (Orpheus v1 English)
  * Requires: GROQ_API_KEY env var.
+ *
+ * When Groq is rate-limited (429 exhausted), automatically falls back to
+ * Kokoro TTS if KOKORO_TTS_URL is configured.
  */
+
+import { isKokoroAvailable, synthesizeKokoroTts } from "@/lib/tts/kokoro";
 
 export type Accent = "us" | "uk" | "au";
 export const ACCENTS: readonly Accent[] = ["us", "uk", "au"];
@@ -203,7 +208,24 @@ export async function synthesizeTtsForVoice(args: {
     return audioBuffer;
   }
 
-  throw new Error("Groq TTS: exhausted retries");
+  // ── Kokoro fallback when Groq retries are exhausted ──
+  if (isKokoroAvailable()) {
+    console.warn(
+      `[TTS Fallback] Groq exhausted ${TTS_MAX_RETRIES} retries → falling back to Kokoro (voice=${args.voice})`,
+    );
+    try {
+      return await synthesizeKokoroTts(args);
+    } catch (kokoroErr) {
+      console.error("[TTS Fallback] Kokoro also failed:", kokoroErr);
+      throw new Error(
+        `Groq TTS exhausted retries and Kokoro fallback failed: ${
+          kokoroErr instanceof Error ? kokoroErr.message : String(kokoroErr)
+        }`,
+      );
+    }
+  }
+
+  throw new Error("Groq TTS: exhausted retries (no Kokoro fallback configured)");
 }
 
 /** Split text at sentence boundaries to stay within maxLen. */

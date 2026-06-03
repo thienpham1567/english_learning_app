@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kokoro TTS Voice Samples</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0f0f13;
+      color: #e4e4e7;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: #71717a;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: #3f3f46;
+      box-shadow: 0 0 20px rgba(167, 139, 250, 0.08);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .accent-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      background: #27272a;
+    }
+    .accent-badge.us { background: #1e3a5f; color: #60a5fa; }
+    .accent-badge.uk { background: #3b1f4e; color: #c084fc; }
+    .accent-badge.au { background: #1a3a2a; color: #4ade80; }
+    .gender-icon { font-size: 1.3rem; }
+    .voice-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .voice-id {
+      color: #52525b;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+    .mapping {
+      font-size: 0.78rem;
+      color: #71717a;
+      margin-bottom: 0.75rem;
+      padding: 0.4rem 0.6rem;
+      background: #1f1f23;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .mapping .arrow { color: #a78bfa; }
+    audio {
+      width: 100%;
+      height: 40px;
+      border-radius: 8px;
+      outline: none;
+    }
+    audio::-webkit-media-controls-panel {
+      background: #27272a;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎙 Kokoro TTS Voice Samples</h1>
+  <p class="subtitle">6 voices mapped from Groq Orpheus → Kokoro • Click play to compare</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <span class="gender-icon">👨</span>
+        <div>
+          <div class="voice-name">US Male</div>
+          <div class="voice-id">am_adam</div>
+        </div>
+        <span class="accent-badge us">US</span>
+      </div>
+      <div class="mapping">
+        <span>Groq: <b>austin</b></span>
+        <span class="arrow">→</span>
+        <span>Kokoro: <b>am_adam</b></span>
+      </div>
+      <audio controls preload="auto" src="/kokoro-samples/am_adam.wav"></audio>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="gender-icon">👩</span>
+        <div>
+          <div class="voice-name">US Female</div>
+          <div class="voice-id">af_heart</div>
+        </div>
+        <span class="accent-badge us">US</span>
+      </div>
+      <div class="mapping">
+        <span>Groq: <b>autumn</b></span>
+        <span class="arrow">→</span>
+        <span>Kokoro: <b>af_heart</b></span>
+      </div>
+      <audio controls preload="auto" src="/kokoro-samples/af_heart.wav"></audio>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="gender-icon">👨</span>
+        <div>
+          <div class="voice-name">UK Male</div>
+          <div class="voice-id">bm_george</div>
+        </div>
+        <span class="accent-badge uk">UK</span>
+      </div>
+      <div class="mapping">
+        <span>Groq: <b>daniel</b></span>
+        <span class="arrow">→</span>
+        <span>Kokoro: <b>bm_george</b></span>
+      </div>
+      <audio controls preload="auto" src="/kokoro-samples/bm_george.wav"></audio>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="gender-icon">👩</span>
+        <div>
+          <div class="voice-name">UK Female</div>
+          <div class="voice-id">bf_emma</div>
+        </div>
+        <span class="accent-badge uk">UK</span>
+      </div>
+      <div class="mapping">
+        <span>Groq: <b>diana</b></span>
+        <span class="arrow">→</span>
+        <span>Kokoro: <b>bf_emma</b></span>
+      </div>
+      <audio controls preload="auto" src="/kokoro-samples/bf_emma.wav"></audio>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="gender-icon">👨</span>
+        <div>
+          <div class="voice-name">AU Male</div>
+          <div class="voice-id">am_michael</div>
+        </div>
+        <span class="accent-badge au">AU</span>
+      </div>
+      <div class="mapping">
+        <span>Groq: <b>troy</b></span>
+        <span class="arrow">→</span>
+        <span>Kokoro: <b>am_michael</b></span>
+      </div>
+      <audio controls preload="auto" src="/kokoro-samples/am_michael.wav"></audio>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="gender-icon">👩</span>
+        <div>
+          <div class="voice-name">AU Female</div>
+          <div class="voice-id">af_bella</div>
+        </div>
+        <span class="accent-badge au">AU</span>
+      </div>
+      <div class="mapping">
+        <span>Groq: <b>hannah</b></span>
+        <span class="arrow">→</span>
+        <span>Kokoro: <b>af_bella</b></span>
+      </div>
+      <audio controls preload="auto" src="/kokoro-samples/af_bella.wav"></audio>
+    </div>
+  </div>
+</body>
+</html>
