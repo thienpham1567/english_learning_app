@@ -16,9 +16,9 @@ interface VoiceSelectorProps {
   onProviderChange: (provider: TtsProvider) => void;
 }
 
-const PROVIDERS: { key: TtsProvider; label: string; icon: typeof Zap; desc: string }[] = [
-  { key: "groq", label: "Groq Orpheus", icon: Zap, desc: "Cloud · Fast · 10 RPM" },
-  { key: "kokoro", label: "Kokoro", icon: Cpu, desc: "Self-hosted · Unlimited" },
+const PROVIDERS: { key: TtsProvider; label: string; icon: typeof Zap; desc: string; color: string }[] = [
+  { key: "groq", label: "Groq Orpheus", icon: Zap, desc: "Cloud · Fast · 6 voices", color: "text-[#f77f00]" },
+  { key: "kokoro", label: "Kokoro", icon: Cpu, desc: "Unlimited · 4 voices", color: "text-[#4ade80]" },
 ];
 
 export function VoiceSelector({
@@ -44,7 +44,7 @@ export function VoiceSelector({
         >
           <Volume2 size={13} />
         </m.span>
-        Select Voice
+        TTS Engine & Voice
       </span>
 
       {/* ── Provider Toggle ── */}
@@ -62,7 +62,7 @@ export function VoiceSelector({
                   : "bg-transparent text-text-secondary hover:text-text-primary"
               }`}
             >
-              <p.icon size={14} />
+              <p.icon size={14} className={isActive ? "" : p.color} />
               <div className="text-left min-w-0">
                 <div className={`text-[11px] ${isActive ? "font-extrabold" : "font-bold"}`}>
                   {p.label}
@@ -76,7 +76,7 @@ export function VoiceSelector({
         })}
       </div>
 
-      {/* ── Voice List ── */}
+      {/* ── Voice List (filtered by provider) ── */}
       <div className="flex flex-col gap-2">
         {voices.map((v) => (
           <VoiceCard

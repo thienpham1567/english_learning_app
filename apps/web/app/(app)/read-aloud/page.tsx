@@ -42,15 +42,8 @@ export default function ReadAloudPage() {
   const [mode, setMode] = useState<AppMode>("listen");
   const [text, setText] = useState("");
   const [provider, setProvider] = useState<TtsProvider>("groq");
-  const [selectedRole, setSelectedRole] = useState<string>("groq-austin");
+  const [selectedRole, setSelectedRole] = useState<string>("groq-us-m");
   const [speed, setSpeed] = useState(1);
-
-  // Auto-select first voice when provider changes
-  const handleProviderChange = useCallback((p: TtsProvider) => {
-    setProvider(p);
-    const voices = getVoicesByProvider(p);
-    if (voices.length > 0) setSelectedRole(voices[0].role);
-  }, []);
   const [showHistory, setShowHistory] = useState(false);
 
   const audio = useAudioPlayback();
@@ -58,11 +51,23 @@ export default function ReadAloudPage() {
 
   const selectedVoice = getVoiceByRole(selectedRole);
 
+  // Auto-select first voice when provider changes
+  const handleProviderChange = useCallback((p: TtsProvider) => {
+    setProvider(p);
+    const voices = getVoicesByProvider(p);
+    if (voices.length > 0) setSelectedRole(voices[0].role);
+  }, []);
+
   /* ── Generate handler ── */
   const handleGenerate = useCallback(async () => {
     const voice = getVoiceByRole(selectedRole);
-    const wasCached = await audio.generate(text, selectedRole, speed, voice.provider, voice.voiceId);
-    // Add to history (whether cached or fresh)
+    const wasCached = await audio.generate(
+      text,
+      selectedRole,
+      speed,
+      voice.provider,
+      voice.voiceId,
+    );
     if (wasCached !== undefined) {
       history.add(text, selectedRole, speed);
     }
