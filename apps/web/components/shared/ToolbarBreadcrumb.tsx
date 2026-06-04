@@ -34,7 +34,7 @@ type BreadcrumbEntry = {
 
 const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
   "/dashboard": { eyebrow: "Overview", title: "Dashboard", icon: <LayoutDashboard /> },
-  "/toeic": { eyebrow: "TOEIC", title: "TOEIC Hub", icon: <Target /> },
+  "/toeic": { eyebrow: "TOEIC", title: "TOEIC Skills", icon: <Target /> },
   "/toeic/practice": { eyebrow: "ETS Practice", title: "TOEIC Practice", icon: <ClipboardList /> },
   "/toeic/skills": { eyebrow: "TOEIC Prep", title: "TOEIC Skills", icon: <Target /> },
   "/toeic/writing": { eyebrow: "TOEIC Writing", title: "Writing Practice", icon: <Pencil /> },

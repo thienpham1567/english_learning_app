@@ -1,17 +1,5 @@
-import { Trophy } from "lucide-react";
-import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
-import { HubWidgets } from "./_components/HubWidgets";
-import { QuickActions } from "./_components/QuickActions";
+import { redirect } from "next/navigation";
 
-export default async function ToeicHubPage() {
-  await requireToeicBaseline();
-
-  return (
-    <div className="flex flex-col h-full flex-1 overflow-auto">
-      <div className="p-4 grid gap-4 max-w-6xl mx-auto w-full">
-        <HubWidgets />
-        <QuickActions />
-      </div>
-    </div>
-  );
+export default function ToeicHubPage() {
+  redirect("/toeic/skills");
 }
