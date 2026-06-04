@@ -11,6 +11,7 @@ import {
   GrammarLessonGenerateRequestSchema,
   GrammarLessonSchema,
 } from "@/lib/grammar-lessons/schema";
+import { buildGrammarLessonPrompt, CONTEXT_PACKS } from "@/lib/grammar-lessons/prompt";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
   }
 
   const { topic, topicTitle, examMode, level, focusNote, forceRefresh } = parsed.data;
-  const lessonVersion = "4";
+  const lessonVersion = "5";
   const now = new Date();
 
   const [existingProgress] = await db
@@ -89,107 +90,28 @@ export async function POST(request: Request) {
     }
   }
 
-  const examContext =
-    examMode === "ielts"
-      ? "IELTS Academic writing and speaking contexts"
-      : "TOEIC business and workplace contexts";
+  // Grammar is taught as shared, exam-agnostic General English — independent of
+  // the app's global exam mode (examMode is still used for cache/progress keys).
+  const focusedSystemPrompt = buildGrammarLessonPrompt({
+    topicTitle,
+    level,
+    context: CONTEXT_PACKS.general,
+    focusNote,
+  });
 
-  const systemPrompt = `You are a world-class English grammar teacher who has helped thousands of Vietnamese learners achieve TOEIC 900+ scores.
-Generate an extremely comprehensive, detailed, bilingual grammar lesson for: "${topicTitle}" at ${level || "B1"} level, specifically for ${examContext}.
-
-Return ONLY valid JSON with this structure:
-{
-  "title": "${topicTitle}",
-  "titleVi": "Vietnamese translation of the topic name",
-  "formula": "Grammar formula/structure (e.g., S + have/has + V3/ed)",
-  "explanationEn": "Detailed English explanation of the grammar rule (5-8 sentences). Cover: WHAT the structure is, WHEN to use it, WHY it matters, HOW it differs from similar structures. Use standard grammar terminology.",
-  "explanation": "Detailed Vietnamese explanation (5-8 sentences). Use simple, accessible Vietnamese. Explain the rule clearly with context about when and why Vietnamese learners struggle with this topic.",
-  "usageNotes": [
-    "Detailed usage note 1 in Vietnamese — explain a specific scenario or context where this structure is commonly used in ${examContext}",
-    "Usage note 2 — cover formal vs informal register, or written vs spoken differences",
-    "Usage note 3 — mention common collocations or fixed expressions that use this structure",
-    "Usage note 4 (optional) — any time-related signals or keywords that indicate this structure should be used"
-  ],
-  "toeicTips": [
-    "TOEIC test strategy tip 1 in Vietnamese — specific to Part 5/6, e.g., 'Khi thấy trạng từ _____, hãy chọn thì _____'",
-    "TOEIC tip 2 — how to eliminate wrong answers quickly for this grammar point",
-    "TOEIC tip 3 — common traps that test-makers set for this grammar topic"
-  ],
-  "timeSignals": [
-    "keyword/signal 1 (e.g., 'since', 'for', 'already')",
-    "keyword/signal 2",
-    "keyword/signal 3"
-  ],
-  "confusionPairs": [
-    {
-      "structureA": "Structure A name (e.g., 'Because + clause')",
-      "structureB": "Structure B name (e.g., 'Because of + noun phrase')",
-      "difference": "Vietnamese explanation of the key difference (2-3 sentences)",
-      "exampleA": "Example sentence using structure A",
-      "exampleB": "Example sentence using structure B"
-    }
-  ],
-  "examples": [
-    { "en": "Business/workplace example sentence 1", "vi": "Vietnamese translation", "highlight": "key grammar part" },
-    { "en": "Email/memo context example 2", "vi": "...", "highlight": "..." },
-    { "en": "Meeting/presentation context example 3", "vi": "...", "highlight": "..." },
-    { "en": "Report/announcement context example 4", "vi": "...", "highlight": "..." },
-    { "en": "Contract/policy context example 5", "vi": "...", "highlight": "..." },
-    { "en": "Daily workplace communication example 6", "vi": "...", "highlight": "..." }
-  ],
-  "commonMistakes": [
-    { "wrong": "Incorrect sentence", "correct": "Correct sentence", "note": "Vietnamese explanation (2-3 sentences)", "noteEn": "English explanation (2-3 sentences)" },
-    { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." },
-    { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." },
-    { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." }
-  ],
-  "exercises": [
-    // TIER 1 - Recognition (4 multiple_choice): identify correct usage
-    { "id": "1", "type": "multiple_choice", "tier": "recognition", "sentence": "Sentence with _____ blank", "answer": "correct", "options": ["opt1", "opt2", "opt3", "opt4"], "explanation": "Vietnamese explanation", "explanationEn": "English explanation", "hint": "Short rule reminder", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "2", "type": "multiple_choice", "tier": "recognition", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "3", "type": "multiple_choice", "tier": "recognition", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "4", "type": "multiple_choice", "tier": "recognition", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
-    // TIER 2 - Application (2 multiple_choice with harder context)
-    { "id": "5", "type": "multiple_choice", "tier": "application", "sentence": "More complex contextual sentence with _____", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "6", "type": "multiple_choice", "tier": "application", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
-    // TIER 3 - Production (2 written: 1 error_correction + 1 transformation)
-    { "id": "7", "type": "error_correction", "tier": "production", "sentence": "Sentence with grammar error to fix", "answer": "Corrected full sentence", "explanation": "Vietnamese explanation", "explanationEn": "English explanation", "hint": "Look at the verb form...", "acceptedAnswers": ["alternative correct version"], "instructionVi": "Tìm và sửa lỗi sai trong câu." },
-    { "id": "8", "type": "transformation", "tier": "production", "sentence": "Sentence to transform using the target structure", "answer": "Expected transformed sentence", "explanation": "Vietnamese explanation", "explanationEn": "English explanation", "hint": "Use the structure: ...", "acceptedAnswers": ["alternative valid answer"], "instructionVi": "Viết lại câu dùng cấu trúc vừa học." },
-    // TIER 4 - Context (2 multiple_choice: paragraph/passage-level)
-    { "id": "9", "type": "multiple_choice", "tier": "context", "sentence": "A longer passage (2-3 sentences) with _____ blank in exam-style context", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Đọc đoạn văn và chọn đáp án đúng." },
-    { "id": "10", "type": "multiple_choice", "tier": "context", "sentence": "Another passage-level question in ${examContext} setting", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Đọc đoạn văn và chọn đáp án đúng." }
-  ]
-}
-
-CRITICAL Rules:
-- "explanation" fields are ALWAYS in Vietnamese, "explanationEn" fields are ALWAYS in English
-- ALL examples MUST use ${examContext} vocabulary: business emails, memos, meeting minutes, company announcements, HR policies, financial reports
-- Total exercises: exactly 10 across 4 tiers as shown above
-- Only multiple_choice has "options" with exactly 4 choices
-- For written exercises (error_correction, transformation), provide 1-2 acceptedAnswers for alternative valid phrasings
-- Tier "context" exercises must use longer, passage-like sentences (2-3 sentences)
-- Each exercise must have a "hint" that reminds the student of the relevant rule without giving away the answer
-- "usageNotes": 3-4 items in Vietnamese, each 1-2 sentences explaining practical usage, register, or collocations
-- "toeicTips": 2-3 items in Vietnamese, each specific to TOEIC Part 5/6 test-taking strategy
-- "timeSignals": 3-6 keywords/adverbs that signal this grammar structure (e.g., "since", "already" for present perfect). If not applicable to this topic, return empty array []
-- "confusionPairs": 1-2 pairs of structures that Vietnamese learners commonly confuse with this topic. If not applicable, return empty array []
-- "commonMistakes": exactly 4, with detailed Vietnamese (note) and English (noteEn) explanations (2-3 sentences each)
-- "examples": exactly 6, all in ${examContext} settings
-- Keep everything practical, exam-relevant, and accessible to Vietnamese learners`;
-
-  const focusedSystemPrompt = focusNote
-    ? `${systemPrompt}\n\nIMPORTANT TOEIC FOCUS — prioritize these points in the explanation, examples, and exercises:\n${focusNote}`
-    : systemPrompt;
-
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const completion = await openAiClient.chat.completions.create({
         model: openAiConfig.chatModel,
         temperature: 0.5,
+        max_tokens: 8000,
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: focusedSystemPrompt },
-          { role: "user", content: `Generate a grammar lesson for: ${topicTitle} (${level})` },
+          {
+            role: "user",
+            content: `Generate the complete grammar lesson for "${topicTitle}" (${level}) as a single valid JSON object. Return JSON only.`,
+          },
         ],
       });
 
