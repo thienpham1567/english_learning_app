@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { extractJson } from "@/lib/openai/extract-json";
 
 const log = routeLogger("vocabulary/context-sentences");
 
@@ -62,7 +63,7 @@ Return JSON:
       return Response.json({ error: "Empty response" }, { status: 502 });
     }
 
-    const parsed = JSON.parse(content);
+    const parsed = extractJson(content);
     return Response.json(parsed);
   } catch (err) {
     log.error({ err }, "vocabulary.context-sentences.failed");

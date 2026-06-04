@@ -1,10 +1,11 @@
-import { headers } from "next/headers";
 import { db, smartReaderHistory } from "@repo/database";
-import { eq, and, desc, sql, gte } from "drizzle-orm";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { extractJson } from "@/lib/openai/extract-json";
 
 const log = routeLogger("smart-reader");
 
@@ -77,10 +78,7 @@ export async function POST(request: Request) {
       .select({ count: sql<number>`count(*)::int` })
       .from(smartReaderHistory)
       .where(
-        and(
-          eq(smartReaderHistory.userId, userId),
-          gte(smartReaderHistory.createdAt, todayStart),
-        ),
+        and(eq(smartReaderHistory.userId, userId), gte(smartReaderHistory.createdAt, todayStart)),
       );
     if (countResult && countResult.count >= DAILY_RATE_LIMIT) {
       return Response.json(
@@ -111,14 +109,18 @@ export async function POST(request: Request) {
 
       // Save a new history entry for this user (reusing cached result)
       try {
-        const [saved] = await db.insert(smartReaderHistory).values({
-          userId,
-          sourceText: text,
-          sourceTextHash: textHash,
-          result: cached.result,
-          difficultyLevel: (cached.result as Record<string, string>).difficultyLevel || "intermediate",
-          preview: text.slice(0, 100),
-        }).returning({ id: smartReaderHistory.id });
+        const [saved] = await db
+          .insert(smartReaderHistory)
+          .values({
+            userId,
+            sourceText: text,
+            sourceTextHash: textHash,
+            result: cached.result,
+            difficultyLevel:
+              (cached.result as Record<string, string>).difficultyLevel || "intermediate",
+            preview: text.slice(0, 100),
+          })
+          .returning({ id: smartReaderHistory.id });
 
         return Response.json({ ...cached.result, id: saved.id, cached: true });
       } catch {
@@ -147,18 +149,10 @@ export async function POST(request: Request) {
       throw new Error("Empty response from model");
     }
 
-    // Strip markdown code fences if model wraps JSON in ```json ... ```
-    let jsonStr = raw.trim();
-    if (jsonStr.startsWith("```")) {
-      jsonStr = jsonStr
-        .replace(/^```(?:json)?\s*\n?/, "")
-        .replace(/\n?\s*```\s*$/, "");
-    }
-
     let parsed: Record<string, unknown>;
     try {
-      parsed = JSON.parse(jsonStr);
-    } catch (parseErr) {
+      parsed = extractJson(raw) as Record<string, unknown>;
+    } catch {
       log.error({ raw: raw.slice(0, 500) }, "smart-reader.json.parse.failed");
       return Response.json(
         { error: "Failed to parse AI response. Please try again." },
@@ -177,14 +171,17 @@ export async function POST(request: Request) {
 
     // Save to DB with hash for future cache hits
     try {
-      const [saved] = await db.insert(smartReaderHistory).values({
-        userId,
-        sourceText: text,
-        sourceTextHash: textHash,
-        result,
-        difficultyLevel: result.difficultyLevel,
-        preview: text.slice(0, 100),
-      }).returning({ id: smartReaderHistory.id });
+      const [saved] = await db
+        .insert(smartReaderHistory)
+        .values({
+          userId,
+          sourceText: text,
+          sourceTextHash: textHash,
+          result,
+          difficultyLevel: result.difficultyLevel,
+          preview: text.slice(0, 100),
+        })
+        .returning({ id: smartReaderHistory.id });
 
       return Response.json({ ...result, id: saved.id });
     } catch (dbErr) {
@@ -202,9 +199,6 @@ export async function POST(request: Request) {
       );
     }
 
-    return Response.json(
-      { error: "Analysis failed. Please try again." },
-      { status: 500 },
-    );
+    return Response.json({ error: "Analysis failed. Please try again." }, { status: 500 });
   }
 }

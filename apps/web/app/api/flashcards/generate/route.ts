@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { extractJson } from "@/lib/openai/extract-json";
 
 const log = routeLogger("flashcards/generate");
 
@@ -101,15 +102,13 @@ Rules:
       return Response.json({ error: "AI returned no content" }, { status: 502 });
     }
 
-    const stripped = content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "");
-    const start = stripped.indexOf("{");
-    const end = stripped.lastIndexOf("}");
-    if (start === -1 || end === -1 || end <= start) {
+    let result: unknown;
+    try {
+      result = extractJson(content);
+    } catch {
       log.error({ topic, type }, "flashcards.generate.malformed");
       return Response.json({ error: "AI returned malformed content" }, { status: 502 });
     }
-
-    const result = JSON.parse(stripped.slice(start, end + 1));
     return Response.json(result);
   } catch (err) {
     log.error({ err, topic, type }, "flashcards.generate.failed");

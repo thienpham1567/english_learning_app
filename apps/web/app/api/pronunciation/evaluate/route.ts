@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { extractJson } from "@/lib/openai/extract-json";
 
 /**
  * POST /api/pronunciation/evaluate
@@ -91,7 +92,7 @@ Return ONLY valid JSON:
       return Response.json({ error: "AI returned no content" }, { status: 502 });
     }
 
-    const result = JSON.parse(content);
+    const result = extractJson(content) as Record<string, unknown>;
     log.info(
       {
         llmMs,

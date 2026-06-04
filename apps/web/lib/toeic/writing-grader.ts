@@ -8,9 +8,22 @@
  *
  * Then maps total raw score to 0-200 scaled (linear approximation).
  */
-import { openAiClient } from "@/lib/openai/client";
+import { z } from "zod";
+import { routeLogger } from "@/lib/logger";
+import { completeJson } from "@/lib/openai/complete-json";
+import { openAiConfig } from "@/lib/openai/config";
+import { JSON_ONLY_RULE, PROMPT_TEMPERATURE } from "@/lib/openai/prompt-kit";
 
-const MODEL = process.env.OPENAI_CHAT_MODEL ?? "google/gemini-2.5-flash";
+const log = routeLogger("toeic/writing-grader");
+
+/** Stable examiner role — cacheable prefix; the rubric + answer go in the user turn. */
+const SYSTEM_PROMPT = `You are an ETS-certified TOEIC Writing examiner with 15+ years of scoring experience. Score strictly and consistently against the rubric you are given, erring slightly low when in doubt. ${JSON_ONLY_RULE}`;
+
+const GradeResultSchema = z.object({
+  rawScore: z.number(),
+  rubricScores: z.record(z.string(), z.number()).default({}),
+  feedbackVi: z.string().default(""),
+});
 
 export type GradePromptInput = {
   type: "q1_5_picture" | "q6_7_email" | "q8_opinion";
@@ -32,10 +45,10 @@ export type GradeResult = {
   feedbackVi: string;
 };
 
-function buildPrompt(input: GradePromptInput): string {
+function buildUserPrompt(input: GradePromptInput): string {
   const { type, userText, maxScore, context } = input;
   if (type === "q1_5_picture") {
-    return `You are grading a TOEIC Writing Q1-5 (write a sentence based on a picture).
+    return `Grade this TOEIC Writing Q1-5 response (write a sentence based on a picture).
 
 Mandatory words (must be used): ${JSON.stringify(context.mandatoryWords ?? [])}
 User's sentence:
@@ -56,7 +69,7 @@ Output strict JSON: {
 }`;
   }
   if (type === "q6_7_email") {
-    return `You are grading a TOEIC Writing Q6-7 (respond to an email).
+    return `Grade this TOEIC Writing Q6-7 response (respond to an email).
 
 Email subject: ${context.emailSubject ?? ""}
 Email body:
@@ -85,7 +98,7 @@ Output strict JSON: {
 }`;
   }
   // q8_opinion
-  return `You are grading a TOEIC Writing Q8 (opinion essay).
+  return `Grade this TOEIC Writing Q8 response (opinion essay).
 
 Topic: ${context.topic ?? ""}
 
@@ -113,22 +126,19 @@ Output strict JSON: {
 
 export async function gradeResponse(input: GradePromptInput): Promise<GradeResult> {
   const t0 = Date.now();
-  const res = await openAiClient.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: "user", content: buildPrompt(input) }],
-    response_format: { type: "json_object" },
-    temperature: 0.1,
+  const parsed = await completeJson({
+    model: openAiConfig.models.grader,
+    system: SYSTEM_PROMPT,
+    user: buildUserPrompt(input),
+    schema: GradeResultSchema,
+    temperature: PROMPT_TEMPERATURE.grading,
   });
-  console.log(
-    `[cost] toeic.grade_writing type=${input.type} duration=${Date.now() - t0}ms tokens=${res.usage?.total_tokens ?? "?"}`,
-  );
-  const raw = res.choices[0]?.message.content ?? "{}";
-  const parsed = JSON.parse(raw);
+  log.info({ type: input.type, durationMs: Date.now() - t0 }, "toeic.grade_writing");
   const rawScore = Math.min(input.maxScore, Math.max(0, Number(parsed.rawScore) || 0));
   return {
     rawScore,
-    rubricScores: parsed.rubricScores ?? {},
-    feedbackVi: parsed.feedbackVi ?? "",
+    rubricScores: parsed.rubricScores,
+    feedbackVi: parsed.feedbackVi,
   };
 }
 

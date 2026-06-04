@@ -10,9 +10,22 @@
 
 import fs from "node:fs";
 import Groq from "groq-sdk";
-import { openAiClient } from "@/lib/openai/client";
+import { z } from "zod";
+import { routeLogger } from "@/lib/logger";
+import { completeJson } from "@/lib/openai/complete-json";
+import { openAiConfig } from "@/lib/openai/config";
+import { JSON_ONLY_RULE, PROMPT_TEMPERATURE } from "@/lib/openai/prompt-kit";
 
-const MODEL = process.env.OPENAI_CHAT_MODEL ?? "google/gemini-2.5-flash";
+const log = routeLogger("toeic/speaking-grader");
+
+/** Stable examiner role — cacheable prefix; the rubric + transcript go in the user turn. */
+const SYSTEM_PROMPT = `You are an ETS-certified TOEIC Speaking examiner. Score strictly and consistently against the rubric you are given, erring slightly low when in doubt. When pronunciation metrics are provided, ground your Vietnamese feedback in at least one concrete number. ${JSON_ONLY_RULE}`;
+
+const GradeSpeakingSchema = z.object({
+  rawScore: z.number(),
+  rubricScores: z.record(z.string(), z.number()).default({}),
+  feedbackVi: z.string().default(""),
+});
 
 let groqClient: Groq | null = null;
 function getGroq(): Groq {
@@ -291,22 +304,19 @@ Output strict JSON: {
 
 export async function gradeSpeaking(input: GradeSpeakingInput): Promise<GradeSpeakingResult> {
   const t0 = Date.now();
-  const res = await openAiClient.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: "user", content: buildPrompt(input) }],
-    response_format: { type: "json_object" },
-    temperature: 0.1,
+  const parsed = await completeJson({
+    model: openAiConfig.models.grader,
+    system: SYSTEM_PROMPT,
+    user: buildPrompt(input),
+    schema: GradeSpeakingSchema,
+    temperature: PROMPT_TEMPERATURE.grading,
   });
-  console.log(
-    `[cost] toeic.grade_speaking type=${input.type} duration=${Date.now() - t0}ms tokens=${res.usage?.total_tokens ?? "?"}`,
-  );
-  const raw = res.choices[0]?.message.content ?? "{}";
-  const parsed = JSON.parse(raw);
+  log.info({ type: input.type, durationMs: Date.now() - t0 }, "toeic.grade_speaking");
   const rawScore = Math.min(input.maxScore, Math.max(0, Number(parsed.rawScore) || 0));
   return {
     rawScore,
-    rubricScores: parsed.rubricScores ?? {},
-    feedbackVi: parsed.feedbackVi ?? "",
+    rubricScores: parsed.rubricScores,
+    feedbackVi: parsed.feedbackVi,
   };
 }
 

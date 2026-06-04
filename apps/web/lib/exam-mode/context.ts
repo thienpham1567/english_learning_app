@@ -53,6 +53,16 @@ Use academic/semi-formal English appropriate for IELTS listening sections (Secti
   },
 };
 
+/**
+ * Canonical human-readable label per exam mode — the single source of truth.
+ * Other modules (e.g. grammar-lessons context packs) reference this instead of
+ * re-declaring "TOEIC" / "IELTS" strings.
+ */
+export const EXAM_LABELS: Record<ExamModeValue, string> = {
+  toeic: EXAM_CONTEXTS.toeic.label,
+  ielts: EXAM_CONTEXTS.ielts.label,
+};
+
 /** Get exam-specific context for AI prompt building */
 export function getExamContext(mode: ExamModeValue): ExamContext {
   return EXAM_CONTEXTS[mode];

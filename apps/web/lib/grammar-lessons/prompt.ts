@@ -15,6 +15,8 @@
  *   L6 QUALITY GATE — constraints + self-check        (fixed)
  */
 
+import { EXAM_LABELS } from "@/lib/exam-mode/context";
+
 export type GrammarContextId = "general" | "toeic" | "ielts";
 
 export interface ContextPack {
@@ -51,7 +53,7 @@ export const CONTEXT_PACKS: Record<GrammarContextId, ContextPack> = {
   },
   toeic: {
     id: "toeic",
-    label: "TOEIC",
+    label: EXAM_LABELS.toeic,
     goal: "achieve TOEIC 900+ scores",
     register: "professional business English",
     exampleDomains:
@@ -65,7 +67,7 @@ export const CONTEXT_PACKS: Record<GrammarContextId, ContextPack> = {
   },
   ielts: {
     id: "ielts",
-    label: "IELTS",
+    label: EXAM_LABELS.ielts,
     goal: "achieve IELTS band 7+ scores",
     register: "formal academic English",
     exampleDomains:
@@ -73,8 +75,7 @@ export const CONTEXT_PACKS: Record<GrammarContextId, ContextPack> = {
     examTips: {
       label: "IELTS exam strategy tip",
       scope: "specific to improving Writing Task 2 / Speaking Grammatical Range & Accuracy",
-      example:
-        "e.g., 'Dùng cấu trúc này trong Writing Task 2 để nâng tiêu chí Grammatical Range'",
+      example: "e.g., 'Dùng cấu trúc này trong Writing Task 2 để nâng tiêu chí Grammatical Range'",
     },
     passageSetting: "an IELTS Reading gap-fill passage",
   },

@@ -7,6 +7,7 @@ const log = routeLogger("reading/grammar");
 
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { extractJson } from "@/lib/openai/extract-json";
 import { BoundedCache } from "@/lib/reading/utils";
 
 const grammarCache = new BoundedCache<unknown>(500, 24 * 60 * 60 * 1000); // 500 entries, 24h TTL
@@ -68,7 +69,7 @@ If no notable patterns found, return { "patterns": [] }`;
     });
 
     const content = completion.choices[0]?.message?.content ?? '{"patterns":[]}';
-    const data = JSON.parse(content);
+    const data = extractJson(content);
 
     grammarCache.set(cacheKey, data);
 

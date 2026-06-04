@@ -10,6 +10,7 @@ import { db, userPreferences } from "@repo/database";
 import { type ExamModeValue, getExamContext } from "@/lib/exam-mode/context";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { extractJson } from "@/lib/openai/extract-json";
 
 /**
  * POST /api/pronunciation/sentences
@@ -101,7 +102,7 @@ Return ONLY valid JSON:
       return Response.json({ error: "AI returned no content" }, { status: 502 });
     }
 
-    const parsed = JSON.parse(content);
+    const parsed = extractJson(content) as Record<string, unknown>;
     if (!Array.isArray(parsed?.sentences) || parsed.sentences.length === 0) {
       return Response.json({ error: "Invalid AI response format" }, { status: 502 });
     }
