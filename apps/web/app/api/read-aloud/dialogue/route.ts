@@ -6,7 +6,7 @@ import { openAiConfig } from "@/lib/openai/config";
 
 const log = routeLogger("read-aloud/dialogue");
 
-const OPENAI_TIMEOUT_MS = 25_000;
+const OPENAI_TIMEOUT_MS = 55_000;
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 15;
