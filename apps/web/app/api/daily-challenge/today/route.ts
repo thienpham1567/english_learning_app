@@ -369,6 +369,10 @@ Return JSON only, with a top-level "exercises" array.`,
           challengeDate: vnToday,
           exercises: result.exercises,
         })
+        .onConflictDoUpdate({
+          target: [dailyChallenge.userId, dailyChallenge.challengeDate],
+          set: { exercises: result.exercises },
+        })
         .returning();
 
       return Response.json({
