@@ -65,6 +65,104 @@ function buildChallengeSystemPrompt(
       ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used in recent challenges. You MUST NOT reuse them or create minor variations of them. Generate completely NEW and DIFFERENT content:\n---\n${recentStems.join("\n")}\n---\nCreate fresh sentences with different vocabulary, different grammar points, and different scenarios. Be creative and surprising.`
       : "";
 
+  if (examMode === "toeic") {
+    return `You are a professional TOEIC daily challenge designer creating a mixed-skill warm-up set.
+Generate exactly 10 mini-exercises. Use 5-9 DIFFERENT types from the 9 types below for variety.
+Do NOT use the same type more than 3 times.
+
+${getDifficultyInstructions(difficulty)}
+
+═══════════════════════════════════════════════
+EXERCISE TYPE SPECIFICATIONS
+═══════════════════════════════════════════════
+
+1. "fill-in-blank" — TOEIC Part 5 style
+   Sentence with _____ and 4 options. Tests grammar or vocabulary in business context.
+   DISTRACTOR RULES: All 4 options must be the same part of speech or closely related word forms.
+   Example:
+   { "type": "fill-in-blank", "instruction": "Chọn từ đúng để điền vào chỗ trống",
+     "data": { "sentence": "All employees must _____ the safety training by the end of the month.", "options": ["complete", "completion", "completely", "completed"], "correctIndex": 0 } }
+
+2. "sentence-order" — Tests natural English word order
+   Provide 5-8 scrambled words/phrases to arrange into a correct TOEIC-style business sentence.
+   Example:
+   { "type": "sentence-order", "instruction": "Sắp xếp các từ thành câu hoàn chỉnh",
+     "data": { "scrambled": ["the meeting", "has been", "until", "postponed", "next Monday"], "correctOrder": ["the meeting", "has been", "postponed", "until", "next Monday"] } }
+
+3. "translation" — Vietnamese → English business sentences
+   Provide a Vietnamese sentence and 1-3 acceptable English translations. Use TOEIC business contexts.
+   Example:
+   { "type": "translation", "instruction": "Dịch câu sau sang tiếng Anh",
+     "data": { "vietnamese": "Cuộc họp đã bị hoãn lại đến tuần sau.", "acceptableAnswers": ["The meeting has been postponed until next week.", "The meeting was postponed to next week."] } }
+
+4. "error-correction" — Find and fix the grammar error
+   A sentence with ONE grammar error common in TOEIC. Identify the wrong word and provide correction + explanation.
+   Example:
+   { "type": "error-correction", "instruction": "Tìm từ sai trong câu và sửa lại",
+     "data": { "sentence": "The sales team have already submited their quarterly reports.", "errorWord": "submited", "correction": "submitted", "explanation": "The past participle of 'submit' is 'submitted' (double t)." } }
+
+5. "word-formation" — Derive correct word form from root (TOEIC Part 5 pattern)
+   A sentence with _____ where the learner picks the correct derived form. Show the rootWord.
+   DISTRACTOR RULES: All 4 options must be different forms of the SAME root word (noun/verb/adj/adv).
+   Example:
+   { "type": "word-formation", "instruction": "Chọn dạng đúng của từ gốc để điền vào câu",
+     "data": { "sentence": "The company's _____ strategy led to a 20% increase in revenue.", "rootWord": "market", "correctAnswer": "marketing", "options": ["market", "marketing", "marketed", "marketable"], "correctIndex": 1 } }
+
+6. "dialogue-completion" — Complete a workplace conversation
+   A 3-4 line dialogue with one missing line. Context must be a TOEIC scenario.
+   Example:
+   { "type": "dialogue-completion", "instruction": "Chọn câu phù hợp để hoàn thành đoạn hội thoại",
+     "data": { "context": "At a client meeting", "dialogue": [{"speaker": "Manager", "text": "I'd like to discuss the timeline for the project."}, {"speaker": "Client", "text": ""}, {"speaker": "Manager", "text": "That works for us. Let's aim for March then."}], "missingIndex": 1, "options": ["We're hoping to launch by the end of Q1.", "The weather has been nice lately.", "I had pasta for lunch.", "My car broke down yesterday."], "correctIndex": 0 } }
+
+7. "synonym-antonym" — Vocabulary breadth (TOEIC Part 5/7 vocabulary)
+   Test business/professional vocabulary. Word should be from TOEIC high-frequency word lists.
+   Example:
+   { "type": "synonym-antonym", "instruction": "Chọn từ trái nghĩa với từ được cho",
+     "data": { "word": "mandatory", "mode": "antonym", "options": ["optional", "required", "essential", "compulsory"], "correctIndex": 0 } }
+
+8. "reading-comprehension" — Mini TOEIC Part 7 passage
+   A 2-3 sentence business passage + one comprehension question with 4 options.
+   Passage types: email excerpt, announcement, advertisement, article snippet, notice.
+   Example:
+   { "type": "reading-comprehension", "instruction": "Đọc đoạn văn và trả lời câu hỏi",
+     "data": { "passage": "Due to renovations, the employee cafeteria on the 3rd floor will be closed from March 10-15. During this time, staff are encouraged to use the café on the 1st floor or nearby restaurants.", "question": "What is the purpose of this notice?", "options": ["To announce a new restaurant", "To inform about a temporary closure", "To invite staff to a party", "To describe a new menu"], "correctIndex": 1 } }
+
+9. "collocation" — Natural word partnerships (TOEIC high-frequency)
+   A phrase with _____ where the learner picks the naturally collocating word.
+   Focus on TOEIC business collocations: make/do/take/have/give + noun patterns.
+   Example:
+   { "type": "collocation", "instruction": "Chọn từ kết hợp tự nhiên nhất",
+     "data": { "phrase": "take _____ of the situation", "options": ["advantage", "benefit", "profit", "gain"], "correctIndex": 0, "explanation": "'Take advantage of' is a fixed collocation meaning to use an opportunity. 'Benefit from', 'profit from', and 'gain from' use different prepositions." } }
+
+═══════════════════════════════════════════════
+TOEIC CONTEXT & VOCABULARY DOMAINS
+═══════════════════════════════════════════════
+Rotate through these topics (never repeat same sub-topic within one challenge set):
+- Corporate: meetings, memos, reports, budgets, presentations, deadlines
+- HR: hiring, training, performance reviews, benefits, promotions, resignations
+- Sales & Marketing: campaigns, product launches, customer feedback, market research
+- Travel & Hospitality: reservations, itineraries, airport announcements, hotel services
+- Finance: invoices, expenses, quarterly earnings, audit, tax filings
+- Operations: supply chain, manufacturing, quality control, inventory, shipping
+- Technology: system upgrades, IT support, software training, data security
+- Customer Service: complaints, refunds, warranties, satisfaction surveys
+- Events: conferences, trade shows, company outings, award ceremonies
+
+═══════════════════════════════════════════════
+INSTRUCTION LANGUAGE
+═══════════════════════════════════════════════
+- "instruction" field: ALWAYS in Vietnamese
+- All exercise content (sentences, options, passages, dialogues): ALWAYS in English
+- Exception: "translation" type has Vietnamese source sentence
+${antiRepetitionBlock}
+
+Return ONLY valid JSON with the key "exercises":
+{
+  "exercises": [ /* exactly 10 exercise objects */ ]
+}`;
+  }
+
+  // IELTS/generic fallback
   return `You are a daily English challenge generator for ${ctx.label} preparation.
 Generate exactly 10 mini-exercises. Pick 5-9 DIFFERENT types from these 9 types for variety:
 
@@ -92,26 +190,6 @@ Return ONLY valid JSON with the key "exercises":
       "type": "fill-in-blank",
       "instruction": "Chọn từ đúng để điền vào chỗ trống",
       "data": { "sentence": "She _____ to school every day.", "options": ["go", "goes", "going", "gone"], "correctIndex": 1 }
-    },
-    {
-      "type": "word-formation",
-      "instruction": "Chọn dạng đúng của từ gốc để điền vào câu",
-      "data": { "sentence": "The _____ of the project was impressive.", "rootWord": "execute", "correctAnswer": "execution", "options": ["executive", "execution", "executing", "executed"], "correctIndex": 1 }
-    },
-    {
-      "type": "dialogue-completion",
-      "instruction": "Chọn câu phù hợp để hoàn thành đoạn hội thoại",
-      "data": { "context": "At a restaurant", "dialogue": [{"speaker": "Waiter", "text": "Good evening. How many in your party?"}, {"speaker": "Customer", "text": ""}, {"speaker": "Waiter", "text": "Right this way, please."}], "missingIndex": 1, "options": ["Table for two, please.", "I'll have the steak.", "The food was great.", "Where is the exit?"], "correctIndex": 0 }
-    },
-    {
-      "type": "synonym-antonym",
-      "instruction": "Chọn từ đồng nghĩa với từ được cho",
-      "data": { "word": "abundant", "mode": "synonym", "options": ["scarce", "plentiful", "tiny", "rare"], "correctIndex": 1 }
-    },
-    {
-      "type": "collocation",
-      "instruction": "Chọn từ kết hợp tự nhiên nhất",
-      "data": { "phrase": "make a _____", "options": ["decision", "opinion", "thought", "idea"], "correctIndex": 0, "explanation": "'Make a decision' is a common English collocation. We say 'form an opinion', 'have a thought', and 'have an idea'." }
     }
   ]
 }`;
@@ -214,12 +292,34 @@ export async function GET() {
     // Non-fatal — use default medium and no dedup
   }
 
+  // ── Rotating daily topic for guaranteed variety ──
+  const DAILY_TOPICS = [
+    "office meetings and scheduling",
+    "hiring and job interviews",
+    "product launches and marketing campaigns",
+    "hotel reservations and travel itineraries",
+    "financial reports and quarterly earnings",
+    "supply chain and manufacturing",
+    "IT support and system upgrades",
+    "customer complaints and refunds",
+    "conferences and trade shows",
+    "performance reviews and promotions",
+    "contract negotiations and legal terms",
+    "training workshops and onboarding",
+    "shipping and logistics coordination",
+    "company announcements and policy changes",
+  ];
+  const dayOfYear = Math.floor(
+    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000,
+  );
+  const todayTopic = DAILY_TOPICS[dayOfYear % DAILY_TOPICS.length];
+
   // Generate new challenge via AI
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const completion = await openAiClient.chat.completions.create({
         model: openAiConfig.chatModel,
-        temperature: 0.8,
+        temperature: 0.9,
         response_format: { type: "json_object" },
         messages: [
           {
@@ -228,7 +328,15 @@ export async function GET() {
           },
           {
             role: "user",
-            content: `Generate today's daily English challenge with exactly 10 exercises. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only, with a top-level "exercises" array.`,
+            content: `Generate today's daily English challenge with exactly 10 exercises.
+Date: ${vnToday}
+Difficulty: ${difficulty}
+Today's primary topic focus: "${todayTopic}" — at least 4-5 exercises should revolve around this theme.
+The remaining exercises should cover OTHER topics for variety.
+
+CRITICAL: Every sentence, passage, and word must be BRAND NEW content never seen before. Do NOT recycle generic textbook examples. Create realistic, specific scenarios with concrete details (names, dates, numbers, locations).
+
+Return JSON only, with a top-level "exercises" array.`,
           },
         ],
       });
