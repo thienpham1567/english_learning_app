@@ -52,12 +52,6 @@ export function CEFRPath({
       shadowSize="sm"
       className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6"
     >
-      <div
-        className="absolute w-[180px] h-[180px] left-1/2 top-0 -translate-x-1/2 pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)",
-        }}
-      />
 
       <h3 className="text-xl font-black font-display text-text-primary m-0">TOEIC Part 5 Quiz</h3>
       <p className="mt-1 text-[13px] text-text-secondary font-medium">
