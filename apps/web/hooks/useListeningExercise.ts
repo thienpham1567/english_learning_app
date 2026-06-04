@@ -24,7 +24,7 @@ export function useListeningExercise() {
   const MAX_REPLAYS = 3;
 
   const generate = useCallback(
-    async (level: CefrLevel, exerciseType: ExerciseType, examMode?: string) => {
+    async (level: CefrLevel, exerciseType: ExerciseType, examMode?: string, toeicPart?: string) => {
       setState("loading");
       setError(null);
       setResult(null);
@@ -34,6 +34,7 @@ export function useListeningExercise() {
           level,
           exerciseType,
           examMode,
+          toeicPart,
         });
         setExercise(data);
         setSelectedAnswers(new Array(data.questions.length).fill(null));

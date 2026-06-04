@@ -10,12 +10,18 @@ export type CefrLevel = (typeof CEFR_LEVELS)[number];
 export const EXERCISE_TYPES = ["comprehension", "dictation", "fill_blanks"] as const;
 export type ExerciseType = (typeof EXERCISE_TYPES)[number];
 
+// ── TOEIC Parts ──
+
+export const TOEIC_LISTENING_PARTS = ["any", "part1", "part2", "part3", "part4"] as const;
+export type ToeicListeningPart = (typeof TOEIC_LISTENING_PARTS)[number];
+
 // ── Zod Schemas ──
 
 export const GenerateInputSchema = z.object({
   level: z.enum(CEFR_LEVELS),
   exerciseType: z.enum(EXERCISE_TYPES).default("comprehension"),
   examMode: z.enum(["toeic", "ielts"]).optional(),
+  toeicPart: z.enum(TOEIC_LISTENING_PARTS).optional().default("any"),
 });
 
 export const DIALOGUE_TURN_COUNTS = [6, 8, 10] as const;

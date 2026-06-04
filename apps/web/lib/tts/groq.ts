@@ -135,11 +135,41 @@ export async function synthesizeTts(args: {
 }
 
 /**
- * Low-level Groq TTS call keyed by explicit voice name.
+ * Primary TTS entry point keyed by explicit voice name.
+ *
+ * Priority: Kokoro (self-hosted, no rate limits) → Groq Orpheus (fallback).
  * Used by the multi-speaker dialogue path, which needs MP3 for frame-level
  * byte concatenation across turns.
  */
 export async function synthesizeTtsForVoice(args: {
+  text: string;
+  voice: string;
+  format?: TtsResponseFormat;
+  speed?: number;
+  signal?: AbortSignal;
+}): Promise<ArrayBuffer> {
+  // ── Try Kokoro first (self-hosted = no rate limits) ──
+  if (isKokoroAvailable()) {
+    try {
+      return await synthesizeKokoroTts(args);
+    } catch (kokoroErr) {
+      console.warn(
+        `[TTS] Kokoro failed, falling back to Groq: ${
+          kokoroErr instanceof Error ? kokoroErr.message : String(kokoroErr)
+        }`,
+      );
+    }
+  }
+
+  // ── Groq Orpheus fallback ──
+  return synthesizeGroqTts(args);
+}
+
+/**
+ * Low-level Groq Orpheus TTS call.
+ * Handles text chunking (200-char limit), rate limiting, and retries.
+ */
+async function synthesizeGroqTts(args: {
   text: string;
   voice: string;
   format?: TtsResponseFormat;
@@ -159,12 +189,10 @@ export async function synthesizeTtsForVoice(args: {
     console.log(
       `[Groq TTS] Chunking text: ${args.text.length} chars → ${chunks.length} chunks, voice=${args.voice}`,
     );
-    // Serial dispatch: parallel chunks burst past Groq's per-second cap and
-    // trigger 429s even when our sliding-window RPM count is well under the limit.
     const buffers: ArrayBuffer[] = [];
     for (let i = 0; i < chunks.length; i++) {
       console.log(`[Groq TTS]   Chunk ${i + 1}/${chunks.length}: ${chunks[i].length} chars`);
-      buffers.push(await synthesizeTtsForVoice({ ...args, text: chunks[i] }));
+      buffers.push(await synthesizeGroqTts({ ...args, text: chunks[i] }));
     }
     const result = concatArrayBuffers(buffers);
     console.log(`[Groq TTS] All ${chunks.length} chunks done, total ${result.byteLength} bytes`);
@@ -205,7 +233,7 @@ export async function synthesizeTtsForVoice(args: {
 
     if (res.status === 429 && attempt < TTS_MAX_RETRIES) {
       const rawRetryAfter = Number(res.headers.get("retry-after")) || 7;
-      const retryAfter = Math.min(rawRetryAfter, 15); // cap to avoid extreme waits (Groq sometimes returns 100s+)
+      const retryAfter = Math.min(rawRetryAfter, 15);
       console.warn(
         `[Groq TTS] 429 rate-limited — retrying in ${retryAfter}s (attempt ${attempt + 1}/${TTS_MAX_RETRIES})${rawRetryAfter > 15 ? ` (server wanted ${rawRetryAfter}s)` : ""}`,
       );
@@ -226,24 +254,7 @@ export async function synthesizeTtsForVoice(args: {
     return audioBuffer;
   }
 
-  // ── Kokoro fallback when Groq retries are exhausted ──
-  if (isKokoroAvailable()) {
-    console.warn(
-      `[TTS Fallback] Groq exhausted ${TTS_MAX_RETRIES} retries → falling back to Kokoro (voice=${args.voice})`,
-    );
-    try {
-      return await synthesizeKokoroTts(args);
-    } catch (kokoroErr) {
-      console.error("[TTS Fallback] Kokoro also failed:", kokoroErr);
-      throw new Error(
-        `Groq TTS exhausted retries and Kokoro fallback failed: ${
-          kokoroErr instanceof Error ? kokoroErr.message : String(kokoroErr)
-        }`,
-      );
-    }
-  }
-
-  throw new Error("Groq TTS: exhausted retries (no Kokoro fallback configured)");
+  throw new Error("Groq TTS: exhausted retries");
 }
 
 /** Split text at sentence boundaries to stay within maxLen. */

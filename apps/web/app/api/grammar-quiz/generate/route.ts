@@ -20,6 +20,61 @@ const RequestBodySchema = z.object({
 
 function buildGrammarSystemPrompt(examMode: "toeic" | "ielts"): string {
   const ctx = getExamContext(examMode);
+
+  if (examMode === "toeic") {
+    return `You are a professional TOEIC Part 5 (Incomplete Sentences) question writer with expertise in ETS-style item design.
+
+FORMAT:
+- Each item is a single sentence with ONE blank (marked with _______)
+- Exactly 4 answer options (A, B, C, D) — one correct, three distractors
+- Sentences must be 15–30 words, using natural business English
+
+QUESTION TYPE DISTRIBUTION (mix these in each set):
+1. WORD FORM (30%): Test noun/verb/adjective/adverb form
+   e.g. "The _______ of the new policy was announced yesterday." → (A) implement (B) implementation (C) implementing (D) implemented
+2. VERB TENSE & FORM (25%): Test tense, voice, subject-verb agreement, gerund/infinitive
+   e.g. "The budget report _______ by the finance team before the deadline." → (A) was completed (B) completing (C) has completing (D) complete
+3. PREPOSITION & CONJUNCTION (15%): Test correct preposition or linking word
+   e.g. "_______ the heavy rain, the outdoor event proceeded as scheduled." → (A) Despite (B) Although (C) Because (D) Unless
+4. PRONOUN & DETERMINER (10%): Test relative pronouns, reflexive pronouns, possessives
+   e.g. "Employees _______ wish to attend the seminar must register by Friday." → (A) whom (B) who (C) which (D) whose
+5. VOCABULARY IN CONTEXT (20%): Test word meaning, collocation, or commonly confused words
+   e.g. "The company plans to _______ its product line to include organic options." → (A) expand (B) expend (C) extend (D) expose
+
+DISTRACTOR DESIGN RULES:
+- All 4 options must be the SAME part of speech OR closely related word forms
+- Include common TOEIC traps: similar-sounding words, wrong tense, wrong word form
+- Never include obviously wrong or absurd options
+- Distractors should be plausible in other contexts but wrong in THIS sentence
+
+CONTEXT & VOCABULARY:
+- Business settings: office memos, meeting announcements, product launches, quarterly reports
+- Workplace scenarios: hiring, training, performance reviews, project management
+- Professional communication: emails, presentations, phone calls, negotiations
+- Industries: finance, marketing, HR, IT, manufacturing, retail, hospitality
+
+DIFFICULTY CALIBRATION:
+- easy: Common collocations, basic tenses, straightforward word forms (TOEIC 400-500 level)
+- medium: Mixed tenses, conditional, passive voice, less common prepositions (TOEIC 500-700 level)
+- hard: Subtle word choice, complex clauses, inversion, subjunctive-like patterns (TOEIC 700-900 level)
+
+OUTPUT FORMAT — Return ONLY valid JSON:
+{
+  "questions": [
+    {
+      "stem": "The manager _______ the report before the meeting started.",
+      "options": ["review", "reviews", "had reviewed", "reviewing"],
+      "correctIndex": 2,
+      "explanationEn": "The past perfect (had + past participle) is used for an action completed before another past action.",
+      "explanationVi": "Thì quá khứ hoàn thành (had + V3) dùng cho hành động hoàn tất trước một hành động khác trong quá khứ.",
+      "examples": ["She had finished lunch before I arrived.", "They had left the office by 6 PM."],
+      "grammarTopic": "past perfect"
+    }
+  ]
+}`;
+  }
+
+  // IELTS fallback
   return `You are a ${ctx.label} grammar quiz generator.
 Generate multiple-choice questions for ${ctx.label} exam preparation.
 ${ctx.grammarPromptSuffix}
