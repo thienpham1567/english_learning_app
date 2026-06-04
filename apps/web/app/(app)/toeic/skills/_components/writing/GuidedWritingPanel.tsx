@@ -12,11 +12,11 @@ import {
   PenTool,
   RefreshCw,
   Send,
+  Sparkles,
   Target,
   X,
 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { api } from "@/lib/api-client";
 
 /* ── Types ──────────────────────────────────────────────── */
@@ -39,9 +39,9 @@ type CriterionResult = { score: number; feedback: string };
 type ScoreResult = {
   overall: number;
   criteria: {
-    taskResponse: CriterionResult;
-    coherence: CriterionResult;
-    lexical: CriterionResult;
+    taskCompletion: CriterionResult;
+    organization: CriterionResult;
+    vocabulary: CriterionResult;
     grammar: CriterionResult;
   };
   inlineIssues: Array<{
@@ -57,23 +57,40 @@ type ScoreResult = {
   wordCount: number;
 };
 
-type ExamType = "ielts-task2" | "ielts-task1" | "toefl-independent";
+type ExampleResult = {
+  example: string;
+  taskType: string;
+  wordCount: number;
+  keyTechniques: string[];
+  vocabularyHighlights: Array<{ term: string; explanation: string }>;
+  structureNotes: string;
+};
+
+type TaskType = "sentence-picture" | "email-response" | "opinion-essay";
 type GuidedState = "setup" | "loading-prompt" | "writing" | "scoring" | "result";
 
-const TOPIC_CATEGORIES = [
-  { key: "education", label: "Education", color: "var(--info)" },
-  { key: "technology", label: "Technology", color: "var(--accent)" },
-  { key: "environment", label: "Environment", color: "var(--success)" },
-  { key: "health", label: "Health", color: "var(--module-grammar)" },
-  { key: "society", label: "Society", color: "var(--fire)" },
-  { key: "work", label: "Work", color: "var(--module-writing)" },
+const TOEIC_TOPICS = [
+  { key: "workplace", label: "Workplace", color: "var(--info)" },
+  { key: "business", label: "Business", color: "var(--accent)" },
+  { key: "technology", label: "Technology", color: "var(--success)" },
+  { key: "travel-transport", label: "Travel & Transport", color: "var(--module-grammar)" },
+  { key: "shopping-services", label: "Shopping & Services", color: "var(--fire)" },
+  { key: "health-fitness", label: "Health & Fitness", color: "var(--module-writing)" },
+  { key: "events-meetings", label: "Events & Meetings", color: "var(--warning)" },
+  { key: "hiring-training", label: "Hiring & Training", color: "var(--module-reading)" },
 ];
 
-const EXAM_OPTIONS: { value: ExamType; label: string }[] = [
-  { value: "ielts-task2", label: "IELTS Task 2" },
-  { value: "ielts-task1", label: "IELTS Task 1" },
-  { value: "toefl-independent", label: "TOEFL Independent" },
+const TASK_OPTIONS: { value: TaskType; label: string; desc: string }[] = [
+  { value: "sentence-picture", label: "Q1–Q5", desc: "Sentence from Picture" },
+  { value: "email-response", label: "Q6–Q7", desc: "Email Response" },
+  { value: "opinion-essay", label: "Q8", desc: "Opinion Essay" },
 ];
+
+const TASK_MIN_WORDS: Record<TaskType, number> = {
+  "sentence-picture": 15,
+  "email-response": 80,
+  "opinion-essay": 150,
+};
 
 /* ── Circular Progress ──────────────────────────────────── */
 
@@ -136,23 +153,22 @@ function CircularProgress({
 /* ── Component ──────────────────────────────────────────── */
 
 export function GuidedWritingPanel() {
-  const { examMode } = useExamMode();
+  const maxScore = 5;
 
   const [state, setState] = useState<GuidedState>("setup");
-  const [exam, setExam] = useState<ExamType>(
-    (examMode as string) === "toefl" ? "toefl-independent" : "ielts-task2",
-  );
+  const [task, setTask] = useState<TaskType>("opinion-essay");
   const [category, setCategory] = useState<string | null>(null);
   const [guided, setGuided] = useState<GuidedPromptData | null>(null);
   const [essayText, setEssayText] = useState("");
   const [scoreResult, setScoreResult] = useState<ScoreResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [exampleResult, setExampleResult] = useState<ExampleResult | null>(null);
+  const [loadingExample, setLoadingExample] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const wordCount = essayText.trim().split(/\s+/).filter(Boolean).length;
-  const isIelts = exam.startsWith("ielts");
-  const maxScore = isIelts ? 9 : 30;
+  const minWords = TASK_MIN_WORDS[task];
 
   /* ── Generate prompt ────────────────────── */
 
@@ -160,10 +176,11 @@ export function GuidedWritingPanel() {
     async (topicCategory?: string) => {
       setError(null);
       setState("loading-prompt");
+      setExampleResult(null);
 
       try {
         const data = await api.post<GuidedPromptData>("/writing/guided-prompt", {
-          exam,
+          exam: task,
           topicCategory: topicCategory ?? category,
         });
         setGuided(data);
@@ -176,8 +193,28 @@ export function GuidedWritingPanel() {
         setState("setup");
       }
     },
-    [exam, category],
-  ); // exam included to avoid stale closure
+    [task, category],
+  );
+
+  /* ── Generate Example ───────────────────── */
+
+  const generateExample = useCallback(async () => {
+    if (!guided) return;
+    setLoadingExample(true);
+    setError(null);
+
+    try {
+      const data = await api.post<ExampleResult>("/writing-practice/example", {
+        category: task,
+        prompt: guided.prompt,
+      });
+      setExampleResult(data);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to generate example");
+    } finally {
+      setLoadingExample(false);
+    }
+  }, [guided, task]);
 
   /* ── Insert vocab at cursor ─────────────── */
 
@@ -191,7 +228,6 @@ export function GuidedWritingPanel() {
       const after = essayText.slice(end);
       const newText = `${before}${term}${after}`;
       setEssayText(newText);
-      // Restore cursor after insert
       requestAnimationFrame(() => {
         ta.focus();
         ta.selectionStart = ta.selectionEnd = start + term.length;
@@ -203,14 +239,14 @@ export function GuidedWritingPanel() {
   /* ── Submit for scoring ─────────────────── */
 
   const submitForScoring = useCallback(async () => {
-    if (wordCount < 150 || !guided) return;
+    if (wordCount < minWords || !guided) return;
     setError(null);
     setState("scoring");
 
     try {
       const data = await api.post<ScoreResult>("/writing/score", {
         text: essayText,
-        exam,
+        exam: task,
         prompt: guided.prompt,
         vocabBank: guided.vocabBank,
         guidedPromptJson: {
@@ -226,7 +262,7 @@ export function GuidedWritingPanel() {
       setError(err instanceof Error ? err.message : "An error occurred");
       setState("writing");
     }
-  }, [essayText, exam, guided, wordCount]);
+  }, [essayText, task, guided, wordCount, minWords]);
 
   /* ── Score color helper ─────────────────── */
 
@@ -254,38 +290,39 @@ export function GuidedWritingPanel() {
             <span className="font-bold text-sm text-ink">Guided Writing</span>
           </div>
           <p className="text-xs text-text-secondary m-0 leading-relaxed">
-            Select exam type and topic — AI will generate the prompt, outline, and vocabulary bank
-            for you.
+            Select TOEIC task type and topic — AI will generate the prompt, outline, and vocabulary
+            bank for you.
           </p>
 
-          {/* Exam selector */}
+          {/* Task type selector */}
           <div>
-            <p className="text-xs text-text-primary font-bold mb-2">Exam Type</p>
+            <p className="text-xs text-text-primary font-bold mb-2">TOEIC Task Type</p>
             <div className="flex gap-2 flex-wrap">
-              {EXAM_OPTIONS.map((opt) => (
+              {TASK_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
-                  onClick={() => setExam(opt.value)}
+                  onClick={() => setTask(opt.value)}
                   className={`px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
-                    exam === opt.value
+                    task === opt.value
                       ? "border-accent bg-accent/15 text-accent font-bold"
                       : "border-border bg-surface text-text-secondary hover:border-border hover:bg-surface-hover hover:text-text-primary"
                   }`}
                 >
-                  {opt.label}
+                  <span className="font-extrabold">{opt.label}</span>
+                  <span className="ml-1.5 text-text-muted">{opt.desc}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Category selector (AC4) */}
+          {/* Category selector */}
           <div>
             <p className="text-xs text-text-primary font-bold mb-2">
               Topic <span className="font-normal text-text-muted">(leave blank = random)</span>
             </p>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(90px,1fr))] gap-2">
-              {TOPIC_CATEGORIES.map((cat) => (
+              {TOEIC_TOPICS.map((cat) => (
                 <button
                   key={cat.key}
                   type="button"
@@ -336,9 +373,26 @@ export function GuidedWritingPanel() {
               <p className="text-xs text-text-primary m-0 font-bold flex items-center gap-1.5">
                 <PenTool className="h-4 w-4 text-accent" />
                 <span>Prompt</span>
+                <span className="text-text-muted font-normal">
+                  ({TASK_OPTIONS.find((o) => o.value === task)?.label})
+                </span>
               </p>
               <div className="flex gap-3">
-                {/* Shuffle (AC4) */}
+                {/* Generate Example */}
+                <button
+                  type="button"
+                  onClick={generateExample}
+                  disabled={loadingExample}
+                  className="border-none bg-transparent cursor-pointer text-accent hover:text-accent-hover text-xs font-semibold flex items-center gap-1 disabled:opacity-50"
+                >
+                  {loadingExample ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Sparkles className="h-3 w-3" />
+                  )}
+                  <span>Generate Example</span>
+                </button>
+                {/* Shuffle */}
                 <button
                   type="button"
                   onClick={() => generatePrompt(category ?? undefined)}
@@ -347,12 +401,13 @@ export function GuidedWritingPanel() {
                   <RefreshCw className="h-3 w-3" />
                   <span>Change Prompt</span>
                 </button>
-                {/* New category (AC4) */}
+                {/* New category */}
                 <button
                   type="button"
                   onClick={() => {
                     setState("setup");
                     setGuided(null);
+                    setExampleResult(null);
                   }}
                   className="border-none bg-transparent cursor-pointer text-text-muted hover:text-text-primary text-xs font-semibold"
                 >
@@ -362,6 +417,71 @@ export function GuidedWritingPanel() {
             </div>
             <p className="text-sm m-0 leading-relaxed text-ink font-medium">{guided.prompt}</p>
           </div>
+
+          {/* AI Example (if generated) */}
+          {exampleResult && (
+            <div className="p-4.5 rounded-2xl bg-success-bg border-2 border-success/30 animate-in fade-in duration-200">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <Sparkles className="h-4 w-4 text-success" />
+                <span className="text-xs text-success font-bold">
+                  AI Model Answer ({exampleResult.wordCount} words)
+                </span>
+              </div>
+              <p className="text-sm m-0 leading-relaxed text-ink whitespace-pre-wrap">
+                {exampleResult.example}
+              </p>
+
+              {/* Key techniques */}
+              {exampleResult.keyTechniques.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-success/20">
+                  <p className="text-[10px] text-success font-bold uppercase tracking-wider mb-1.5">
+                    Key Techniques
+                  </p>
+                  <ul className="m-0 pl-4 text-xs text-text-secondary leading-relaxed list-disc flex flex-col gap-0.5">
+                    {exampleResult.keyTechniques.map((t, i) => (
+                      <li key={i}>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Vocabulary highlights */}
+              {exampleResult.vocabularyHighlights.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-success/20">
+                  <p className="text-[10px] text-success font-bold uppercase tracking-wider mb-1.5">
+                    Vocabulary Highlights
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {exampleResult.vocabularyHighlights.map((v, i) => (
+                      <span
+                        key={i}
+                        className="relative group inline-block"
+                      >
+                        <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-success/10 text-success border border-success/20 cursor-help">
+                          {v.term}
+                        </span>
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-foreground border-2 border-border text-background p-2 rounded-xl shadow-sm text-[11px] w-44 pointer-events-none text-center">
+                          {v.explanation}
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Structure notes */}
+              {exampleResult.structureNotes && (
+                <div className="mt-3 pt-3 border-t border-success/20">
+                  <p className="text-[10px] text-success font-bold uppercase tracking-wider mb-1">
+                    Structure
+                  </p>
+                  <p className="text-xs text-text-secondary m-0 leading-relaxed">
+                    {exampleResult.structureNotes}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Outline + Vocab — side by side */}
           <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
@@ -423,17 +543,17 @@ export function GuidedWritingPanel() {
               <p className="text-xs text-text-primary m-0 font-bold">Writing</p>
               <span
                 className={`text-[10px] font-semibold ${
-                  wordCount < 150 ? "text-error" : "text-text-muted"
+                  wordCount < minWords ? "text-error" : "text-text-muted"
                 }`}
               >
-                {wordCount} words {wordCount < 150 && "(needs ≥ 150)"}
+                {wordCount} words {wordCount < minWords && `(needs ≥ ${minWords})`}
               </span>
             </div>
             <textarea
               ref={textareaRef}
               value={essayText}
               onChange={(e) => setEssayText(e.target.value)}
-              placeholder="Write your essay here. Click vocabulary items on the right to insert..."
+              placeholder="Write your response here. Click vocabulary items above to insert..."
               disabled={state === "scoring"}
               className="w-full min-h-70 p-4 rounded-2xl border-2 border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
             />
@@ -443,9 +563,9 @@ export function GuidedWritingPanel() {
           <button
             type="button"
             onClick={submitForScoring}
-            disabled={wordCount < 150 || state === "scoring"}
+            disabled={wordCount < minWords || state === "scoring"}
             className={`px-8 py-3 rounded-xl border-2 border-border text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer transition-all duration-155 active:scale-97 shadow-sm ${
-              wordCount < 150 || state === "scoring"
+              wordCount < minWords || state === "scoring"
                 ? "bg-bg-deep text-text-muted cursor-not-allowed border-2 border-border/20"
                 : "bg-accent hover:bg-accent-hover text-text-on-accent"
             }`}
@@ -477,16 +597,17 @@ export function GuidedWritingPanel() {
               color={scoreColor(scoreResult.overall)}
             />
             <p className="text-xs text-text-secondary m-0 mt-3 font-semibold">
-              {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {scoreResult.wordCount} words
+              TOEIC Writing • {TASK_OPTIONS.find((o) => o.value === task)?.desc} •{" "}
+              {scoreResult.wordCount} words
             </p>
 
             {/* Criteria scores */}
             <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t-2 border-border pt-4">
               {(
                 [
-                  { key: "taskResponse", label: "Task" },
-                  { key: "coherence", label: "Coherence" },
-                  { key: "lexical", label: "Lexical" },
+                  { key: "taskCompletion", label: "Task" },
+                  { key: "organization", label: "Organization" },
+                  { key: "vocabulary", label: "Vocabulary" },
                   { key: "grammar", label: "Grammar" },
                 ] as const
               ).map((c) => {
@@ -550,26 +671,26 @@ export function GuidedWritingPanel() {
           {(
             [
               {
-                key: "taskResponse",
+                key: "taskCompletion",
                 label: (
                   <>
-                    <PenTool className="h-4 w-4" /> Task Response
+                    <PenTool className="h-4 w-4" /> Task Completion
                   </>
                 ),
               },
               {
-                key: "coherence",
+                key: "organization",
                 label: (
                   <>
-                    <LinkIcon className="h-4 w-4" /> Coherence &amp; Cohesion
+                    <LinkIcon className="h-4 w-4" /> Organization
                   </>
                 ),
               },
               {
-                key: "lexical",
+                key: "vocabulary",
                 label: (
                   <>
-                    <BookOpen className="h-4 w-4" /> Lexical Resource
+                    <BookOpen className="h-4 w-4" /> Vocabulary
                   </>
                 ),
               },
@@ -594,7 +715,7 @@ export function GuidedWritingPanel() {
                     className="px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold tracking-wider text-black border-2 border-border/10"
                     style={{ backgroundColor: scoreColor(s.score) }}
                   >
-                    {s.score}
+                    {s.score}/{maxScore}
                   </span>
                 </div>
                 <p className="text-xs text-text-secondary leading-relaxed m-0">{s.feedback}</p>
@@ -637,6 +758,7 @@ export function GuidedWritingPanel() {
                 setGuided(null);
                 setEssayText("");
                 setScoreResult(null);
+                setExampleResult(null);
               }}
               className="px-6 py-2.5 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-97"
             >

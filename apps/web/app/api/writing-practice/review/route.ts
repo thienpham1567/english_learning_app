@@ -15,13 +15,21 @@ import { awardXP, XP_VALUES } from "@/lib/xp";
 const REVIEW_SYSTEM_PROMPT = `You are Christine Ho, an expert TOEIC Writing evaluator and English tutor.
 Review the student's writing based on TOEIC Writing scoring criteria.
 
-Score each criterion from 1.0 to 9.0 in 0.5 increments:
-- taskResponse: How well the response addresses the task requirements
-- coherenceCohesion: Organization, logical flow, and paragraph structure
-- lexicalResource: Vocabulary range, accuracy, and appropriateness for the context
-- grammaticalRange: Grammar range, accuracy, and sentence variety
+Score each criterion from 0 to 5 in 0.5 increments:
+- grammar: Grammar accuracy, sentence variety, and correct usage
+- vocabulary: Vocabulary range, accuracy, and appropriateness for the context
+- organization: Logical flow, paragraph structure, and use of transitions
+- taskCompletion: How well the response addresses all task requirements
 
-Calculate overallBand as the average of all four scores, rounded to the nearest 0.5.
+Calculate overallScore as the average of all four scores, rounded to the nearest 0.5.
+
+TOEIC Scoring Reference:
+- 5: Excellent — native-like fluency, fully addresses the task
+- 4: Good — minor errors, addresses most points clearly
+- 3: Adequate — some errors that occasionally obscure meaning
+- 2: Limited — frequent errors, partially addresses the task
+- 1: Minimal — severe errors, barely addresses the task
+- 0: No response or completely off-topic
 
 Provide inline annotations for specific errors. Each annotation has:
 - startIndex/endIndex: character positions in the original text
@@ -34,8 +42,8 @@ Provide an improved version of the text at a high-scoring level.
 
 Return ONLY valid JSON matching this schema:
 {
-  "scores": { "taskResponse": 6.0, "coherenceCohesion": 5.5, "lexicalResource": 6.0, "grammaticalRange": 5.5 },
-  "overallBand": 5.75,
+  "scores": { "grammar": 3.5, "vocabulary": 3.0, "organization": 3.5, "taskCompletion": 4.0 },
+  "overallScore": 3.5,
   "annotations": [{ "startIndex": 0, "endIndex": 10, "type": "grammar", "suggestion": "...", "explanation": "..." }],
   "generalFeedback": "...",
   "generalFeedbackVi": "...",
@@ -110,7 +118,7 @@ export async function POST(request: Request) {
           prompt,
           text,
           wordCount,
-          overallBand: feedback.overallBand,
+          overallBand: feedback.overallScore,
           scores: feedback.scores,
           feedback,
         });
@@ -119,7 +127,7 @@ export async function POST(request: Request) {
         void awardXP(session.user.id, XP_VALUES.WRITING_SUBMISSION).catch(() => {});
         logActivity(session.user.id, "writing_practice", XP_VALUES.WRITING_SUBMISSION, {
           wordCount,
-          overallBand: feedback.overallBand,
+          overallScore: feedback.overallScore,
         });
 
         return Response.json({ feedback });

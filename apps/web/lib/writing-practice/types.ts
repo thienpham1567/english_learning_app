@@ -6,16 +6,20 @@ export type InlineAnnotation = {
   explanation: string;
 };
 
-export type BandScores = {
-  taskResponse: number;
-  coherenceCohesion: number;
-  lexicalResource: number;
-  grammaticalRange: number;
+/**
+ * TOEIC Writing scoring criteria.
+ * Each criterion scored 0-5 (matching TOEIC raw score scale).
+ */
+export type ToeicWritingScores = {
+  grammar: number;
+  vocabulary: number;
+  organization: number;
+  taskCompletion: number;
 };
 
 export type WritingFeedback = {
-  scores: BandScores;
-  overallBand: number;
+  scores: ToeicWritingScores;
+  overallScore: number; // 0-5 average
   annotations: InlineAnnotation[];
   generalFeedback: string;
   generalFeedbackVi: string;
@@ -28,24 +32,22 @@ export type WritingSubmission = {
   prompt: string;
   text: string;
   wordCount: number;
-  overallBand: number;
-  scores: BandScores;
+  overallScore: number;
+  scores: ToeicWritingScores;
   feedback: WritingFeedback;
   createdAt: string;
 };
 
-export type WritingCategory = "email-response" | "opinion-essay" | "describe-picture" | "free";
+export type WritingCategory = "sentence-picture" | "email-response" | "opinion-essay";
 
 export const CATEGORY_LABELS: Record<WritingCategory, string> = {
+  "sentence-picture": "Sentence from Picture",
   "email-response": "Email Response",
   "opinion-essay": "Opinion Essay",
-  "describe-picture": "Describe a Picture",
-  free: "Chủ đề tự do",
 };
 
 export const MIN_WORDS: Record<WritingCategory, number> = {
+  "sentence-picture": 15,
   "email-response": 80,
   "opinion-essay": 200,
-  "describe-picture": 60,
-  free: 50,
 };

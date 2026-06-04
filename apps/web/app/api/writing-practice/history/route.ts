@@ -28,6 +28,7 @@ export async function GET() {
 
   const submissions = rows.map((r) => ({
     ...r,
+    overallScore: r.overallBand,
     createdAt: r.createdAt.toISOString(),
   }));
 

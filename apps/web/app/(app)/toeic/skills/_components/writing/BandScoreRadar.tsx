@@ -1,29 +1,30 @@
 "use client";
 
-import type { BandScores } from "@/lib/writing-practice/types";
+import type { ToeicWritingScores } from "@/lib/writing-practice/types";
 
 const CRITERIA = [
-  { key: "taskResponse" as const, label: "Task" },
-  { key: "coherenceCohesion" as const, label: "Coherence" },
-  { key: "lexicalResource" as const, label: "Lexical" },
-  { key: "grammaticalRange" as const, label: "Grammar" },
+  { key: "taskCompletion" as const, label: "Task" },
+  { key: "organization" as const, label: "Organization" },
+  { key: "vocabulary" as const, label: "Vocabulary" },
+  { key: "grammar" as const, label: "Grammar" },
 ];
 
 type Props = {
-  scores: BandScores;
+  scores: ToeicWritingScores;
   size?: number;
 };
 
-export function BandScoreRadar({ scores, size = 200 }: Props) {
+export function ToeicScoreRadar({ scores, size = 200 }: Props) {
   const cx = size / 2;
   const cy = size / 2;
   const maxR = size * 0.38;
-  const levels = [3, 5, 7, 9];
+  const maxScore = 5;
+  const levels = [1, 2, 3, 4, 5];
   const n = CRITERIA.length;
 
   const getPoint = (index: number, value: number) => {
     const angle = (Math.PI * 2 * index) / n - Math.PI / 2;
-    const r = (value / 9) * maxR;
+    const r = (value / maxScore) * maxR;
     return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
   };
 
@@ -47,7 +48,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
 
       {/* Axes */}
       {CRITERIA.map((_, i) => {
-        const p = getPoint(i, 9);
+        const p = getPoint(i, maxScore);
         return (
           <line
             key={i}
@@ -77,7 +78,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
 
       {/* Labels */}
       {CRITERIA.map((c, i) => {
-        const p = getPoint(i, 9.8);
+        const p = getPoint(i, maxScore + 0.8);
         return (
           <text
             key={c.key}

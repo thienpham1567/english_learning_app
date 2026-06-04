@@ -1,7 +1,6 @@
 "use client";
 
-import { Image, Loader2, Mail, PenTool, Star } from "lucide-react";
-import { useState } from "react";
+import { Image, Loader2, Mail, PenTool } from "lucide-react";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
@@ -15,9 +14,18 @@ const CATEGORIES: {
   iconBgClass: string;
 }[] = [
   {
+    id: "sentence-picture",
+    icon: Image,
+    desc: "Write sentences based on a picture (TOEIC Q1–Q5)",
+    colorClass: "text-warning",
+    borderClass: "border-border hover:border-warning",
+    bgClass: "hover:bg-warning/5 bg-surface",
+    iconBgClass: "bg-warning-bg text-warning",
+  },
+  {
     id: "email-response",
     icon: Mail,
-    desc: "Respond to a written request (TOEIC Q6-7)",
+    desc: "Respond to a written request (TOEIC Q6–Q7)",
     colorClass: "text-info",
     borderClass: "border-border hover:border-info",
     bgClass: "hover:bg-info/5 bg-surface",
@@ -31,24 +39,6 @@ const CATEGORIES: {
     borderClass: "border-border hover:border-accent",
     bgClass: "hover:bg-accent/5 bg-surface",
     iconBgClass: "bg-accent-muted text-accent",
-  },
-  {
-    id: "describe-picture",
-    icon: Image,
-    desc: "Write a sentence based on a picture (TOEIC Q1-5)",
-    colorClass: "text-warning",
-    borderClass: "border-border hover:border-warning",
-    bgClass: "hover:bg-warning/5 bg-surface",
-    iconBgClass: "bg-warning-bg text-warning",
-  },
-  {
-    id: "free",
-    icon: Star,
-    desc: "Free writing on any topic",
-    colorClass: "text-success",
-    borderClass: "border-border hover:border-success",
-    bgClass: "hover:bg-success/5 bg-surface",
-    iconBgClass: "bg-success-bg text-success",
   },
 ];
 
@@ -90,7 +80,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
               <div
                 className="absolute top-0 left-0 w-full h-1"
                 style={{
-                  backgroundColor: `var(--${cat.id === "email-response" ? "info" : cat.id === "opinion-essay" ? "accent" : cat.id === "describe-picture" ? "warning" : "success"})`,
+                  backgroundColor: `var(--${cat.id === "sentence-picture" ? "warning" : cat.id === "email-response" ? "info" : "accent"})`,
                 }}
               />
 
@@ -117,7 +107,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
                 <div
                   className="text-[11px] font-semibold mt-1 flex items-center gap-1.5"
                   style={{
-                    color: `var(--${cat.id === "email-response" ? "info" : cat.id === "opinion-essay" ? "accent" : cat.id === "describe-picture" ? "warning" : "success"})`,
+                    color: `var(--${cat.id === "sentence-picture" ? "warning" : cat.id === "email-response" ? "info" : "accent"})`,
                   }}
                 >
                   Generating prompt...

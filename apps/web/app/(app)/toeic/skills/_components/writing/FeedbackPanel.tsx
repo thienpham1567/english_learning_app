@@ -4,7 +4,7 @@ import { PenTool } from "lucide-react";
 import { useState } from "react";
 import type { WritingFeedback } from "@/lib/writing-practice/types";
 import { AnnotatedText } from "./AnnotatedText";
-import { BandScoreRadar } from "./BandScoreRadar";
+import { ToeicScoreRadar } from "./BandScoreRadar";
 
 type Props = {
   text: string;
@@ -25,16 +25,16 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
   return (
     <div className="mx-auto w-full max-w-4xl">
-      {/* Overall band */}
+      {/* Overall score */}
       <div className="mb-6 text-center">
         <span className="text-xs font-semibold uppercase tracking-widest text-text-muted">
-          Overall Band
+          TOEIC Writing Score
         </span>
         <div className="mt-1 inline-flex items-baseline gap-1">
           <span className="[font-family:var(--font-display)] text-5xl italic text-accent">
-            {feedback.overallBand.toFixed(1)}
+            {feedback.overallScore.toFixed(1)}
           </span>
-          <span className="text-sm text-text-muted">/ 9.0</span>
+          <span className="text-sm text-text-muted">/ 5.0</span>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           {/* Right: improved version */}
           <div className="rounded-xl border-2 border-success/30 bg-success-bg p-5 shadow-sm">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
-              Sample Answer (Band 7+)
+              Model Answer (Score 5)
             </h3>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
               {feedback.improvedVersion}
@@ -67,7 +67,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-text-muted">
               Detailed Scores
             </h3>
-            <BandScoreRadar scores={feedback.scores} />
+            <ToeicScoreRadar scores={feedback.scores} />
           </div>
 
           <div className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm">
@@ -112,7 +112,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         {activeTab === "improved" && (
           <div className="anim-fade-in rounded-xl border-2 border-success/30 bg-success-bg p-4 shadow-sm">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
-              Sample Answer (Band 7+)
+              Model Answer (Score 5)
             </h3>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
               {feedback.improvedVersion}
@@ -126,7 +126,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-text-muted">
                 Detailed Scores
               </h3>
-              <BandScoreRadar scores={feedback.scores} />
+              <ToeicScoreRadar scores={feedback.scores} />
             </div>
             <div className="rounded-xl border-2 border-border bg-surface p-4 shadow-sm">
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-muted">

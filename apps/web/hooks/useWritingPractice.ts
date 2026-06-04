@@ -49,7 +49,7 @@ export function useWritingPractice() {
       setHints(data.hints ?? []);
       setState("writing");
     } catch {
-      setError("Không thể tạo đề bài. Vui lòng thử lại.");
+      setError("Failed to generate prompt. Please try again.");
       setState("prompt-selection");
     } finally {
       setLoadingCategory(null);
@@ -76,7 +76,7 @@ export function useWritingPractice() {
           .then((h) => setHistory(h.submissions))
           .catch(() => {});
       } catch {
-        setError("Không thể chấm bài. Vui lòng thử lại.");
+        setError("Failed to score your writing. Please try again.");
         setState("writing");
       }
     },

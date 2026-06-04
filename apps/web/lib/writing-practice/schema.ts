@@ -10,12 +10,12 @@ export const InlineAnnotationSchema = z.object({
 
 export const WritingFeedbackSchema = z.object({
   scores: z.object({
-    taskResponse: z.number().min(1).max(9),
-    coherenceCohesion: z.number().min(1).max(9),
-    lexicalResource: z.number().min(1).max(9),
-    grammaticalRange: z.number().min(1).max(9),
+    grammar: z.number().min(0).max(5),
+    vocabulary: z.number().min(0).max(5),
+    organization: z.number().min(0).max(5),
+    taskCompletion: z.number().min(0).max(5),
   }),
-  overallBand: z.number().min(1).max(9),
+  overallScore: z.number().min(0).max(5),
   annotations: z.array(InlineAnnotationSchema),
   generalFeedback: z.string().min(10),
   generalFeedbackVi: z.string().min(10),
@@ -23,11 +23,11 @@ export const WritingFeedbackSchema = z.object({
 });
 
 export const PromptRequestSchema = z.object({
-  category: z.enum(["email-response", "opinion-essay", "describe-picture", "free"]),
+  category: z.enum(["sentence-picture", "email-response", "opinion-essay"]),
 });
 
 export const ReviewRequestSchema = z.object({
   prompt: z.string().min(1),
-  category: z.enum(["email-response", "opinion-essay", "describe-picture", "free"]),
+  category: z.enum(["sentence-picture", "email-response", "opinion-essay"]),
   text: z.string().min(10),
 });

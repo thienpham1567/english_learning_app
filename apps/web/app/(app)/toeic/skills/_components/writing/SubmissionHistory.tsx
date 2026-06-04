@@ -39,7 +39,7 @@ export function SubmissionHistory({ submissions, onView }: Props) {
             <div className="flex items-center gap-3">
               <span className="text-xs text-text-muted">{s.wordCount} words</span>
               <span className="rounded-lg bg-accent/10 px-2 py-0.5 text-xs font-bold text-accent">
-                {s.overallBand.toFixed(1)}
+                {s.overallScore.toFixed(1)}
               </span>
             </div>
           </button>
