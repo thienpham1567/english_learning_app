@@ -161,7 +161,6 @@ function getActiveTab(pathname: string): string {
     pathname.startsWith("/writing-tools") ||
     pathname.startsWith("/pdf-reader") ||
     pathname.startsWith("/reading") ||
-    pathname.startsWith("/diagnostic") ||
     pathname.startsWith("/study-sets")
   )
     return "more";

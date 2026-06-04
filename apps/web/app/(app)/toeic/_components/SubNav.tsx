@@ -12,7 +12,6 @@ const TABS = [
 
 export function SubNav() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/toeic/diagnostic")) return null;
 
   return (
     <m.nav

@@ -51,7 +51,6 @@ const MODULE_LABELS: Record<string, { label: string; href: string }> = {
   voice_practice: { label: "Luyện nói", href: "/pronunciation" },
   listening_practice: { label: "Luyện nghe", href: "/listening" },
   daily_challenge: { label: "Thử thách", href: "/daily-challenge" },
-  diagnostic_test: { label: "Bài kiểm tra", href: "/diagnostic" },
 };
 
 const MIN_ACTIVITIES = 10;
