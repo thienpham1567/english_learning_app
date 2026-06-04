@@ -9,7 +9,7 @@ import { PlaybackControls } from "./_components/PlaybackControls";
 import { ShadowingMode } from "./_components/ShadowingMode";
 import { TextInputPanel } from "./_components/TextInputPanel";
 import { VoiceSelector } from "./_components/VoiceSelector";
-import { getVoiceByRole, getVoicesByProvider, GROQ_VOICES, type TtsProvider } from "./_data/voices";
+import { getVoiceByRole, getVoicesByProvider, type TtsProvider } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare } from "lucide-react";
@@ -46,13 +46,8 @@ export default function ReadAloudPage() {
   const [speed, setSpeed] = useState(1);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Dialogue-specific: voice per speaker
+  // Dialogue-specific: speaker count only (voices auto-assigned)
   const [dialogueSpeakers, setDialogueSpeakers] = useState<2 | 3>(2);
-  const [dialogueVoiceRoles, setDialogueVoiceRoles] = useState<string[]>([
-    GROQ_VOICES[0].role,
-    GROQ_VOICES[1].role,
-    GROQ_VOICES[2].role,
-  ]);
 
   const audio = useAudioPlayback();
   const history = useHistory();
@@ -66,25 +61,12 @@ export default function ReadAloudPage() {
       const voices = getVoicesByProvider(p);
       if (voices.length > 0) {
         setSelectedRole(voices[0].role);
-        // Also update dialogue voices to match new provider
-        setDialogueVoiceRoles([
-          voices[0]?.role ?? voices[0].role,
-          voices[1]?.role ?? voices[0].role,
-          voices[2]?.role ?? voices[0].role,
-        ]);
       }
     },
     [],
   );
 
-  // Update a single dialogue voice
-  const handleDialogueVoiceChange = useCallback((index: number, role: string) => {
-    setDialogueVoiceRoles((prev) => {
-      const next = [...prev];
-      next[index] = role;
-      return next;
-    });
-  }, []);
+
 
   /* ── Generate handler ── */
   const handleGenerate = useCallback(async () => {
@@ -227,26 +209,11 @@ export default function ReadAloudPage() {
 
         {/* ── Dialogue Mode ── */}
         {mode === "dialogue" && (
-          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
-            <DialoguePlayer
-              voiceRoles={dialogueVoiceRoles.slice(0, dialogueSpeakers)}
-              speed={speed}
-              speakerCount={dialogueSpeakers}
-              onSpeakerCountChange={setDialogueSpeakers}
-            />
-            <div className="flex flex-col gap-5">
-              <VoiceSelector
-                selectedRole={selectedRole}
-                onSelectRole={setSelectedRole}
-                provider={provider}
-                onProviderChange={handleProviderChange}
-                dialogueMode
-                speakerCount={dialogueSpeakers}
-                dialogueVoiceRoles={dialogueVoiceRoles}
-                onDialogueVoiceChange={handleDialogueVoiceChange}
-              />
-            </div>
-          </div>
+          <DialoguePlayer
+            speed={speed}
+            speakerCount={dialogueSpeakers}
+            onSpeakerCountChange={setDialogueSpeakers}
+          />
         )}
       </div>
     </div>

@@ -25,7 +25,7 @@ import { useCallback, useState } from "react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useDialogue } from "../_hooks/useDialogue";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
-import { getVoiceByRole } from "../_data/voices";
+import { GROQ_VOICES } from "../_data/voices";
 
 const SPEAKER_COLORS: Record<
   string,
@@ -58,13 +58,12 @@ const SPEAKER_COLORS: Record<
 };
 
 interface DialoguePlayerProps {
-  voiceRoles: string[];
   speed: number;
   speakerCount: 2 | 3;
   onSpeakerCountChange: (count: 2 | 3) => void;
 }
 
-export function DialoguePlayer({ voiceRoles, speed, speakerCount, onSpeakerCountChange }: DialoguePlayerProps) {
+export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: DialoguePlayerProps) {
   const dlg = useDialogue();
   const [topic, setTopic] = useState("");
   const [length, setLength] = useState<"short" | "medium" | "long">("medium");
@@ -83,27 +82,13 @@ export function DialoguePlayer({ voiceRoles, speed, speakerCount, onSpeakerCount
   const handleGenerate = useCallback(async () => {
     setHasListenedOnce(false);
     setIsListeningPreview(false);
-    // Build voice config from the selected voice roles
-    const voiceConfig = voiceRoles.map((role, i) => {
-      const v = getVoiceByRole(role);
-      return {
-        speaker: String.fromCharCode(65 + i),
-        voiceRole: v.role,
-        voiceName: v.name,
-        voiceId: v.voiceId,
-        provider: v.provider,
-        flag: v.flag,
-        avatar: v.avatar,
-      };
-    });
     await dlg.generate({
       topic: topic || undefined,
       speakers: speakerCount,
       length,
-      primaryVoice: voiceRoles[0],
-      voiceConfig,
+      primaryVoice: GROQ_VOICES[0].role,
     });
-  }, [dlg, topic, speakerCount, length, voiceRoles]);
+  }, [dlg, topic, speakerCount, length]);
 
   /* ── Listen preview: hear full dialogue before role-playing ── */
   const listenPreview = useCallback(async () => {
