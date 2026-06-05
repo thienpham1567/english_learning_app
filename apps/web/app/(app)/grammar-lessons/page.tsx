@@ -160,9 +160,9 @@ export default function GrammarLessonsPage() {
               }}
             />
           ) : (
-            <div className="flex flex-col lg:grid lg:grid-cols-[340px_1fr] lg:items-start gap-5">
+            <div className="flex flex-col md:grid md:grid-cols-[280px_1fr] lg:grid-cols-[340px_1fr] md:items-start gap-5">
               {/* ── Left sidebar on desktop ── */}
-              <div className="flex flex-col gap-5 lg:sticky lg:top-0">
+              <div className="flex flex-col gap-5 md:sticky md:top-0">
                 {/* ── Hero Stats Dashboard ── */}
                 <m.div
                   initial={{ opacity: 0, y: 16 }}

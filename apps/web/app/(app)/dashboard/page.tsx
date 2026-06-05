@@ -197,7 +197,7 @@ export default function DashboardPage() {
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1.62fr_1fr] gap-5 items-start max-w-5xl mx-auto px-1">
+      <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] lg:grid-cols-[1.62fr_1fr] gap-5 items-start max-w-5xl mx-auto px-1">
         {/* Left Column: Focus & Core Actions */}
         <div className="flex flex-col gap-5">
           {/* ── Roadmap Progress ── */}

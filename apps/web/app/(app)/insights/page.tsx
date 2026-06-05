@@ -255,7 +255,7 @@ export default function InsightsPage() {
 
   return (
     <div className="min-h-full overflow-y-auto px-4 py-6 pb-12">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Page Header */}
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 mb-8">
@@ -282,7 +282,7 @@ export default function InsightsPage() {
           {/* ── Score Overview Row ── */}
           <motion.div variants={itemVariants}>
             <Card shadowSize="default" className="overflow-hidden">
-              <div className="flex flex-col sm:flex-row items-center justify-around gap-6 py-4">
+              <div className="flex flex-col sm:flex-row items-center justify-around gap-6 lg:gap-10 py-4">
                 <ScoreRing
                   score={score?.predicted ?? 0}
                   maxScore={990}

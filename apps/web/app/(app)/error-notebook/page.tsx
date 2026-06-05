@@ -64,7 +64,7 @@ export default function ErrorNotebookPage() {
       <RoadmapBanner className="relative z-[1] shrink-0 px-5 pt-3 max-w-6xl" />
 
       {/* ─── Tab switcher ─── */}
-      <div className="relative z-[1] shrink-0 px-5 pt-3 pb-2">
+      <div className="relative z-[1] shrink-0 px-5 pt-3 pb-2 max-w-6xl mx-auto w-full">
         <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm max-w-5xl overflow-x-auto scrollbar-none">
           {TABS.map((t) => (
             <m.button

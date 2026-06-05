@@ -7,11 +7,13 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import {
   type GrammarPoint,
+  type PriorityTier,
   getTierTopicIds,
   PRIORITY_TIERS,
 } from "@/lib/grammar-lessons/priority-roadmap";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import { GRAMMAR_TOPIC_CATEGORIES, type GrammarTopic } from "@/lib/grammar-lessons/topics";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export type TopicSelection = {
   id: string;
@@ -38,8 +40,28 @@ function categoryTopics(categoryId: string): GrammarTopic[] {
 }
 
 export function PriorityTiers({ completedTopics, inProgressTopics, onSelectTopic }: Props) {
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
   const [expandedTier, setExpandedTier] = useState<string | null>("high");
 
+  // ── Desktop: Kanban board ──
+  if (isDesktop) {
+    return (
+      <div className="grid grid-cols-3 gap-4 items-start">
+        {PRIORITY_TIERS.map((tier, colIdx) => (
+          <TierColumn
+            key={tier.id}
+            tier={tier}
+            colIdx={colIdx}
+            completedTopics={completedTopics}
+            inProgressTopics={inProgressTopics}
+            onSelectTopic={onSelectTopic}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // ── Mobile / Tablet: Accordion (original behavior) ──
   return (
     <div className="flex flex-col gap-4">
       {PRIORITY_TIERS.map((tier) => {
@@ -107,6 +129,99 @@ export function PriorityTiers({ completedTopics, inProgressTopics, onSelectTopic
     </div>
   );
 }
+
+/* ────────────────────────────────────────────────────────────────────────
+   Desktop Kanban Column — one per priority tier
+   ──────────────────────────────────────────────────────────────────────── */
+
+function TierColumn({
+  tier,
+  colIdx,
+  completedTopics,
+  inProgressTopics,
+  onSelectTopic,
+}: {
+  tier: PriorityTier;
+  colIdx: number;
+  completedTopics: Set<string>;
+  inProgressTopics: Set<string>;
+  onSelectTopic: (selection: TopicSelection) => void;
+}) {
+  const topicIds = getTierTopicIds(tier);
+  const completed = topicIds.filter((id) => completedTopics.has(id)).length;
+  const pct = topicIds.length > 0 ? Math.round((completed / topicIds.length) * 100) : 0;
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: colIdx * 0.08 }}
+      className="flex flex-col rounded-xl border-2 border-border bg-surface overflow-hidden"
+      style={{ boxShadow: "var(--shadow-sm)" }}
+    >
+      {/* ── Column header ── */}
+      <div
+        className="p-4 border-b-2 border-border"
+        style={{
+          background: `color-mix(in srgb, ${tier.color} 6%, var(--surface))`,
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="text-lg shrink-0">{tier.stars}</div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-black text-ink font-display leading-tight">
+              {tier.title}
+            </div>
+            <div className="text-[11px] text-text-muted font-semibold mt-0.5">{tier.subtitle}</div>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="flex items-center gap-2.5 mt-3">
+          <div className="flex-1 h-[5px] rounded-full bg-border relative overflow-hidden">
+            <m.div
+              initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }}
+              transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 + colIdx * 0.1 }}
+              className="absolute left-0 top-0 bottom-0 h-full rounded-full"
+              style={{ background: tier.color }}
+            />
+          </div>
+          <span
+            className="text-xs font-black shrink-0 tabular-nums font-mono"
+            style={{ color: pct > 0 ? tier.color : "var(--text-muted)" }}
+          >
+            {completed}/{topicIds.length}
+          </span>
+        </div>
+      </div>
+
+      {/* ── Column body — scrollable list of point cards ── */}
+      <div className="flex flex-col gap-2 p-3 max-h-[calc(100vh-320px)] overflow-y-auto">
+        {tier.points.map((point, idx) => (
+          <m.div
+            key={point.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 + idx * 0.03 }}
+          >
+            <PointRow
+              point={point}
+              tierColor={tier.color}
+              completedTopics={completedTopics}
+              inProgressTopics={inProgressTopics}
+              onSelectTopic={onSelectTopic}
+            />
+          </m.div>
+        ))}
+      </div>
+    </m.div>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Shared Point Row — used in both accordion and kanban modes
+   ──────────────────────────────────────────────────────────────────────── */
 
 function PointRow({
   point,
