@@ -45,18 +45,18 @@ export function getOpenAiConfig(): OpenAiConfig {
     throw new Error("Missing OPENAI_API_KEY");
   }
 
-  const chatModel = process.env.OPENAI_CHAT_MODEL ?? "deepseek/deepseek-v4-pro";
+  const chatModel = process.env.OPENAI_CHAT_MODEL ?? "deepseek/deepseek-v4-flash";
 
   return {
     apiKey,
     baseURL: process.env.OPENAI_BASE_URL ?? "https://openrouter.ai/api/v1",
     chatModel,
-    dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "deepseek/deepseek-v4-pro",
-    listeningModel: process.env.OPENAI_LISTENING_MODEL ?? "deepseek/deepseek-v4-pro",
-    smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "deepseek/deepseek-v4-pro",
+    dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "deepseek/deepseek-v4-flash",
+    listeningModel: process.env.OPENAI_LISTENING_MODEL ?? "deepseek/deepseek-v4-flash",
+    smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "deepseek/deepseek-v4-flash",
     dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(process.env.DICTIONARY_CACHE_TTL_MS),
     models: {
-      grader: process.env.OPENAI_GRADER_MODEL ?? chatModel,
+      grader: process.env.OPENAI_GRADER_MODEL ?? "deepseek/deepseek-v4-pro",
       generator: process.env.OPENAI_GENERATOR_MODEL ?? chatModel,
       coach: process.env.OPENAI_COACH_MODEL ?? chatModel,
     },
