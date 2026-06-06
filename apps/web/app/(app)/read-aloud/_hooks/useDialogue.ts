@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/lib/api-client";
-import { ALL_VOICES, VOICES, getVoicesByProvider, type TtsProvider } from "../_data/voices";
+import { GROQ_VOICES } from "../_data/voices";
 import { getCachedAudio, setCachedAudio, makeCacheKey } from "../_lib/audio-cache";
 
 export interface DialogueLine {
@@ -23,7 +23,6 @@ interface VoiceAssignment {
   voiceRole: string;
   voiceName: string;
   voiceId?: string;
-  provider?: TtsProvider;
   flag: string;
   avatar: string;
 }
@@ -70,17 +69,12 @@ export function useDialogue() {
   /* ── Audio cache: lineIndex → objectURL ── */
   const audioCacheRef = useRef<Map<string, string>>(new Map());
 
-  /* ── Auto-assign voices using the same provider as primaryRole ── */
+  /* ── Auto-assign voices from Groq voices ── */
   const assignVoices = useCallback((lines: DialogueLine[], primaryRole: string) => {
     const speakers = [...new Set(lines.map((l) => l.speaker))];
 
-    // Determine which provider the selected voice belongs to
-    const selectedVoice = ALL_VOICES.find((v) => v.role === primaryRole);
-    const provider = selectedVoice?.provider ?? "groq";
-    const providerVoices = getVoicesByProvider(provider);
-
-    // Build a name → voice lookup from provider's voices
-    const nameToVoice = new Map(providerVoices.map((v) => [v.name.toLowerCase(), v]));
+    // Build a name → voice lookup from Groq voices
+    const nameToVoice = new Map(GROQ_VOICES.map((v) => [v.name.toLowerCase(), v]));
 
     // Try to find each speaker's character name in the dialogue lines
     const assignments: VoiceAssignment[] = speakers.map((s) => {
@@ -94,20 +88,18 @@ export function useDialogue() {
           voiceRole: matchedVoice.role,
           voiceName: matchedVoice.name,
           voiceId: matchedVoice.voiceId,
-          provider: matchedVoice.provider,
           flag: matchedVoice.flag,
           avatar: matchedVoice.avatar,
         };
       }
 
-      // Fallback: assign by index from the same provider
-      const fallback = providerVoices[speakers.indexOf(s) % providerVoices.length];
+      // Fallback: assign by index
+      const fallback = GROQ_VOICES[speakers.indexOf(s) % GROQ_VOICES.length];
       return {
         speaker: s,
         voiceRole: fallback.role,
         voiceName: fallback.name,
         voiceId: fallback.voiceId,
-        provider: fallback.provider,
         flag: fallback.flag,
         avatar: fallback.avatar,
       };
@@ -279,10 +271,6 @@ export function useDialogue() {
 
       setBatchProgress({ loaded: lines.length - uncachedIndices.length, total: lines.length });
 
-      // Split uncached by provider
-      const groqIndices = uncachedIndices.filter((i) => getAssignment(lines[i]).provider !== "kokoro");
-      const kokoroIndices = uncachedIndices.filter((i) => getAssignment(lines[i]).provider === "kokoro");
-
       // Helper to cache a decoded blob
       const cacheBlob = (i: number, blob: Blob) => {
         const line = lines[i];
@@ -295,52 +283,32 @@ export function useDialogue() {
         setCachedAudio(persistKey, blob, { text: line.text, voiceRole: a.voiceRole, speed }).catch(() => {});
       };
 
-      // Fetch Groq lines via batch API
-      if (groqIndices.length > 0) {
-        const batchLines = groqIndices.map((i) => ({
-          text: lines[i].text,
-          voice: getAssignment(lines[i]).voiceRole,
-        }));
+      // Fetch all lines via Groq batch API
+      const batchLines = uncachedIndices.map((i) => ({
+        text: lines[i].text,
+        voice: getAssignment(lines[i]).voiceRole,
+      }));
 
-        const res = await fetch("/api/read-aloud/batch", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lines: batchLines, speed }),
-          signal,
-        });
+      const res = await fetch("/api/read-aloud/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lines: batchLines, speed }),
+        signal,
+      });
 
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({ error: "Unknown error" }));
-          throw new Error(err.error || `HTTP ${res.status}`);
-        }
-
-        const data: { segments: string[] } = await res.json();
-
-        for (let j = 0; j < groqIndices.length; j++) {
-          const binary = atob(data.segments[j]);
-          const bytes = new Uint8Array(binary.length);
-          for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
-          const blob = new Blob([bytes], { type: "audio/wav" });
-          cacheBlob(groqIndices[j], blob);
-        }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `HTTP ${res.status}`);
       }
 
-      // Fetch Kokoro lines individually (no batch API for Kokoro)
-      for (const i of kokoroIndices) {
-        if (signal.aborted) break;
-        const a = getAssignment(lines[i]);
-        const kokoroVoice = a.voiceId || "af_heart";
-        console.log(`[Kokoro TTS] Line ${i}: speaker=${a.speaker}, voiceRole=${a.voiceRole}, voiceId=${a.voiceId}, sending=${kokoroVoice}`);
-        const res = await fetch("/api/read-aloud/kokoro", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: lines[i].text.trim(), voice: kokoroVoice, speed }),
-          signal,
-        });
-        if (!res.ok) throw new Error("Kokoro TTS failed");
-        const blob = await res.blob();
-        cacheBlob(i, blob);
-        setBatchProgress({ loaded: lines.length - uncachedIndices.length + kokoroIndices.indexOf(i) + 1, total: lines.length });
+      const data: { segments: string[] } = await res.json();
+
+      for (let j = 0; j < uncachedIndices.length; j++) {
+        const binary = atob(data.segments[j]);
+        const bytes = new Uint8Array(binary.length);
+        for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
+        const blob = new Blob([bytes], { type: "audio/wav" });
+        cacheBlob(uncachedIndices[j], blob);
       }
 
       setBatchProgress(null);
@@ -360,15 +328,13 @@ export function useDialogue() {
     });
   }, []);
 
-  /* ── TTS for a single line (still needed for playSingleLine) ── */
+  /* ── TTS for a single line ── */
   const ttsLine = useCallback(
     async (
       text: string,
       voiceRole: string,
       speed: number,
       signal: AbortSignal,
-      provider?: TtsProvider,
-      voiceId?: string,
     ): Promise<string> => {
       // Check persistent cache first
       const persistKey = makeCacheKey(text, voiceRole, speed);
@@ -377,15 +343,10 @@ export function useDialogue() {
         return URL.createObjectURL(cached.blob);
       }
 
-      // Route to correct API based on provider
-      const isKokoro = provider === "kokoro";
-      const endpoint = isKokoro ? "/api/read-aloud/kokoro" : "/api/read-aloud";
-      const voice = isKokoro && voiceId ? voiceId : voiceRole;
-
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/read-aloud", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text.trim(), voice, speed }),
+        body: JSON.stringify({ text: text.trim(), voice: voiceRole, speed }),
         signal,
       });
       if (!res.ok) throw new Error("TTS failed");
@@ -473,8 +434,6 @@ export function useDialogue() {
             assignment.voiceRole,
             speed,
             abortRef.current.signal,
-            assignment.provider,
-            assignment.voiceId,
           );
           audioCacheRef.current.set(cacheKey, url);
         }

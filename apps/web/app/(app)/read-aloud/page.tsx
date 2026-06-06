@@ -9,7 +9,7 @@ import { PlaybackControls } from "./_components/PlaybackControls";
 import { ShadowingMode } from "./_components/ShadowingMode";
 import { TextInputPanel } from "./_components/TextInputPanel";
 import { VoiceSelector } from "./_components/VoiceSelector";
-import { getVoiceByRole, getVoicesByProvider, type TtsProvider } from "./_data/voices";
+import { getVoiceByRole } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare } from "lucide-react";
@@ -41,7 +41,6 @@ const MODE_TABS = [
 export default function ReadAloudPage() {
   const [mode, setMode] = useState<AppMode>("listen");
   const [text, setText] = useState("");
-  const [provider, setProvider] = useState<TtsProvider>("groq");
   const [selectedRole, setSelectedRole] = useState<string>("groq-us-m");
   const [speed, setSpeed] = useState(1);
   const [showHistory, setShowHistory] = useState(false);
@@ -54,30 +53,9 @@ export default function ReadAloudPage() {
 
   const selectedVoice = getVoiceByRole(selectedRole);
 
-  // Auto-select first voice when provider changes
-  const handleProviderChange = useCallback(
-    (p: TtsProvider) => {
-      setProvider(p);
-      const voices = getVoicesByProvider(p);
-      if (voices.length > 0) {
-        setSelectedRole(voices[0].role);
-      }
-    },
-    [],
-  );
-
-
-
   /* ── Generate handler ── */
   const handleGenerate = useCallback(async () => {
-    const voice = getVoiceByRole(selectedRole);
-    const wasCached = await audio.generate(
-      text,
-      selectedRole,
-      speed,
-      voice.provider,
-      voice.voiceId,
-    );
+    const wasCached = await audio.generate(text, selectedRole, speed);
     if (wasCached !== undefined) {
       history.add(text, selectedRole, speed);
     }
@@ -173,8 +151,6 @@ export default function ReadAloudPage() {
               <VoiceSelector
                 selectedRole={selectedRole}
                 onSelectRole={setSelectedRole}
-                provider={provider}
-                onProviderChange={handleProviderChange}
               />
               <PlaybackControls
                 loading={audio.loading}
@@ -200,8 +176,6 @@ export default function ReadAloudPage() {
               <VoiceSelector
                 selectedRole={selectedRole}
                 onSelectRole={setSelectedRole}
-                provider={provider}
-                onProviderChange={handleProviderChange}
               />
             </div>
           </div>

@@ -60,8 +60,6 @@ export function useAudioPlayback() {
     text: string,
     voiceRole: string,
     speed: number,
-    provider: "groq" | "kokoro" = "groq",
-    voiceId?: string,
   ) => {
     if (!text.trim()) {
       toast.warning("Please enter some text first.");
@@ -138,13 +136,12 @@ export function useAudioPlayback() {
     abortRef.current = new AbortController();
 
     try {
-      const endpoint = provider === "kokoro" ? "/api/read-aloud/kokoro" : "/api/read-aloud";
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/read-aloud", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           text: text.trim(),
-          voice: provider === "kokoro" ? voiceId : voiceRole,
+          voice: voiceRole,
           speed,
         }),
         signal: abortRef.current.signal,

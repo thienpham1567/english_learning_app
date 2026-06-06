@@ -9,7 +9,6 @@
  * Kokoro TTS if KOKORO_TTS_URL is configured.
  */
 
-import { isKokoroAvailable, synthesizeKokoroTts } from "@/lib/tts/kokoro";
 
 export type Accent = "us" | "uk" | "au";
 export const ACCENTS: readonly Accent[] = ["us", "uk", "au"];
@@ -137,9 +136,7 @@ export async function synthesizeTts(args: {
 /**
  * Primary TTS entry point keyed by explicit voice name.
  *
- * Priority: Kokoro (self-hosted, no rate limits) → Groq Orpheus (fallback).
- * Used by the multi-speaker dialogue path, which needs MP3 for frame-level
- * byte concatenation across turns.
+ * Uses Groq Orpheus for all TTS synthesis.
  */
 export async function synthesizeTtsForVoice(args: {
   text: string;
@@ -148,20 +145,6 @@ export async function synthesizeTtsForVoice(args: {
   speed?: number;
   signal?: AbortSignal;
 }): Promise<ArrayBuffer> {
-  // ── Try Kokoro first (self-hosted = no rate limits) ──
-  if (isKokoroAvailable()) {
-    try {
-      return await synthesizeKokoroTts(args);
-    } catch (kokoroErr) {
-      console.warn(
-        `[TTS] Kokoro failed, falling back to Groq: ${
-          kokoroErr instanceof Error ? kokoroErr.message : String(kokoroErr)
-        }`,
-      );
-    }
-  }
-
-  // ── Groq Orpheus fallback ──
   return synthesizeGroqTts(args);
 }
 
