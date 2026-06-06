@@ -203,7 +203,7 @@ function WaveformVisualizer({
               "Compiling & generating audio..."
             ) : (
               <span>
-                ⚡ Groq • {selectedVoice.flag}{" "}
+                {selectedVoice.provider === "elevenlabs" ? "🎙 ElevenLabs" : "⚡ Groq"} • {selectedVoice.flag}{" "}
                 <strong className="text-accent-active">{selectedVoice.name}</strong> (
                 {selectedVoice.label})
               </span>

@@ -1,18 +1,29 @@
 "use client";
 
-import { Info, User, Volume2 } from "lucide-react";
+import { Info, User, Volume2, Zap, Mic } from "lucide-react";
 import * as m from "motion/react-client";
-import { GROQ_VOICES, type VoiceOption } from "../_data/voices";
+import { getVoicesByProvider, type TtsProvider, type VoiceOption } from "../_data/voices";
 
 interface VoiceSelectorProps {
   selectedRole: string;
   onSelectRole: (role: string) => void;
+  provider: TtsProvider;
+  onProviderChange: (provider: TtsProvider) => void;
 }
+
+const PROVIDERS: { key: TtsProvider; label: string; icon: typeof Zap; color: string }[] = [
+  { key: "groq", label: "Groq", icon: Zap, color: "text-success" },
+  { key: "elevenlabs", label: "ElevenLabs", icon: Mic, color: "text-accent" },
+];
 
 export function VoiceSelector({
   selectedRole,
   onSelectRole,
+  provider,
+  onProviderChange,
 }: VoiceSelectorProps) {
+  const voices = getVoicesByProvider(provider);
+
   return (
     <m.div
       initial={{ opacity: 0, y: 15 }}
@@ -31,8 +42,36 @@ export function VoiceSelector({
         Voice Selection
       </span>
 
+      {/* ── Provider Toggle ── */}
+      <div className="flex gap-1.5 bg-bg-deep rounded-xl p-1 border border-border">
+        {PROVIDERS.map((p) => {
+          const isActive = provider === p.key;
+          return (
+            <m.button
+              key={p.key}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onProviderChange(p.key)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-extrabold cursor-pointer transition-all duration-200 ${
+                isActive
+                  ? "bg-surface border border-border shadow-sm text-text-primary"
+                  : "bg-transparent text-text-muted hover:text-text-secondary"
+              }`}
+            >
+              <p.icon size={13} className={isActive ? p.color : ""} />
+              {p.label}
+              {p.key === "elevenlabs" && (
+                <span className="text-[8px] font-bold bg-accent/15 text-accent rounded px-1 py-0.5">
+                  HD
+                </span>
+              )}
+            </m.button>
+          );
+        })}
+      </div>
+
+      {/* ── Voice List ── */}
       <div className="flex flex-col gap-2">
-        {GROQ_VOICES.map((v) => (
+        {voices.map((v) => (
           <VoiceCard
             key={v.role}
             voice={v}
@@ -41,6 +80,17 @@ export function VoiceSelector({
           />
         ))}
       </div>
+
+      {/* ── Provider Info ── */}
+      {provider === "elevenlabs" && (
+        <m.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="text-[10px] text-text-muted bg-accent/5 rounded-lg px-3 py-2 border border-accent/10"
+        >
+          🎙 ElevenLabs — Premium quality voices. Free plan: 10,000 chars/month.
+        </m.div>
+      )}
     </m.div>
   );
 }
@@ -98,7 +148,7 @@ function VoiceCard({
             isActive ? "text-text-secondary font-semibold" : "text-text-muted"
           }`}
         >
-          {v.accentLabel} • {v.voiceId}
+          {v.accentLabel} • {v.name}
         </span>
       </div>
 

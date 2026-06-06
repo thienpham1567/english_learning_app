@@ -60,6 +60,8 @@ export function useAudioPlayback() {
     text: string,
     voiceRole: string,
     speed: number,
+    provider: "groq" | "elevenlabs" = "groq",
+    voiceId?: string,
   ) => {
     if (!text.trim()) {
       toast.warning("Please enter some text first.");
@@ -132,16 +134,18 @@ export function useAudioPlayback() {
       }
     }
 
-    // ── L3: Call Groq TTS (expensive — last resort) ──
+    // ── L3: Call TTS API ──
     abortRef.current = new AbortController();
 
     try {
-      const res = await fetch("/api/read-aloud", {
+      const isElevenLabs = provider === "elevenlabs";
+      const endpoint = isElevenLabs ? "/api/read-aloud/elevenlabs" : "/api/read-aloud";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           text: text.trim(),
-          voice: voiceRole,
+          voice: isElevenLabs ? voiceId : voiceRole,
           speed,
         }),
         signal: abortRef.current.signal,
