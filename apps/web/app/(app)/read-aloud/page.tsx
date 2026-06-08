@@ -193,7 +193,13 @@ export default function ReadAloudPage() {
         {/* ── Shadow Mode ── */}
         {mode === "shadow" && (
           <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_380px] gap-5">
-            <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
+            <ShadowingMode
+              text={text}
+              onTextChange={setText}
+              onClear={handleClear}
+              voiceRole={selectedRole}
+              speed={speed}
+            />
             <div className="flex flex-col gap-5">
               <VoiceSelector
                 selectedRole={selectedRole}

@@ -34,6 +34,10 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const streamRef = useRef<MediaStream | null>(null);
   const startedAtRef = useRef<number>(0);
   const mountedRef = useRef(true);
+  /** Resolver for an in-flight stopAndGetBlob() call, settled inside recorder.onstop. */
+  const pendingStopRef = useRef<((r: { blob: Blob | null; durationMs: number }) => void) | null>(
+    null,
+  );
 
   const [isSupported, setIsSupported] = useState(false);
 
@@ -86,9 +90,15 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
         stream.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
 
-        if (!mountedRef.current) return;
+        if (!mountedRef.current) {
+          pendingStopRef.current?.({ blob: null, durationMs: measuredMs });
+          pendingStopRef.current = null;
+          return;
+        }
 
         if (chunksRef.current.length === 0) {
+          pendingStopRef.current?.({ blob: null, durationMs: measuredMs });
+          pendingStopRef.current = null;
           setIsListening(false);
           return;
         }
@@ -98,6 +108,9 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
         });
         setBlob(audioBlob);
         setDurationMs(measuredMs);
+
+        pendingStopRef.current?.({ blob: audioBlob, durationMs: measuredMs });
+        pendingStopRef.current = null;
 
         if (!autoTranscribe) {
           setIsListening(false);
@@ -145,6 +158,27 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     setIsListening(false);
   }, []);
 
+  /**
+   * Stops recording and resolves once the final blob is assembled in `onstop`.
+   * Avoids the race of reading `blob` immediately after `stop()`. When not
+   * recording, resolves with the most recent blob/duration. Works regardless of
+   * `autoTranscribe`. Resolves with `{ blob: null }` if no audio was captured.
+   */
+  const stopAndGetBlob = useCallback(
+    () =>
+      new Promise<{ blob: Blob | null; durationMs: number }>((resolve) => {
+        const recorder = mediaRecorderRef.current;
+        if (!recorder || recorder.state !== "recording") {
+          resolve({ blob, durationMs });
+          return;
+        }
+        pendingStopRef.current = resolve;
+        recorder.stop();
+        setIsListening(false);
+      }),
+    [blob, durationMs],
+  );
+
   /** Returns the active MediaStream while recording, or null otherwise. */
   const getStream = useCallback(() => streamRef.current, []);
 
@@ -164,6 +198,8 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     words,
     start,
     stop,
+    /** Stops recording and awaits the assembled blob (use instead of stop()+blob). */
+    stopAndGetBlob,
     getStream,
     isSupported,
     error,

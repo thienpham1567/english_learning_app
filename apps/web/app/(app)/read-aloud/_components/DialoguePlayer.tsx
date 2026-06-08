@@ -24,7 +24,7 @@ import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useDialogue } from "../_hooks/useDialogue";
-import { type EvalResult, ShadowResult } from "./ShadowResult";
+import { type EvalResult, ShadowResult } from "./shadowing/ShadowResult";
 import { GROQ_VOICES } from "../_data/voices";
 
 const SPEAKER_COLORS: Record<

@@ -1,18 +1,18 @@
 "use client";
 
-import * as m from "motion/react-client";
 import {
-  CheckCircle2,
   AlertTriangle,
-  XCircle,
   Award,
+  CheckCircle2,
+  FileText,
+  Gauge,
+  Lightbulb,
   Mic,
   Music,
-  Gauge,
   Target,
-  FileText,
-  Lightbulb,
+  XCircle,
 } from "lucide-react";
+import * as m from "motion/react-client";
 
 export interface WordScore {
   word: string;
