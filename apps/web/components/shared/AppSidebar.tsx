@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Blocks,
   BookOpen,
   BookOpenCheck,
   BookOpenText,
@@ -64,6 +65,7 @@ const navGroups: (NavItem | NavGroup)[] = [
         icon: GraduationCap,
       },
       { href: "/toeic/vocab", label: "TOEIC Vocab", icon: BookOpenText },
+      { href: "/morphology", label: "Word Formation", icon: Blocks },
       { href: "/my-vocabulary", label: "Vocabulary", icon: Star },
       { href: "/flashcards", label: "Flashcard Review", icon: RefreshCw },
     ],

@@ -28,6 +28,7 @@ export const activityTypeEnum = pgEnum("activity_type", [
   "voice_practice",
   "listening_practice",
   "diagnostic_test",
+  "morphology",
 ]);
 
 /** Exam Mode — TOEIC or IELTS */
@@ -216,6 +217,51 @@ export const grammarLessonProgress = pgTable("grammar_lesson_progress", {
 
 export type GrammarLessonCacheRow = typeof grammarLessonCache.$inferSelect;
 export type GrammarLessonProgressRow = typeof grammarLessonProgress.$inferSelect;
+
+// ── Morphology (Word Formation) ──
+
+export const morphemeLessonCache = pgTable(
+  "morpheme_lesson_cache",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    morphemeId: text("morpheme_id").notNull(),
+    morphemeType: text("morpheme_type").notNull(),
+    lessonVersion: text("lesson_version").notNull().default("1"),
+    content: jsonb("content").$type<Record<string, unknown>>().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("morpheme_lesson_cache_morpheme_version_idx").on(
+      table.morphemeId,
+      table.lessonVersion,
+    ),
+  ],
+);
+
+export const morphemeProgress = pgTable(
+  "morpheme_progress",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    morphemeId: text("morpheme_id").notNull(),
+    status: text("status").notNull().default("in_progress"),
+    correctCount: integer("correct_count").notNull().default(0),
+    totalCount: integer("total_count").notNull().default(0),
+    scorePct: integer("score_pct").notNull().default(0),
+    attemptCount: integer("attempt_count").notNull().default(0),
+    lastStudiedAt: timestamp("last_studied_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("morpheme_progress_user_morpheme_idx").on(table.userId, table.morphemeId),
+    index("morpheme_progress_user_idx").on(table.userId),
+  ],
+);
+
+export type MorphemeLessonCacheRow = typeof morphemeLessonCache.$inferSelect;
+export type MorphemeProgressRow = typeof morphemeProgress.$inferSelect;
 
 /** Listening Exercise — generated audio passage with MCQ questions */
 export interface ListeningQuestion {
