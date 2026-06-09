@@ -1,11 +1,11 @@
 import type { DictionaryEntryType } from "@/lib/dictionary/classify-entry";
 
 const ENTRY_TYPE_CONTEXT: Record<DictionaryEntryType, string> = {
-  word: "This entry is a regular word. Cover all major distinct senses. Set `verbForms` for verbs, `numberInfo` for nouns, `frequencyBand`, and `wordFamily` as applicable.",
+  word: "This entry is a regular word. Cover all major distinct senses. Set `verbForms` for verbs, `numberInfo` for nouns, and `wordFamily` as applicable.",
   phrasal_verb:
-    "This entry is a phrasal verb. Focus on the core figurative meaning, particle usage, and whether the verb is separable or inseparable. Set `verbForms` and `numberInfo` to null. Set `frequencyBand` and `wordFamily` to null.",
+    "This entry is a phrasal verb. Focus on the core figurative meaning, particle usage, and whether the verb is separable or inseparable. Set `verbForms` and `numberInfo` to null. Set `wordFamily` to null.",
   idiom:
-    "This entry is an idiom. Provide its figurative meaning only — do not explain the literal words. Set `verbForms`, `numberInfo`, `frequencyBand`, and `wordFamily` to null.",
+    "This entry is an idiom. Provide its figurative meaning only — do not explain the literal words. Set `verbForms`, `numberInfo`, and `wordFamily` to null.",
 };
 
 export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
@@ -39,7 +39,6 @@ export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
     "If partOfSpeech is 'noun', populate `numberInfo`: set `plural` to the standard plural form, or null if the noun is uncountable, plural-only, or singular-only. Set exactly one of `isUncountable`, `isPluralOnly`, `isSingularOnly` to true (the other two false) — these are mutually exclusive. For all non-noun parts of speech, set `numberInfo` to null.",
 
     // ── Frequency and word family ─────────────────────────────────────────
-    'Set `frequencyBand` to one of: "top1k", "top3k", "top5k", "top10k", "rare", reflecting general English corpus frequency (COCA / Oxford 5000 / CEFR word lists as reference). Set to null for phrasal verbs and idioms.',
     'Set `wordFamily` to an array of related-form groups, each `{ pos, words }`. Allowed `pos` values: noun, verb, adjective, adverb. Include only standard, attested English words — never invent forms. Do not include the headword itself. Order groups noun → verb → adjective → adverb. Set to null for phrasal verbs, idioms, or words with no meaningful family. Example for \'decide\': [{"pos":"noun","words":["decision","indecision"]},{"pos":"adjective","words":["decisive","undecided"]},{"pos":"adverb","words":["decisively"]}]',
 
     // ── Sense count and ordering ──────────────────────────────────────────

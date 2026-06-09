@@ -2,73 +2,20 @@
 
 import { BookOpen, Loader2, Star, Volume2 } from "lucide-react";
 import { useState } from "react";
-import { NearbyWordsBar } from "@/app/(app)/dictionary/_components/NearbyWordsBar";
 import { SensePanel } from "@/app/(app)/dictionary/_components/SensePanel";
 import { VerbFormsSection } from "@/app/(app)/dictionary/_components/VerbFormsSection";
 import { WordFamilySection } from "@/app/(app)/dictionary/_components/WordFamilySection";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
-import type {
-  FrequencyBand,
-  VocabularyWithNearby,
-} from "@/lib/schemas/vocabulary";
+import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 type DictionaryResultCardProps = {
-  vocabulary: VocabularyWithNearby | null;
+  vocabulary: Vocabulary | null;
   hasSearched: boolean;
   isLoading: boolean;
   saved?: boolean | null;
   onToggleSaved?: () => void;
-  onOpenThesaurus?: () => void;
   onSearch?: (word: string) => void;
 };
-
-const FREQUENCY_CONFIG: Record<
-  FrequencyBand,
-  { filled: number; label: string; tooltipEn: string }
-> = {
-  top1k: {
-    filled: 5,
-    label: "Very Common",
-    tooltipEn: "Top 1,000 most common words",
-  },
-  top3k: {
-    filled: 4,
-    label: "Common",
-    tooltipEn: "Top 3,000 most common words",
-  },
-  top5k: {
-    filled: 3,
-    label: "Fairly Common",
-    tooltipEn: "Top 5,000 most common words",
-  },
-  top10k: {
-    filled: 2,
-    label: "Uncommon",
-    tooltipEn: "Top 10,000 most common words",
-  },
-  rare: { filled: 1, label: "Rare", tooltipEn: "Uncommon word" },
-};
-
-function FrequencyBar({ band }: { band: FrequencyBand }) {
-  const { filled, label, tooltipEn } = FREQUENCY_CONFIG[band];
-  return (
-    <div className="anim-fade-in inline-flex items-center gap-2 relative group">
-      <div className="flex gap-1">
-        {Array.from({ length: 5 }, (_, i) => (
-          <div
-            key={i}
-            data-frequency-segment={i < filled ? "filled" : "empty"}
-            className={`w-5 h-1.5 rounded-sm ${i < filled ? "bg-accent" : "bg-border"}`}
-          />
-        ))}
-      </div>
-      <span className="text-xs text-text-muted">{label}</span>
-      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
-        {tooltipEn}
-      </span>
-    </div>
-  );
-}
 
 import { CEFR_BADGE_CLASSES } from "@/lib/constants/cefr";
 
@@ -143,7 +90,7 @@ function AudioButton({
 }
 
 function getNumberLabel(
-  numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>,
+  numberInfo: NonNullable<Vocabulary["numberInfo"]>,
 ): string {
   if (numberInfo.isUncountable) return "uncountable";
   if (numberInfo.isPluralOnly) return "plural only";
@@ -158,7 +105,6 @@ export function DictionaryResultCard({
   isLoading,
   saved,
   onToggleSaved,
-  onOpenThesaurus,
   onSearch,
 }: DictionaryResultCardProps) {
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
@@ -213,52 +159,37 @@ export function DictionaryResultCard({
     ? getNumberLabel(vocabulary.numberInfo)
     : "";
 
+  // Determine POS display
+  const posKey =
+    vocabulary.entryType === "idiom"
+      ? "idiom"
+      : vocabulary.entryType === "phrasal_verb"
+        ? "phrasal verb"
+        : (vocabulary.partOfSpeech ?? null);
+  const posEn = posKey ? POS_LABELS[posKey] : null;
+  const posDisplay = posEn ?? posKey ?? "word";
+
   return (
     <div
       key={vocabulary.headword}
       className="dictionary-result-card bg-surface min-h-[400px]"
     >
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 flex-wrap">
+      {/* ── Header: headword + metadata on one line ── */}
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-active m-0">
-            Search Result
-          </p>
-          <div className="flex items-baseline gap-3 flex-wrap mt-2">
+          <div className="flex items-baseline gap-3 flex-wrap">
             <h2 className="dictionary-result-heading italic leading-tight font-display text-ink break-words m-0">
               {vocabulary.headword}
             </h2>
-            {(() => {
-              const posKey =
-                vocabulary.entryType === "idiom"
-                  ? "idiom"
-                  : vocabulary.entryType === "phrasal_verb"
-                    ? "phrasal verb"
-                    : (vocabulary.partOfSpeech ?? null);
-              const posEn = posKey ? POS_LABELS[posKey] : null;
-              const display = posEn ?? posKey ?? "word";
-              const tooltip = posKey && posEn ? posKey : null;
-              return (
-                <span className="relative group rounded-lg px-3.5 py-1 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
-                  {display}
-                  {tooltip && (
-                    <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
-                      {tooltip}
-                    </span>
-                  )}
-                </span>
-              );
-            })()}
+            <span className="rounded-lg px-3 py-0.5 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
+              {posDisplay}
+            </span>
             {numberLabel && (
               <span className="rounded-lg px-2.5 py-0.5 text-xs font-medium text-text-muted border-2 border-border whitespace-nowrap">
                 {numberLabel}
               </span>
             )}
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {vocabulary.level &&
-            (() => {
+            {vocabulary.level && (() => {
               const badgeClass =
                 CEFR_BADGE_CLASSES[vocabulary.level] ??
                 "text-text-secondary border-border bg-bg-deep";
@@ -270,15 +201,14 @@ export function DictionaryResultCard({
                 </span>
               );
             })()}
-          {vocabulary.register &&
-            (() => {
+            {vocabulary.register && (() => {
               const info = REGISTER_INFO[vocabulary.register];
               const display = info?.en ?? vocabulary.register;
               const tooltip = info
                 ? `${vocabulary.register} — ${info.tooltipEn}`
                 : vocabulary.register;
               return (
-                <span className="relative group rounded-lg px-3 py-0.5 text-xs border-2 border-border text-text-primary bg-accent-light font-bold cursor-help">
+                <span className="relative group rounded-lg px-2.5 py-0.5 text-xs border-2 border-border text-text-primary bg-accent-light font-bold cursor-help">
                   {display}
                   <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
                     {tooltip}
@@ -286,32 +216,23 @@ export function DictionaryResultCard({
                 </span>
               );
             })()}
-          {onOpenThesaurus && (
-            <button
-              type="button"
-              onClick={onOpenThesaurus}
-              aria-label="Thesaurus"
-              className="flex items-center gap-1.5 rounded-lg bg-accent-light px-3 py-1 text-xs font-bold text-ink border-2 border-border cursor-pointer transition-colors duration-200 hover:bg-accent/15 shadow-sm"
-            >
-              <BookOpen className="h-3 w-3 text-accent" />
-              Thesaurus
-            </button>
-          )}
-          {saved != null && onToggleSaved && (
-            <button
-              onClick={onToggleSaved}
-              className="grid w-8 h-8 place-items-center rounded-lg bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent hover:bg-surface-alt"
-              aria-label={saved ? "Remove word from saved" : "Save this word"}
-            >
-              <Star
-                className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`}
-              />
-            </button>
-          )}
+          </div>
         </div>
+        {/* Save button */}
+        {saved != null && onToggleSaved && (
+          <button
+            onClick={onToggleSaved}
+            className="grid w-8 h-8 place-items-center rounded-lg bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent hover:bg-surface-alt shrink-0"
+            aria-label={saved ? "Remove word from saved" : "Save this word"}
+          >
+            <Star
+              className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`}
+            />
+          </button>
+        )}
       </div>
 
-      {/* Pronunciation */}
+      {/* ── Pronunciation ── */}
       {hasDualPhonetics ? (
         <div className="anim-fade-in mt-3 flex flex-wrap items-center gap-3">
           {vocabulary.phoneticsUs && (
@@ -354,7 +275,7 @@ export function DictionaryResultCard({
         </span>
       ) : null}
 
-      {/* ── Meta info strip: Word Family ── */}
+      {/* ── Word Family ── */}
       {vocabulary.wordFamily &&
         vocabulary.wordFamily.length > 0 &&
         onSearch && (
@@ -366,11 +287,12 @@ export function DictionaryResultCard({
           </div>
         )}
 
+      {/* ── Verb Forms ── */}
       {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
         <VerbFormsSection verbForms={vocabulary.verbForms} />
       )}
 
-      {/* Sense tabs */}
+      {/* ── Sense tabs ── */}
       <div className="mt-6">
         <div className="flex items-center gap-2 border-b-2 border-border pb-3 mb-5 overflow-x-auto">
           {vocabulary.senses.map((sense) => (
@@ -398,17 +320,6 @@ export function DictionaryResultCard({
           />
         )}
       </div>
-
-      {/* Nearby words bar */}
-      {vocabulary.nearbyWords.length > 0 && onSearch && (
-        <div className="mt-6 border-t-2 border-border pt-5">
-          <NearbyWordsBar
-            words={vocabulary.nearbyWords}
-            headword={vocabulary.headword}
-            onSearch={onSearch}
-          />
-        </div>
-      )}
     </div>
   );
 }

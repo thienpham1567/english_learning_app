@@ -3,6 +3,7 @@
 import {
   AlertTriangle,
   BookOpen,
+  ChevronDown,
   Code,
   Lightbulb,
   Link as LinkIcon,
@@ -85,9 +86,13 @@ function HighlightWord({ text, headword }: { text: string; headword: string }) {
 
 export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
   const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
+  const [isThesaurusOpen, setIsThesaurusOpen] = useState(false);
   const examples = sense.examples ?? [];
   const examplesVi = sense.examplesVi ?? [];
   const collocations = sense.collocations ?? [];
+  const synonyms = sense.synonyms ?? [];
+  const antonyms = sense.antonyms ?? [];
+  const hasThesaurus = synonyms.length > 0 || antonyms.length > 0;
 
   const shortMeanings = sense.shortMeaningsVi ?? [];
 
@@ -188,6 +193,105 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         </section>
       )}
 
+      {collocations.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h3 className={SENSE_HEADER_STYLE}>
+            <Zap className="h-3 w-3" />
+            Collocations
+          </h3>
+          <ul className="list-none p-0 m-0 flex flex-col gap-1.5">
+            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
+              <li key={`${collocation.en}-${collocation.vi}`} className="text-sm leading-relaxed">
+                <span className="text-text-primary">
+                  <BoldText text={collocation.en} />
+                </span>
+                <span className="mx-1.5 text-text-muted">&mdash;</span>
+                <span className="text-text-secondary">
+                  <BoldText text={collocation.vi} />
+                </span>
+              </li>
+            ))}
+          </ul>
+          {collocations.length > 3 && (
+            <button
+              type="button"
+              aria-expanded={isCollocationsOpen}
+              onClick={() => setIsCollocationsOpen((open) => !open)}
+              className="inline-flex items-center rounded-lg border-2 border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
+            >
+              {isCollocationsOpen ? "Show Less" : `Show More (${collocations.length - 3})`}
+            </button>
+          )}
+        </section>
+      )}
+
+      {/* ── Inline Thesaurus: Synonyms & Antonyms ── */}
+      {hasThesaurus && (
+        <section className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => setIsThesaurusOpen((o) => !o)}
+            aria-expanded={isThesaurusOpen}
+            className="flex w-full items-center justify-between gap-2 bg-transparent border-none cursor-pointer p-0 transition-all duration-200 hover:opacity-80 text-left"
+          >
+            <h3 className={SENSE_HEADER_STYLE}>
+              <BookOpen className="h-3 w-3" />
+              Synonyms & Antonyms
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border-2 border-accent/20 normal-case tracking-normal">
+                {synonyms.length + antonyms.length}
+              </span>
+            </h3>
+            <ChevronDown
+              className={`h-3.5 w-3.5 text-text-muted transition-transform duration-300 ${isThesaurusOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {isThesaurusOpen && (
+            <div className="anim-fade-in flex flex-col gap-4 pt-1">
+              {synonyms.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-success m-0">
+                    Synonyms
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {synonyms.map((word) => (
+                      <button
+                        key={word}
+                        type="button"
+                        onClick={() => onSearch?.(word)}
+                        className="rounded-lg bg-success/5 px-3 py-1 text-[13px] font-bold text-success border-2 border-success/20 cursor-pointer transition-all duration-150 hover:bg-success/15 hover:border-success/40"
+                      >
+                        {word}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {antonyms.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-warning m-0">
+                    Antonyms
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {antonyms.map((word) => (
+                      <button
+                        key={word}
+                        type="button"
+                        onClick={() => onSearch?.(word)}
+                        className="rounded-lg bg-xp/5 px-3 py-1 text-[13px] font-bold text-warning border-2 border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
+                      >
+                        {word}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      )}
+
       {sense.relatedExpressions.length > 0 && (
         <section className="flex flex-col gap-2">
           <h3 className={SENSE_HEADER_STYLE}>
@@ -225,38 +329,6 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               </li>
             ))}
           </ul>
-        </section>
-      )}
-
-      {collocations.length > 0 && (
-        <section className="flex flex-col gap-2">
-          <h3 className={SENSE_HEADER_STYLE}>
-            <Zap className="h-3 w-3" />
-            Collocations
-          </h3>
-          <ul className="list-none p-0 m-0 flex flex-col gap-1.5">
-            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
-              <li key={`${collocation.en}-${collocation.vi}`} className="text-sm leading-relaxed">
-                <span className="text-text-primary">
-                  <BoldText text={collocation.en} />
-                </span>
-                <span className="mx-1.5 text-text-muted">&mdash;</span>
-                <span className="text-text-secondary">
-                  <BoldText text={collocation.vi} />
-                </span>
-              </li>
-            ))}
-          </ul>
-          {collocations.length > 3 && (
-            <button
-              type="button"
-              aria-expanded={isCollocationsOpen}
-              onClick={() => setIsCollocationsOpen((open) => !open)}
-              className="inline-flex items-center rounded-lg border-2 border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
-            >
-              {isCollocationsOpen ? "Show Less" : `Show More (${collocations.length - 3})`}
-            </button>
-          )}
         </section>
       )}
     </div>

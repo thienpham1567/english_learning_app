@@ -10,7 +10,7 @@ const log = routeLogger("dictionary");
 
 import { userVocabulary, vocabularyCache } from "@repo/database";
 import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
-import { getNearbyWords } from "@/lib/dictionary/nearby-words";
+
 import { ALLOWED_QUERY_PATTERN, normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
 import { openAiClient } from "@/lib/openai/client";
@@ -99,8 +99,7 @@ export async function POST(req: Request) {
           // so the regenerated entry stays cached for subsequent lookups.
         } else {
           const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
-          const nearbyWords = getNearbyWords(cacheKey);
-          return NextResponse.json({ data: { ...cachedData, nearbyWords }, cached: true, saved });
+          return NextResponse.json({ data: cachedData, cached: true, saved });
         }
       }
     }
@@ -140,9 +139,7 @@ export async function POST(req: Request) {
       });
 
     const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
-    const nearbyWords = getNearbyWords(normalized);
-
-    return NextResponse.json({ data: { ...parsed, nearbyWords }, cached: false, saved });
+    return NextResponse.json({ data: parsed, cached: false, saved });
   } catch (error) {
     log.error({ err: error }, "dictionary.error");
     return NextResponse.json(

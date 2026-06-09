@@ -7,11 +7,10 @@ import * as m from "motion/react-client";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
-import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { api } from "@/lib/api-client";
 import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
-import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
@@ -42,11 +41,10 @@ export function FloatingDictionaryWidget() {
   const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [result, setResult] = useState<VocabularyWithNearby | null>(null);
+  const [result, setResult] = useState<Vocabulary | null>(null);
   const [saved, setSaved] = useState<boolean | null>(null);
   const [currentQuery, setCurrentQuery] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isThesaurusOpen, setIsThesaurusOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -80,7 +78,7 @@ export function FloatingDictionaryWidget() {
     const reqId = ++reqIdRef.current;
 
     try {
-      const payload = await api.post<{ data: VocabularyWithNearby; saved: boolean }>(
+      const payload = await api.post<{ data: Vocabulary; saved: boolean }>(
         "/dictionary",
         { word: normalized },
       );
@@ -286,23 +284,11 @@ export function FloatingDictionaryWidget() {
               isLoading={isSearching}
               saved={saved}
               onToggleSaved={handleToggleSaved}
-              onOpenThesaurus={() => setIsThesaurusOpen(true)}
               onSearch={handleSearchInModal}
             />
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Thesaurus sheet */}
-      <ThesaurusSheet
-        vocabulary={result}
-        isOpen={isThesaurusOpen}
-        onClose={() => setIsThesaurusOpen(false)}
-        onWordClick={(word) => {
-          setIsThesaurusOpen(false);
-          handleSearchInModal(word);
-        }}
-      />
     </>
   );
 }

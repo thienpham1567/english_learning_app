@@ -13,9 +13,8 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
-import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
 import { api } from "@/lib/api-client";
-import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 const STORAGE_KEY = "dict_recent_searches";
 const MAX_RECENT = 15;
@@ -65,13 +64,13 @@ function addRecentSearch(word: string) {
 
 export function DictionaryTab() {
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState<VocabularyWithNearby | null>(null);
+  const [result, setResult] = useState<Vocabulary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [saved, setSaved] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [recentWords, setRecentWords] = useState<string[]>([]);
-  const [thesaurusOpen, setThesaurusOpen] = useState(false);
+
 
   const [savedWords, setSavedWords] = useState<SavedWord[]>([]);
   const [savedLoading, setSavedLoading] = useState(true);
@@ -114,7 +113,7 @@ export function DictionaryTab() {
     setRecentWords(getRecentSearches());
 
     try {
-      const res = await api.post<{ data: VocabularyWithNearby; saved: boolean }>("/dictionary", {
+      const res = await api.post<{ data: Vocabulary; saved: boolean }>("/dictionary", {
         word: trimmed,
       });
       setResult(res.data);
@@ -194,7 +193,6 @@ export function DictionaryTab() {
             isLoading={isLoading}
             saved={saved}
             onToggleSaved={toggleSaved}
-            onOpenThesaurus={() => setThesaurusOpen(true)}
             onSearch={doSearch}
           />
         </div>
@@ -266,15 +264,7 @@ export function DictionaryTab() {
         )}
       </div>
 
-      {/* Thesaurus sheet */}
-      {thesaurusOpen && result && (
-        <ThesaurusSheet
-          vocabulary={result}
-          isOpen={thesaurusOpen}
-          onClose={() => setThesaurusOpen(false)}
-          onWordClick={doSearch}
-        />
-      )}
+
     </div>
   );
 }
