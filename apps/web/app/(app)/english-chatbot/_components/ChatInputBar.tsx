@@ -4,7 +4,6 @@ import { Check, Loader2, Mic, MicOff, Send, Square, Volume2 } from "lucide-react
 import { useCallback, useRef } from "react";
 import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import type { useVoiceInput } from "@/hooks/useVoiceInput";
-import { PersonaSwitcher } from "./PersonaSwitcher";
 
 type Props = {
   input: string;
@@ -12,10 +11,6 @@ type Props = {
   onSend: () => void;
   onStop: () => void;
   isLoading: boolean;
-
-  // Persona
-  selectedPersonaId: string;
-  onPersonaChange: (id: string) => void;
 
   // Voice
   voice: ReturnType<typeof useVoiceInput>;
@@ -33,8 +28,6 @@ export function ChatInputBar({
   onSend,
   onStop,
   isLoading,
-  selectedPersonaId,
-  onPersonaChange,
   voice,
   tts,
   voiceMode,
@@ -165,12 +158,6 @@ export function ChatInputBar({
             {/* ── Bottom toolbar ── */}
             <div className="flex items-center justify-between border-t border-border/50 px-3 py-2">
               <div className="flex items-center gap-2">
-                <PersonaSwitcher
-                  value={selectedPersonaId}
-                  onChange={onPersonaChange}
-                  disabled={isLoading}
-                />
-
                 {/* Voice Mode pill */}
                 {voice.isSupported && tts.isSupported && (
                   <button
