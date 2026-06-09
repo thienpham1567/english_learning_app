@@ -108,7 +108,7 @@ export function EmptyState({ onSuggestedPrompt }: Props) {
         variants={itemVariants}
         className="font-display text-2xl md:text-3xl italic font-semibold text-ink tracking-wide"
       >
-        Hi, I'm Aria — your TOEIC coach
+        Hi, I&apos;m Aria — your TOEIC coach
       </motion.h2>
 
       <motion.p
