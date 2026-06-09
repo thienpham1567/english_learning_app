@@ -2,12 +2,15 @@
 
 import { Check, Copy, Loader2, Pause, RotateCcw, Volume2 } from "lucide-react";
 import { motion } from "motion/react";
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useUser } from "@/components/shared/UserContext";
 import type { Persona } from "@/lib/chat/personas";
+import { parseToeicExercise, splitToeicBlocks } from "@/lib/chat/toeic-exercise";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import { ExerciseCard, hasExercisePattern, splitExerciseBlocks } from "./ExerciseCard";
+import { ToeicExerciseCard } from "./ToeicExerciseCard";
 
 export type DividerMessage = {
   id: string;
@@ -161,83 +164,109 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   );
 }
 
-/* ── MessageBody: splits AI text into markdown + interactive exercises ── */
+/* ── MessageBody: markdown + interactive exercises (legacy + toeic) ── */
 function MessageBody({
   text,
   isStreaming,
   onSendMessage,
   isChatLoading,
+  onSpeak,
+  isSpeaking,
 }: {
   text: string;
   isStreaming?: boolean;
   onSendMessage?: (text: string) => void;
   isChatLoading?: boolean;
+  onSpeak?: (text: string) => void;
+  isSpeaking?: boolean;
 }) {
-  const segments = useMemo(() => {
-    // Don't split while streaming — wait for complete message
-    if (isStreaming || !hasExercisePattern(text)) {
-      return null;
-    }
-    return splitExerciseBlocks(text);
-  }, [text, isStreaming]);
+  const markdownComponents = {
+    code: ({ className, children }: { className?: string; children?: ReactNode }) =>
+      className ? (
+        <CodeBlock className={className}>{children}</CodeBlock>
+      ) : (
+        <InlineCode>{children}</InlineCode>
+      ),
+    pre: ({ children }: { children?: ReactNode }) => <>{children}</>,
+  };
 
-  // Simple markdown rendering (no exercise splitting)
-  if (!segments) {
+  // Renders a plain text chunk: legacy exercise split first, else markdown.
+  const renderText = (chunk: string, keyPrefix: string) => {
+    if (!hasExercisePattern(chunk)) {
+      return (
+        <ReactMarkdown key={keyPrefix} remarkPlugins={[remarkGfm]} components={markdownComponents}>
+          {chunk}
+        </ReactMarkdown>
+      );
+    }
+    return splitExerciseBlocks(chunk).map((seg, i) =>
+      seg.type === "exercise" ? (
+        <ExerciseCard
+          key={`${keyPrefix}-${i}`}
+          text={seg.content}
+          title={seg.title}
+          onSubmitAnswers={onSendMessage}
+          isLoading={isChatLoading}
+        />
+      ) : (
+        <ReactMarkdown
+          key={`${keyPrefix}-${i}`}
+          remarkPlugins={[remarkGfm]}
+          components={markdownComponents}
+        >
+          {seg.content}
+        </ReactMarkdown>
+      ),
+    );
+  };
+
+  // While streaming, render raw markdown (don't split a half-finished block).
+  if (isStreaming) {
     return (
       <div className="chat-markdown text-sm leading-relaxed text-text-primary">
-        <ReactMarkdown
-          components={{
-            code: ({ className, children }) =>
-              className ? (
-                <CodeBlock className={className}>{children}</CodeBlock>
-              ) : (
-                <InlineCode>{children}</InlineCode>
-              ),
-            pre: ({ children }) => <>{children}</>,
-          }}
-        >
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
           {text}
         </ReactMarkdown>
-
-        {isStreaming && (
-          <span
-            className="inline-block h-4 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
-            aria-hidden="true"
-          />
-        )}
+        <span
+          className="inline-block h-4 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
+          aria-hidden="true"
+        />
       </div>
     );
   }
 
-  // Mixed rendering: markdown + exercise cards
+  const segments = splitToeicBlocks(text);
+
   return (
     <div className="chat-markdown text-sm leading-relaxed text-text-primary">
-      {segments.map((seg, i) =>
-        seg.type === "exercise" ? (
-          <ExerciseCard
-            key={i}
-            text={seg.content}
-            title={seg.title}
-            onSubmitAnswers={onSendMessage}
-            isLoading={isChatLoading}
-          />
-        ) : (
-          <ReactMarkdown
-            key={i}
-            components={{
-              code: ({ className, children }) =>
-                className ? (
-                  <CodeBlock className={className}>{children}</CodeBlock>
-                ) : (
-                  <InlineCode>{children}</InlineCode>
-                ),
-              pre: ({ children }) => <>{children}</>,
-            }}
-          >
-            {seg.content}
-          </ReactMarkdown>
-        ),
-      )}
+      {segments.map((seg, i) => {
+        if (seg.type === "toeic") {
+          const exercise = parseToeicExercise(seg.content);
+          if (exercise) {
+            return (
+              <ToeicExerciseCard
+                key={`toeic-${i}`}
+                exercise={exercise}
+                onAskCoach={onSendMessage}
+                isLoading={isChatLoading}
+                onPlayAudio={onSpeak}
+                isPlaying={isSpeaking}
+              />
+            );
+          }
+          // Unparseable block → show raw so nothing is lost.
+          return (
+            <ReactMarkdown
+              key={`toeic-${i}`}
+              remarkPlugins={[remarkGfm]}
+              components={markdownComponents}
+            >
+              {`\`\`\`\n${seg.content}\`\`\``}
+            </ReactMarkdown>
+          );
+        }
+        return renderText(seg.content, `text-${i}`);
+      })}
     </div>
   );
 }
@@ -290,9 +319,7 @@ export function ChatMessage({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`group relative w-full py-3 ${
-        isUser ? "bg-chat-surface/30" : ""
-      }`}
+      className={`group relative w-full py-3 ${isUser ? "bg-chat-surface/30" : ""}`}
     >
       <div className="mx-auto max-w-2xl px-2">
         {/* ── Row: Avatar + Content ── */}
@@ -315,7 +342,7 @@ export function ChatMessage({
             {/* Sender label */}
             <div className="mb-1.5 flex items-center gap-2">
               <span className="text-xs font-bold text-ink leading-none">
-                {isUser ? "You" : persona?.label.split(" —")[0] ?? "Tutor"}
+                {isUser ? "You" : (persona?.label.split(" —")[0] ?? "Tutor")}
               </span>
               {isStreaming && (
                 <span className="text-[10px] font-semibold text-accent animate-pulse">
@@ -335,6 +362,8 @@ export function ChatMessage({
                 isStreaming={isStreaming}
                 onSendMessage={onSendMessage}
                 isChatLoading={isChatLoading}
+                onSpeak={onSpeak}
+                isSpeaking={isSpeaking}
               />
             )}
 
@@ -351,11 +380,7 @@ export function ChatMessage({
                   />
                 )}
                 {!isUser && isLastAssistant && onRegenerate && (
-                  <ActionButton
-                    icon={RotateCcw}
-                    label="Regenerate"
-                    onClick={onRegenerate}
-                  />
+                  <ActionButton icon={RotateCcw} label="Regenerate" onClick={onRegenerate} />
                 )}
                 <CopyAction text={text} />
               </div>
