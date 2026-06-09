@@ -99,14 +99,14 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
   return (
     <div className="anim-fade-up flex flex-col gap-7">
       {shortMeanings.length > 0 && (
-        <div className="flex flex-wrap items-center gap-3 gap-y-2">
+        <div className="flex flex-wrap items-center gap-2">
           {shortMeanings.map((meaning, i) => (
             <span
               key={meaning}
               className={
                 i === 0
-                  ? "rounded-lg border-2 border-border bg-accent-light px-3.5 py-1 text-sm font-extrabold font-display text-ink whitespace-nowrap shadow-sm"
-                  : "text-sm text-text-secondary font-semibold leading-snug"
+                  ? "rounded-lg border border-accent/30 bg-accent-light px-3 py-1 text-sm font-extrabold text-accent-active whitespace-nowrap"
+                  : "rounded-lg border border-border/10 bg-bg-deep px-3 py-1 text-sm font-bold text-text-secondary whitespace-nowrap"
               }
             >
               {meaning}
