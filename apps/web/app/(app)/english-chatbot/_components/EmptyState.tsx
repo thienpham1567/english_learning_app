@@ -2,20 +2,15 @@
 
 import { Sparkles } from "lucide-react";
 import { motion } from "motion/react";
-import { PERSONAS, type Persona } from "@/lib/chat/personas";
+import { PERSONAS } from "@/lib/chat/personas";
 
 type Props = {
-  selectedPersonaId: string;
-  onSelectPersona: (id: string) => void;
   onSuggestedPrompt: (text: string) => void;
 };
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
 const itemVariants = {
@@ -27,19 +22,60 @@ const itemVariants = {
   },
 };
 
-const TOPIC_STARTERS = [
-  { emoji: "✈️", label: "Travel", prompt: "Let's practice travel English — I'm planning a trip!", desc: "Plan trips & navigate" },
-  { emoji: "💼", label: "Work", prompt: "Help me practice workplace conversations and emails", desc: "Office & meetings" },
-  { emoji: "☕", label: "Daily Life", prompt: "Let's have a casual chat about daily routines", desc: "Casual conversations" },
-  { emoji: "🎬", label: "Movies", prompt: "Let's discuss movies — recommend me something good!", desc: "Films & entertainment" },
-  { emoji: "📝", label: "Grammar", prompt: "Quiz me on common grammar mistakes", desc: "Rules & exercises" },
-  { emoji: "🌍", label: "Culture", prompt: "Tell me about cultural differences in English-speaking countries", desc: "Customs & traditions" },
-  { emoji: "🍜", label: "Food", prompt: "Let's talk about cooking and favorite foods", desc: "Recipes & dining" },
-  { emoji: "📰", label: "News", prompt: "Let's discuss a current event in English", desc: "Current events" },
+const SKILL_STARTERS = [
+  {
+    emoji: "🎧",
+    label: "Listening",
+    prompt: "Give me a TOEIC Part 3 listening drill with audio.",
+    desc: "Parts 1–4",
+  },
+  {
+    emoji: "📖",
+    label: "Reading",
+    prompt: "Drill me on TOEIC Part 5 grammar and vocabulary.",
+    desc: "Parts 5–7",
+  },
+  {
+    emoji: "🗣️",
+    label: "Speaking",
+    prompt: "Let's practice TOEIC Speaking — give me a describe-the-picture task.",
+    desc: "Respond by voice",
+  },
+  {
+    emoji: "✍️",
+    label: "Writing",
+    prompt: "Give me a TOEIC Writing opinion-essay prompt and score my answer.",
+    desc: "Email & essay",
+  },
+  {
+    emoji: "🧭",
+    label: "Diagnose",
+    prompt: "Run a quick 5-question check to estimate my TOEIC level.",
+    desc: "Find weak spots",
+  },
+  {
+    emoji: "📝",
+    label: "Mini-test",
+    prompt: "Give me a 10-question TOEIC mini-test across skills.",
+    desc: "Mixed practice",
+  },
+  {
+    emoji: "📊",
+    label: "Part 7",
+    prompt: "Give me a TOEIC Part 7 reading passage with 4 questions.",
+    desc: "Reading comp",
+  },
+  {
+    emoji: "⏱️",
+    label: "Strategy",
+    prompt: "Teach me time-management strategy for the Reading section.",
+    desc: "Test tactics",
+  },
 ];
 
-export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedPrompt }: Props) {
-  const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
+export function EmptyState({ onSuggestedPrompt }: Props) {
+  const coach = PERSONAS[0];
+  const Avatar = coach.avatar;
 
   return (
     <motion.div
@@ -51,12 +87,20 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
       {/* Badge */}
       <motion.div
         variants={itemVariants}
-        className="flex items-center gap-2 mb-3 text-accent bg-accent/5 px-3 py-1 rounded-lg border-2 border-accent/15"
+        className="flex items-center gap-2 mb-4 text-accent bg-accent/5 px-3 py-1 rounded-lg border-2 border-accent/15"
       >
         <Sparkles className="h-3.5 w-3.5 animate-pulse" />
         <span className="text-[10px] font-bold uppercase tracking-widest font-mono">
-          English Tutor
+          {coach.specialty}
         </span>
+      </motion.div>
+
+      {/* Coach avatar */}
+      <motion.div
+        variants={itemVariants}
+        className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-border shadow-sm mb-3"
+      >
+        <Avatar size={64} />
       </motion.div>
 
       {/* Heading */}
@@ -64,34 +108,22 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
         variants={itemVariants}
         className="font-display text-2xl md:text-3xl italic font-semibold text-ink tracking-wide"
       >
-        What would you like to practice?
+        Hi, I'm Aria — your TOEIC coach
       </motion.h2>
 
       <motion.p
         variants={itemVariants}
-        className="mt-2 max-w-sm text-sm text-text-secondary leading-relaxed"
+        className="mt-2 max-w-md text-sm text-text-secondary leading-relaxed"
       >
-        Pick a tutor and topic, or just start typing.
+        Tell me your target score and which skill to work on, or pick a starter below.
       </motion.p>
 
-      {/* ── Persona Row (compact horizontal) ── */}
+      {/* Suggested prompts */}
       <motion.div
         variants={itemVariants}
-        className="mt-6 flex w-full flex-wrap justify-center gap-2"
+        className="mt-6 flex flex-wrap justify-center gap-2 max-w-xl"
       >
-        {PERSONAS.map((persona) => (
-          <CompactPersonaCard
-            key={persona.id}
-            persona={persona}
-            isSelected={persona.id === selectedPersonaId}
-            onSelect={() => onSelectPersona(persona.id)}
-          />
-        ))}
-      </motion.div>
-
-      {/* ── Persona-specific prompts ── */}
-      <motion.div variants={itemVariants} className="mt-6 flex flex-wrap justify-center gap-2 max-w-xl">
-        {activePersona.suggestedPrompts.map((prompt) => (
+        {coach.suggestedPrompts.map((prompt) => (
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -104,65 +136,27 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
         ))}
       </motion.div>
 
-      {/* ── Topic grid ── */}
+      {/* Skill grid */}
       <motion.div variants={itemVariants} className="mt-6 w-full">
         <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted font-mono">
-          Topics
+          Skills & Drills
         </span>
         <div className="mt-2.5 grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {TOPIC_STARTERS.map((topic) => (
+          {SKILL_STARTERS.map((s) => (
             <motion.button
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
-              key={topic.label}
-              onClick={() => onSuggestedPrompt(topic.prompt)}
+              key={s.label}
+              onClick={() => onSuggestedPrompt(s.prompt)}
               className="flex flex-col items-center gap-1.5 rounded-xl border-2 border-border bg-chat-surface p-3 text-center hover:border-accent/40 hover:bg-accent/5 transition-all cursor-pointer group"
             >
-              <span className="text-lg group-hover:scale-110 transition-transform">{topic.emoji}</span>
-              <span className="text-[11px] font-bold text-ink">{topic.label}</span>
-              <span className="text-[10px] text-text-muted leading-tight">{topic.desc}</span>
+              <span className="text-lg group-hover:scale-110 transition-transform">{s.emoji}</span>
+              <span className="text-[11px] font-bold text-ink">{s.label}</span>
+              <span className="text-[10px] text-text-muted leading-tight">{s.desc}</span>
             </motion.button>
           ))}
         </div>
       </motion.div>
     </motion.div>
-  );
-}
-
-/* ── Compact Persona Card (horizontal pill) ── */
-function CompactPersonaCard({
-  persona,
-  isSelected,
-  onSelect,
-}: {
-  persona: Persona;
-  isSelected: boolean;
-  onSelect: () => void;
-}) {
-  const Avatar = persona.avatar;
-
-  return (
-    <motion.button
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onSelect}
-      className={`flex items-center gap-2.5 rounded-xl border-2 px-3.5 py-2.5 transition-all duration-200 cursor-pointer ${
-        isSelected
-          ? "border-accent bg-accent/5 ring-1 ring-accent/30 text-ink shadow-sm"
-          : "border-border bg-chat-surface text-text-secondary hover:border-border-strong hover:text-text-primary"
-      }`}
-    >
-      <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0 border-2 border-border">
-        <Avatar size={32} />
-      </div>
-      <div className="flex flex-col items-start text-left">
-        <span className="text-xs font-bold leading-tight">{persona.label.split(" —")[0]}</span>
-        <span className={`text-[9px] font-semibold mt-0.5 ${
-          isSelected ? "text-accent" : "text-text-muted"
-        }`}>
-          {persona.specialty}
-        </span>
-      </div>
-    </motion.button>
   );
 }

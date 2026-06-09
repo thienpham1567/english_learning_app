@@ -1,8 +1,7 @@
 "use client";
 
 import { AlertCircle, ArrowDown } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useChatConversations } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
+import { useEffect, useRef, useState } from "react";
 import { ChatHeader } from "@/app/(app)/english-chatbot/_components/ChatHeader";
 import { ChatInputBar } from "@/app/(app)/english-chatbot/_components/ChatInputBar";
 import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
@@ -53,8 +52,7 @@ interface ChatWindowProps {
 }
 
 export function ChatWindow({ conversationId }: ChatWindowProps) {
-  const { conversations } = useChatConversations();
-  const [selectedPersonaId, setSelectedPersonaId] = useState(DEFAULT_PERSONA_ID);
+  const [selectedPersonaId] = useState(DEFAULT_PERSONA_ID);
 
   // ── Voice hook (needs sendRef for auto-send in voice mode) ──
   const sendRef = useRef<(text?: string) => Promise<void>>(
@@ -96,38 +94,13 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     error: chat.error,
   });
 
-  // ── Sync persona from conversation on load ──
+  // ── Reset voice state when switching conversations ──
   useEffect(() => {
     if (!conversationId) {
-      setSelectedPersonaId(DEFAULT_PERSONA_ID);
       chatVoice.resetVoiceState();
-      return;
-    }
-    const conv = conversations.find((c) => c.id === conversationId);
-    if (conv?.personaId) {
-      setSelectedPersonaId(conv.personaId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
-
-  // ── Persona change handler ──
-  const handlePersonaChange = useCallback((personaId: string) => {
-    setSelectedPersonaId(personaId);
-    chat.setMessages((curr) => {
-      if (curr.length === 0) return curr;
-      const persona = PERSONAS.find((p) => p.id === personaId);
-      if (!persona) return curr;
-      return [
-        ...curr,
-        {
-          id: crypto.randomUUID(),
-          role: "divider" as const,
-          text: `Switched to ${persona.label}`,
-        },
-      ];
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
   const lastMsg = chat.messages.at(-1);
@@ -156,8 +129,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
           {!hasMessages && !chat.isLoadingMessages && (
             <EmptyState
-              selectedPersonaId={selectedPersonaId}
-              onSelectPersona={setSelectedPersonaId}
               onSuggestedPrompt={(text) => {
                 chat.setInput(text);
                 setTimeout(() => chat.send(text), 50);
@@ -255,10 +226,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
           {/* Session Report Card — appears after 5+ exchanges */}
           {!chat.isLoading && hasMessages && (
-            <SessionSummary
-              conversationId={conversationId}
-              messageCount={chat.messages.length}
-            />
+            <SessionSummary conversationId={conversationId} messageCount={chat.messages.length} />
           )}
 
           <div ref={scroll.bottomRef} />
@@ -281,8 +249,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         onSend={() => chat.send()}
         onStop={chat.stopStreaming}
         isLoading={chat.isLoading}
-        selectedPersonaId={selectedPersonaId}
-        onPersonaChange={handlePersonaChange}
         voice={chatVoice.voice}
         tts={chatVoice.tts}
         voiceMode={chatVoice.voiceMode}
