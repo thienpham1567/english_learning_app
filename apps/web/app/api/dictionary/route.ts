@@ -105,21 +105,57 @@ export async function POST(req: Request) {
     }
 
     const entryType = classifyDictionaryEntry(normalized);
-    const response = await openAiClient.responses.create({
-      model: openAiConfig.dictionaryModel,
-      instructions: buildDictionaryInstructions(entryType),
-      input: normalized,
-      text: {
-        format: {
-          type: "json_schema",
-          name: "dictionary_entry",
-          strict: true,
-          schema: toJSONSchema(VocabularySchema),
-        },
-      },
-    });
+    // We use json_object (not strict json_schema) so OpenRouter can route to the
+    // fastest provider for this model. The exact shape is enforced two ways:
+    // the JSON Schema is embedded in the prompt, and the result is Zod-validated.
+    const schemaJson = JSON.stringify(toJSONSchema(VocabularySchema));
+    const instructions = `${buildDictionaryInstructions(entryType)}
 
-    const parsed = VocabularySchema.parse(JSON.parse(response.output_text));
+Return a single JSON object that conforms exactly to this JSON Schema (same field names, nesting, and types):
+${schemaJson}`;
+
+    let parsed: Vocabulary | null = null;
+    for (let attempt = 0; attempt < 2 && !parsed; attempt++) {
+      const startedAt = Date.now();
+      const completion = await openAiClient.chat.completions.create({
+        model: openAiConfig.dictionaryModel,
+        messages: [
+          { role: "system", content: instructions },
+          { role: "user", content: normalized },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.2,
+        // OpenRouter-specific: prefer the highest-throughput provider for this model.
+        ...({ provider: { sort: "throughput" } } as object),
+      });
+      const durationMs = Date.now() - startedAt;
+
+      log.info(
+        {
+          query: cacheKey,
+          attempt: attempt + 1,
+          model: openAiConfig.dictionaryModel,
+          durationMs,
+          promptTokens: completion.usage?.prompt_tokens,
+          completionTokens: completion.usage?.completion_tokens,
+          totalTokens: completion.usage?.total_tokens,
+        },
+        "dictionary.llm.timing",
+      );
+
+      const content = completion.choices[0]?.message?.content;
+      if (!content) continue;
+
+      try {
+        parsed = VocabularySchema.parse(JSON.parse(content));
+      } catch (parseErr) {
+        log.warn({ err: parseErr, attempt: attempt + 1 }, "dictionary.parse.failed");
+      }
+    }
+
+    if (!parsed) {
+      throw new Error("Failed to produce a valid dictionary entry");
+    }
 
     if (parsed.isNotEnglish) {
       return NextResponse.json(
