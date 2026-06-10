@@ -125,8 +125,9 @@ export function FloatingDictionaryWidget() {
   };
 
   const handleSearchInModal = (word: string) => {
-    setModalOpen(false);
-    setTimeout(() => search(word), 100);
+    // Keep the modal open and let DictionaryResultCard's loading skeleton give
+    // feedback while the new word is fetched — closing it would blank the screen.
+    search(word);
   };
 
   const handleOpenFullPage = () => {
@@ -164,6 +165,9 @@ export function FloatingDictionaryWidget() {
                 onChange={(e) => {
                   setQuery(e.target.value);
                   setErrorMsg(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") handleCollapse();
                 }}
                 placeholder="Look up a word..."
                 className="border-none bg-transparent text-sm font-body text-ink w-[160px] outline-none shadow-none tracking-tight placeholder:text-text-muted"
@@ -243,12 +247,11 @@ export function FloatingDictionaryWidget() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                const q = (
-                  e.currentTarget.elements.namedItem("q") as HTMLInputElement
-                )?.value?.trim();
+                const input = e.currentTarget.elements.namedItem("q") as HTMLInputElement | null;
+                const q = input?.value?.trim();
                 if (q) {
-                  setModalOpen(false);
-                  setTimeout(() => search(q), 80);
+                  input?.blur();
+                  search(q);
                 }
               }}
               className="flex items-center gap-2 flex-1 min-w-0"

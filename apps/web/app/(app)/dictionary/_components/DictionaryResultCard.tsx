@@ -265,12 +265,20 @@ export function DictionaryResultCard({
 
       {/* ── Sense tabs ── */}
       <div className="mt-6">
-        <div className="flex items-center gap-2 border-b-2 border-border pb-3 mb-5 overflow-x-auto">
+        <div
+          role="tablist"
+          aria-label="Word senses"
+          className="flex items-center gap-2 border-b-2 border-border pb-3 mb-5 overflow-x-auto"
+        >
           {vocabulary.senses.map((sense) => (
             <button
               key={sense.id}
               type="button"
+              role="tab"
+              id={`sense-tab-${sense.id}`}
+              aria-controls={`sense-panel-${sense.id}`}
               aria-selected={activeKey === sense.id}
+              tabIndex={activeKey === sense.id ? 0 : -1}
               onClick={() => setActiveKey(sense.id)}
               className={`shrink-0 rounded-lg px-4 py-1.5 text-sm font-bold border-2 transition-all duration-200 ${
                 activeKey === sense.id
@@ -283,12 +291,19 @@ export function DictionaryResultCard({
           ))}
         </div>
         {activeSense && (
-          <SensePanel
-            key={activeSense.id}
-            sense={activeSense}
-            headword={vocabulary.headword}
-            onSearch={onSearch}
-          />
+          <div
+            role="tabpanel"
+            id={`sense-panel-${activeSense.id}`}
+            aria-labelledby={`sense-tab-${activeSense.id}`}
+            tabIndex={0}
+          >
+            <SensePanel
+              key={activeSense.id}
+              sense={activeSense}
+              headword={vocabulary.headword}
+              onSearch={onSearch}
+            />
+          </div>
         )}
       </div>
     </div>
