@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Loader2, Mic, MicOff, Send, Square, Volume2 } from "lucide-react";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import type { useVoiceInput } from "@/hooks/useVoiceInput";
 
@@ -64,9 +64,11 @@ export function ChatInputBar({
   );
 
   // Reset textarea height when input is cleared externally (after send)
-  if (!input && textareaRef.current) {
-    textareaRef.current.style.height = "auto";
-  }
+  useEffect(() => {
+    if (!input && textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+  }, [input]);
 
   const hasInput = input.trim().length > 0;
 
@@ -87,7 +89,6 @@ export function ChatInputBar({
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Message..."
-                disabled={isLoading}
                 rows={1}
                 className="flex-1 min-h-[42px] max-h-[200px] resize-none border-0 bg-transparent py-2 px-1 text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none"
               />

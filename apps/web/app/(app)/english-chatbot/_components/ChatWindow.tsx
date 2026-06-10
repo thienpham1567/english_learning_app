@@ -138,6 +138,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
           {hasMessages && (
             <div
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions text"
               className="flex flex-col transition-opacity duration-200"
               style={{ opacity: chat.isLoadingMessages ? 0.4 : 1 }}
             >

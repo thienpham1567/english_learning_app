@@ -62,10 +62,16 @@ export function useChatMessages({
   const [error, setError] = useState<string | null>(null);
 
   // ── Keep module-level refs pointing to the CURRENT component's setters ──
-  // This ensures streaming writes survive router.replace() remounts
-  _setMessagesFn = setMessages;
-  _setIsLoadingFn = setIsLoading;
-  _setErrorFn = setError;
+  // Assigned in an effect (NOT during render) so render stays pure. useState
+  // setters are stable, so this effectively runs on mount; after a
+  // router.replace() remount the new instance repoints these refs, letting the
+  // in-flight streaming loop keep writing to the live component. Until the
+  // effect runs, every consumer falls back to the local setter (`_setX ?? setX`).
+  useEffect(() => {
+    _setMessagesFn = setMessages;
+    _setIsLoadingFn = setIsLoading;
+    _setErrorFn = setError;
+  }, []);
 
   const abortCtrlRef = useRef<AbortController | null>(null);
   const lastSendRef = useRef<string | null>(null);
@@ -135,9 +141,13 @@ export function useChatMessages({
 
   // ── Send message ──
   const send = useCallback(
-    async (text?: string) => {
+    async (text?: string, overrideMessages?: PageMessage[]) => {
       const t = (text ?? input).trim();
       if (!t || isLoading) return;
+
+      // History the new turn is appended to. `regenerate` passes an explicit
+      // sliced array; without this, send() would read a stale `messages` closure.
+      const baseMessages = overrideMessages ?? messages;
 
       // Set module-level guard BEFORE any async work
       _isSending = true;
@@ -179,14 +189,14 @@ export function useChatMessages({
       };
       const assistantMessageId = crypto.randomUUID();
 
-      const requestMessages = [...messages, userMessage].filter(
+      const requestMessages = [...baseMessages, userMessage].filter(
         (m): m is AppChatMessage => m.role === "user" || m.role === "assistant",
       );
-      const isFirstExchange = messages.length === 0;
+      const isFirstExchange = baseMessages.length === 0;
 
       // Build the new messages array including user + assistant placeholder
       const newMessages: PageMessage[] = [
-        ...messages,
+        ...baseMessages,
         userMessage,
         { id: assistantMessageId, role: "assistant" as const, text: "" },
       ];
@@ -291,8 +301,10 @@ export function useChatMessages({
     if (lastUserIdx < 0) return;
     const last = messages[lastUserIdx];
     if (last.role !== "user") return;
-    setMessages((curr) => curr.slice(0, lastUserIdx));
-    void send(last.text);
+    // Drop the last user turn and everything after it, then re-send that text
+    // against the trimmed history (passed explicitly to avoid a stale closure).
+    const base = messages.slice(0, lastUserIdx);
+    void send(last.text, base);
   }, [isLoading, messages, send]);
 
   const retryLast = useCallback(() => {
