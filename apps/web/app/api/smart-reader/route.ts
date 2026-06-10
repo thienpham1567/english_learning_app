@@ -34,6 +34,22 @@ Given an English text, respond with a JSON object containing:
 
 5. "readingTips": One brief tip in Vietnamese about a pattern or technique from this text that helps reading comprehension.
 
+6. "grammarAnalysis": A grammar analysis object with:
+   - "sentenceStructure": overall sentence type description in Vietnamese (e.g. "Câu phức với mệnh đề phụ", "Câu ghép")
+   - "tenses": array of tenses found. Each item has:
+     - "tense": tense name in English (e.g. "Present Perfect", "Past Simple")
+     - "example": the exact words from the text using this tense
+     - "explanation": brief Vietnamese explanation of WHY this tense is used here
+   - "clauses": array of clauses in the sentence. Each item has:
+     - "text": the clause text (exact from the original)
+     - "type": clause type in English ("main clause", "subordinate clause", "relative clause", "adverbial clause", "noun clause", etc.)
+     - "connector": the connecting word/phrase if any (e.g. "because", "which", "that")
+   - "keyPatterns": array of notable grammar patterns. Each item has:
+     - "pattern": grammar pattern name in English (e.g. "Passive Voice", "Conditional Type 2", "Inversion")
+     - "inText": the exact part of the text showing this pattern
+     - "usage": Vietnamese explanation of this pattern and when to use it
+   Keep tenses to the most important ones found. Keep clauses accurate. Keep keyPatterns to 1-3 most notable patterns.
+
 Rules:
 - All Vietnamese output must be natural, colloquial Vietnamese — not robotic translation
 - Keep breakdown to 3-6 most important phrases (not every word)
@@ -141,7 +157,7 @@ export async function POST(request: Request) {
         { role: "user", content: text },
       ],
       temperature: 0.3,
-      max_tokens: 2000,
+      max_tokens: 2500,
     });
 
     const raw = completion.choices[0]?.message?.content;
@@ -167,6 +183,27 @@ export async function POST(request: Request) {
       vocabulary: Array.isArray(parsed.vocabulary) ? parsed.vocabulary : [],
       difficultyLevel: (parsed.difficultyLevel as string) || "intermediate",
       readingTips: parsed.readingTips || "",
+      grammarAnalysis: parsed.grammarAnalysis
+        ? {
+            sentenceStructure:
+              (parsed.grammarAnalysis as Record<string, unknown>).sentenceStructure || "",
+            tenses: Array.isArray(
+              (parsed.grammarAnalysis as Record<string, unknown>).tenses,
+            )
+              ? (parsed.grammarAnalysis as Record<string, unknown>).tenses
+              : [],
+            clauses: Array.isArray(
+              (parsed.grammarAnalysis as Record<string, unknown>).clauses,
+            )
+              ? (parsed.grammarAnalysis as Record<string, unknown>).clauses
+              : [],
+            keyPatterns: Array.isArray(
+              (parsed.grammarAnalysis as Record<string, unknown>).keyPatterns,
+            )
+              ? (parsed.grammarAnalysis as Record<string, unknown>).keyPatterns
+              : [],
+          }
+        : null,
     };
 
     // Save to DB with hash for future cache hits

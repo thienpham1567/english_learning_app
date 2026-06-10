@@ -2,13 +2,17 @@
 
 import {
   BookOpenCheck,
+  BrainCircuit,
   Check,
   ChevronDown,
   ChevronUp,
   ClipboardCopy,
   FileText,
+  GitBranch,
   Lightbulb,
   Ruler,
+  Sparkles,
+  Timer,
   Volume2,
 } from "lucide-react";
 import * as m from "motion/react-client";
@@ -33,6 +37,7 @@ const DIFFICULTY_CONFIG = {
 export function SmartReaderResult({ result, tts, sourceText }: Props) {
   const [expandedBreakdown, setExpandedBreakdown] = useState(true);
   const [expandedVocab, setExpandedVocab] = useState(true);
+  const [expandedGrammar, setExpandedGrammar] = useState(true);
   const [copied, setCopied] = useState(false);
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
 
@@ -211,6 +216,152 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                   </div>
                 </m.div>
               ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Grammar Analysis ── */}
+      {result.grammarAnalysis && (
+        <div className="rounded-2xl border-2 border-border bg-surface shadow-sm overflow-hidden">
+          <button
+            onClick={() => setExpandedGrammar(!expandedGrammar)}
+            className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-surface-hover/30 transition-colors cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <BrainCircuit className="h-4 w-4 text-accent shrink-0" />
+              <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-mono">
+                Phân tích Grammar
+              </span>
+              {result.grammarAnalysis.sentenceStructure && (
+                <span className="text-[10px] font-bold text-accent bg-accent/10 px-1.5 py-0.5 rounded-md max-w-[180px] truncate">
+                  {result.grammarAnalysis.sentenceStructure}
+                </span>
+              )}
+            </div>
+            {expandedGrammar ? (
+              <ChevronUp className="h-4 w-4 text-text-muted" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-text-muted" />
+            )}
+          </button>
+
+          {expandedGrammar && (
+            <div className="border-t border-border/50 px-5 py-4 space-y-5">
+              {/* Tenses */}
+              {result.grammarAnalysis.tenses.length > 0 && (
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <Timer className="h-3.5 w-3.5 text-text-muted" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-text-muted">
+                      Thì (Tenses)
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {result.grammarAnalysis.tenses.map((t, i) => (
+                      <m.div
+                        key={i}
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="group rounded-xl border-2 border-border p-3 hover:border-accent/30 transition-colors"
+                      >
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="text-[10px] font-bold text-white bg-accent px-2 py-0.5 rounded-md">
+                            {t.tense}
+                          </span>
+                        </div>
+                        <p className="text-xs text-ink font-medium italic border-l-2 border-accent/30 pl-2 mb-1.5">
+                          "{t.example}"
+                        </p>
+                        <p className="text-[11px] text-text-secondary leading-relaxed">
+                          {t.explanation}
+                        </p>
+                      </m.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Clauses */}
+              {result.grammarAnalysis.clauses.length > 0 && (
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <GitBranch className="h-3.5 w-3.5 text-text-muted" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-text-muted">
+                      Mệnh đề (Clauses)
+                    </span>
+                  </div>
+                  <div className="space-y-1.5">
+                    {result.grammarAnalysis.clauses.map((c, i) => (
+                      <m.div
+                        key={i}
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.04 }}
+                        className="flex items-start gap-2 py-2 px-3 rounded-xl border-2 border-border bg-bg-deep/30"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-ink leading-relaxed">
+                            "{c.text}"
+                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span
+                              className={`text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md border ${
+                                c.type === "main clause"
+                                  ? "text-success bg-success/10 border-success/30"
+                                  : c.type === "relative clause"
+                                    ? "text-accent bg-accent/10 border-accent/30"
+                                    : "text-warning bg-warning/10 border-warning/30"
+                              }`}
+                            >
+                              {c.type}
+                            </span>
+                            {c.connector && (
+                              <span className="text-[9px] font-bold text-text-muted bg-surface px-1.5 py-0.5 rounded-md border border-border">
+                                connector: <span className="text-accent">{c.connector}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </m.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Key Patterns */}
+              {result.grammarAnalysis.keyPatterns.length > 0 && (
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles className="h-3.5 w-3.5 text-text-muted" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-text-muted">
+                      Cấu trúc nổi bật (Key Patterns)
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {result.grammarAnalysis.keyPatterns.map((p, i) => (
+                      <m.div
+                        key={i}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.06 }}
+                        className="rounded-xl border-2 border-accent/20 bg-accent/5 p-3 space-y-1.5"
+                      >
+                        <span className="text-[10px] font-bold text-accent bg-accent/15 px-2 py-0.5 rounded-md">
+                          {p.pattern}
+                        </span>
+                        <p className="text-xs text-ink font-medium italic border-l-2 border-accent/30 pl-2">
+                          "{p.inText}"
+                        </p>
+                        <p className="text-[11px] text-text-secondary leading-relaxed">
+                          {p.usage}
+                        </p>
+                      </m.div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

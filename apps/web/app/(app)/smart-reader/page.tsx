@@ -24,6 +24,24 @@ export type SmartReaderResponse = {
   }>;
   difficultyLevel: "beginner" | "intermediate" | "advanced";
   readingTips?: string;
+  grammarAnalysis?: {
+    sentenceStructure: string;
+    tenses: Array<{
+      tense: string;
+      example: string;
+      explanation: string;
+    }>;
+    clauses: Array<{
+      text: string;
+      type: string;
+      connector?: string;
+    }>;
+    keyPatterns: Array<{
+      pattern: string;
+      inText: string;
+      usage: string;
+    }>;
+  } | null;
 };
 
 type HistoryEntry = {
