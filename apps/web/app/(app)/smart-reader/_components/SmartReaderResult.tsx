@@ -77,7 +77,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
     if (result.vocabulary.length) {
       lines.push("💡 Từ vựng quan trọng:");
       result.vocabulary.forEach((v) => {
-        lines.push(`  • ${v.word} (${v.pos}) — ${v.meaning}`);
+        lines.push(`  • ${v.word}${v.ipa ? ` ${v.ipa}` : ""} (${v.pos}) — ${v.meaning}`);
         if (v.example) lines.push(`    Ex: "${v.example}"`);
       });
       lines.push("");
@@ -408,6 +408,9 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                         <span className="text-sm font-bold text-ink group-hover:text-accent transition-colors">
                           {item.word}
                         </span>
+                        {item.ipa && (
+                          <span className="text-[10px] text-text-muted font-mono">{item.ipa}</span>
+                        )}
                         <span className="text-[9px] font-bold text-text-muted bg-bg-deep px-1.5 py-0.5 rounded-md uppercase font-mono">
                           {item.pos}
                         </span>

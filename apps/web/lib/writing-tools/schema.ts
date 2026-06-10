@@ -31,6 +31,8 @@ export const GrammarCheckResponseSchema = z.object({
     spelling: z.number(),
     style: z.number(),
   }),
+  /** Set (in Vietnamese) when the input is not valid English to check. */
+  notice: z.string().optional(),
 });
 
 export type GrammarCheckRequest = z.infer<typeof GrammarCheckRequestSchema>;
@@ -73,6 +75,8 @@ export const ParaphraseChangeSchema = z.object({
 export const ParaphraseResponseSchema = z.object({
   result: z.string(),
   changes: z.array(ParaphraseChangeSchema),
+  /** Set (in Vietnamese) when the input is not valid English to paraphrase. */
+  notice: z.string().optional(),
 });
 
 export type ParaphraseRequest = z.infer<typeof ParaphraseRequestSchema>;

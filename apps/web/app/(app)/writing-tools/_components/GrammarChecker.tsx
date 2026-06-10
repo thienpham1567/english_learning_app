@@ -200,12 +200,24 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
           {/* Rule tag */}
           <span className="text-[11px] text-text-secondary italic">Rule: {error.rule}</span>
 
-          {/* Explanation */}
+          {/* Explanation — Vietnamese first (primary for learners), English below */}
           <div className="py-2.5 px-3.5 rounded-lg bg-surface-alt border-2 border-border text-[13px] leading-relaxed">
-            <span className="font-bold text-text-secondary text-[11px] uppercase tracking-wide">
-              Explanation:
-            </span>
-            <p className="text-text-primary mt-1 mb-0">{error.explanationEn}</p>
+            {error.explanationVi && (
+              <>
+                <span className="font-bold text-text-secondary text-[11px] uppercase tracking-wide">
+                  Giải thích:
+                </span>
+                <p className="text-text-primary mt-1 mb-0">{error.explanationVi}</p>
+              </>
+            )}
+            {error.explanationEn && (
+              <>
+                <span className="font-bold text-text-muted text-[11px] uppercase tracking-wide mt-2 block">
+                  Explanation (EN):
+                </span>
+                <p className="text-text-secondary mt-1 mb-0">{error.explanationEn}</p>
+              </>
+            )}
           </div>
 
           {/* Apply button */}
@@ -261,19 +273,32 @@ export function GrammarChecker() {
 
   const applyFix = useCallback(
     (err: GrammarError) => {
-      const before = text.slice(0, err.offset);
-      const after = text.slice(err.offset + err.length);
+      // The model's offset/length are unreliable — trust err.original and locate
+      // it in the text, falling back to the reported offset only if it matches.
+      let start = -1;
+      if (err.original) {
+        const atOffset = text.slice(err.offset, err.offset + err.original.length);
+        start = atOffset === err.original ? err.offset : text.indexOf(err.original);
+      }
+      if (start === -1) {
+        // Can't safely locate the span — skip rather than corrupt the text.
+        setError("Could not apply this suggestion automatically. Please edit manually.");
+        return;
+      }
+      const matchedLength = err.original ? err.original.length : err.length;
+      const before = text.slice(0, start);
+      const after = text.slice(start + matchedLength);
       const newText = before + err.correction + after;
       setText(newText);
 
       // Recalculate remaining errors with adjusted offsets
       if (result) {
-        const lengthDiff = err.correction.length - err.original.length;
+        const lengthDiff = err.correction.length - matchedLength;
         const updatedErrors = result.errors
           .filter((e) => e !== err)
           .map((e) => ({
             ...e,
-            offset: e.offset > err.offset ? e.offset + lengthDiff : e.offset,
+            offset: e.offset > start ? e.offset + lengthDiff : e.offset,
           }));
         setResult({
           ...result,
@@ -423,8 +448,20 @@ export function GrammarChecker() {
         </Card>
       )}
 
+      {/* Notice — input is not valid English */}
+      {result?.notice && (
+        <Card
+          shadowSize="none"
+          size="sm"
+          className="bg-warning/10 border-warning/30 text-text-primary text-[13px] font-bold flex items-center gap-2"
+        >
+          <AlertTriangle size={16} className="text-warning shrink-0" />
+          {result.notice}
+        </Card>
+      )}
+
       {/* Results */}
-      {result && (
+      {result && !result.notice && (
         <div className="flex flex-col gap-3">
           {/* Score + Stats dashboard */}
           <Card

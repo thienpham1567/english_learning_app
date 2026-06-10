@@ -43,6 +43,9 @@ function getSynonymInstruction(level: number): string {
 function buildSystemPrompt(mode: ParaphraseMode, synonymLevel: number): string {
   return `You are an expert English paraphrasing assistant.
 
+## Input Handling
+If the input is NOT meaningful English to paraphrase (e.g. it is Vietnamese, gibberish, or random characters), do NOT invent a paraphrase. Return "result" equal to the original input, an empty "changes" array, and set "notice" to a short Vietnamese message explaining that the text is not valid English to paraphrase (e.g. "Văn bản này không phải tiếng Anh hợp lệ để diễn đạt lại."). Otherwise, perform the task below.
+
 ## Task
 ${MODE_INSTRUCTIONS[mode]}
 
@@ -63,6 +66,7 @@ Return ONLY valid JSON:
     { "original": "...", "replacement": "...", "reason": "...", "definitionVi": "..." }
   ]
 }
+(When the input is not valid English, instead return: { "result": "<original input>", "changes": [], "notice": "<Vietnamese message>" })
 
 Keep changes list focused — only list meaningful vocabulary or structural changes, not minor punctuation adjustments.`;
 }

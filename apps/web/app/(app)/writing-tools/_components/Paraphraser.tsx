@@ -2,6 +2,7 @@
 
 import { diffWords } from "diff";
 import {
+  AlertTriangle,
   ArrowLeftRight,
   BookOpen,
   Briefcase,
@@ -456,8 +457,20 @@ export function Paraphraser() {
         </Card>
       )}
 
+      {/* Notice — input is not valid English */}
+      {result?.notice && (
+        <Card
+          shadowSize="none"
+          size="sm"
+          className="bg-warning/10 border-warning/30 text-text-primary text-[13px] font-bold flex items-center gap-2"
+        >
+          <AlertTriangle size={16} className="text-warning shrink-0" />
+          {result.notice}
+        </Card>
+      )}
+
       {/* Changes detail */}
-      {result && <ChangesPanel changes={result.changes} />}
+      {result && !result.notice && <ChangesPanel changes={result.changes} />}
     </div>
   );
 }

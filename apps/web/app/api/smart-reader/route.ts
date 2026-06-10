@@ -14,46 +14,50 @@ const DAILY_RATE_LIMIT = 30;
 
 const SYSTEM_PROMPT = `You are a premium English-to-Vietnamese reading comprehension assistant. Your job is to help Vietnamese learners deeply understand English text.
 
-Given an English text, respond with a JSON object containing:
+INPUT HANDLING (check first):
+- If the input is NOT meaningful English (e.g. it is Vietnamese, gibberish, random characters, or only a fragment that cannot be understood), do NOT invent an analysis. Return JSON where "naturalTranslation" politely states in Vietnamese that the text is not valid English to analyze (e.g. "Văn bản này không phải tiếng Anh hợp lệ để phân tích."), set "difficultyLevel" to "beginner", and return empty arrays for breakdown/vocabulary, an empty readingTips, and null grammarAnalysis.
+- Otherwise, analyze the English text and respond with a JSON object containing:
 
-1. "naturalTranslation": A natural, fluent Vietnamese translation. NOT word-by-word. Translate as a native Vietnamese speaker would express the same idea. Use natural Vietnamese word order and phrasing.
+1. "naturalTranslation": A natural, fluent Vietnamese translation of the ENTIRE text. NOT word-by-word, but COMPLETE — do not summarize, shorten, or omit any idea. Translate as a native Vietnamese speaker would express the same meaning, using natural Vietnamese word order and phrasing.
 
 2. "breakdown": An array of key phrases/patterns worth explaining. Each item has:
-   - "phrase": the English phrase (exact from the text)
+   - "phrase": the English phrase (exact substring from the text)
    - "meaning": Vietnamese meaning
    - "note": grammar pattern, formality level, or usage tip (in Vietnamese)
    Focus on: idioms, phrasal verbs, complex structures, formal/informal markers, connectors.
 
 3. "vocabulary": An array of important words. Each item has:
-   - "word": the English word
+   - "word": the English word (base/dictionary form)
+   - "ipa": IPA pronunciation including slashes, e.g. "/əˈbʌv/"
    - "pos": part of speech (noun, verb, adj, adv, etc.)
    - "meaning": Vietnamese meaning
-   - "example": a simple example sentence using this word
+   - "example": a simple English example sentence using this word
 
-4. "difficultyLevel": "beginner" | "intermediate" | "advanced" based on the text complexity
+4. "difficultyLevel": "beginner" | "intermediate" | "advanced" — map to CEFR: beginner = A1–A2, intermediate = B1–B2, advanced = C1–C2. Judge by vocabulary rarity, sentence complexity, and idiomatic density.
 
 5. "readingTips": One brief tip in Vietnamese about a pattern or technique from this text that helps reading comprehension.
 
-6. "grammarAnalysis": A grammar analysis object with:
+6. "grammarAnalysis": A grammar analysis object. If the text contains multiple sentences, pick the 1–2 most complex/representative sentences and analyze those (do not try to cover every sentence). It has:
    - "sentenceStructure": overall sentence type description in Vietnamese (e.g. "Câu phức với mệnh đề phụ", "Câu ghép")
    - "tenses": array of tenses found. Each item has:
      - "tense": tense name in English (e.g. "Present Perfect", "Past Simple")
      - "example": the exact words from the text using this tense
      - "explanation": brief Vietnamese explanation of WHY this tense is used here
-   - "clauses": array of clauses in the sentence. Each item has:
-     - "text": the clause text (exact from the original)
+   - "clauses": array of clauses in the analyzed sentence(s). Each item has:
+     - "text": the clause text (exact substring from the original)
      - "type": clause type in English ("main clause", "subordinate clause", "relative clause", "adverbial clause", "noun clause", etc.)
      - "connector": the connecting word/phrase if any (e.g. "because", "which", "that")
    - "keyPatterns": array of notable grammar patterns. Each item has:
      - "pattern": grammar pattern name in English (e.g. "Passive Voice", "Conditional Type 2", "Inversion")
      - "inText": the exact part of the text showing this pattern
      - "usage": Vietnamese explanation of this pattern and when to use it
-   Keep tenses to the most important ones found. Keep clauses accurate. Keep keyPatterns to 1-3 most notable patterns.
+   Keep tenses to the most important ones found. Keep clauses accurate. Keep keyPatterns to 1–3 most notable patterns.
 
 Rules:
 - All Vietnamese output must be natural, colloquial Vietnamese — not robotic translation
-- Keep breakdown to 3-6 most important phrases (not every word)
-- Keep vocabulary to 4-8 most useful words
+- Scale quantity to text length: do NOT pad. A single short sentence may have only 1–3 vocabulary items; a long passage up to 8.
+- Keep breakdown to the 3–6 most important phrases (not every phrase), fewer for short text
+- Keep vocabulary to the 4–8 most useful words, fewer for short text
 - Respond ONLY with valid JSON, no markdown, no explanation outside JSON`;
 
 /** Simple SHA-256 hash using Web Crypto API */
@@ -156,8 +160,9 @@ export async function POST(request: Request) {
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: text },
       ],
+      response_format: { type: "json_object" },
       temperature: 0.3,
-      max_tokens: 2500,
+      max_tokens: 4000,
     });
 
     const raw = completion.choices[0]?.message?.content;

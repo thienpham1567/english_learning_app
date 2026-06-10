@@ -18,6 +18,7 @@ export type SmartReaderResponse = {
   }>;
   vocabulary: Array<{
     word: string;
+    ipa?: string;
     pos: string;
     meaning: string;
     example?: string;
