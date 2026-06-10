@@ -238,7 +238,10 @@ export function QuestionRunner({
               className="text-[11px] font-black font-mono rounded-md"
               style={{
                 padding: "2px 8px",
-                background: remainingSec < 60 ? "color-mix(in srgb, var(--error) 8%, transparent)" : "var(--surface)",
+                background:
+                  remainingSec < 60
+                    ? "color-mix(in srgb, var(--error) 8%, transparent)"
+                    : "var(--surface)",
                 color: remainingSec < 60 ? "var(--error)" : "var(--text-secondary)",
                 border: `1px solid ${remainingSec < 60 ? "color-mix(in srgb, var(--error) 20%, transparent)" : "var(--border)"}`,
               }}
@@ -458,7 +461,9 @@ export function QuestionRunner({
           style={{
             display: "inline-flex",
             border: "1.5px solid var(--border)",
-            background: isFlagged ? "color-mix(in srgb, var(--error) 8%, transparent)" : "var(--surface)",
+            background: isFlagged
+              ? "color-mix(in srgb, var(--error) 8%, transparent)"
+              : "var(--surface)",
             color: isFlagged ? "var(--error)" : "var(--text-secondary)",
             cursor: attemptId ? "pointer" : "not-allowed",
             transition: "all 0.15s",

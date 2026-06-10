@@ -18,13 +18,31 @@ export const MINIMAL_PAIRS: MinimalPair[] = [
   { phonemeA: "ɪ", phonemeB: "iː", wordA: "ship", wordB: "sheep", hint: "Short vs long /i/" },
   { phonemeA: "ʊ", phonemeB: "uː", wordA: "pull", wordB: "pool", hint: "Short vs long /u/" },
   { phonemeA: "e", phonemeB: "æ", wordA: "pen", wordB: "pan", hint: "Mid vs low front vowel" },
-  { phonemeA: "ʌ", phonemeB: "ɑː", wordA: "cut", wordB: "cart", hint: "Short central vs long back" },
+  {
+    phonemeA: "ʌ",
+    phonemeB: "ɑː",
+    wordA: "cut",
+    wordB: "cart",
+    hint: "Short central vs long back",
+  },
   { phonemeA: "ɒ", phonemeB: "ɔː", wordA: "cot", wordB: "caught", hint: "Short vs long rounded" },
   { phonemeA: "æ", phonemeB: "ʌ", wordA: "bat", wordB: "but", hint: "Front vs central" },
-  { phonemeA: "ɜː", phonemeB: "ɔː", wordA: "bird", wordB: "board", hint: "Central vs back rounded" },
+  {
+    phonemeA: "ɜː",
+    phonemeB: "ɔː",
+    wordA: "bird",
+    wordB: "board",
+    hint: "Central vs back rounded",
+  },
 
   // Diphthongs
-  { phonemeA: "eɪ", phonemeB: "aɪ", wordA: "late", wordB: "light", hint: "Starting height differs" },
+  {
+    phonemeA: "eɪ",
+    phonemeB: "aɪ",
+    wordA: "late",
+    wordB: "light",
+    hint: "Starting height differs",
+  },
   { phonemeA: "aʊ", phonemeB: "əʊ", wordA: "found", wordB: "phone", hint: "Open vs central start" },
 
   // Consonants — Vietnamese speakers' top confusions

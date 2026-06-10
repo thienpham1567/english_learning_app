@@ -2,9 +2,9 @@ import { db, toeicDictationItem } from "@repo/database";
 import { asc } from "drizzle-orm";
 import { ArrowRight, Headphones } from "lucide-react";
 import Link from "next/link";
-import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Card } from "@/components/ui/card";
+import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 
 const LEVEL_META: Record<
   string,

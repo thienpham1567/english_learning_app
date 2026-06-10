@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatePresence } from "motion/react";
 import { ArrowLeft, BookOpenText, Clock, Globe, Lightbulb, Loader2, Volume2 } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -46,7 +46,11 @@ const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: str
     color: "var(--warning)",
     border: "color-mix(in srgb, var(--warning) 20%, transparent)",
   },
-  C1: { bg: "color-mix(in srgb, var(--error) 8%, transparent)", color: "var(--error)", border: "color-mix(in srgb, var(--error) 20%, transparent)" },
+  C1: {
+    bg: "color-mix(in srgb, var(--error) 8%, transparent)",
+    color: "var(--error)",
+    border: "color-mix(in srgb, var(--error) 20%, transparent)",
+  },
 };
 
 export default function ArticleReaderPage() {

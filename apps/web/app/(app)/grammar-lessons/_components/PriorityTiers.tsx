@@ -5,15 +5,15 @@ import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   type GrammarPoint,
-  type PriorityTier,
   getTierTopicIds,
   PRIORITY_TIERS,
+  type PriorityTier,
 } from "@/lib/grammar-lessons/priority-roadmap";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import { GRAMMAR_TOPIC_CATEGORIES, type GrammarTopic } from "@/lib/grammar-lessons/topics";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export type TopicSelection = {
   id: string;

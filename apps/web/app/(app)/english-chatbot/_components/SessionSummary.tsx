@@ -13,8 +13,8 @@ import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Sparkline } from "@/components/charts/Sparkline";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 interface SessionAnalysis {
@@ -127,7 +127,11 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
         : "var(--text-muted)";
 
   const fluencyIcon =
-    analysis?.fluencyTrend === "improving" ? "↑" : analysis?.fluencyTrend === "declining" ? "↓" : "→";
+    analysis?.fluencyTrend === "improving"
+      ? "↑"
+      : analysis?.fluencyTrend === "declining"
+        ? "↓"
+        : "→";
 
   if (dismissed || !analysis) return null;
 
@@ -163,11 +167,7 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
                   <ScoreRing score={analysis.grammarScore} label="Grammar" color="var(--accent)" />
                 </div>
                 <div className="relative">
-                  <ScoreRing
-                    score={analysis.fluencyScore}
-                    label="Fluency"
-                    color={fluencyColor}
-                  />
+                  <ScoreRing score={analysis.fluencyScore} label="Fluency" color={fluencyColor} />
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
                   <div className="w-14 h-14 rounded-xl border-2 border-accent bg-accent/10 grid place-items-center">

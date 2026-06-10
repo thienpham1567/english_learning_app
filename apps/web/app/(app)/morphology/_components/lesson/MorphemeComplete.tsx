@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, RefreshCw, Sparkles, Trophy } from "lucide-react";
+import { ArrowLeft, GraduationCap, RefreshCw, Sparkles, Trophy } from "lucide-react";
 import * as m from "motion/react-client";
 import { Card } from "@/components/ui/card";
 
@@ -22,11 +22,21 @@ function scoreColor(pct: number): string {
   return "var(--error)";
 }
 
-function medal(pct: number): string {
-  if (pct >= 90) return "🥇";
-  if (pct >= 70) return "🥈";
-  if (pct >= 50) return "🥉";
-  return "🎓";
+function renderMedal(pct: number) {
+  if (pct >= 90) {
+    return <Trophy className="h-6 w-6 text-xp fill-xp inline-block mr-2 align-text-bottom" />;
+  }
+  if (pct >= 70) {
+    return (
+      <Trophy className="h-6 w-6 text-secondary fill-secondary inline-block mr-2 align-text-bottom" />
+    );
+  }
+  if (pct >= 50) {
+    return (
+      <Trophy className="h-6 w-6 text-tertiary fill-tertiary inline-block mr-2 align-text-bottom" />
+    );
+  }
+  return <GraduationCap className="h-6 w-6 text-text-muted inline-block mr-2 align-text-bottom" />;
 }
 
 /** Completion summary for a morpheme lesson: score, XP, and next actions. */
@@ -55,8 +65,8 @@ export function MorphemeComplete({
           </m.div>
         </div>
 
-        <h2 className="mb-1 text-2xl font-black text-text-primary font-display">
-          {medal(scorePct)} {morpheme} mastered!
+        <h2 className="mb-1 text-2xl font-black text-text-primary font-display flex items-center justify-center">
+          {renderMedal(scorePct)} {morpheme} mastered!
         </h2>
 
         <div

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { getAllUnits, CURRICULUM } from "@/lib/curriculum/data";
+import { CURRICULUM, getAllUnits } from "@/lib/curriculum/data";
 
 // ─── Types ───
 export type RoadmapProgress = {

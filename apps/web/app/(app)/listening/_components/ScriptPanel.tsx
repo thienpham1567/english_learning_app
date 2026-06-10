@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle, Eye, EyeOff, FileText, Lightbulb } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useState } from "react";
 import { Card } from "@/components/ui/card";
 

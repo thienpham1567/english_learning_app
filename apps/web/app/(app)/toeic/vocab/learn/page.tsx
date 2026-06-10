@@ -3,10 +3,10 @@
 import { BookOpenText, CheckCircle, MapPin } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { getUnitIdForVocabTopic, getVocabRoadmapWeek } from "@/lib/curriculum/vocab-mapping";
-import { Card } from "@/components/ui/card";
 
 type VocabWord = {
   id: string;

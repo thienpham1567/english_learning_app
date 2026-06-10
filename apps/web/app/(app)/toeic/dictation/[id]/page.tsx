@@ -157,10 +157,7 @@ export default function DictationDetailPage() {
               {result.vocabHints && result.vocabHints.length > 0 && (
                 <div className="mt-3 flex gap-2 flex-wrap">
                   {result.vocabHints.map((h) => (
-                    <span
-                      key={h.word}
-                      className="bg-info/15 text-info py-0.5 px-2 inline-block"
-                    >
+                    <span key={h.word} className="bg-info/15 text-info py-0.5 px-2 inline-block">
                       {h.word} = {h.vi}
                     </span>
                   ))}

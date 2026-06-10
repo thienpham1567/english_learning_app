@@ -9,7 +9,6 @@
  * Kokoro TTS if KOKORO_TTS_URL is configured.
  */
 
-
 export type Accent = "us" | "uk" | "au";
 export const ACCENTS: readonly Accent[] = ["us", "uk", "au"];
 export const DEFAULT_ACCENT: Accent = "us";
@@ -27,12 +26,32 @@ export function parseAccent(value: unknown): Accent {
  * Available English voices: autumn, diana, hannah, austin, daniel, troy
  */
 export type VoiceRole =
-  | "us-m" | "us-f" | "uk-m" | "uk-f" | "au-m" | "au-f"
-  | "groq-us-m" | "groq-us-f" | "groq-uk-m" | "groq-uk-f" | "groq-au-m" | "groq-au-f";
+  | "us-m"
+  | "us-f"
+  | "uk-m"
+  | "uk-f"
+  | "au-m"
+  | "au-f"
+  | "groq-us-m"
+  | "groq-us-f"
+  | "groq-uk-m"
+  | "groq-uk-f"
+  | "groq-au-m"
+  | "groq-au-f";
 
 export const VOICE_ROLES: readonly VoiceRole[] = [
-  "us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f",
-  "groq-us-m", "groq-us-f", "groq-uk-m", "groq-uk-f", "groq-au-m", "groq-au-f",
+  "us-m",
+  "us-f",
+  "uk-m",
+  "uk-f",
+  "au-m",
+  "au-f",
+  "groq-us-m",
+  "groq-us-f",
+  "groq-uk-m",
+  "groq-uk-f",
+  "groq-au-m",
+  "groq-au-f",
 ];
 
 export const VOICE_BY_ROLE: Record<VoiceRole, string> = {

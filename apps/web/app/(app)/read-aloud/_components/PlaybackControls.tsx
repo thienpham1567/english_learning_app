@@ -1,6 +1,16 @@
 "use client";
 
-import { Download, Loader2, PauseCircle, PlayCircle, Undo, Volume2, Settings } from "lucide-react";
+import {
+  Download,
+  Loader2,
+  Mic,
+  PauseCircle,
+  PlayCircle,
+  Settings,
+  Undo,
+  Volume2,
+  Zap,
+} from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { SPEED_PRESETS, type VoiceOption } from "../_data/voices";
@@ -202,8 +212,18 @@ function WaveformVisualizer({
             {loading ? (
               "Compiling & generating audio..."
             ) : (
-              <span>
-                {selectedVoice.provider === "elevenlabs" ? "🎙 ElevenLabs" : "⚡ Groq"} • {selectedVoice.flag}{" "}
+              <span className="inline-flex items-center gap-1 flex-wrap">
+                {selectedVoice.provider === "elevenlabs" ? (
+                  <span className="inline-flex items-center gap-1">
+                    <Mic className="h-3.5 w-3.5 text-accent" /> ElevenLabs
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1">
+                    <Zap className="h-3.5 w-3.5 text-accent fill-accent/20" /> Groq
+                  </span>
+                )}
+                {" • "}
+                {selectedVoice.flag}{" "}
                 <strong className="text-accent-active">{selectedVoice.name}</strong> (
                 {selectedVoice.label})
               </span>

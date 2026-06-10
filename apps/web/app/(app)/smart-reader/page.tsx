@@ -1,11 +1,11 @@
 "use client";
 
 import { Clock, Loader2, Sparkles, Trash2, Volume2, X } from "lucide-react";
-import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { api } from "@/lib/api-client";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { api } from "@/lib/api-client";
 import { SmartReaderResult } from "./_components/SmartReaderResult";
 
 export type SmartReaderResponse = {
@@ -157,29 +157,26 @@ export default function SmartReaderPage() {
     [input, loadHistory, tts],
   );
 
-  const loadHistoryEntry = useCallback(
-    async (id: string) => {
-      setIsLoading(true);
-      setError(null);
-      setResult(null);
+  const loadHistoryEntry = useCallback(async (id: string) => {
+    setIsLoading(true);
+    setError(null);
+    setResult(null);
 
-      try {
-        const entry = await api.get<{
-          sourceText: string;
-          result: SmartReaderResponse;
-        }>(`/smart-reader/history/${id}`);
-        setInput(entry.sourceText);
-        setActiveSourceText(entry.sourceText);
-        setResult({ ...entry.result, id });
-        setShowHistory(false);
-      } catch {
-        setError("Failed to load history entry.");
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [],
-  );
+    try {
+      const entry = await api.get<{
+        sourceText: string;
+        result: SmartReaderResponse;
+      }>(`/smart-reader/history/${id}`);
+      setInput(entry.sourceText);
+      setActiveSourceText(entry.sourceText);
+      setResult({ ...entry.result, id });
+      setShowHistory(false);
+    } catch {
+      setError("Failed to load history entry.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   // Optimistic delete
   const deleteHistoryEntry = useCallback(
@@ -206,9 +203,8 @@ export default function SmartReaderPage() {
   };
 
   // Filter history by difficulty
-  const filteredHistory = historyFilter === "all"
-    ? history
-    : history.filter((h) => h.difficultyLevel === historyFilter);
+  const filteredHistory =
+    historyFilter === "all" ? history : history.filter((h) => h.difficultyLevel === historyFilter);
 
   const hasResult = !!result && !isLoading;
 
@@ -238,7 +234,9 @@ export default function SmartReaderPage() {
               {/* Bottom toolbar */}
               <div className="flex items-center justify-between border-t border-border/50 px-4 py-2.5">
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] font-mono ${input.length >= MAX_INPUT_LENGTH ? "text-error font-bold" : "text-text-muted"}`}>
+                  <span
+                    className={`text-[10px] font-mono ${input.length >= MAX_INPUT_LENGTH ? "text-error font-bold" : "text-text-muted"}`}
+                  >
                     {input.length} / {MAX_INPUT_LENGTH.toLocaleString()}
                   </span>
                   {input.trim() && (
@@ -272,9 +270,7 @@ export default function SmartReaderPage() {
                     )}
                   </button>
 
-                  <span className="hidden sm:inline text-[10px] text-text-muted font-mono">
-                    ⌘↵
-                  </span>
+                  <span className="hidden sm:inline text-[10px] text-text-muted font-mono">⌘↵</span>
                   <button
                     onClick={() => analyze()}
                     disabled={!input.trim() || isLoading}
@@ -340,7 +336,10 @@ export default function SmartReaderPage() {
                         {label}
                         {key !== "all" && (
                           <span className="ml-1 opacity-60">
-                            {history.filter((h) => key === "all" || h.difficultyLevel === key).length}
+                            {
+                              history.filter((h) => key === "all" || h.difficultyLevel === key)
+                                .length
+                            }
                           </span>
                         )}
                       </button>
@@ -370,7 +369,9 @@ export default function SmartReaderPage() {
                               {entry.preview || "Untitled"}
                             </p>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <span className={`text-[9px] font-bold uppercase ${DIFFICULTY_COLORS[entry.difficultyLevel] ?? "text-text-muted"}`}>
+                              <span
+                                className={`text-[9px] font-bold uppercase ${DIFFICULTY_COLORS[entry.difficultyLevel] ?? "text-text-muted"}`}
+                              >
                                 {entry.difficultyLevel}
                               </span>
                               <span className="text-[9px] text-text-muted">
@@ -442,11 +443,7 @@ export default function SmartReaderPage() {
 
           {/* Loading skeleton */}
           {isLoading && (
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-4"
-            >
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               <div className="rounded-xl border-2 border-border bg-surface p-5 space-y-3">
                 <div className="h-4 w-32 rounded-lg bg-surface-hover animate-pulse" />
                 <div className="h-4 w-full rounded-lg bg-surface-hover animate-pulse" />

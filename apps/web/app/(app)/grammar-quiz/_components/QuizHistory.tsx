@@ -1,8 +1,8 @@
 "use client";
 
 import { ClipboardList, X } from "lucide-react";
-import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
 
 export type QuizHistoryEntry = {
   date: string;
@@ -12,9 +12,17 @@ export type QuizHistoryEntry = {
 };
 
 const LEVEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  easy: { label: "Basic A1–A2", color: "var(--success)", bg: "color-mix(in srgb, var(--success) 8%, transparent)" },
+  easy: {
+    label: "Basic A1–A2",
+    color: "var(--success)",
+    bg: "color-mix(in srgb, var(--success) 8%, transparent)",
+  },
   medium: { label: "Intermediate B1–B2", color: "var(--accent)", bg: "var(--accent-light)" },
-  hard: { label: "Advanced C1–C2", color: "var(--error)", bg: "color-mix(in srgb, var(--error) 8%, transparent)" },
+  hard: {
+    label: "Advanced C1–C2",
+    color: "var(--error)",
+    bg: "color-mix(in srgb, var(--error) 8%, transparent)",
+  },
 };
 
 const HISTORY_KEY = "grammar-quiz-history";

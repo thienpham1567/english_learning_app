@@ -37,7 +37,6 @@ const LEVELS = ["", "A2", "B1", "B2", "C1", "C2"] as const;
 
 import { CEFR_COLORS } from "@/lib/constants/cefr";
 
-
 const LEVEL_LABELS: Record<string, string> = {
   "": "All Levels",
   A2: "A2 · Elementary",

@@ -96,7 +96,6 @@ export const STUDY_TOPICS: StudyCategory[] = [
 
 import { CEFR_COLORS } from "@/lib/constants/cefr";
 
-
 interface Props {
   onSelect: (topic: StudyTopic) => void;
   completedTopics: Set<string>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, User, Volume2, Zap, Mic } from "lucide-react";
+import { Info, Mic, User, Volume2, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 import { getVoicesByProvider, type TtsProvider, type VoiceOption } from "../_data/voices";
 

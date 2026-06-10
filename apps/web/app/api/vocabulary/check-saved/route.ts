@@ -1,5 +1,5 @@
 import { db, userVocabulary } from "@repo/database";
-import { eq, and, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 

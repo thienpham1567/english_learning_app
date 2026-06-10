@@ -94,7 +94,10 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json({ error: "Rate limit exceeded. Please try again later." }, { status: 429 });
+      return Response.json(
+        { error: "Rate limit exceeded. Please try again later." },
+        { status: 429 },
+      );
     }
     entry.count++;
   } else {

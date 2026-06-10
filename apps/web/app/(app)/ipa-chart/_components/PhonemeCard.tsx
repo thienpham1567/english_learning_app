@@ -191,24 +191,29 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
               {pairs.map((pair, pi) => {
                 const otherSymbol = pair.phonemeA === symbol ? pair.phonemeB : pair.phonemeA;
                 return (
-                  <div
-                    key={pi}
-                    className="flex items-center gap-1 text-[10px]"
-                  >
+                  <div key={pi} className="flex items-center gap-1 text-[10px]">
                     <button
-                      onClick={(e) => { e.stopPropagation(); onSpeak(pair.wordA, accent); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSpeak(pair.wordA, accent);
+                      }}
                       className="font-bold text-accent cursor-pointer bg-transparent border-none hover:underline p-0"
                     >
                       {pair.wordA}
                     </button>
                     <span className="text-text-muted">vs</span>
                     <button
-                      onClick={(e) => { e.stopPropagation(); onSpeak(pair.wordB, accent); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSpeak(pair.wordB, accent);
+                      }}
                       className="font-bold text-accent cursor-pointer bg-transparent border-none hover:underline p-0"
                     >
                       {pair.wordB}
                     </button>
-                    <span className="text-text-muted ml-auto text-[8px] font-mono">/{otherSymbol}/</span>
+                    <span className="text-text-muted ml-auto text-[8px] font-mono">
+                      /{otherSymbol}/
+                    </span>
                   </div>
                 );
               })}

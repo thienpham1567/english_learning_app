@@ -745,12 +745,8 @@
           "name": "flashcard_progress_query_vocabulary_cache_query_fk",
           "tableFrom": "flashcard_progress",
           "tableTo": "vocabulary_cache",
-          "columnsFrom": [
-            "query"
-          ],
-          "columnsTo": [
-            "query"
-          ],
+          "columnsFrom": ["query"],
+          "columnsTo": ["query"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1579,12 +1575,8 @@
           "name": "listening_summary_attempt_exercise_id_listening_exercise_id_fk",
           "tableFrom": "listening_summary_attempt",
           "tableTo": "listening_exercise",
-          "columnsFrom": [
-            "exercise_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exercise_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1661,12 +1653,8 @@
           "name": "message_conversation_id_conversation_id_fk",
           "tableFrom": "message",
           "tableTo": "conversation",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2488,12 +2476,8 @@
           "name": "read_aloud_session_dialogue_id_read_aloud_dialogue_id_fk",
           "tableFrom": "read_aloud_session",
           "tableTo": "read_aloud_dialogue",
-          "columnsFrom": [
-            "dialogue_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["dialogue_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2645,12 +2629,8 @@
           "name": "reading_progress_passage_id_reading_passage_id_fk",
           "tableFrom": "reading_progress",
           "tableTo": "reading_passage",
-          "columnsFrom": [
-            "passage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["passage_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2774,12 +2754,8 @@
           "name": "reading_session_passage_id_reading_passage_id_fk",
           "tableFrom": "reading_session",
           "tableTo": "reading_passage",
-          "columnsFrom": [
-            "passage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["passage_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3367,12 +3343,8 @@
           "name": "toeic_answer_attempt_id_toeic_attempt_id_fk",
           "tableFrom": "toeic_answer",
           "tableTo": "toeic_attempt",
-          "columnsFrom": [
-            "attempt_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["attempt_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3380,12 +3352,8 @@
           "name": "toeic_answer_question_id_toeic_question_id_fk",
           "tableFrom": "toeic_answer",
           "tableTo": "toeic_question",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["question_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3572,12 +3540,8 @@
           "name": "toeic_attempt_exam_id_toeic_exam_id_fk",
           "tableFrom": "toeic_attempt",
           "tableTo": "toeic_exam",
-          "columnsFrom": [
-            "exam_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exam_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3769,9 +3733,7 @@
         "toeic_exam_code_unique": {
           "name": "toeic_exam_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+          "columns": ["code"]
         }
       },
       "policies": {},
@@ -3951,12 +3913,8 @@
           "name": "toeic_question_exam_id_toeic_exam_id_fk",
           "tableFrom": "toeic_question",
           "tableTo": "toeic_exam",
-          "columnsFrom": [
-            "exam_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exam_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4200,12 +4158,8 @@
           "name": "toeic_speaking_response_session_id_toeic_speaking_session_id_fk",
           "tableFrom": "toeic_speaking_response",
           "tableTo": "toeic_speaking_session",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4213,12 +4167,8 @@
           "name": "toeic_speaking_response_prompt_id_toeic_speaking_prompt_id_fk",
           "tableFrom": "toeic_speaking_response",
           "tableTo": "toeic_speaking_prompt",
-          "columnsFrom": [
-            "prompt_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["prompt_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4446,9 +4396,7 @@
         "toeic_vocab_word_unique": {
           "name": "toeic_vocab_word_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "word"
-          ]
+          "columns": ["word"]
         }
       },
       "policies": {},
@@ -4688,12 +4636,8 @@
           "name": "toeic_writing_response_session_id_toeic_writing_session_id_fk",
           "tableFrom": "toeic_writing_response",
           "tableTo": "toeic_writing_session",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["session_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4701,12 +4645,8 @@
           "name": "toeic_writing_response_prompt_id_toeic_writing_prompt_id_fk",
           "tableFrom": "toeic_writing_response",
           "tableTo": "toeic_writing_prompt",
-          "columnsFrom": [
-            "prompt_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["prompt_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5331,12 +5271,8 @@
           "name": "user_vocabulary_query_vocabulary_cache_query_fk",
           "tableFrom": "user_vocabulary",
           "tableTo": "vocabulary_cache",
-          "columnsFrom": [
-            "query"
-          ],
-          "columnsTo": [
-            "query"
-          ],
+          "columnsFrom": ["query"],
+          "columnsTo": ["query"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5824,18 +5760,12 @@
     "public.exam_mode": {
       "name": "exam_mode",
       "schema": "public",
-      "values": [
-        "toeic",
-        "ielts"
-      ]
+      "values": ["toeic", "ielts"]
     },
     "public.message_role": {
       "name": "message_role",
       "schema": "public",
-      "values": [
-        "user",
-        "assistant"
-      ]
+      "values": ["user", "assistant"]
     }
   },
   "schemas": {},

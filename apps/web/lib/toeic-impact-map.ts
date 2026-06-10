@@ -25,7 +25,8 @@ export const TOEIC_GRAMMAR_MAP: ToeicImpact[] = [
     parts: ["Part 5", "Part 6", "Part 7"],
     questionRange: "Q101-130",
     estimatedPoints: 25,
-    description: "Tense usage appears in sentence completion, text completion, and reading comprehension",
+    description:
+      "Tense usage appears in sentence completion, text completion, and reading comprehension",
   },
   {
     topic: "article",
@@ -104,6 +105,7 @@ export const TOEIC_GRAMMAR_MAP: ToeicImpact[] = [
  */
 export function getToeicImpact(category: string): ToeicImpact | undefined {
   return TOEIC_GRAMMAR_MAP.find(
-    (item) => item.topic === category || item.topic.includes(category) || category.includes(item.topic),
+    (item) =>
+      item.topic === category || item.topic.includes(category) || category.includes(item.topic),
   );
 }

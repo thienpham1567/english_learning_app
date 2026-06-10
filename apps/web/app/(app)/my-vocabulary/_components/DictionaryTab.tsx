@@ -71,7 +71,6 @@ export function DictionaryTab() {
   const [error, setError] = useState<string | null>(null);
   const [recentWords, setRecentWords] = useState<string[]>([]);
 
-
   const [savedWords, setSavedWords] = useState<SavedWord[]>([]);
   const [savedLoading, setSavedLoading] = useState(true);
 
@@ -263,8 +262,6 @@ export function DictionaryTab() {
           </div>
         )}
       </div>
-
-
     </div>
   );
 }

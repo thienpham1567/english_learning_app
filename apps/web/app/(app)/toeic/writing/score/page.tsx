@@ -1,7 +1,5 @@
 "use client";
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
 import {
   AlertTriangle,
   BookOpen,
@@ -19,6 +17,7 @@ import {
 import { useCallback, useMemo, useState } from "react";
 import { RewritePanel } from "@/app/(app)/toeic/skills/_components/writing/RewritePanel";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { api } from "@/lib/api-client";
 
 /* ── Types ─────────────────────────────────────────────────── */

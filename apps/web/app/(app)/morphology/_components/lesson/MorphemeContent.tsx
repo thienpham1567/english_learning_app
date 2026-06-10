@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, ChevronRight, RefreshCw, Sparkles } from "lucide-react";
+import { BookOpen, ChevronRight, Play, RefreshCw, Sparkles } from "lucide-react";
 import * as m from "motion/react-client";
 import { Card } from "@/components/ui/card";
 import type { MorphemeLesson } from "@/lib/morphology/schema";
@@ -98,7 +98,8 @@ export function MorphemeContent({ lesson, onStart, onRegenerate }: MorphemeConte
         onClick={onStart}
         className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-4 px-6 text-base font-black text-text-on-accent bg-accent border-2 border-border shadow-md hover:bg-accent-hover cursor-pointer font-display"
       >
-        🚀 Start Practice — {lesson.exercises.length} exercises
+        <Play className="h-4 w-4 fill-current" /> Start Practice — {lesson.exercises.length}{" "}
+        exercises
         <ChevronRight size={18} />
       </m.button>
     </div>

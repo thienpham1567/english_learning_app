@@ -60,7 +60,11 @@ export function BatchConvertToFlashcards({ errorIds }: BatchConvertProps) {
   if (errorIds.length === 0) return null;
 
   return (
-    <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+    <m.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+    >
       <Card shadowSize="default" accentColor="accent" accentPosition="left" bgType="accent-light">
         {state === "idle" && (
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">

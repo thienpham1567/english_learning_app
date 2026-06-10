@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ArrowLeft,
   CircleCheckBig,
+  GraduationCap,
   Lightbulb,
   RefreshCw,
   Star,
@@ -30,11 +31,21 @@ interface LessonCompleteProps {
   onRetry: () => void;
 }
 
-function medalFor(scorePct: number): string {
-  if (scorePct >= 90) return "🥇";
-  if (scorePct >= 70) return "🥈";
-  if (scorePct >= 50) return "🥉";
-  return "🎓";
+function renderMedal(scorePct: number) {
+  if (scorePct >= 90) {
+    return <Trophy className="h-6 w-6 text-xp fill-xp inline-block mr-2 align-text-bottom" />;
+  }
+  if (scorePct >= 70) {
+    return (
+      <Trophy className="h-6 w-6 text-secondary fill-secondary inline-block mr-2 align-text-bottom" />
+    );
+  }
+  if (scorePct >= 50) {
+    return (
+      <Trophy className="h-6 w-6 text-tertiary fill-tertiary inline-block mr-2 align-text-bottom" />
+    );
+  }
+  return <GraduationCap className="h-6 w-6 text-text-muted inline-block mr-2 align-text-bottom" />;
 }
 
 /** Post-practice summary: score, XP, roadmap progress, and incorrect-item review. */
@@ -64,8 +75,8 @@ export function LessonComplete({
           <Star size={20} className="absolute -top-1 -right-3 text-xp" />
         </div>
 
-        <h2 className="mb-2 text-2xl font-black text-text-primary font-display">
-          {medalFor(scorePct)} Lesson Completed!
+        <h2 className="mb-2 text-2xl font-black text-text-primary font-display flex items-center justify-center">
+          {renderMedal(scorePct)} Lesson Completed!
         </h2>
         <p className="text-text-secondary mb-4 font-medium text-[14.5px] leading-normal">
           Topic: <span className="text-accent-active font-bold">{title}</span>

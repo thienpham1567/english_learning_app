@@ -36,10 +36,7 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json(
-        { error: "Rate limit reached. Please wait a moment." },
-        { status: 429 },
-      );
+      return Response.json({ error: "Rate limit reached. Please wait a moment." }, { status: 429 });
     }
     entry.count++;
   } else {

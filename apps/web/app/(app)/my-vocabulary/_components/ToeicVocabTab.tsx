@@ -22,9 +22,9 @@ import {
 import * as m from "motion/react-client";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { api } from "@/lib/api-client";
-import { Card } from "@/components/ui/card";
 
 type ToeicWord = {
   id: string;

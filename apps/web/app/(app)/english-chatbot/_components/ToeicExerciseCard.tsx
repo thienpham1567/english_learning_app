@@ -1,6 +1,18 @@
 "use client";
 
-import { Check, Play, RefreshCw, Send, Volume2, X } from "lucide-react";
+import {
+  Check,
+  Pencil,
+  Pin,
+  Play,
+  RefreshCw,
+  RotateCcw,
+  Send,
+  Target,
+  TrendingUp,
+  Volume2,
+  X,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import {
   gradeToeicAnswers,
@@ -18,11 +30,34 @@ type Props = {
   isPlaying?: boolean;
 };
 
-function bandMessage(pct: number): string {
-  if (pct >= 90) return "Excellent — on track for a high score 🎯";
-  if (pct >= 70) return "Good — a few gaps to close 💪";
-  if (pct >= 50) return "Getting there — review the misses 📌";
-  return "Keep practicing — let's drill these 🔁";
+function renderBandMessage(pct: number) {
+  if (pct >= 90) {
+    return (
+      <span className="inline-flex items-center gap-1">
+        on track for a high score <Target className="h-3.5 w-3.5 text-accent shrink-0" />
+      </span>
+    );
+  }
+  if (pct >= 70) {
+    return (
+      <span className="inline-flex items-center gap-1">
+        Good — a few gaps to close <TrendingUp className="h-3.5 w-3.5 text-success shrink-0" />
+      </span>
+    );
+  }
+  if (pct >= 50) {
+    return (
+      <span className="inline-flex items-center gap-1">
+        Getting there — review the misses <Pin className="h-3.5 w-3.5 text-warning shrink-0" />
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1">
+      Keep practicing — let's drill these{" "}
+      <RotateCcw className="h-3.5 w-3.5 text-text-muted shrink-0" />
+    </span>
+  );
 }
 
 export function ToeicExerciseCard({
@@ -86,7 +121,7 @@ export function ToeicExerciseCard({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-accent/5 border-b border-accent/10">
         <div className="flex items-center gap-2">
-          <span className="text-sm">✍️</span>
+          <Pencil className="h-3.5 w-3.5 text-accent shrink-0" />
           <span className="text-xs font-bold text-accent">
             {exercise.partLabel ?? "TOEIC Practice"}
           </span>
@@ -245,8 +280,8 @@ export function ToeicExerciseCard({
             <span className="text-sm font-bold text-ink">
               {result.score}/{total}
             </span>
-            <span className="text-[11px] font-semibold text-text-secondary">
-              {scorePct}% · {bandMessage(scorePct)}
+            <span className="text-[11px] font-semibold text-text-secondary inline-flex items-center gap-1">
+              {scorePct}% · {renderBandMessage(scorePct)}
             </span>
           </div>
           {onAskCoach && (

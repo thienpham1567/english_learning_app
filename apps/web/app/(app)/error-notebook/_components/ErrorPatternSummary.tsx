@@ -3,25 +3,26 @@
 import type { ErrorPatternInput } from "@repo/modules/learning";
 import { summarizeErrorPatterns } from "@repo/modules/learning";
 import {
+  Book,
+  BookOpen,
   Check,
   ChevronRight,
-  X as XIcon,
   Clock,
-  Pin,
-  MapPin,
-  Type,
-  Link2,
   Construction,
-  Book,
+  Ear,
+  GraduationCap,
+  Headphones,
+  HelpCircle,
+  Link2,
+  MapPin,
+  PenTool,
+  Pin,
   Puzzle,
   Target,
-  PenTool,
+  TrendingUp,
+  Type,
   Volume2,
-  Headphones,
-  Ear,
-  BookOpen,
-  GraduationCap,
-  HelpCircle,
+  X as XIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -104,8 +105,9 @@ export function ErrorPatternSummary({ errors }: Props) {
                     if (!impact) return null;
                     return (
                       <div className="flex items-center gap-1.5 mt-1.5">
-                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-lg bg-accent/8 text-accent border-2 border-accent/15">
-                          📈 ~{impact.estimatedPoints} pts
+                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-lg bg-accent/8 text-accent border-2 border-accent/15 inline-flex items-center gap-1">
+                          <TrendingUp className="h-3 w-3 text-success" /> ~{impact.estimatedPoints}{" "}
+                          pts
                         </span>
                         <span className="text-[9px] text-text-muted font-medium">
                           {impact.parts.join(", ")}

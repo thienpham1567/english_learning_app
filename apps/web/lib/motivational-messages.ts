@@ -1,5 +1,5 @@
-import type { DashboardData } from "@/hooks/useDashboard";
 import type { DailyPlanState } from "@/hooks/useDailyStudyPlan";
+import type { DashboardData } from "@/hooks/useDashboard";
 
 type PredictedScore = {
   predicted: number | null;
@@ -66,9 +66,11 @@ export function getMotivationalMessage(
 
   // Fallback: Time-based motivation
   const hr = new Date().getHours();
-  if (hr < 10) return "🌅 Morning study sessions boost retention by 20%. Let's make the most of it!";
+  if (hr < 10)
+    return "🌅 Morning study sessions boost retention by 20%. Let's make the most of it!";
   if (hr < 14) return "☀️ Midday energy is perfect for grammar drills. Jump into your study plan!";
-  if (hr < 18) return "🌤️ Afternoon practice builds long-term memory. Every minute invested compounds!";
+  if (hr < 18)
+    return "🌤️ Afternoon practice builds long-term memory. Every minute invested compounds!";
   return "🌙 Evening reviews help consolidate what you learned today. Even 10 minutes makes a difference!";
 }
 

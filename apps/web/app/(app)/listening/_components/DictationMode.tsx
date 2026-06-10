@@ -1,13 +1,20 @@
 "use client";
 
 import {
+  AlertTriangle,
   Check,
   ChevronRight,
   CircleCheckBig,
+  Flame,
+  Headphones,
   Info,
   Loader2,
   Pencil,
   RefreshCw,
+  Sparkles,
+  ThumbsUp,
+  TrendingUp,
+  Trophy,
   XCircle,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -226,7 +233,7 @@ export default function DictationMode({ examMode }: Props) {
     <div className="w-full max-w-2xl mx-auto">
       {error && (
         <div className="py-2.5 px-4 rounded-lg text-[var(--error)] mb-4 text-[13px] bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
-          ⚠️ {error}
+          <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
 
@@ -276,10 +283,9 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Instruction */}
-          <div className="p-4 rounded-lg text-center border-2 border-border bg-surface">
-            <p className="text-sm text-text-secondary m-0">
-              🎧 Listen and type the sentence you hear
-            </p>
+          <div className="p-4 rounded-lg text-center border-2 border-border bg-surface flex items-center justify-center gap-2">
+            <Headphones className="h-4 w-4 text-accent shrink-0" />
+            <p className="text-sm text-text-secondary m-0">Listen and type the sentence you hear</p>
           </div>
 
           {/* AudioPlayer — sentence playback (AC4 migration) */}
@@ -378,15 +384,25 @@ export default function DictationMode({ examMode }: Props) {
                 {accuracy}%
               </span>
             </div>
-            <p className="text-[13px] text-text-secondary mt-2">
-              {accuracy === 100
-                ? "Perfect! 🎉"
-                : accuracy >= 80
-                  ? "Very Good! 👏"
-                  : accuracy >= 50
-                    ? "Good job, keep it up! 💪"
-                    : "Needs practice 📝"}
-            </p>
+            <div className="text-[13px] text-text-secondary mt-2 flex items-center justify-center gap-1.5 font-bold">
+              {accuracy === 100 ? (
+                <>
+                  <Sparkles className="h-4 w-4 text-accent animate-bounce" /> Perfect!
+                </>
+              ) : accuracy >= 80 ? (
+                <>
+                  <ThumbsUp className="h-4 w-4 text-success" /> Very Good!
+                </>
+              ) : accuracy >= 50 ? (
+                <>
+                  <Flame className="h-4 w-4 text-warning" /> Good job, keep it up!
+                </>
+              ) : (
+                <>
+                  <Pencil className="h-4 w-4 text-text-muted" /> Needs practice
+                </>
+              )}
+            </div>
           </motion.div>
 
           {/* Word diff */}
@@ -491,15 +507,23 @@ export default function DictationMode({ examMode }: Props) {
             <p className="text-accent text-[13px] font-bold mb-2">+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
-            <p
-              className={`text-[13px] mb-4 ${
+            <div
+              className={`text-[13px] mb-4 flex items-center justify-center gap-1.5 font-bold ${
                 skillUpdate.levelUp ? "text-[var(--success)]" : "text-text-secondary"
               }`}
             >
-              {skillUpdate.levelUp
-                ? `🎉 Listening Level: ${skillUpdate.cefr}!`
-                : `📊 Listening Level: ${skillUpdate.cefr}`}
-            </p>
+              {skillUpdate.levelUp ? (
+                <>
+                  <Trophy className="h-4 w-4 text-accent" />
+                  <span>Listening Level: {skillUpdate.cefr}!</span>
+                </>
+              ) : (
+                <>
+                  <TrendingUp className="h-4 w-4 text-text-muted" />
+                  <span>Listening Level: {skillUpdate.cefr}</span>
+                </>
+              )}
+            </div>
           )}
           <div className="flex gap-2 justify-center flex-wrap mb-5">
             {sessionScores.map((s, i) => (

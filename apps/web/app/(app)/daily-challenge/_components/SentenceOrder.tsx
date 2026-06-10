@@ -78,7 +78,9 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
               className="rounded-lg py-1.5 px-3.5 text-sm font-semibold items-center"
               style={{
                 background:
-                  hoveredSel === i && !disabled ? "color-mix(in srgb, var(--error) 10%, transparent)" : "var(--surface)",
+                  hoveredSel === i && !disabled
+                    ? "color-mix(in srgb, var(--error) 10%, transparent)"
+                    : "var(--surface)",
                 color: hoveredSel === i && !disabled ? "var(--error)" : "var(--accent)",
                 border:
                   hoveredSel === i && !disabled

@@ -3,9 +3,9 @@
 import { Lightbulb, Loader2, Network, Star, Target } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
-import { api } from "@/lib/api-client";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { api } from "@/lib/api-client";
 
 type WordForm = {
   word: string;

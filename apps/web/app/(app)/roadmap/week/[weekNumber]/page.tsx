@@ -16,6 +16,7 @@ import {
 import * as m from "motion/react-client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Card } from "@/components/ui/card";
 import {
   getPhaseForWeek,
   getWeek,
@@ -23,7 +24,6 @@ import {
   SKILL_LABELS,
   type Skill,
 } from "@/lib/curriculum/data";
-import { Card } from "@/components/ui/card";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 
 const SKILL_ICONS: Record<

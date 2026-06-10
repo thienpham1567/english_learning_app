@@ -68,7 +68,9 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           outline: "none",
           transition: "all 0.2s ease",
           boxSizing: "border-box",
-          boxShadow: focused ? "0 4px 12px color-mix(in srgb, var(--error) 15%, transparent)" : "none",
+          boxShadow: focused
+            ? "0 4px 12px color-mix(in srgb, var(--error) 15%, transparent)"
+            : "none",
         }}
       />
 

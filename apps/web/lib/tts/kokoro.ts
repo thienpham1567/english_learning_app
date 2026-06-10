@@ -22,14 +22,14 @@
  */
 const KOKORO_VOICE_MAP: Record<string, string> = {
   // US voices
-  austin: "am_adam",     // American male
-  autumn: "af_heart",    // American female
+  austin: "am_adam", // American male
+  autumn: "af_heart", // American female
   // UK voices
-  daniel: "bm_george",   // British male
-  diana: "bf_emma",      // British female
+  daniel: "bm_george", // British male
+  diana: "bf_emma", // British female
   // AU voices (Kokoro has no native AU — use closest alternatives)
-  troy: "am_michael",    // Male fallback
-  hannah: "af_bella",    // Female fallback
+  troy: "am_michael", // Male fallback
+  hannah: "af_bella", // Female fallback
 };
 
 const KOKORO_MODEL = "kokoro";
@@ -64,9 +64,7 @@ export async function synthesizeKokoroTts(args: {
   // If voice is already a native Kokoro ID (e.g., "am_adam", "bf_emma"), use directly.
   // Otherwise, map from Groq voice name (e.g., "austin" → "am_adam").
   const isNativeKokoroId = /^[ab][fm]_/.test(args.voice);
-  const kokoroVoice = isNativeKokoroId
-    ? args.voice
-    : (KOKORO_VOICE_MAP[args.voice] || "af_heart");
+  const kokoroVoice = isNativeKokoroId ? args.voice : KOKORO_VOICE_MAP[args.voice] || "af_heart";
   const speed = Math.max(0.25, Math.min(args.speed ?? 1, 4.0));
   const format = args.format ?? "wav";
 

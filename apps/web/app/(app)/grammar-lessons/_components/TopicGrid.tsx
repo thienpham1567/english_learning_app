@@ -1,6 +1,5 @@
 "use client";
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   AlignVerticalSpaceAround,
   ArrowLeftRight,
@@ -19,6 +18,7 @@ import {
   RefreshCw,
   Square,
   Star,
+  Trophy,
   Type,
   User,
   Zap,
@@ -26,6 +26,8 @@ import {
 import * as m from "motion/react-client";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { getCategoryRoadmapWeeks } from "@/lib/curriculum/grammar-mapping";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import {
   type ExamType,
@@ -34,7 +36,6 @@ import {
   type GrammarTopicCategory,
   getCategoriesForExam,
 } from "@/lib/grammar-lessons/topics";
-import { getCategoryRoadmapWeeks } from "@/lib/curriculum/grammar-mapping";
 
 export type { GrammarTopic };
 
@@ -129,9 +130,7 @@ export function TopicGrid({
               <div
                 className="relative grid w-11 h-11 rounded-xl text-lg shrink-0 place-items-center text-white shadow-sm transition-transform duration-200 group-hover:scale-105 border-2 border-white/10"
                 style={{
-                  background: allDone
-                    ? "var(--success)"
-                    : cat.color,
+                  background: allDone ? "var(--success)" : cat.color,
                 }}
               >
                 {allDone ? <CircleCheckBig size={20} /> : cat.icon}
@@ -156,8 +155,8 @@ export function TopicGrid({
                         ? `W${weeks[0]}`
                         : `W${weeks[0]}-${weeks[weeks.length - 1]}`;
                     return (
-                      <span className="text-[8px] font-black rounded-md px-1.5 py-px bg-accent/10 text-accent border-2 border-accent/15 shrink-0 uppercase tracking-wider">
-                        📍 {label}
+                      <span className="text-[8px] font-black rounded-md px-1.5 py-px bg-accent/10 text-accent border-2 border-accent/15 shrink-0 uppercase tracking-wider inline-flex items-center gap-0.5">
+                        <MapPin className="h-2 w-2" /> {label}
                       </span>
                     );
                   })()}
@@ -171,9 +170,7 @@ export function TopicGrid({
                       transition={{ type: "spring", stiffness: 80, damping: 15 }}
                       className="absolute left-0 top-0 bottom-0 h-full rounded-full"
                       style={{
-                        background: allDone
-                          ? "var(--success)"
-                          : cat.color,
+                        background: allDone ? "var(--success)" : cat.color,
                       }}
                     />
                   </div>
@@ -256,7 +253,7 @@ export function TopicGrid({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span
-                              className={`text-[10px] rounded-lg font-bold py-0.5 px-2 ${
+                              className={`text-[10px] rounded-lg font-bold py-0.5 px-2 inline-flex items-center gap-0.5 ${
                                 progress.scorePct >= 80
                                   ? "bg-success/12 text-success"
                                   : progress.scorePct >= 50
@@ -264,13 +261,13 @@ export function TopicGrid({
                                     : "bg-error/12 text-error"
                               }`}
                             >
-                              {progress.scorePct >= 90
-                                ? "🥇 "
-                                : progress.scorePct >= 70
-                                  ? "🥈 "
-                                  : progress.scorePct >= 50
-                                    ? "🥉 "
-                                    : ""}
+                              {progress.scorePct >= 90 ? (
+                                <Trophy size={10} className="text-xp fill-xp" />
+                              ) : progress.scorePct >= 70 ? (
+                                <Trophy size={10} className="text-secondary fill-secondary" />
+                              ) : progress.scorePct >= 50 ? (
+                                <Trophy size={10} className="text-tertiary fill-tertiary" />
+                              ) : null}
                               {progress.scorePct}%
                             </span>
                           </TooltipTrigger>

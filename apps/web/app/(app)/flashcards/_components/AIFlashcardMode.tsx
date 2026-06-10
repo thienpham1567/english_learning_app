@@ -1,27 +1,39 @@
 "use client";
 
 import {
+  Activity,
   AlertTriangle,
+  BarChart3,
   BookOpen,
+  Box,
   CheckCircle,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
+  Coins,
+  FileText,
+  GraduationCap,
+  Headphones,
   LayoutGrid,
   Lightbulb,
   Loader2,
+  Mail,
   Pin,
+  Plane,
+  Printer,
   RefreshCw,
   Target,
   Trash2,
+  User,
+  Users,
   Volume2,
   Zap,
 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
-import { Button } from "@/components/ui/button";
 
 /* ── Types ── */
 type AICard = {
@@ -41,18 +53,18 @@ type CardType = "mixed" | "vocab" | "grammar";
 
 /* ── TOEIC Topics ── */
 const TOEIC_TOPICS = [
-  { id: "meetings", label: "Business Meetings", emoji: "🤝" },
-  { id: "email", label: "Email & Correspondence", emoji: "📧" },
-  { id: "hiring", label: "Hiring & Recruitment", emoji: "👤" },
-  { id: "marketing", label: "Marketing & Advertising", emoji: "📊" },
-  { id: "finance", label: "Finance & Banking", emoji: "💰" },
-  { id: "travel", label: "Travel & Tourism", emoji: "✈️" },
-  { id: "office", label: "Office Equipment & Supplies", emoji: "🖨️" },
-  { id: "contracts", label: "Contracts & Agreements", emoji: "📝" },
-  { id: "training", label: "Training & Development", emoji: "🎓" },
-  { id: "customer-service", label: "Customer Service", emoji: "🎧" },
-  { id: "shipping", label: "Shipping & Logistics", emoji: "📦" },
-  { id: "health", label: "Health & Safety", emoji: "🏥" },
+  { id: "meetings", label: "Business Meetings", icon: Users },
+  { id: "email", label: "Email & Correspondence", icon: Mail },
+  { id: "hiring", label: "Hiring & Recruitment", icon: User },
+  { id: "marketing", label: "Marketing & Advertising", icon: BarChart3 },
+  { id: "finance", label: "Finance & Banking", icon: Coins },
+  { id: "travel", label: "Travel & Tourism", icon: Plane },
+  { id: "office", label: "Office Equipment & Supplies", icon: Printer },
+  { id: "contracts", label: "Contracts & Agreements", icon: FileText },
+  { id: "training", label: "Training & Development", icon: GraduationCap },
+  { id: "customer-service", label: "Customer Service", icon: Headphones },
+  { id: "shipping", label: "Shipping & Logistics", icon: Box },
+  { id: "health", label: "Health & Safety", icon: Activity },
 ];
 
 const TYPE_OPTIONS: { value: CardType; label: string; icon: React.ReactNode }[] = [
@@ -64,7 +76,6 @@ const TYPE_OPTIONS: { value: CardType; label: string; icon: React.ReactNode }[] 
 const COUNT_OPTIONS = [5, 10, 15, 20];
 
 import { CEFR_COLORS } from "@/lib/constants/cefr";
-
 
 /* ── Main Component ── */
 export function AIFlashcardMode() {
@@ -235,7 +246,9 @@ export function AIFlashcardMode() {
                       : "border-2 border-border bg-surface shadow-sm"
                   }`}
                 >
-                  <span className="text-xl">{topic.emoji}</span>
+                  <span className="text-xl text-accent shrink-0">
+                    <topic.icon className="h-5 w-5" />
+                  </span>
                   <span
                     className={`text-[12.5px] leading-snug ${
                       isSelected ? "font-extrabold text-ink" : "font-semibold text-text-primary"
@@ -263,9 +276,7 @@ export function AIFlashcardMode() {
             }}
             placeholder="e.g. Negotiation Skills, Supply Chain, Real Estate..."
             className={`w-full py-3 px-4 rounded-lg bg-surface text-text-primary text-sm font-semibold outline-none box-border ${
-              selectedTopic === "__custom"
-                ? "border-2 border-accent"
-                : "border-2 border-border"
+              selectedTopic === "__custom" ? "border-2 border-accent" : "border-2 border-border"
             }`}
           />
         </div>
@@ -442,13 +453,21 @@ export function AIFlashcardMode() {
 
             {/* Type badge */}
             <span
-              className={`text-[10px] font-extrabold rounded-md mb-3 border-none py-1 px-2.5 ${
+              className={`text-[10px] font-extrabold rounded-md mb-3 border-none py-1 px-2.5 inline-flex items-center gap-1.5 ${
                 isVocab
                   ? "bg-[color-mix(in srgb, var(--info) 10%, transparent)] text-info"
                   : "bg-[color-mix(in srgb, var(--module-grammar) 10%, transparent)] text-[var(--module-grammar)]"
               }`}
             >
-              {isVocab ? "📖 VOCABULARY" : "📐 GRAMMAR"}
+              {isVocab ? (
+                <>
+                  <BookOpen className="h-3.5 w-3.5" /> VOCABULARY
+                </>
+              ) : (
+                <>
+                  <ClipboardList className="h-3.5 w-3.5" /> GRAMMAR
+                </>
+              )}
             </span>
 
             {/* Tags row */}
@@ -565,7 +584,7 @@ export function AIFlashcardMode() {
                 }}
               >
                 <div className="flex items-start gap-2">
-                  <span className="text-sm shrink-0 mt-px">🎯</span>
+                  <Target size={14} className="text-warning shrink-0 mt-0.5" />
                   <div>
                     <span className="text-[10px] font-extrabold uppercase tracking-widest text-warning">
                       TOEIC Exam Tip
@@ -652,10 +671,7 @@ export function AIFlashcardMode() {
             >
               <RefreshCw size={12} /> Review Again
             </Button>
-            <Button
-              size="sm"
-              onClick={resetToTopics}
-            >
+            <Button size="sm" onClick={resetToTopics}>
               New Topic
             </Button>
           </div>

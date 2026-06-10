@@ -3,8 +3,8 @@
 import { CheckCircle, Lightbulb, Loader2, RefreshCw, Trophy, XCircle, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
-import { api } from "@/lib/api-client";
 import { Card } from "@/components/ui/card";
+import { api } from "@/lib/api-client";
 
 type DrillExercise = {
   type: string;
@@ -234,7 +234,10 @@ export function PersonalizedDrill() {
                               ? "var(--error)"
                               : "var(--border)"
                           : "var(--border)",
-                        color: answered && (isCorrect || isSelected) ? "var(--text-on-accent)" : "var(--text-muted)",
+                        color:
+                          answered && (isCorrect || isSelected)
+                            ? "var(--text-on-accent)"
+                            : "var(--text-muted)",
                       }}
                     >
                       {answered ? (

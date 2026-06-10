@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  AlertTriangle,
   CircleCheckBig,
   Eye,
   FileText,
+  Headphones,
   Info,
   Loader2,
   RefreshCw,
@@ -142,7 +144,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {/* Error banner */}
       {error && (
         <div className="py-2.5 px-4 rounded-lg text-[var(--error)] text-[13px] bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
-          ⚠️ {error}
+          <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
 
@@ -209,9 +211,15 @@ export default function SummarizeMode({ examMode }: Props) {
       {(state === "listening" || state === "writing") && exercise && (
         <>
           {/* Instruction */}
-          <Card shadowSize="sm" className="py-3 px-4 text-[13px] text-text-secondary">
-            🎧 <strong>Listen to the passage below.</strong> The original transcript will be
-            revealed after you submit your summary.
+          <Card
+            shadowSize="sm"
+            className="py-3 px-4 text-[13px] text-text-secondary flex items-start gap-2"
+          >
+            <Headphones className="h-4 w-4 shrink-0 text-accent mt-0.5" />
+            <span>
+              <strong>Listen to the passage below.</strong> The original transcript will be revealed
+              after you submit your summary.
+            </span>
           </Card>
 
           {/* AudioPlayer (AC1 — reuses 19.3.2 component with A-B loop + speed) */}

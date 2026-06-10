@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpenText, Compass, Hash, Headphones, Trophy, Zap, Shuffle } from "lucide-react";
+import { BookOpenText, Compass, Hash, Headphones, Shuffle, Trophy, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
@@ -235,8 +235,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
             className="w-[44px] h-[44px] grid text-xl shrink-0"
             style={{
               borderRadius: 14,
-              background:
-                "var(--accent)",
+              background: "var(--accent)",
               boxShadow: "0 6px 20px color-mix(in srgb, var(--accent) 25%, transparent)",
               placeItems: "center",
               color: "var(--text-on-accent)",
@@ -355,8 +354,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
           }
           className="w-full p-4 text-[15px] font-black border-none rounded-lg cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden"
           style={{
-            background:
-              "var(--accent)",
+            background: "var(--accent)",
             color: "var(--text-on-accent)",
             boxShadow: "0 4px 18px color-mix(in srgb, var(--accent) 30%, transparent)",
             letterSpacing: "-0.01em",
@@ -378,8 +376,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
               top: 0,
               left: 0,
               width: "40%",
-              background:
-                "none",
+              background: "none",
               pointerEvents: "none",
             }}
           />

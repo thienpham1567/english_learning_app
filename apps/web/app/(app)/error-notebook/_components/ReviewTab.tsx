@@ -15,11 +15,11 @@ import {
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { useErrorSRS } from "../_hooks/useErrorSRS";
 import type { SRSGrade } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS, SRS_GRADE_OPTIONS } from "../_types/types";
 import { DeepExplanation } from "./DeepExplanation";
-import { Card } from "@/components/ui/card";
 
 export function ReviewTab() {
   const srs = useErrorSRS();

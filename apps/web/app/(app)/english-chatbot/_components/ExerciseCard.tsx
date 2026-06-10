@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, RefreshCw, Send, X } from "lucide-react";
+import { Check, Pencil, RefreshCw, Send, X } from "lucide-react";
 import { useCallback, useState } from "react";
 
 type Question = {
@@ -152,8 +152,8 @@ export function splitExerciseBlocks(text: string): Array<{
 export function ExerciseCard({ text, title, onSubmitAnswers, isLoading }: Props) {
   const questions = parseQuestions(text);
   // answers[questionIdx][blankIdx]
-  const [answers, setAnswers] = useState<string[][]>(
-    () => questions.map((q) => Array(q.blankCount).fill("")),
+  const [answers, setAnswers] = useState<string[][]>(() =>
+    questions.map((q) => Array(q.blankCount).fill("")),
   );
   const [submitted, setSubmitted] = useState(false);
 
@@ -198,10 +198,8 @@ export function ExerciseCard({ text, title, onSubmitAnswers, isLoading }: Props)
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-accent/5 border-b border-accent/10">
         <div className="flex items-center gap-2">
-          <span className="text-sm">✍️</span>
-          <span className="text-xs font-bold text-accent">
-            {title || "Exercise"}
-          </span>
+          <Pencil className="h-3.5 w-3.5 text-accent shrink-0" />
+          <span className="text-xs font-bold text-accent">{title || "Exercise"}</span>
           <span className="text-[9px] font-bold text-text-muted bg-bg-deep px-1.5 py-0.5 rounded-md">
             {questions.length} {questions.length === 1 ? "question" : "questions"}
           </span>

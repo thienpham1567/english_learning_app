@@ -7,11 +7,11 @@ import { routeLogger } from "@/lib/logger";
 const log = routeLogger("grammar-lessons/generate");
 
 import { db, grammarLessonCache, grammarLessonProgress } from "@repo/database";
+import { buildGrammarLessonPrompt, CONTEXT_PACKS } from "@/lib/grammar-lessons/prompt";
 import {
   GrammarLessonGenerateRequestSchema,
   GrammarLessonSchema,
 } from "@/lib/grammar-lessons/schema";
-import { buildGrammarLessonPrompt, CONTEXT_PACKS } from "@/lib/grammar-lessons/prompt";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 

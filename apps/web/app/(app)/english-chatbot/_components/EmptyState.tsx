@@ -1,6 +1,16 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  Compass,
+  FileText,
+  Headphones,
+  Mic,
+  PenTool,
+  Sparkles,
+  Timer,
+} from "lucide-react";
 import { motion } from "motion/react";
 import { PERSONAS } from "@/lib/chat/personas";
 
@@ -24,49 +34,49 @@ const itemVariants = {
 
 const SKILL_STARTERS = [
   {
-    emoji: "🎧",
+    icon: Headphones,
     label: "Listening",
     prompt: "Give me a TOEIC Part 3 listening drill with audio.",
     desc: "Parts 1–4",
   },
   {
-    emoji: "📖",
+    icon: BookOpen,
     label: "Reading",
     prompt: "Drill me on TOEIC Part 5 grammar and vocabulary.",
     desc: "Parts 5–7",
   },
   {
-    emoji: "🗣️",
+    icon: Mic,
     label: "Speaking",
     prompt: "Let's practice TOEIC Speaking — give me a describe-the-picture task.",
     desc: "Respond by voice",
   },
   {
-    emoji: "✍️",
+    icon: PenTool,
     label: "Writing",
     prompt: "Give me a TOEIC Writing opinion-essay prompt and score my answer.",
     desc: "Email & essay",
   },
   {
-    emoji: "🧭",
+    icon: Compass,
     label: "Diagnose",
     prompt: "Run a quick 5-question check to estimate my TOEIC level.",
     desc: "Find weak spots",
   },
   {
-    emoji: "📝",
+    icon: FileText,
     label: "Mini-test",
     prompt: "Give me a 10-question TOEIC mini-test across skills.",
     desc: "Mixed practice",
   },
   {
-    emoji: "📊",
+    icon: BarChart3,
     label: "Part 7",
     prompt: "Give me a TOEIC Part 7 reading passage with 4 questions.",
     desc: "Reading comp",
   },
   {
-    emoji: "⏱️",
+    icon: Timer,
     label: "Strategy",
     prompt: "Teach me time-management strategy for the Reading section.",
     desc: "Test tactics",
@@ -150,7 +160,9 @@ export function EmptyState({ onSuggestedPrompt }: Props) {
               onClick={() => onSuggestedPrompt(s.prompt)}
               className="flex flex-col items-center gap-1.5 rounded-xl border-2 border-border bg-chat-surface p-3 text-center hover:border-accent/40 hover:bg-accent/5 transition-all cursor-pointer group"
             >
-              <span className="text-lg group-hover:scale-110 transition-transform">{s.emoji}</span>
+              <span className="text-lg group-hover:scale-110 transition-transform">
+                <s.icon className="h-5 w-5 text-accent" />
+              </span>
               <span className="text-[11px] font-bold text-ink">{s.label}</span>
               <span className="text-[10px] text-text-muted leading-tight">{s.desc}</span>
             </motion.button>

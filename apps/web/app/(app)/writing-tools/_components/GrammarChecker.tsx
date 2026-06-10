@@ -456,9 +456,7 @@ export function GrammarChecker() {
                 >
                   <CircleCheckBig className="text-success text-xl" />
                   <div>
-                    <div className="text-base font-black text-success font-display">
-                      Excellent!
-                    </div>
+                    <div className="text-base font-black text-success font-display">Excellent!</div>
                     <div className="text-xs text-text-muted mt-0.5">No errors detected</div>
                   </div>
                 </div>

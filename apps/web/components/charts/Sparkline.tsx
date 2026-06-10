@@ -57,9 +57,7 @@ export function Sparkline({
       className={className}
       style={{ display: "block" }}
     >
-      {filled && (
-        <path d={fillPath} fill={color} fillOpacity={0.12} />
-      )}
+      {filled && <path d={fillPath} fill={color} fillOpacity={0.12} />}
       <path
         d={linePath}
         fill="none"
@@ -85,10 +83,7 @@ export function Sparkline({
  * Compute weekly error counts from error timestamps.
  * Returns last N weeks of data.
  */
-export function computeWeeklyData(
-  timestamps: (string | Date)[],
-  weeks = 6,
-): number[] {
+export function computeWeeklyData(timestamps: (string | Date)[], weeks = 6): number[] {
   const now = Date.now();
   const msPerWeek = 7 * 24 * 60 * 60 * 1000;
   const counts = new Array(weeks).fill(0);

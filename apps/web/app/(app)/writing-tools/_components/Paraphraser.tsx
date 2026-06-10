@@ -406,7 +406,6 @@ export function Paraphraser() {
         </div>
       </div>
 
-
       {/* Action bar */}
       <div className="flex items-center gap-2.5">
         <Button

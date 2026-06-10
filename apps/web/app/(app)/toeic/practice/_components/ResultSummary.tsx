@@ -42,7 +42,9 @@ export function ResultSummary({
               padding: "2px 10px",
               borderRadius: 20,
               background:
-                percentage >= 70 ? "color-mix(in srgb, var(--success) 8%, transparent)" : "color-mix(in srgb, var(--warning) 8%, transparent)",
+                percentage >= 70
+                  ? "color-mix(in srgb, var(--success) 8%, transparent)"
+                  : "color-mix(in srgb, var(--warning) 8%, transparent)",
               color: percentage >= 70 ? "var(--success)" : "var(--warning)",
               fontSize: 12.5,
               border: `1px solid ${percentage >= 70 ? "color-mix(in srgb, var(--success) 20%, transparent)" : "color-mix(in srgb, var(--warning) 20%, transparent)"}`,

@@ -20,19 +20,19 @@ import {
 import * as m from "motion/react-client";
 import Link from "next/link";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   CURRICULUM,
   getPhaseForWeek,
   getWeek,
+  type Phase,
   SKILL_COLORS,
   SKILL_LABELS,
-  type Phase,
   type Skill,
   type Week,
 } from "@/lib/curriculum/data";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 const SKILL_ICONS: Record<
   Skill,
@@ -70,85 +70,86 @@ export default function RoadmapPage() {
       <div className="p-5 pb-16 max-w-6xl mx-auto w-full flex flex-col md:grid md:grid-cols-[260px_1fr] lg:grid-cols-[320px_1fr] md:items-start gap-6">
         {/* ─── Header ─── */}
         <div className="flex flex-col gap-6 md:sticky md:top-0">
-        <Card shadowSize="md" className="relative overflow-hidden">
-          <div
-            className="absolute top-0 left-0 right-0 h-[3px]"
-            style={{
-              background: "linear-gradient(90deg, #22c55e, #3b82f6, #f59e0b)",
-            }}
-          />
+          <Card shadowSize="md" className="relative overflow-hidden">
+            <div
+              className="absolute top-0 left-0 right-0 h-[3px]"
+              style={{
+                background: "linear-gradient(90deg, #22c55e, #3b82f6, #f59e0b)",
+              }}
+            />
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl grid place-items-center shrink-0 bg-accent/10 border-2 border-accent/20">
-              <Trophy className="text-accent" size={24} />
-            </div>
-            <div className="flex-1">
-              <h1 className="text-xl font-black text-ink font-display m-0">{CURRICULUM.title}</h1>
-              <p className="text-xs text-text-secondary font-semibold mt-1">
-                {CURRICULUM.duration} · Target: {CURRICULUM.targetScore.lr} L&R ·{" "}
-                {CURRICULUM.targetScore.sw} S&W
-              </p>
-            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl grid place-items-center shrink-0 bg-accent/10 border-2 border-accent/20">
+                <Trophy className="text-accent" size={24} />
+              </div>
+              <div className="flex-1">
+                <h1 className="text-xl font-black text-ink font-display m-0">{CURRICULUM.title}</h1>
+                <p className="text-xs text-text-secondary font-semibold mt-1">
+                  {CURRICULUM.duration} · Target: {CURRICULUM.targetScore.lr} L&R ·{" "}
+                  {CURRICULUM.targetScore.sw} S&W
+                </p>
+              </div>
 
-            {/* Overall progress */}
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="relative w-[56px] h-[56px]">
-                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="42"
-                    fill="none"
-                    stroke="var(--border)"
-                    strokeWidth="8"
-                  />
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="42"
-                    fill="none"
-                    stroke="var(--accent)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeDasharray={`${Math.round((overall.percent / 100) * 264)} 264`}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-black text-ink font-display">
-                    {overall.percent}%
-                  </span>
+              {/* Overall progress */}
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="relative w-[56px] h-[56px]">
+                  <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="42"
+                      fill="none"
+                      stroke="var(--border)"
+                      strokeWidth="8"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="42"
+                      fill="none"
+                      stroke="var(--accent)"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray={`${Math.round((overall.percent / 100) * 264)} 264`}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-sm font-black text-ink font-display">
+                      {overall.percent}%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
-
-        {/* ─── Today's Focus ─── */}
-        <m.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card shadowSize="sm" className="border-accent/30 bg-accent/5">
-            <div className="flex items-center gap-2.5 mb-2">
-              <Zap className="text-accent" size={18} />
-              <span className="text-sm font-black text-ink font-display">Today&apos;s Focus</span>
-              <span className="text-[10px] font-extrabold rounded-lg bg-accent/10 text-accent border-2 border-accent/20 px-2 py-0.5 ml-auto">
-                Week {currentWeek}
-              </span>
-            </div>
-            <p className="text-xs text-text-secondary font-semibold m-0">
-              {getWeek(currentWeek)?.focusTopic ?? "Start your learning journey!"}
-            </p>
-            <Link
-              href={`/roadmap/week/${currentWeek}`}
-              className="no-underline inline-flex items-center gap-1.5 mt-3 text-xs font-black text-accent hover:underline"
-            >
-              Continue Learning <ChevronRight size={14} />
-            </Link>
           </Card>
-        </m.div>
-        </div>{/* end sidebar */}
+
+          {/* ─── Today's Focus ─── */}
+          <m.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Card shadowSize="sm" className="border-accent/30 bg-accent/5">
+              <div className="flex items-center gap-2.5 mb-2">
+                <Zap className="text-accent" size={18} />
+                <span className="text-sm font-black text-ink font-display">Today&apos;s Focus</span>
+                <span className="text-[10px] font-extrabold rounded-lg bg-accent/10 text-accent border-2 border-accent/20 px-2 py-0.5 ml-auto">
+                  Week {currentWeek}
+                </span>
+              </div>
+              <p className="text-xs text-text-secondary font-semibold m-0">
+                {getWeek(currentWeek)?.focusTopic ?? "Start your learning journey!"}
+              </p>
+              <Link
+                href={`/roadmap/week/${currentWeek}`}
+                className="no-underline inline-flex items-center gap-1.5 mt-3 text-xs font-black text-accent hover:underline"
+              >
+                Continue Learning <ChevronRight size={14} />
+              </Link>
+            </Card>
+          </m.div>
+        </div>
+        {/* end sidebar */}
 
         {/* ─── Phase Timeline ─── */}
         <div className="flex flex-col gap-4">
@@ -388,9 +389,7 @@ export default function RoadmapPage() {
 
                                 {/* Go to week detail */}
                                 <Button asChild variant="dashed" size="sm" className="mt-2 w-full">
-                                  <Link
-                                    href={`/roadmap/week/${week.weekNumber}`}
-                                  >
+                                  <Link href={`/roadmap/week/${week.weekNumber}`}>
                                     View Full Week Details
                                     <ChevronRight size={14} />
                                   </Link>
@@ -426,9 +425,7 @@ export default function RoadmapPage() {
                           </div>
                         </div>
                         <Button asChild variant="outline" size="sm">
-                          <Link href={phase.checkpoint.routePath}>
-                            Take Test
-                          </Link>
+                          <Link href={phase.checkpoint.routePath}>Take Test</Link>
                         </Button>
                       </div>
                     </div>

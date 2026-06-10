@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, History, Trash2, X } from "lucide-react";
+import { Clock, History, Mic, Trash2, X, Zap } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { toast } from "sonner";
@@ -94,7 +94,7 @@ export function HistoryPanel({
                     >
                       {/* Voice flag */}
                       <div className="w-9 h-9 bg-surface border-2 border-border grid place-items-center text-lg shrink-0 rounded-xl">
-                        {voice?.flag ?? "🗣️"}
+                        {voice?.flag ?? <Mic className="h-4 w-4 text-text-secondary" />}
                       </div>
 
                       {/* Content */}
@@ -111,8 +111,8 @@ export function HistoryPanel({
                             {timeAgo(entry.createdAt)}
                           </span>
                           {cached && (
-                            <span className="font-extrabold rounded-md text-success text-[9.5px] py-px px-1.5 bg-[color-mix(in srgb, var(--success) 10%, transparent)] border-2 border-[color-mix(in srgb, var(--success) 20%, transparent)]">
-                              ⚡ Cached
+                            <span className="font-extrabold rounded-md text-success text-[9.5px] py-px px-1.5 bg-[color-mix(in srgb, var(--success) 10%, transparent)] border-2 border-[color-mix(in srgb, var(--success) 20%, transparent)] inline-flex items-center gap-0.5">
+                              <Zap className="h-2.5 w-2.5 fill-success text-success" /> Cached
                             </span>
                           )}
                         </div>

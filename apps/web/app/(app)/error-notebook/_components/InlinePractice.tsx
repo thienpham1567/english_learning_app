@@ -1,5 +1,5 @@
 "use client";
-import { CheckCircle, Loader2, XCircle, Zap } from "lucide-react";
+import { CheckCircle, Loader2, Sparkles, XCircle, Zap } from "lucide-react";
 import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 
@@ -181,7 +181,13 @@ export function InlinePractice({ errorId, onResolved }: Props) {
             ) : (
               <XCircle className="h-3.5 w-3.5" />
             )}
-            {isCorrect ? "Correct! 🎉" : "Incorrect!"}
+            {isCorrect ? (
+              <span className="inline-flex items-center gap-1">
+                Correct! <Sparkles className="h-3.5 w-3.5 text-accent fill-accent shrink-0" />
+              </span>
+            ) : (
+              "Incorrect!"
+            )}
           </div>
           <p className="m-0 text-xs leading-relaxed text-text-secondary italic">
             {data.explanation}

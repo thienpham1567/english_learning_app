@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import {
   ArrowLeft,
   CheckCircle,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { api } from "@/lib/api-client";
 
 type ClozeItem = {

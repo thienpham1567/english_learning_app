@@ -1,20 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import * as m from "motion/react-client";
 import {
-  BookOpenText,
-  Target,
-  Timer,
-  Repeat,
-  TrendingUp,
-  Headphones,
-  PenTool,
   BookOpen,
-  Type,
+  BookOpenText,
+  Headphones,
   MessageSquare,
   Pencil,
+  PenTool,
+  Repeat,
+  Target,
+  Timer,
+  TrendingUp,
+  Type,
 } from "lucide-react";
+import * as m from "motion/react-client";
+import Link from "next/link";
 import type { ComponentType } from "react";
 import { Card } from "@/components/ui/card";
 

@@ -185,7 +185,9 @@ export function ScoreSummary({
                 className="flex items-center justify-between rounded-lg border-2 border-border"
                 style={{
                   padding: "12px 14px",
-                  background: isWeak ? "color-mix(in srgb, var(--error) 3%, transparent)" : "var(--surface-alt)",
+                  background: isWeak
+                    ? "color-mix(in srgb, var(--error) 3%, transparent)"
+                    : "var(--surface-alt)",
                 }}
               >
                 <div className="flex items-center gap-2 w-[0px]">

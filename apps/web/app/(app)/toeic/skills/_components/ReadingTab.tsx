@@ -231,9 +231,7 @@ export function ReadingTab() {
               <Lightbulb size={18} />
             </div>
             <div className="flex-1">
-              <div className="text-sm font-black text-ink font-display">
-                Exam Strategy Tips
-              </div>
+              <div className="text-sm font-black text-ink font-display">Exam Strategy Tips</div>
               <div className="text-[11px] text-text-muted font-bold mt-0.5">
                 Part 5 · 6 · 7 strategies from 900+ scorers
               </div>
@@ -252,10 +250,7 @@ export function ReadingTab() {
               {STRATEGIES.map((s) => (
                 <div key={s.part}>
                   <div className="flex items-center gap-2 mb-2">
-                    <div
-                      className="w-1.5 h-4 rounded-full"
-                      style={{ backgroundColor: s.color }}
-                    />
+                    <div className="w-1.5 h-4 rounded-full" style={{ backgroundColor: s.color }} />
                     <span className="text-xs font-black text-ink">
                       {s.part} — {s.title}
                     </span>

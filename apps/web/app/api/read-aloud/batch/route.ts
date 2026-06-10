@@ -63,7 +63,6 @@ export async function POST(request: Request) {
     return Response.json({ error: `Tối đa ${MAX_LINES} dòng mỗi batch` }, { status: 400 });
   }
 
-
   const speed = typeof body.speed === "number" ? Math.max(0.5, Math.min(body.speed, 2.0)) : 1;
   const log = routeLogger("read-aloud-batch", { userId, lineCount: body.lines.length, speed });
 

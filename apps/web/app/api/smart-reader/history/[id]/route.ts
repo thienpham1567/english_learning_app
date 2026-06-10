@@ -1,5 +1,5 @@
 import { db, smartReaderHistory } from "@repo/database";
-import { eq, and } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
@@ -16,12 +16,7 @@ export async function GET(_req: Request, { params }: Params) {
   const [row] = await db
     .select()
     .from(smartReaderHistory)
-    .where(
-      and(
-        eq(smartReaderHistory.id, id),
-        eq(smartReaderHistory.userId, session.user.id),
-      ),
-    )
+    .where(and(eq(smartReaderHistory.id, id), eq(smartReaderHistory.userId, session.user.id)))
     .limit(1);
 
   if (!row) {
@@ -41,12 +36,7 @@ export async function DELETE(_req: Request, { params }: Params) {
   const { id } = await params;
   await db
     .delete(smartReaderHistory)
-    .where(
-      and(
-        eq(smartReaderHistory.id, id),
-        eq(smartReaderHistory.userId, session.user.id),
-      ),
-    );
+    .where(and(eq(smartReaderHistory.id, id), eq(smartReaderHistory.userId, session.user.id)));
 
   return new Response(null, { status: 204 });
 }

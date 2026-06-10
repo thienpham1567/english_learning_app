@@ -6,30 +6,30 @@ import {
   ArrowDown,
   ArrowUp,
   BarChart2,
+  Book,
+  BookOpen,
+  Clock,
+  Construction,
+  Ear,
+  GraduationCap,
+  Headphones,
   HelpCircle,
   Info,
   LineChart,
-  Minus,
-  TrendingDown,
-  TrendingUp,
-  Clock,
-  Pin,
-  MapPin,
-  Type,
   Link2,
-  Construction,
-  Book,
+  MapPin,
+  Minus,
+  PenTool,
+  Pin,
   Puzzle,
   Target,
-  PenTool,
+  TrendingDown,
+  TrendingUp,
+  Type,
   Volume2,
-  Headphones,
-  Ear,
-  BookOpen,
-  GraduationCap,
 } from "lucide-react";
 import { useMemo } from "react";
-import { Sparkline, computeWeeklyData } from "@/components/charts/Sparkline";
+import { computeWeeklyData, Sparkline } from "@/components/charts/Sparkline";
 
 const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   tense: Clock,
@@ -92,9 +92,7 @@ function TrendRow({ trend, errors }: { trend: CategoryTrend; errors: TrendInput[
   // Compute weekly sparkline data for this category
   const sparkData = useMemo(() => {
     const key = trend.category.key;
-    const categoryErrors = errors.filter(
-      (e) => e.grammarTopic === key || e.sourceModule === key,
-    );
+    const categoryErrors = errors.filter((e) => e.grammarTopic === key || e.sourceModule === key);
     const timestamps = categoryErrors.map((e) => e.createdAt);
     return computeWeeklyData(timestamps, 6);
   }, [errors, trend.category.key]);

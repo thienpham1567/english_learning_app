@@ -6,13 +6,19 @@ import {
   Calculator,
   ChevronRight,
   CircleCheckBig,
+  Clock,
+  FileText,
   Languages,
   Lightbulb,
   Loader2,
   MessageSquare,
+  Pin,
+  Play,
   RefreshCw,
+  Target,
   Volume2,
   XCircle,
+  Zap,
 } from "lucide-react";
 import * as m from "motion/react-client";
 import type { ReactNode } from "react";
@@ -132,7 +138,9 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
           {lesson.explanationEn ?? lesson.explanation}
         </p>
         <div className="mt-3.5 py-3 px-4 rounded-lg bg-surface-alt border-l-4 border-accent">
-          <span className="text-[11.5px] font-black text-accent-active">📝 Giải thích</span>
+          <span className="text-[11.5px] font-black text-accent-active inline-flex items-center gap-1">
+            <FileText className="h-3.5 w-3.5" /> Giải thích
+          </span>
           <p className="mt-1.5 m-0 text-text-secondary font-medium text-[13.5px] leading-relaxed">
             {lesson.explanation}
           </p>
@@ -141,7 +149,7 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
 
       {/* Usage notes */}
       {lesson.usageNotes && lesson.usageNotes.length > 0 && (
-        <Section icon={<span>📌</span>} title="Usage Notes">
+        <Section icon={<Pin className="h-3.5 w-3.5" />} title="Usage Notes">
           <div className="flex flex-col gap-2.5">
             {lesson.usageNotes.map((note, idx) => (
               <div
@@ -162,14 +170,14 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
 
       {/* TOEIC tips */}
       {lesson.toeicTips && lesson.toeicTips.length > 0 && (
-        <Section icon={<span>🎯</span>} title="TOEIC Exam Tips">
+        <Section icon={<Target className="h-3.5 w-3.5 text-accent" />} title="TOEIC Exam Tips">
           <div className="flex flex-col gap-2">
             {lesson.toeicTips.map((tip, idx) => (
               <div
                 key={idx}
                 className="flex gap-2.5 items-start rounded-lg bg-surface-alt border-2 border-border py-3 px-3.5"
               >
-                <span className="text-base shrink-0">💡</span>
+                <Lightbulb className="h-3.5 w-3.5 text-warning shrink-0 mt-0.5" />
                 <p className="m-0 text-text-primary font-semibold text-[13.5px] leading-relaxed">
                   {tip}
                 </p>
@@ -181,7 +189,7 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
 
       {/* Time signals */}
       {lesson.timeSignals && lesson.timeSignals.length > 0 && (
-        <Section icon={<span>⏰</span>} title="Time Signals & Keywords">
+        <Section icon={<Clock className="h-3.5 w-3.5" />} title="Time Signals & Keywords">
           <div className="flex flex-wrap gap-2">
             {lesson.timeSignals.map((signal, idx) => (
               <span
@@ -197,7 +205,10 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
 
       {/* Confusion pairs */}
       {lesson.confusionPairs && lesson.confusionPairs.length > 0 && (
-        <Section icon={<span>⚡</span>} title="Commonly Confused Structures">
+        <Section
+          icon={<Zap className="h-3.5 w-3.5 text-accent" />}
+          title="Commonly Confused Structures"
+        >
           <div className="flex flex-col gap-3">
             {lesson.confusionPairs.map((pair, idx) => (
               <div key={idx} className="rounded-lg border-2 border-border overflow-hidden">
@@ -303,7 +314,8 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
         onClick={onStart}
         className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-4 px-6 text-base font-black text-text-on-accent bg-accent border-2 border-border shadow-md hover:bg-accent-hover cursor-pointer font-display"
       >
-        🚀 Start Practice — {lesson.exercises.length} questions
+        <Play className="h-4 w-4 fill-current" /> Start Practice — {lesson.exercises.length}{" "}
+        questions
         <ChevronRight size={18} />
       </m.button>
     </div>

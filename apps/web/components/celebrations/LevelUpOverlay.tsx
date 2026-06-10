@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, Star, X } from "lucide-react";
+import { Sparkles, Star, Target, X, Zap } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -138,7 +138,7 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
               </div>
               <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-left">
                 <span className="w-8 h-8 rounded-lg bg-accent/10 border-2 border-accent/20 grid place-items-center text-accent shrink-0">
-                  🎯
+                  <Target size={16} />
                 </span>
                 <div>
                   <div className="text-xs font-bold text-ink">New Challenge Difficulty</div>
@@ -146,8 +146,8 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
                 </div>
               </div>
               <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-left">
-                <span className="w-8 h-8 rounded-lg bg-xp/10 border-2 border-xp/20 grid place-items-center shrink-0">
-                  ⚡
+                <span className="w-8 h-8 rounded-lg bg-xp/10 border-2 border-xp/20 grid place-items-center text-xp shrink-0">
+                  <Zap size={16} className="fill-current" />
                 </span>
                 <div>
                   <div className="text-xs font-bold text-ink">XP Multiplier +10%</div>

@@ -25,9 +25,8 @@ type PassageDetail = {
   isRead: boolean;
 };
 
-import { CEFR_COLORS } from "@/lib/constants/cefr";
 import { Button } from "@/components/ui/button";
-
+import { CEFR_COLORS } from "@/lib/constants/cefr";
 
 export default function GradedPassagePage() {
   const { id } = useParams<{ id: string }>();
@@ -93,9 +92,13 @@ export default function GradedPassagePage() {
     <div className="anim-fade-up h-full overflow-y-auto p-6">
       <div className="w-full max-w-[720px] mx-auto flex flex-col gap-5">
         {/* Back button */}
-          <Button variant="link" onClick={() => router.push("/reading/graded")} className="text-text-muted text-[13px] self-start bg-transparent border-none">
-            <ArrowLeft size={12} /> Back to List
-          </Button>
+        <Button
+          variant="link"
+          onClick={() => router.push("/reading/graded")}
+          className="text-text-muted text-[13px] self-start bg-transparent border-none"
+        >
+          <ArrowLeft size={12} /> Back to List
+        </Button>
 
         {/* Article header card */}
         <div className="overflow-hidden rounded-[20px] border-2 border-border">

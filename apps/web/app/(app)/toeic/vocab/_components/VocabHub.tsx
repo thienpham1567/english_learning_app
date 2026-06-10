@@ -2,8 +2,8 @@
 
 import { AlertTriangle, BookOpen, MapPin } from "lucide-react";
 import Link from "next/link";
-import { getVocabRoadmapWeek } from "@/lib/curriculum/vocab-mapping";
 import { Card } from "@/components/ui/card";
+import { getVocabRoadmapWeek } from "@/lib/curriculum/vocab-mapping";
 
 type Pack = { topic: string; label: string; total: number; learned: number };
 
@@ -23,7 +23,11 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
             <Link
               href="/toeic/vocab/learn?mode=review"
               className="py-2 px-4 rounded-lg text-sm font-bold"
-              style={{ background: "var(--error)", color: "var(--text-on-accent)", textDecoration: "none" }}
+              style={{
+                background: "var(--error)",
+                color: "var(--text-on-accent)",
+                textDecoration: "none",
+              }}
             >
               Review Now
             </Link>

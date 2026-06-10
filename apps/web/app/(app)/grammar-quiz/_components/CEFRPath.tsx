@@ -52,7 +52,6 @@ export function CEFRPath({
       shadowSize="sm"
       className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6"
     >
-
       <h3 className="text-xl font-black font-display text-text-primary m-0">TOEIC Part 5 Quiz</h3>
       <p className="mt-1 text-[13px] text-text-secondary font-medium">
         Practice Part 5 multiple choice questions designed to match real exam standards

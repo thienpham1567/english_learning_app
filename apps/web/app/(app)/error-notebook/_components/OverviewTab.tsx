@@ -11,13 +11,13 @@ import {
 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useMemo } from "react";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 import { BatchConvertToFlashcards } from "./BatchConvertToFlashcards";
 import { ErrorPatternSummary } from "./ErrorPatternSummary";
 import { ErrorTrendSection } from "./ErrorTrendSection";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 interface OverviewTabProps {
   errors: ErrorEntry[];
@@ -261,9 +261,7 @@ export function OverviewTab({
 
       {/* ─── Batch Convert to Flashcards ─── */}
       {unresolvedCount > 0 && (
-        <BatchConvertToFlashcards
-          errorIds={errors.filter((e) => !e.isResolved).map((e) => e.id)}
-        />
+        <BatchConvertToFlashcards errorIds={errors.filter((e) => !e.isResolved).map((e) => e.id)} />
       )}
 
       {/* ─── Error Trends ─── */}

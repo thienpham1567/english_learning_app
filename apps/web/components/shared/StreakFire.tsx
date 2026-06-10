@@ -1,5 +1,6 @@
 "use client";
 
+import { Flame } from "lucide-react";
 import * as m from "motion/react-client";
 
 interface StreakFireProps {
@@ -48,14 +49,13 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
           }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           style={{
-            fontSize: config.fontSize,
             lineHeight: 1,
             display: "inline-block",
             transformOrigin: "bottom center",
             zIndex: 2,
           }}
         >
-          🔥
+          <Flame size={config.fontSize} className="text-fire fill-fire" />
         </m.span>
 
         {/* Particles */}
@@ -71,14 +71,13 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
               position: "absolute",
               bottom: -2,
               left: -4,
-              fontSize: config.fontSize * 0.55,
               lineHeight: 1,
               display: "inline-block",
               transformOrigin: "bottom center",
               zIndex: 1,
             }}
           >
-            🔥
+            <Flame size={config.fontSize * 0.55} className="text-fire fill-fire" />
           </m.span>
         )}
         {config.particles >= 3 && (
@@ -93,14 +92,13 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
               position: "absolute",
               bottom: -2,
               right: -4,
-              fontSize: config.fontSize * 0.5,
               lineHeight: 1,
               display: "inline-block",
               transformOrigin: "bottom center",
               zIndex: 1,
             }}
           >
-            🔥
+            <Flame size={config.fontSize * 0.5} className="text-fire fill-fire" />
           </m.span>
         )}
       </div>

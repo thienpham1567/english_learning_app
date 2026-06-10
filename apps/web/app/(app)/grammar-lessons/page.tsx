@@ -5,9 +5,13 @@ import {
   ArrowRight,
   BookOpen,
   CheckCircle,
+  FileText,
   Flame,
+  Map,
+  RefreshCw,
   Rocket,
   Star,
+  Target,
   Trophy,
   Zap,
 } from "lucide-react";
@@ -39,22 +43,22 @@ type ProgressResponse = {
 
 const STRATEGY_TIPS = [
   {
-    emoji: "🎯",
+    icon: Target,
     title: "Part 5: 20 giây/câu",
     desc: "Xác định từ loại trước để loại ngay 2 đáp án. 80% Part 5 hỏi word form, thì, hoặc hòa hợp chủ–vị.",
   },
   {
-    emoji: "📚",
+    icon: BookOpen,
     title: "Học theo cặp đối lập",
     desc: "Luôn học because vs because of, although vs despite cùng nhau — TOEIC rất hay bẫy liên từ vs giới từ.",
   },
   {
-    emoji: "🔁",
+    icon: RefreshCw,
     title: "Luyện lặp ngắt quãng",
     desc: "Sau mỗi bài, AI sinh bài tập 4 tầng: nhận biết → vận dụng → tự viết → ngữ cảnh đề thi.",
   },
   {
-    emoji: "⚡",
+    icon: Zap,
     title: "Đừng bỏ qua bị động",
     desc: "10–15% Part 5/6 hỏi bị động. Nắm be + V3 và causative (have something done) là điểm dễ ăn.",
   },
@@ -306,13 +310,13 @@ export default function GrammarLessonsPage() {
                 >
                   <QuickLinkCard
                     href="/roadmap"
-                    emoji="🗺️"
+                    icon={Map}
                     label="Learning Roadmap"
                     desc="24-week TOEIC plan"
                   />
                   <QuickLinkCard
                     href="/grammar-quiz"
-                    emoji="📝"
+                    icon={FileText}
                     label="Part 5 Quiz"
                     desc="Real exam practice"
                   />
@@ -353,7 +357,9 @@ export default function GrammarLessonsPage() {
                   <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
                     {STRATEGY_TIPS.map((tip) => (
                       <Card key={tip.title} shadowSize="sm" size="sm" bgType="alt">
-                        <div className="text-xl mb-1.5">{tip.emoji}</div>
+                        <div className="mb-2">
+                          <tip.icon className="h-5 w-5 text-accent-active" />
+                        </div>
                         <div className="font-extrabold text-ink mb-1 text-[13.5px]">
                           {tip.title}
                         </div>

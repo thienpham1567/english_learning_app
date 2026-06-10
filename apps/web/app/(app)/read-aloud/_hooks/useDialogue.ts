@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/lib/api-client";
 import { GROQ_VOICES } from "../_data/voices";
-import { getCachedAudio, setCachedAudio, makeCacheKey } from "../_lib/audio-cache";
+import { getCachedAudio, makeCacheKey, setCachedAudio } from "../_lib/audio-cache";
 
 export interface DialogueLine {
   speaker: string; // "A" | "B" | "C"
@@ -153,7 +153,10 @@ export function useDialogue() {
         setDialogue(data);
         // Use pre-configured voiceConfig if provided, otherwise auto-assign
         const assignments = options.voiceConfig
-          ? (() => { setVoiceAssignments(options.voiceConfig); return options.voiceConfig; })()
+          ? (() => {
+              setVoiceAssignments(options.voiceConfig);
+              return options.voiceConfig;
+            })()
           : assignVoices(data.lines, options.primaryVoice);
         /* toast: success */
 
@@ -280,7 +283,9 @@ export function useDialogue() {
         audioCacheRef.current.set(memKey, url);
         resolvedUrls[i] = url;
         const persistKey = makeCacheKey(line.text, a.voiceRole, speed);
-        setCachedAudio(persistKey, blob, { text: line.text, voiceRole: a.voiceRole, speed }).catch(() => {});
+        setCachedAudio(persistKey, blob, { text: line.text, voiceRole: a.voiceRole, speed }).catch(
+          () => {},
+        );
       };
 
       // Fetch all lines via Groq batch API
@@ -429,12 +434,7 @@ export function useDialogue() {
 
         if (!url) {
           setIsLoading(true);
-          url = await ttsLine(
-            line.text,
-            assignment.voiceRole,
-            speed,
-            abortRef.current.signal,
-          );
+          url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
           audioCacheRef.current.set(cacheKey, url);
         }
 

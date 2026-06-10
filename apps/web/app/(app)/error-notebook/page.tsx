@@ -3,8 +3,8 @@
 import { BarChart2, Brain, ClipboardList, FlaskConical } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
-import { api } from "@/lib/api-client";
 import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
+import { api } from "@/lib/api-client";
 import { AnalysisTab } from "./_components/AnalysisTab";
 import { ListTab } from "./_components/ListTab";
 import { OverviewTab } from "./_components/OverviewTab";

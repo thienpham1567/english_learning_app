@@ -1,7 +1,9 @@
 "use client";
 
-import { toast } from "sonner";
+import { Headphones, MessageSquare, Mic } from "lucide-react";
+import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
 import { DialoguePlayer } from "./_components/DialoguePlayer";
 import { HistoryPanel } from "./_components/HistoryPanel";
 import { PassageBrowser } from "./_components/PassageBrowser";
@@ -12,8 +14,6 @@ import { VoiceSelector } from "./_components/VoiceSelector";
 import { getVoiceByRole, getVoicesByProvider, type TtsProvider } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
-import { Headphones, Mic, MessageSquare } from "lucide-react";
-import * as m from "motion/react-client";
 
 type AppMode = "listen" | "shadow" | "dialogue";
 
@@ -55,16 +55,13 @@ export default function ReadAloudPage() {
   const selectedVoice = getVoiceByRole(selectedRole);
 
   /* ── Auto-select first voice when provider changes ── */
-  const handleProviderChange = useCallback(
-    (p: TtsProvider) => {
-      setProvider(p);
-      const voices = getVoicesByProvider(p);
-      if (voices.length > 0) {
-        setSelectedRole(voices[0].role);
-      }
-    },
-    [],
-  );
+  const handleProviderChange = useCallback((p: TtsProvider) => {
+    setProvider(p);
+    const voices = getVoicesByProvider(p);
+    if (voices.length > 0) {
+      setSelectedRole(voices[0].role);
+    }
+  }, []);
 
   /* ── Generate handler ── */
   const handleGenerate = useCallback(async () => {

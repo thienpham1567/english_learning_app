@@ -25,14 +25,14 @@ import {
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { SectionHeader } from "@/components/ui/section-header";
+import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
+import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 import { LevelUpOverlay, useLevelUpDetection } from "@/components/celebrations/LevelUpOverlay";
 import { ScoreCounter } from "@/components/celebrations/ScoreCounter";
 import { useStreakCelebration } from "@/components/celebrations/StreakCelebration";
-import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
-import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { SectionHeader } from "@/components/ui/section-header";
 import {
   type DailyPlanItem,
   type DailyPlanStats,
@@ -40,8 +40,8 @@ import {
 } from "@/hooks/useDailyStudyPlan";
 import { type DashboardData, useDashboard } from "@/hooks/useDashboard";
 import { api } from "@/lib/api-client";
-import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { getWeek } from "@/lib/curriculum/data";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { getMotivationalMessage, getSmartGreeting } from "@/lib/motivational-messages";
 
 // ── Types ────────────────────────────────────────────────────────
@@ -70,8 +70,6 @@ const containerVariants = {
     transition: { staggerChildren: 0.08 },
   },
 };
-
-
 
 // ── Component ────────────────────────────────────────────────────
 export default function DashboardPage() {
@@ -127,7 +125,6 @@ export default function DashboardPage() {
           <Card className="relative overflow-hidden rounded-2xl bg-surface flex flex-col md:flex-row md:items-center justify-between gap-6">
             {/* Subtle grid pattern background */}
             <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
-
 
             <div className="flex items-start gap-4.5 relative z-10">
               <div className="w-14 h-14 rounded-2xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden group">

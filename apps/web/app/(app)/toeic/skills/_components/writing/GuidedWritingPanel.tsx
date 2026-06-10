@@ -453,10 +453,7 @@ export function GuidedWritingPanel() {
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {exampleResult.vocabularyHighlights.map((v, i) => (
-                      <span
-                        key={i}
-                        className="relative group inline-block"
-                      >
+                      <span key={i} className="relative group inline-block">
                         <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-success/10 text-success border border-success/20 cursor-help">
                           {v.term}
                         </span>

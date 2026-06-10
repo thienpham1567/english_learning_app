@@ -187,7 +187,11 @@ export async function HubWidgets() {
 
   const priorityColors = (p: PlanItem["priority"]) =>
     p === "high"
-      ? { bg: "color-mix(in srgb, var(--error) 8%, transparent)", text: "var(--error)", border: "color-mix(in srgb, var(--error) 20%, transparent)" }
+      ? {
+          bg: "color-mix(in srgb, var(--error) 8%, transparent)",
+          text: "var(--error)",
+          border: "color-mix(in srgb, var(--error) 20%, transparent)",
+        }
       : p === "medium"
         ? {
             bg: "color-mix(in srgb, var(--warning) 8%, transparent)",

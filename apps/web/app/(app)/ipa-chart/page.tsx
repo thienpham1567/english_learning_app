@@ -207,7 +207,9 @@ export default function IpaChartPage() {
                 );
               })}
               {searchLower && filterPhonemes(CONSONANTS).length === 0 && (
-                <p className="text-center text-text-muted text-sm py-8 font-bold">No consonants match "{search}"</p>
+                <p className="text-center text-text-muted text-sm py-8 font-bold">
+                  No consonants match "{search}"
+                </p>
               )}
             </div>
           ) : (
@@ -234,7 +236,9 @@ export default function IpaChartPage() {
                 );
               })}
               {searchLower && filterPhonemes(VOWELS).length === 0 && (
-                <p className="text-center text-text-muted text-sm py-8 font-bold">No vowels match "{search}"</p>
+                <p className="text-center text-text-muted text-sm py-8 font-bold">
+                  No vowels match "{search}"
+                </p>
               )}
             </div>
           )}

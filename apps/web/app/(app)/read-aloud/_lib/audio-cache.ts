@@ -75,7 +75,11 @@ async function idbGet(key: string): Promise<Blob | null> {
 }
 
 /** L1 SET — save to IndexedDB */
-async function idbSet(key: string, blob: Blob, meta: { text: string; voiceRole: string; speed: number }): Promise<void> {
+async function idbSet(
+  key: string,
+  blob: Blob,
+  meta: { text: string; voiceRole: string; speed: number },
+): Promise<void> {
   try {
     const db = await openDB();
     await new Promise<void>((resolve) => {
@@ -142,7 +146,11 @@ async function dbGet(key: string): Promise<Blob | null> {
 }
 
 /** L2 SET — save to DB via API (fire-and-forget) */
-function dbSet(key: string, blob: Blob, meta: { text: string; voiceRole: string; speed: number }): void {
+function dbSet(
+  key: string,
+  blob: Blob,
+  meta: { text: string; voiceRole: string; speed: number },
+): void {
   // Convert blob to base64, then POST
   const reader = new FileReader();
   reader.onloadend = () => {

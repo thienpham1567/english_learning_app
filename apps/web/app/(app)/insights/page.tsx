@@ -16,13 +16,13 @@ import { motion } from "motion/react";
 import * as m from "motion/react-client";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Card } from "@/components/ui/card";
 import { ScoreCounter } from "@/components/celebrations/ScoreCounter";
-import { Sparkline, computeWeeklyData } from "@/components/charts/Sparkline";
-import { useDashboard } from "@/hooks/useDashboard";
+import { computeWeeklyData, Sparkline } from "@/components/charts/Sparkline";
+import { Card } from "@/components/ui/card";
 import { useDailyStudyPlan } from "@/hooks/useDailyStudyPlan";
+import { useDashboard } from "@/hooks/useDashboard";
 import { api } from "@/lib/api-client";
-import { TOEIC_GRAMMAR_MAP, getToeicImpact } from "@/lib/toeic-impact-map";
+import { getToeicImpact, TOEIC_GRAMMAR_MAP } from "@/lib/toeic-impact-map";
 
 // ── Types ─────────────────────────────────────────────────────────
 type PredictedScore = {
@@ -107,11 +107,7 @@ function ScoreRing({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <ScoreCounter
-            value={score}
-            className="text-lg font-black font-mono"
-            duration={1500}
-          />
+          <ScoreCounter value={score} className="text-lg font-black font-mono" duration={1500} />
         </div>
       </div>
       <span className="text-[9px] font-extrabold uppercase tracking-widest text-text-muted">
@@ -159,10 +155,7 @@ function FocusAreaCard({ area, index }: { area: FocusArea; index: number }) {
             <span className="text-[9px] font-extrabold uppercase tracking-widest text-text-muted">
               Mastery
             </span>
-            <span
-              className="text-[11px] font-black font-mono"
-              style={{ color: masteryColor }}
-            >
+            <span className="text-[11px] font-black font-mono" style={{ color: masteryColor }}>
               {area.masteryPercent}%
             </span>
           </div>
@@ -205,10 +198,16 @@ export default function InsightsPage() {
     let cancelled = false;
     api
       .get<PredictedScore>("/predicted-score")
-      .then((d) => { if (!cancelled) setScore(d); })
+      .then((d) => {
+        if (!cancelled) setScore(d);
+      })
       .catch(() => {})
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Fetch insights data (focus areas)
@@ -216,7 +215,9 @@ export default function InsightsPage() {
     let cancelled = false;
     api
       .get<InsightsData>("/profile/insights")
-      .then((d) => { if (!cancelled) setInsights(d); })
+      .then((d) => {
+        if (!cancelled) setInsights(d);
+      })
       .catch(() => {
         // Generate client-side fallback if endpoint doesn't exist
         if (!cancelled) {
@@ -239,7 +240,9 @@ export default function InsightsPage() {
           });
         }
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Weekly XP sparkline data
@@ -347,9 +350,7 @@ export default function InsightsPage() {
             <motion.div variants={itemVariants}>
               <Card shadowSize="sm" className="items-center text-center py-4">
                 <BarChart2 className="h-5 w-5 text-accent mb-1" />
-                <div className="text-xl font-black text-ink font-mono">
-                  {resolutionRate}%
-                </div>
+                <div className="text-xl font-black text-ink font-mono">{resolutionRate}%</div>
                 <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-0.5">
                   Error Resolution
                 </div>
@@ -440,7 +441,8 @@ export default function InsightsPage() {
                 <div className="flex items-center gap-2.5 mb-4">
                   <Award size={14} className="text-xp" />
                   <span className="text-[10px] font-extrabold uppercase tracking-widest text-text-muted font-display">
-                    Achievements ({dash.badges.filter((b) => b.unlocked).length}/{dash.badges.length})
+                    Achievements ({dash.badges.filter((b) => b.unlocked).length}/
+                    {dash.badges.length})
                   </span>
                 </div>
                 <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">

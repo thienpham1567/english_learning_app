@@ -15,8 +15,8 @@ import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
-import { useDashboard } from "@/hooks/useDashboard";
 import { Card } from "@/components/ui/card";
+import { useDashboard } from "@/hooks/useDashboard";
 
 type Props = {
   totalReviewed: number;
@@ -87,8 +87,7 @@ export function SessionSummary({
           shadowSize="sm"
           className="text-center relative overflow-hidden flex flex-col items-center gap-3 py-8 px-6 rounded-xl"
           style={{
-            background:
-              "color-mix(in srgb, var(--accent) 8%, var(--surface))",
+            background: "color-mix(in srgb, var(--accent) 8%, var(--surface))",
           }}
         >
           {/* Ambient glow behind streak */}
@@ -200,8 +199,7 @@ export function SessionSummary({
               shadowSize="sm"
               className="flex-row items-center gap-3.5 py-4 px-5 rounded-xl text-left"
               style={{
-                background:
-                  "color-mix(in srgb, var(--accent) 6%, var(--surface))",
+                background: "color-mix(in srgb, var(--accent) 6%, var(--surface))",
                 border: "2px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
               }}
             >

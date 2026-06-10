@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Loader2, Sparkles } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";

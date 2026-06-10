@@ -43,7 +43,11 @@ const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: str
     color: "var(--warning)",
     border: "color-mix(in srgb, var(--warning) 20%, transparent)",
   },
-  C1: { bg: "color-mix(in srgb, var(--error) 8%, transparent)", color: "var(--error)", border: "color-mix(in srgb, var(--error) 20%, transparent)" },
+  C1: {
+    bg: "color-mix(in srgb, var(--error) 8%, transparent)",
+    color: "var(--error)",
+    border: "color-mix(in srgb, var(--error) 20%, transparent)",
+  },
 };
 
 const SECTIONS = [

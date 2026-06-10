@@ -654,10 +654,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                         border = "1.5px solid var(--success)";
                         color = "var(--success)";
                         iconElement = (
-                          <CheckCircle
-                            className="text-success"
-                            style={{ marginLeft: "auto" }}
-                          />
+                          <CheckCircle className="text-success" style={{ marginLeft: "auto" }} />
                         );
                       } else if (isSel) {
                         bg = "color-mix(in srgb, var(--error) 8%, transparent)";

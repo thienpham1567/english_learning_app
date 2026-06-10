@@ -74,9 +74,7 @@ function AudioButton({
   return (
     <button
       type="button"
-      aria-label={
-        locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"
-      }
+      aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
       onClick={() => onSpeak(locale)}
       className="grid w-6 h-6 place-items-center rounded border-none bg-transparent text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent"
     >
@@ -89,9 +87,7 @@ function AudioButton({
   );
 }
 
-function getNumberLabel(
-  numberInfo: NonNullable<Vocabulary["numberInfo"]>,
-): string {
+function getNumberLabel(numberInfo: NonNullable<Vocabulary["numberInfo"]>): string {
   if (numberInfo.isUncountable) return "uncountable";
   if (numberInfo.isPluralOnly) return "plural only";
   if (numberInfo.isSingularOnly) return "singular only";
@@ -124,13 +120,7 @@ export function DictionaryResultCard({
             <div
               key={i}
               className={`h-4 rounded-lg bg-bg-deep animate-pulse ${
-                i === 1
-                  ? "w-3/5"
-                  : i === 2
-                    ? "w-2/5"
-                    : i === 3
-                      ? "w-1/3"
-                      : "w-1/4"
+                i === 1 ? "w-3/5" : i === 2 ? "w-2/5" : i === 3 ? "w-1/3" : "w-1/4"
               }`}
             />
           ))}
@@ -152,12 +142,9 @@ export function DictionaryResultCard({
     );
   }
 
-  const activeSense =
-    vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
+  const activeSense = vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
   const hasDualPhonetics = vocabulary.phoneticsUs || vocabulary.phoneticsUk;
-  const numberLabel = vocabulary.numberInfo
-    ? getNumberLabel(vocabulary.numberInfo)
-    : "";
+  const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
 
   // Determine POS display
   const posKey =
@@ -170,10 +157,7 @@ export function DictionaryResultCard({
   const posDisplay = posEn ?? posKey ?? "word";
 
   return (
-    <div
-      key={vocabulary.headword}
-      className="dictionary-result-card bg-surface min-h-[400px]"
-    >
+    <div key={vocabulary.headword} className="dictionary-result-card bg-surface min-h-[400px]">
       {/* ── Header: headword + metadata on one line ── */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
@@ -189,33 +173,35 @@ export function DictionaryResultCard({
                 {numberLabel}
               </span>
             )}
-            {vocabulary.level && (() => {
-              const badgeClass =
-                CEFR_BADGE_CLASSES[vocabulary.level] ??
-                "text-text-secondary border-border bg-bg-deep";
-              return (
-                <span
-                  className={`rounded-lg px-3 py-0.5 text-xs font-bold tracking-wide border-2 ${badgeClass}`}
-                >
-                  {vocabulary.level}
-                </span>
-              );
-            })()}
-            {vocabulary.register && (() => {
-              const info = REGISTER_INFO[vocabulary.register];
-              const display = info?.en ?? vocabulary.register;
-              const tooltip = info
-                ? `${vocabulary.register} — ${info.tooltipEn}`
-                : vocabulary.register;
-              return (
-                <span className="relative group rounded-lg px-2.5 py-0.5 text-xs border-2 border-border text-text-primary bg-accent-light font-bold cursor-help">
-                  {display}
-                  <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
-                    {tooltip}
+            {vocabulary.level &&
+              (() => {
+                const badgeClass =
+                  CEFR_BADGE_CLASSES[vocabulary.level] ??
+                  "text-text-secondary border-border bg-bg-deep";
+                return (
+                  <span
+                    className={`rounded-lg px-3 py-0.5 text-xs font-bold tracking-wide border-2 ${badgeClass}`}
+                  >
+                    {vocabulary.level}
                   </span>
-                </span>
-              );
-            })()}
+                );
+              })()}
+            {vocabulary.register &&
+              (() => {
+                const info = REGISTER_INFO[vocabulary.register];
+                const display = info?.en ?? vocabulary.register;
+                const tooltip = info
+                  ? `${vocabulary.register} — ${info.tooltipEn}`
+                  : vocabulary.register;
+                return (
+                  <span className="relative group rounded-lg px-2.5 py-0.5 text-xs border-2 border-border text-text-primary bg-accent-light font-bold cursor-help">
+                    {display}
+                    <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+                      {tooltip}
+                    </span>
+                  </span>
+                );
+              })()}
           </div>
         </div>
         {/* Save button */}
@@ -225,9 +211,7 @@ export function DictionaryResultCard({
             className="grid w-8 h-8 place-items-center rounded-lg bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent hover:bg-surface-alt shrink-0"
             aria-label={saved ? "Remove word from saved" : "Save this word"}
           >
-            <Star
-              className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`}
-            />
+            <Star className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`} />
           </button>
         )}
       </div>
@@ -243,11 +227,7 @@ export function DictionaryResultCard({
               <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border-2 border-border">
                 {vocabulary.phoneticsUs}
               </span>
-              <AudioButton
-                locale="en-US"
-                speakingLocale={speakingLocale}
-                onSpeak={speak}
-              />
+              <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
           )}
           {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
@@ -261,11 +241,7 @@ export function DictionaryResultCard({
               <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border-2 border-border">
                 {vocabulary.phoneticsUk}
               </span>
-              <AudioButton
-                locale="en-GB"
-                speakingLocale={speakingLocale}
-                onSpeak={speak}
-              />
+              <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
           )}
         </div>
@@ -276,16 +252,11 @@ export function DictionaryResultCard({
       ) : null}
 
       {/* ── Word Family ── */}
-      {vocabulary.wordFamily &&
-        vocabulary.wordFamily.length > 0 &&
-        onSearch && (
-          <div className="anim-fade-up mt-5">
-            <WordFamilySection
-              wordFamily={vocabulary.wordFamily}
-              onSearch={onSearch}
-            />
-          </div>
-        )}
+      {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
+        <div className="anim-fade-up mt-5">
+          <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
+        </div>
+      )}
 
       {/* ── Verb Forms ── */}
       {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (

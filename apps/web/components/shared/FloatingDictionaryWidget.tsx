@@ -16,9 +16,7 @@ const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
 /** Trigger dictionary lookup from anywhere in the app */
 export function lookupWord(word: string) {
-  window.dispatchEvent(
-    new CustomEvent("dictionary:lookup", { detail: { word } }),
-  );
+  window.dispatchEvent(new CustomEvent("dictionary:lookup", { detail: { word } }));
 }
 
 function useIsMobile(bp = 768) {
@@ -78,10 +76,9 @@ export function FloatingDictionaryWidget() {
     const reqId = ++reqIdRef.current;
 
     try {
-      const payload = await api.post<{ data: Vocabulary; saved: boolean }>(
-        "/dictionary",
-        { word: normalized },
-      );
+      const payload = await api.post<{ data: Vocabulary; saved: boolean }>("/dictionary", {
+        word: normalized,
+      });
       if (reqId !== reqIdRef.current) return;
       setResult(payload.data);
       setSaved(payload.saved);

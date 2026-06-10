@@ -3,8 +3,8 @@
 import { ChevronRight, Map } from "lucide-react";
 import * as m from "motion/react-client";
 import Link from "next/link";
-import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { getWeek } from "@/lib/curriculum/data";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 
 /**
  * Reusable roadmap context banner for use in any page.

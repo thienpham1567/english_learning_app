@@ -1,5 +1,5 @@
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { FlashcardSession } from "@/app/(app)/flashcards/_components/FlashcardSession";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 
 export default function FlashcardsPage() {
   return (

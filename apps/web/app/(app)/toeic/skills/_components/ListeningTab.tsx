@@ -128,9 +128,7 @@ export function ListeningTab() {
       {/* ─── Active: Audio + Questions ─── */}
       {(state === "active" || state === "submitting") && exercise && (
         <div className="flex flex-col gap-5">
-          {exercise.turns && exercise.turns.length > 0 && (
-            <SpeakerLegend turns={exercise.turns} />
-          )}
+          {exercise.turns && exercise.turns.length > 0 && <SpeakerLegend turns={exercise.turns} />}
 
           {(!exercise.turns || exercise.turns.length === 0) && (
             <div className="flex items-center gap-2.5">

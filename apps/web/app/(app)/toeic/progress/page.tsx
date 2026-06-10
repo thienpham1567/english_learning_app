@@ -5,11 +5,11 @@ import { and, desc, eq, gte, isNotNull, like, or, sql } from "drizzle-orm";
 import { AlertTriangle, ArrowRight, TrendingDown, TrendingUp, Trophy, Zap } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
+import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { bandLabel, computePredictedScore } from "@/lib/toeic/predict";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
-import { Card } from "@/components/ui/card";
 
 export default async function ToeicProgressPage() {
   await requireToeicBaseline();

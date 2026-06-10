@@ -1,31 +1,31 @@
 "use client";
 
-import { toast } from "sonner";
 import {
+  Bookmark,
+  Headphones,
+  Lightbulb,
   Loader2,
+  MessageSquare,
   Mic,
   PauseCircle,
+  Pin,
   PlayCircle,
   Redo,
+  Sparkles,
   Star,
   StopCircle,
-  Volume2,
-  MessageSquare,
-  Users,
-  Bookmark,
-  Sparkles,
   Trash2,
-  Headphones,
-  Pin,
-  Lightbulb,
+  Users,
+  Volume2,
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { GROQ_VOICES } from "../_data/voices";
 import { useDialogue } from "../_hooks/useDialogue";
 import { type EvalResult, ShadowResult } from "./shadowing/ShadowResult";
-import { GROQ_VOICES } from "../_data/voices";
 
 const SPEAKER_COLORS: Record<
   string,

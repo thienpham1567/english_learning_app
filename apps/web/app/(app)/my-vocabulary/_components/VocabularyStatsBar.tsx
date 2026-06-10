@@ -2,8 +2,8 @@
 
 import { Star, Trophy } from "lucide-react";
 import * as m from "motion/react-client";
-import { CEFR_BADGE_CLASSES, CEFR_LEVELS } from "@/lib/constants/cefr";
 import { Card } from "@/components/ui/card";
+import { CEFR_BADGE_CLASSES, CEFR_LEVELS } from "@/lib/constants/cefr";
 
 type StatsEntry = { level: string | null; saved: boolean };
 type Props = { entries: StatsEntry[] };

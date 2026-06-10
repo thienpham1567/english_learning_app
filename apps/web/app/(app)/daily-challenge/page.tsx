@@ -13,16 +13,16 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
-import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useBonusChallenge } from "@/hooks/useBonusChallenge";
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 
 // Live elapsed timer hook
 function useElapsedTimer(isRunning: boolean) {
@@ -202,11 +202,7 @@ function ExerciseFlow({
       </AnimatePresence>
 
       {/* Skip */}
-      <Button
-        variant="outline"
-        onClick={onSkip}
-        className="self-center mt-2"
-      >
+      <Button variant="outline" onClick={onSkip} className="self-center mt-2">
         <ArrowRight className="h-4 w-4" />
         <span>Skip this question</span>
       </Button>
@@ -404,9 +400,7 @@ export default function DailyChallengePage() {
                   <p className="text-xs text-text-muted mb-4 font-semibold">
                     Please check your network connection or try again later.
                   </p>
-                  <Button
-                    onClick={() => window.location.reload()}
-                  >
+                  <Button onClick={() => window.location.reload()}>
                     <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Try reloading page
                   </Button>
                 </Card>

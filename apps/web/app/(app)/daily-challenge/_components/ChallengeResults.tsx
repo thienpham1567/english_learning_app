@@ -118,9 +118,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div
             className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-              ok
-                ? "bg-success border-2 border-success"
-                : "bg-error border-2 border-error"
+              ok ? "bg-success border-2 border-success" : "bg-error border-2 border-error"
             }`}
           />
           <div className="flex flex-col items-start min-w-0">

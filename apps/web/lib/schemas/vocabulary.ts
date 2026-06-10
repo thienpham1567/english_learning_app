@@ -54,8 +54,6 @@ export const VocabularySchema = z.object({
   senses: z.array(DictionarySenseSchema).min(1),
 });
 
-
-
 export type Vocabulary = z.infer<typeof VocabularySchema>;
 
 export type DictionarySense = z.infer<typeof DictionarySenseSchema>;

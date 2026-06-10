@@ -1,12 +1,22 @@
 "use client";
 
-import { BookOpenCheck, Check, ChevronDown, ChevronUp, ClipboardCopy, Lightbulb, Volume2 } from "lucide-react";
+import {
+  BookOpenCheck,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  ClipboardCopy,
+  FileText,
+  Lightbulb,
+  Ruler,
+  Volume2,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
-import type { SmartReaderResponse } from "../page";
-import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { lookupWord } from "@/components/shared/FloatingDictionaryWidget";
+import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
+import type { SmartReaderResponse } from "../page";
 
 type Props = {
   result: SmartReaderResponse;
@@ -89,7 +99,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
         <div className="rounded-2xl border-2 border-border bg-surface p-5 space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-base">📝</span>
+              <FileText className="h-4 w-4 text-accent shrink-0" />
               <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-mono">
                 Original Text
               </span>
@@ -121,9 +131,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
               </button>
             </div>
           </div>
-          <p className="text-sm leading-relaxed text-text-secondary italic">
-            {sourceText}
-          </p>
+          <p className="text-sm leading-relaxed text-text-secondary italic">{sourceText}</p>
         </div>
       )}
 
@@ -136,14 +144,14 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
               Bản dịch tự nhiên
             </span>
           </div>
-          <span className={`inline-flex items-center px-2 py-0.5 rounded-lg border-2 text-[9px] font-bold uppercase tracking-wide ${diffConfig.color}`}>
+          <span
+            className={`inline-flex items-center px-2 py-0.5 rounded-lg border-2 text-[9px] font-bold uppercase tracking-wide ${diffConfig.color}`}
+          >
             {diffConfig.label}
           </span>
         </div>
 
-        <p className="text-sm leading-relaxed text-ink font-medium">
-          {result.naturalTranslation}
-        </p>
+        <p className="text-sm leading-relaxed text-ink font-medium">{result.naturalTranslation}</p>
       </div>
 
       {/* ── Sentence Breakdown ── */}
@@ -154,7 +162,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
             className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-surface-hover/30 transition-colors cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <span className="text-base">📐</span>
+              <Ruler className="h-4 w-4 text-accent shrink-0" />
               <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-mono">
                 Phân tích cấu trúc
               </span>
@@ -194,12 +202,10 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                         <Volume2 className="h-3 w-3" />
                       </button>
                     </div>
-                    <p className="text-xs text-text-secondary leading-relaxed">
-                      → {item.meaning}
-                    </p>
+                    <p className="text-xs text-text-secondary leading-relaxed">→ {item.meaning}</p>
                     {item.note && (
-                      <p className="text-[11px] text-text-muted italic leading-relaxed">
-                        💡 {item.note}
+                      <p className="text-[11px] text-text-muted italic leading-relaxed inline-flex items-center gap-1">
+                        <Lightbulb className="h-3 w-3 text-warning shrink-0" /> {item.note}
                       </p>
                     )}
                   </div>
@@ -218,7 +224,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
             className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-surface-hover/30 transition-colors cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <span className="text-base">💡</span>
+              <Lightbulb className="h-4 w-4 text-accent shrink-0" />
               <span className="text-xs font-bold uppercase tracking-wider text-text-muted font-mono">
                 Từ vựng quan trọng
               </span>
@@ -248,7 +254,9 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                       className="group rounded-xl border-2 border-border p-3 hover:border-accent/30 hover:bg-accent/5 transition-all cursor-pointer active:scale-[0.98]"
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-bold text-ink group-hover:text-accent transition-colors">{item.word}</span>
+                        <span className="text-sm font-bold text-ink group-hover:text-accent transition-colors">
+                          {item.word}
+                        </span>
                         <span className="text-[9px] font-bold text-text-muted bg-bg-deep px-1.5 py-0.5 rounded-md uppercase font-mono">
                           {item.pos}
                         </span>
@@ -259,7 +267,10 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                         )}
                         <div className="flex items-center gap-1 ml-auto">
                           <button
-                            onClick={(e) => { e.stopPropagation(); tts.speak(item.word); }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              tts.speak(item.word);
+                            }}
                             disabled={tts.isLoading}
                             className="text-text-muted hover:text-accent transition-colors cursor-pointer"
                             aria-label={`Listen to "${item.word}"`}
@@ -297,9 +308,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
             <span className="text-[10px] font-bold uppercase tracking-wider text-accent font-mono">
               Mẹo đọc hiểu
             </span>
-            <p className="text-xs text-text-secondary leading-relaxed mt-1">
-              {result.readingTips}
-            </p>
+            <p className="text-xs text-text-secondary leading-relaxed mt-1">{result.readingTips}</p>
           </div>
         </m.div>
       )}
