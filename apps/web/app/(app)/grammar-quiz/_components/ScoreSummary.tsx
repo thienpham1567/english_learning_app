@@ -66,7 +66,7 @@ export function ScoreSummary({
   return (
     <Card
       shadowSize="lg"
-      className="w-full w-[500px] mx-auto text-center relative overflow-hidden"
+      className="w-full max-w-[500px] mx-auto text-center relative overflow-hidden"
       style={{ padding: "36px 24px" }}
     >
       <div
@@ -190,7 +190,7 @@ export function ScoreSummary({
                     : "var(--surface-alt)",
                 }}
               >
-                <div className="flex items-center gap-2 w-[0px]">
+                <div className="flex-1 min-w-0 flex items-center gap-2">
                   {isWeak ? (
                     <AlertTriangle className="text-destructive text-sm" />
                   ) : (

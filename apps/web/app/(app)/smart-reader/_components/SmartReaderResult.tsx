@@ -302,9 +302,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                         className="flex items-start gap-2 py-2 px-3 rounded-xl border-2 border-border bg-bg-deep/30"
                       >
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-ink leading-relaxed">
-                            "{c.text}"
-                          </p>
+                          <p className="text-xs font-medium text-ink leading-relaxed">"{c.text}"</p>
                           <div className="flex items-center gap-2 mt-1">
                             <span
                               className={`text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md border ${
@@ -354,9 +352,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
                         <p className="text-xs text-ink font-medium italic border-l-2 border-accent/30 pl-2">
                           "{p.inText}"
                         </p>
-                        <p className="text-[11px] text-text-secondary leading-relaxed">
-                          {p.usage}
-                        </p>
+                        <p className="text-[11px] text-text-secondary leading-relaxed">{p.usage}</p>
                       </m.div>
                     ))}
                   </div>

@@ -225,7 +225,7 @@ export default function SpeakingRunnerPage() {
 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 grid gap-3 w-[720px]">
+      <div className="p-4 grid gap-3 w-full max-w-[720px] mx-auto">
         <div className="flex justify-between items-center">
           <span className="bg-error/15 text-error py-0.5 px-2 inline-block">
             {phase === "prep" && `Chuẩn bị · ${sec}s`}

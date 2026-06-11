@@ -34,7 +34,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 grid gap-4 w-[800px]">
+      <div className="p-4 grid gap-4 w-full max-w-[800px] mx-auto">
         <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>

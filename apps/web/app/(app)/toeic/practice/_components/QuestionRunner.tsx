@@ -213,7 +213,7 @@ export function QuestionRunner({
     timeLimit && startedAt ? Math.max(0, Math.ceil((timeLimit - elapsed) / 1000)) : null;
 
   return (
-    <div className="anim-fade-up flex flex-col gap-4 w-[720px] w-full mx-auto">
+    <div className="anim-fade-up flex flex-col gap-4 w-full max-w-[720px] mx-auto">
       {/* Question metadata bar */}
       <div
         className="flex justify-between items-center bg-surface-alt rounded-xl"

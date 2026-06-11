@@ -140,7 +140,7 @@ function LearnRunner() {
   if (!current) return null;
 
   return (
-    <div className="grid gap-3 w-[600px] mx-auto">
+    <div className="grid gap-3 w-full max-w-[600px] mx-auto">
       <div className="flex justify-between text-text-muted text-sm px-1">
         <span>
           Word {idx + 1} / {total}

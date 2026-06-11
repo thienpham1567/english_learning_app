@@ -60,7 +60,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 grid gap-4 w-[720px]">
+      <div className="p-4 grid gap-4 w-full max-w-[720px] mx-auto">
         {cheatTriggered && (
           <div className="flex items-start gap-3 rounded-xl py-3 px-4 bg-warning/10 text-warning border-2 border-warning/20">
             <AlertTriangle className="shrink-0 mt-0.5" size={18} />

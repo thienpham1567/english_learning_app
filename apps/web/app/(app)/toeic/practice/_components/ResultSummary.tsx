@@ -22,7 +22,7 @@ export function ResultSummary({
   const percentage = Math.round((correct / Math.max(1, total)) * 100);
 
   return (
-    <div className="anim-fade-up grid gap-5 w-[720px] w-full mx-auto">
+    <div className="anim-fade-up grid gap-5 w-full max-w-[720px] mx-auto">
       {/* Score Summary Card */}
       <div
         className="bg-surface rounded-xl p-6 flex justify-between items-center gap-4"

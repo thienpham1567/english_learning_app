@@ -25,7 +25,7 @@ export default function StudySetsPage() {
               "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--warning) 6%, transparent) 0%, transparent 70%)",
           }}
         />
-        <div className="relative mx-auto w-[700px] w-full">
+        <div className="relative mx-auto w-full max-w-[700px]">
           {activeTopic ? (
             <StudySetView
               topicId={activeTopic.id}

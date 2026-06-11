@@ -192,14 +192,10 @@ export async function POST(request: Request) {
         ? {
             sentenceStructure:
               (parsed.grammarAnalysis as Record<string, unknown>).sentenceStructure || "",
-            tenses: Array.isArray(
-              (parsed.grammarAnalysis as Record<string, unknown>).tenses,
-            )
+            tenses: Array.isArray((parsed.grammarAnalysis as Record<string, unknown>).tenses)
               ? (parsed.grammarAnalysis as Record<string, unknown>).tenses
               : [],
-            clauses: Array.isArray(
-              (parsed.grammarAnalysis as Record<string, unknown>).clauses,
-            )
+            clauses: Array.isArray((parsed.grammarAnalysis as Record<string, unknown>).clauses)
               ? (parsed.grammarAnalysis as Record<string, unknown>).clauses
               : [],
             keyPatterns: Array.isArray(

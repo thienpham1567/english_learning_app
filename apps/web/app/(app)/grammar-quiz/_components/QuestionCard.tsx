@@ -34,7 +34,7 @@ export function QuestionCard({
   const [showExplanation, setShowExplanation] = useState(false);
 
   return (
-    <div className="mx-auto w-full w-[580px]">
+    <div className="mx-auto w-full max-w-[580px]">
       {/* Progress track */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">

@@ -285,7 +285,7 @@ export default function EssayScorePage() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-6 w-[800px] mx-auto w-full">
+      <div className="flex-1 p-6 w-full max-w-[800px] mx-auto">
         {/* Error */}
         {error && (
           <div

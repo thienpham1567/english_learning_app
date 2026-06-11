@@ -1,6 +1,14 @@
 "use client";
 
-import { ArrowLeft, BookOpenText, Clock, Globe, Lightbulb, Loader2, Volume2 } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpenText,
+  Clock,
+  Globe,
+  Lightbulb,
+  Loader2,
+  Volume2,
+} from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useParams, useRouter } from "next/navigation";
@@ -35,7 +43,10 @@ const PATTERN_COLORS: Record<string, string> = {
   purple: "var(--accent)",
 };
 
-const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: string }> = {
+const DIFFICULTY_COLORS: Record<
+  string,
+  { bg: string; color: string; border: string }
+> = {
   B1: {
     bg: "color-mix(in srgb, var(--success) 8%, transparent)",
     color: "var(--success)",
@@ -61,7 +72,9 @@ export default function ArticleReaderPage() {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [grammarResults, setGrammarResults] = useState<Record<number, GrammarPattern[]>>({});
+  const [grammarResults, setGrammarResults] = useState<
+    Record<number, GrammarPattern[]>
+  >({});
   const [grammarLoading, setGrammarLoading] = useState<Set<number>>(new Set());
   const [ttsAccent, setTtsAccent] = useState("us");
   const [grammarPopup, setGrammarPopup] = useState<number | null>(null);
@@ -90,9 +103,12 @@ export default function ArticleReaderPage() {
     setGrammarLoading((prev) => new Set(prev).add(index));
 
     try {
-      const data = await api.post<{ patterns?: GrammarPattern[] }>("/reading/grammar", {
-        paragraph: text,
-      });
+      const data = await api.post<{ patterns?: GrammarPattern[] }>(
+        "/reading/grammar",
+        {
+          paragraph: text,
+        },
+      );
       const patterns = data.patterns ?? [];
       setGrammarResults((prev) => ({ ...prev, [index]: patterns }));
       if (patterns.length > 0) setGrammarPopup(index);
@@ -110,7 +126,8 @@ export default function ArticleReaderPage() {
   useEffect(() => {
     return () => {
       if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
-      if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
+      if (paragraphAudioUrlRef.current)
+        URL.revokeObjectURL(paragraphAudioUrlRef.current);
     };
   }, []);
 
@@ -118,7 +135,8 @@ export default function ArticleReaderPage() {
     async (idx: number, text: string) => {
       if (speakingIdx === idx) {
         if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
-        if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
+        if (paragraphAudioUrlRef.current)
+          URL.revokeObjectURL(paragraphAudioUrlRef.current);
         paragraphAudioRef.current = null;
         paragraphAudioUrlRef.current = null;
         setSpeakingIdx(null);
@@ -126,7 +144,8 @@ export default function ArticleReaderPage() {
       }
 
       if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
-      if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
+      if (paragraphAudioUrlRef.current)
+        URL.revokeObjectURL(paragraphAudioUrlRef.current);
       paragraphAudioRef.current = null;
       paragraphAudioUrlRef.current = null;
 
@@ -176,7 +195,10 @@ export default function ArticleReaderPage() {
     return (
       <div className="flex flex-col h-full items-center justify-center gap-4">
         <Loader2 className="animate-spin text-accent" size={32} />
-        <span className="text-text-secondary font-bold" style={{ fontSize: 13.5 }}>
+        <span
+          className="text-text-secondary font-bold"
+          style={{ fontSize: 13.5 }}
+        >
           Loading article content...
         </span>
       </div>
@@ -206,22 +228,26 @@ export default function ArticleReaderPage() {
     );
   }
 
-  const diffStyle = DIFFICULTY_COLORS[article.difficulty] ?? DIFFICULTY_COLORS.B1;
+  const diffStyle =
+    DIFFICULTY_COLORS[article.difficulty] ?? DIFFICULTY_COLORS.B1;
 
   return (
-    <div className="relative flex h-full h-[0px] flex-1 flex-col overflow-hidden">
+    <div className="relative flex h-full flex-1 flex-col overflow-hidden">
       <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
 
       {/* Reader Scroll Container */}
       <div
-        className="relative h-[0px] flex-1 overflow-y-auto z-[1]"
+        className="relative h-0 flex-1 overflow-y-auto z-[1]"
         style={{ padding: "24px 20px 80px" }}
       >
-        <div className="w-[720px] mx-auto flex flex-col gap-5">
+        <div className="w-full max-w-180 mx-auto flex flex-col gap-5">
           {/* Header Action Menu */}
           <div
             className="flex items-center justify-between"
-            style={{ borderBottom: "1px solid var(--border)", paddingBottom: 14 }}
+            style={{
+              borderBottom: "1px solid var(--border)",
+              paddingBottom: 14,
+            }}
           >
             <m.button
               onClick={() => router.push("/reading")}
@@ -263,10 +289,16 @@ export default function ArticleReaderPage() {
 
             <div
               className="flex gap-3 flex-wrap mt-1.5 pb-4"
-              style={{ alignContent: "center", borderBottom: "1px dashed var(--border)" }}
+              style={{
+                alignContent: "center",
+                borderBottom: "1px dashed var(--border)",
+              }}
             >
               {article.author && (
-                <span className="text-text-muted font-bold" style={{ fontSize: 12.5 }}>
+                <span
+                  className="text-text-muted font-bold"
+                  style={{ fontSize: 12.5 }}
+                >
                   By {article.author}
                 </span>
               )}
@@ -297,7 +329,8 @@ export default function ArticleReaderPage() {
                   onChange={(e) => {
                     setTtsAccent(e.target.value);
                     if (speakingIdx !== null || paragraphAudioRef.current) {
-                      if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
+                      if (paragraphAudioRef.current)
+                        paragraphAudioRef.current.pause();
                       if (paragraphAudioUrlRef.current)
                         URL.revokeObjectURL(paragraphAudioUrlRef.current);
                       paragraphAudioRef.current = null;
@@ -322,14 +355,21 @@ export default function ArticleReaderPage() {
               src={article.thumbnail}
               alt={article.title}
               className="w-full h-[340px] rounded-xl"
-              style={{ objectFit: "cover", border: "1.5px solid var(--border)" }}
+              style={{
+                objectFit: "cover",
+                border: "1.5px solid var(--border)",
+              }}
             />
           )}
 
           {/* Reader Body Content */}
           <div
             className="font-medium text-text-primary flex flex-col gap-5"
-            style={{ fontSize: 16.5, lineHeight: 1.85, letterSpacing: "0.01em" }}
+            style={{
+              fontSize: 16.5,
+              lineHeight: 1.85,
+              letterSpacing: "0.01em",
+            }}
           >
             {article.paragraphs.map((para, idx) => (
               <div key={idx} className="relative" style={{ paddingRight: 60 }}>
@@ -340,7 +380,11 @@ export default function ArticleReaderPage() {
                 {/* Floating control buttons per paragraph */}
                 <div
                   className="absolute flex flex-col gap-1.5"
-                  style={{ right: 0, top: "50%", transform: "translateY(-50%)" }}
+                  style={{
+                    right: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
                 >
                   {/* Grammar Analysis trigger */}
                   <m.button
@@ -385,7 +429,10 @@ export default function ArticleReaderPage() {
                         speakingIdx === idx
                           ? "linear-gradient(135deg, var(--info), var(--accent))"
                           : "var(--surface)",
-                      color: speakingIdx === idx ? "var(--text-on-accent)" : "var(--text-muted)",
+                      color:
+                        speakingIdx === idx
+                          ? "var(--text-on-accent)"
+                          : "var(--text-muted)",
                       cursor: loadingAudioIdx === idx ? "wait" : "pointer",
                     }}
                   >
@@ -423,12 +470,15 @@ export default function ArticleReaderPage() {
                   <div
                     className="py-4 px-5 flex items-center gap-2 relative"
                     style={{
-                      background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                      background:
+                        "linear-gradient(135deg, var(--accent), var(--secondary))",
                       color: "var(--text-on-accent)",
                     }}
                   >
                     <Lightbulb size={16} />
-                    <span className="font-black text-[14.5px]">Grammar Analysis</span>
+                    <span className="font-black text-[14.5px]">
+                      Grammar Analysis
+                    </span>
                     <span
                       className="rounded-xl text-[10.5px] font-extrabold py-0.5 px-2"
                       style={{ background: "rgba(255,255,255,0.2)" }}
@@ -456,7 +506,10 @@ export default function ArticleReaderPage() {
                       >
                         <span
                           className="font-black block mb-1.5 text-[13.5px]"
-                          style={{ color: PATTERN_COLORS[pattern.color] ?? "var(--accent)" }}
+                          style={{
+                            color:
+                              PATTERN_COLORS[pattern.color] ?? "var(--accent)",
+                          }}
                         >
                           {pattern.name}
                         </span>

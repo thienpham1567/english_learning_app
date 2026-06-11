@@ -78,7 +78,7 @@ export default function DictationDetailPage() {
 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 grid gap-3 w-[720px]">
+      <div className="p-4 grid gap-3 w-full max-w-[720px] mx-auto">
         <Card shadowSize="sm" className="p-4">
           <div className="flex items-center gap-3">
             <button
