@@ -12,53 +12,106 @@ const log = routeLogger("smart-reader");
 const MAX_INPUT_LENGTH = 3000;
 const DAILY_RATE_LIMIT = 30;
 
-const SYSTEM_PROMPT = `You are a premium English-to-Vietnamese reading comprehension assistant. Your job is to help Vietnamese learners deeply understand English text.
+const SYSTEM_PROMPT = `You are a premium English-to-Vietnamese reading comprehension assistant specializing in GRAMMAR. Your job is to help Vietnamese learners deeply understand the grammar of English text.
 
 INPUT HANDLING (check first):
-- If the input is NOT meaningful English (e.g. it is Vietnamese, gibberish, random characters, or only a fragment that cannot be understood), do NOT invent an analysis. Return JSON where "naturalTranslation" politely states in Vietnamese that the text is not valid English to analyze (e.g. "Văn bản này không phải tiếng Anh hợp lệ để phân tích."), set "difficultyLevel" to "beginner", and return empty arrays for breakdown/vocabulary, an empty readingTips, and null grammarAnalysis.
-- Otherwise, analyze the English text and respond with a JSON object containing:
+- If the input is NOT meaningful English (e.g. it is Vietnamese, gibberish, random characters, or only a fragment that cannot be understood), do NOT invent an analysis. Return JSON where "naturalTranslation" politely states in Vietnamese that the text is not valid English to analyze (e.g. "Văn bản này không phải tiếng Anh hợp lệ để phân tích."), set "difficultyLevel" to "beginner", set "readingTips" to an empty string, and set "grammarAnalysis" to null.
+- Otherwise, analyze the English text and respond with a JSON object containing exactly these fields:
 
 1. "naturalTranslation": A natural, fluent Vietnamese translation of the ENTIRE text. NOT word-by-word, but COMPLETE — do not summarize, shorten, or omit any idea. Translate as a native Vietnamese speaker would express the same meaning, using natural Vietnamese word order and phrasing.
 
-2. "breakdown": An array of key phrases/patterns worth explaining. Each item has:
-   - "phrase": the English phrase (exact substring from the text)
-   - "meaning": Vietnamese meaning
-   - "note": grammar pattern, formality level, or usage tip (in Vietnamese)
-   Focus on: idioms, phrasal verbs, complex structures, formal/informal markers, connectors.
+2. "difficultyLevel": "beginner" | "intermediate" | "advanced" — map to CEFR: beginner = A1–A2, intermediate = B1–B2, advanced = C1–C2. Judge by vocabulary rarity, sentence complexity, and idiomatic density.
 
-3. "vocabulary": An array of important words. Each item has:
-   - "word": the English word (base/dictionary form)
-   - "ipa": IPA pronunciation including slashes, e.g. "/əˈbʌv/"
-   - "pos": part of speech (noun, verb, adj, adv, etc.)
-   - "meaning": Vietnamese meaning
-   - "example": a simple English example sentence using this word
+3. "readingTips": One brief tip in Vietnamese about a pattern or technique from this text that helps reading comprehension.
 
-4. "difficultyLevel": "beginner" | "intermediate" | "advanced" — map to CEFR: beginner = A1–A2, intermediate = B1–B2, advanced = C1–C2. Judge by vocabulary rarity, sentence complexity, and idiomatic density.
-
-5. "readingTips": One brief tip in Vietnamese about a pattern or technique from this text that helps reading comprehension.
-
-6. "grammarAnalysis": A grammar analysis object. If the text contains multiple sentences, pick the 1–2 most complex/representative sentences and analyze those (do not try to cover every sentence). It has:
-   - "sentenceStructure": overall sentence type description in Vietnamese (e.g. "Câu phức với mệnh đề phụ", "Câu ghép")
-   - "tenses": array of tenses found. Each item has:
-     - "tense": tense name in English (e.g. "Present Perfect", "Past Simple")
-     - "example": the exact words from the text using this tense
-     - "explanation": brief Vietnamese explanation of WHY this tense is used here
-   - "clauses": array of clauses in the analyzed sentence(s). Each item has:
-     - "text": the clause text (exact substring from the original)
-     - "type": clause type in English ("main clause", "subordinate clause", "relative clause", "adverbial clause", "noun clause", etc.)
-     - "connector": the connecting word/phrase if any (e.g. "because", "which", "that")
-   - "keyPatterns": array of notable grammar patterns. Each item has:
-     - "pattern": grammar pattern name in English (e.g. "Passive Voice", "Conditional Type 2", "Inversion")
-     - "inText": the exact part of the text showing this pattern
-     - "usage": Vietnamese explanation of this pattern and when to use it
-   Keep tenses to the most important ones found. Keep clauses accurate. Keep keyPatterns to 1–3 most notable patterns.
+4. "grammarAnalysis": A deep grammar analysis object. From the whole text, choose the 2–3 most complex or representative sentences and analyze those (a single short sentence → analyze just that one; do NOT try to cover every sentence; do NOT pad). It has:
+   - "focusSummary": Vietnamese string naming the 1–2 most worthwhile grammar points of the whole text (what a learner should take away).
+   - "sentences": an array, one item per analyzed sentence. Each item has:
+     - "sentence": the exact sentence text from the input.
+     - "structureLabel": overall sentence type in Vietnamese (e.g. "Câu đơn", "Câu ghép", "Câu phức", "Câu phức-ghép").
+     - "skeleton": the core of the MAIN clause as an object:
+       - "subject": the main subject (exact substring)
+       - "verb": the main verb / verb phrase (exact substring)
+       - "object": the main object or complement (exact substring), or null if there is none (e.g. passive or intransitive)
+     - "clauseTree": an array of clause nodes representing the clause structure, NESTED to reflect dependency. Each node has:
+       - "text": the clause text (exact substring of the sentence)
+       - "type": clause type in English ("main clause", "subordinate clause", "relative clause", "adverbial clause", "noun clause", etc.)
+       - "role": Vietnamese explanation of what this clause does in the sentence (e.g. "bổ nghĩa cho danh từ 'rate'", "chỉ lý do")
+       - "connector": the connecting word/phrase if any (e.g. "because", "which", "at which"), else null
+       - "children": an array of nested clause nodes (same shape); use [] when there are none. Nest a clause inside another ONLY when it genuinely depends on or modifies part of that clause.
+     - "tenses": array of the important tenses in this sentence. Each item has:
+       - "tense": tense name in English (e.g. "Present Perfect", "Past Simple")
+       - "example": the exact words from the sentence using this tense
+       - "contrast": Vietnamese explanation of WHY this tense is used here, explicitly contrasting with the tense a learner might wrongly use instead (e.g. why Present Perfect, not Past Simple).
+     - "patterns": array of 1–3 notable grammar patterns in this sentence. Each item has:
+       - "pattern": pattern name in English (e.g. "Passive + modal", "Conditional Type 2", "Inversion")
+       - "inText": the exact part of the sentence showing this pattern
+       - "ruleName": a short, lookup-friendly name of the underlying rule (e.g. "modal + be + past participle")
+       - "usage": Vietnamese explanation of this pattern and when to use it
+       - "extraExample": one short, different English example sentence illustrating the same rule
+       - "studyHint": Vietnamese suggestion of what grammar topic to revise next to master this
+     - "learnerNote": Vietnamese note about a mistake Vietnamese learners commonly make with the grammar in THIS sentence (articles, tense, word order, missing "be", etc.).
 
 Rules:
-- All Vietnamese output must be natural, colloquial Vietnamese — not robotic translation
-- Scale quantity to text length: do NOT pad. A single short sentence may have only 1–3 vocabulary items; a long passage up to 8.
-- Keep breakdown to the 3–6 most important phrases (not every phrase), fewer for short text
-- Keep vocabulary to the 4–8 most useful words, fewer for short text
-- Respond ONLY with valid JSON, no markdown, no explanation outside JSON`;
+- All Vietnamese output must be natural, colloquial Vietnamese — not robotic translation.
+- Scale to text length: do NOT pad. Keep clauseTree accurate over deep — only nest where the structure genuinely nests.
+- All "example", "inText", "sentence", "skeleton" values must be EXACT substrings from the input (do not paraphrase the English).
+- Respond ONLY with valid JSON, no markdown, no explanation outside JSON.`;
+
+type ClauseNode = {
+  text: string;
+  type: string;
+  role: string;
+  connector: string | null;
+  children: ClauseNode[];
+};
+
+/** Defensive, recursive sanitizer for the clause tree (depth-capped). */
+function sanitizeClauseTree(raw: unknown, depth = 0): ClauseNode[] {
+  if (!Array.isArray(raw) || depth > 6) return [];
+  return raw
+    .filter((n): n is Record<string, unknown> => !!n && typeof n === "object")
+    .map((n) => ({
+      text: typeof n.text === "string" ? n.text : "",
+      type: typeof n.type === "string" ? n.type : "clause",
+      role: typeof n.role === "string" ? n.role : "",
+      connector: typeof n.connector === "string" ? n.connector : null,
+      children: sanitizeClauseTree(n.children, depth + 1),
+    }))
+    .filter((n) => n.text);
+}
+
+/** Normalize the new sentence-centric grammarAnalysis shape. */
+function sanitizeGrammarAnalysis(raw: unknown) {
+  if (!raw || typeof raw !== "object") return null;
+  const g = raw as Record<string, unknown>;
+  const sentencesRaw = Array.isArray(g.sentences) ? g.sentences : [];
+  const sentences = sentencesRaw
+    .filter((s): s is Record<string, unknown> => !!s && typeof s === "object")
+    .map((s) => {
+      const sk = (s.skeleton ?? {}) as Record<string, unknown>;
+      return {
+        sentence: typeof s.sentence === "string" ? s.sentence : "",
+        structureLabel: typeof s.structureLabel === "string" ? s.structureLabel : "",
+        skeleton: {
+          subject: typeof sk.subject === "string" ? sk.subject : "",
+          verb: typeof sk.verb === "string" ? sk.verb : "",
+          object: typeof sk.object === "string" ? sk.object : null,
+        },
+        clauseTree: sanitizeClauseTree(s.clauseTree),
+        tenses: Array.isArray(s.tenses) ? s.tenses : [],
+        patterns: Array.isArray(s.patterns) ? s.patterns : [],
+        learnerNote: typeof s.learnerNote === "string" ? s.learnerNote : "",
+      };
+    })
+    .filter((s) => s.sentence);
+
+  if (!sentences.length) return null;
+  return {
+    focusSummary: typeof g.focusSummary === "string" ? g.focusSummary : "",
+    sentences,
+  };
+}
 
 /** Simple SHA-256 hash using Web Crypto API */
 async function hashText(text: string): Promise<string> {
@@ -184,31 +237,9 @@ export async function POST(request: Request) {
     // Ensure required fields exist
     const result = {
       naturalTranslation: parsed.naturalTranslation || "",
-      breakdown: Array.isArray(parsed.breakdown) ? parsed.breakdown : [],
-      vocabulary: Array.isArray(parsed.vocabulary) ? parsed.vocabulary : [],
       difficultyLevel: (parsed.difficultyLevel as string) || "intermediate",
       readingTips: parsed.readingTips || "",
-      grammarAnalysis: parsed.grammarAnalysis
-        ? {
-            sentenceStructure:
-              (parsed.grammarAnalysis as Record<string, unknown>).sentenceStructure || "",
-            tenses: Array.isArray(
-              (parsed.grammarAnalysis as Record<string, unknown>).tenses,
-            )
-              ? (parsed.grammarAnalysis as Record<string, unknown>).tenses
-              : [],
-            clauses: Array.isArray(
-              (parsed.grammarAnalysis as Record<string, unknown>).clauses,
-            )
-              ? (parsed.grammarAnalysis as Record<string, unknown>).clauses
-              : [],
-            keyPatterns: Array.isArray(
-              (parsed.grammarAnalysis as Record<string, unknown>).keyPatterns,
-            )
-              ? (parsed.grammarAnalysis as Record<string, unknown>).keyPatterns
-              : [],
-          }
-        : null,
+      grammarAnalysis: sanitizeGrammarAnalysis(parsed.grammarAnalysis),
     };
 
     // Save to DB with hash for future cache hits
