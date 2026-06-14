@@ -56,7 +56,7 @@ export function getOpenAiConfig(): OpenAiConfig {
     smartReaderModel: process.env.OPENAI_SMART_READER_MODEL ?? "deepseek/deepseek-v4-flash",
     dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(process.env.DICTIONARY_CACHE_TTL_MS),
     models: {
-      grader: process.env.OPENAI_GRADER_MODEL ?? "deepseek/deepseek-v4-pro",
+      grader: process.env.OPENAI_GRADER_MODEL ?? "deepseek/deepseek-v4-flash",
       generator: process.env.OPENAI_GENERATOR_MODEL ?? chatModel,
       coach: process.env.OPENAI_COACH_MODEL ?? chatModel,
     },

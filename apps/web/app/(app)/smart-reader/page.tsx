@@ -8,40 +8,43 @@ import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import { SmartReaderResult } from "./_components/SmartReaderResult";
 
+export type ClauseNode = {
+  text: string;
+  type: string;
+  role?: string;
+  connector?: string | null;
+  children?: ClauseNode[];
+};
+
+export type GrammarSentence = {
+  sentence: string;
+  structureLabel: string;
+  skeleton: { subject: string; verb: string; object: string | null };
+  clauseTree: ClauseNode[];
+  tenses: Array<{
+    tense: string;
+    example: string;
+    contrast: string;
+  }>;
+  patterns: Array<{
+    pattern: string;
+    inText: string;
+    ruleName: string;
+    usage: string;
+    extraExample: string;
+    studyHint: string;
+  }>;
+  learnerNote: string;
+};
+
 export type SmartReaderResponse = {
   id?: string;
   naturalTranslation: string;
-  breakdown: Array<{
-    phrase: string;
-    meaning: string;
-    note?: string;
-  }>;
-  vocabulary: Array<{
-    word: string;
-    ipa?: string;
-    pos: string;
-    meaning: string;
-    example?: string;
-  }>;
   difficultyLevel: "beginner" | "intermediate" | "advanced";
   readingTips?: string;
   grammarAnalysis?: {
-    sentenceStructure: string;
-    tenses: Array<{
-      tense: string;
-      example: string;
-      explanation: string;
-    }>;
-    clauses: Array<{
-      text: string;
-      type: string;
-      connector?: string;
-    }>;
-    keyPatterns: Array<{
-      pattern: string;
-      inText: string;
-      usage: string;
-    }>;
+    focusSummary: string;
+    sentences: GrammarSentence[];
   } | null;
 };
 
