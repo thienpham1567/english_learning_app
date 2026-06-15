@@ -76,7 +76,7 @@ function AudioButton({
       type="button"
       aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
       onClick={() => onSpeak(locale)}
-      className="grid w-6 h-6 place-items-center rounded border-none bg-transparent text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent"
+      className="grid w-6 h-6 place-items-center bg-transparent text-text-muted cursor-pointer transition-colors duration-150 hover:text-accent-active active:scale-90"
     >
       {speakingLocale === locale ? (
         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -115,12 +115,21 @@ export function DictionaryResultCard({
   if (isLoading) {
     return (
       <div className="dictionary-result-card bg-surface min-h-[400px]">
-        <div className="flex flex-col gap-5">
-          {[1, 2, 3, 4].map((i) => (
+        <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+          <span className="inline-block h-2 w-2 animate-pulse bg-accent" />
+          Đang tra cứu…
+        </div>
+        <div className="mt-5 flex flex-col gap-4">
+          <div className="h-9 w-3/5 border-2 border-border bg-bg-deep animate-pulse" />
+          <div className="flex gap-2">
+            <div className="h-6 w-20 border-2 border-border bg-bg-deep animate-pulse" />
+            <div className="h-6 w-14 border-2 border-border bg-bg-deep animate-pulse" />
+          </div>
+          {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className={`h-4 rounded-lg bg-bg-deep animate-pulse ${
-                i === 1 ? "w-3/5" : i === 2 ? "w-2/5" : i === 3 ? "w-1/3" : "w-1/4"
+              className={`h-4 bg-bg-deep animate-pulse ${
+                i === 1 ? "w-full" : i === 2 ? "w-5/6" : "w-2/3"
               }`}
             />
           ))}
@@ -132,10 +141,12 @@ export function DictionaryResultCard({
   if (!hasSearched || !vocabulary) {
     return (
       <div className="dictionary-result-card bg-surface min-h-[400px]">
-        <div className="flex min-h-[360px] flex-col items-center justify-center gap-3">
-          <BookOpen className="h-8 w-8 text-text-muted" />
-          <p className="text-sm text-text-muted">
-            {!hasSearched ? "Enter a word to search" : "No results to display"}
+        <div className="flex min-h-[360px] flex-col items-center justify-center gap-4">
+          <div className="grid h-16 w-16 place-items-center border-2 border-border bg-bg-deep text-text-muted shadow-[4px_4px_0_var(--shadow-color)]">
+            <BookOpen className="h-7 w-7" />
+          </div>
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
+            {!hasSearched ? "Nhập một từ để tra cứu" : "Không có kết quả"}
           </p>
         </div>
       </div>
@@ -158,87 +169,94 @@ export function DictionaryResultCard({
 
   return (
     <div key={vocabulary.headword} className="dictionary-result-card bg-surface min-h-[400px]">
-      {/* ── Header: headword + metadata on one line ── */}
+      {/* ── Header: accent spine + headword + metadata ── */}
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-3 flex-wrap">
-            <h2 className="dictionary-result-heading italic leading-tight font-display text-ink break-words m-0">
+        <div className="flex min-w-0 flex-1 items-stretch gap-3.5">
+          {/* Brutalist accent spine */}
+          <div className="w-1.5 shrink-0 bg-accent" />
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+              <span className="text-accent">◆</span>
+              Từ điển
+            </div>
+            <h2 className="dictionary-result-heading leading-[0.95] font-display font-black text-ink break-words m-0 mt-1">
               {vocabulary.headword}
             </h2>
-            <span className="rounded-lg px-3 py-0.5 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
-              {posDisplay}
-            </span>
-            {numberLabel && (
-              <span className="rounded-lg px-2.5 py-0.5 text-xs font-medium text-text-muted border-2 border-border whitespace-nowrap">
-                {numberLabel}
+            <div className="mt-2.5 flex items-center gap-2 flex-wrap">
+              <span className="border-2 border-border bg-accent px-2.5 py-0.5 font-mono text-[11px] font-black uppercase tracking-wide text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)] whitespace-nowrap">
+                {posDisplay}
               </span>
-            )}
-            {vocabulary.level &&
-              (() => {
-                const badgeClass =
-                  CEFR_BADGE_CLASSES[vocabulary.level] ??
-                  "text-text-secondary border-border bg-bg-deep";
-                return (
-                  <span
-                    className={`rounded-lg px-3 py-0.5 text-xs font-bold tracking-wide border-2 ${badgeClass}`}
-                  >
-                    {vocabulary.level}
-                  </span>
-                );
-              })()}
-            {vocabulary.register &&
-              (() => {
-                const info = REGISTER_INFO[vocabulary.register];
-                const display = info?.en ?? vocabulary.register;
-                const tooltip = info
-                  ? `${vocabulary.register} — ${info.tooltipEn}`
-                  : vocabulary.register;
-                return (
-                  <span className="relative group rounded-lg px-2.5 py-0.5 text-xs border-2 border-border text-text-primary bg-accent-light font-bold cursor-help">
-                    {display}
-                    <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
-                      {tooltip}
+              {numberLabel && (
+                <span className="border-2 border-border bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-text-muted whitespace-nowrap">
+                  {numberLabel}
+                </span>
+              )}
+              {vocabulary.level &&
+                (() => {
+                  const badgeClass =
+                    CEFR_BADGE_CLASSES[vocabulary.level] ??
+                    "text-text-secondary border-border bg-bg-deep";
+                  return (
+                    <span
+                      className={`border-2 px-2.5 py-0.5 font-mono text-[11px] font-black uppercase tracking-wide ${badgeClass}`}
+                    >
+                      {vocabulary.level}
                     </span>
-                  </span>
-                );
-              })()}
+                  );
+                })()}
+              {vocabulary.register &&
+                (() => {
+                  const info = REGISTER_INFO[vocabulary.register];
+                  const display = info?.en ?? vocabulary.register;
+                  const tooltip = info
+                    ? `${vocabulary.register} — ${info.tooltipEn}`
+                    : vocabulary.register;
+                  return (
+                    <span className="relative group border-2 border-border bg-accent-light px-2.5 py-0.5 font-mono text-[11px] font-bold text-text-primary cursor-help">
+                      {display}
+                      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 border-2 border-border bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-[3px_3px_0_var(--shadow-color)]">
+                        {tooltip}
+                      </span>
+                    </span>
+                  );
+                })()}
+            </div>
           </div>
         </div>
         {/* Save button */}
         {saved != null && onToggleSaved && (
           <button
             onClick={onToggleSaved}
-            className="grid w-8 h-8 place-items-center rounded-lg bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent hover:bg-surface-alt shrink-0"
+            className={`grid w-9 h-9 shrink-0 place-items-center border-2 border-border cursor-pointer shadow-[2px_2px_0_var(--shadow-color)] transition-all duration-150 hover:-translate-x-px hover:-translate-y-px hover:shadow-[3px_3px_0_var(--shadow-color)] active:translate-x-0 active:translate-y-0 active:shadow-none ${
+              saved ? "bg-accent text-text-on-accent" : "bg-surface text-text-muted hover:text-ink"
+            }`}
             aria-label={saved ? "Remove word from saved" : "Save this word"}
           >
-            <Star className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`} />
+            <Star className={`h-4.5 w-4.5 ${saved ? "fill-current" : ""}`} />
           </button>
         )}
       </div>
 
       {/* ── Pronunciation ── */}
       {hasDualPhonetics ? (
-        <div className="anim-fade-in mt-3 flex flex-wrap items-center gap-3">
+        <div className="anim-fade-in mt-4 flex flex-wrap items-center gap-2.5">
           {vocabulary.phoneticsUs && (
-            <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">
+            <div className="flex items-stretch border-2 border-border bg-bg-deep pr-1.5 shadow-[2px_2px_0_var(--shadow-color)]">
+              <span className="grid place-items-center bg-ink px-2 text-[10px] font-black text-bg">
                 US
               </span>
-              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border-2 border-border">
+              <span className="px-2.5 py-1 text-sm font-mono text-ink font-bold">
                 {vocabulary.phoneticsUs}
               </span>
               <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
           )}
-          {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
-            <span className="text-text-muted font-bold">·</span>
-          )}
           {vocabulary.phoneticsUk && (
-            <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">
+            <div className="flex items-stretch border-2 border-border bg-bg-deep pr-1.5 shadow-[2px_2px_0_var(--shadow-color)]">
+              <span className="grid place-items-center bg-ink px-2 text-[10px] font-black text-bg">
                 UK
               </span>
-              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border-2 border-border">
+              <span className="px-2.5 py-1 text-sm font-mono text-ink font-bold">
                 {vocabulary.phoneticsUk}
               </span>
               <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
@@ -246,7 +264,7 @@ export function DictionaryResultCard({
           )}
         </div>
       ) : vocabulary.phonetic ? (
-        <span className="anim-fade-in mt-3 inline-block rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent-active border-2 border-border">
+        <span className="anim-fade-in mt-4 inline-block border-2 border-border bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-accent-active">
           {vocabulary.phonetic}
         </span>
       ) : null}
@@ -265,12 +283,18 @@ export function DictionaryResultCard({
 
       {/* ── Sense tabs ── */}
       <div className="mt-6">
+        <div className="mb-3 flex items-center gap-2">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+            Nghĩa · {vocabulary.senses.length}
+          </span>
+          <span className="h-0.5 flex-1 bg-border" />
+        </div>
         <div
           role="tablist"
           aria-label="Word senses"
-          className="flex items-center gap-2 border-b-2 border-border pb-3 mb-5 overflow-x-auto"
+          className="flex items-center gap-2 pb-4 mb-5 overflow-x-auto"
         >
-          {vocabulary.senses.map((sense) => (
+          {vocabulary.senses.map((sense, i) => (
             <button
               key={sense.id}
               type="button"
@@ -280,12 +304,15 @@ export function DictionaryResultCard({
               aria-selected={activeKey === sense.id}
               tabIndex={activeKey === sense.id ? 0 : -1}
               onClick={() => setActiveKey(sense.id)}
-              className={`shrink-0 rounded-lg px-4 py-1.5 text-sm font-bold border-2 transition-all duration-200 ${
+              className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-bold border-2 transition-all duration-150 ${
                 activeKey === sense.id
-                  ? "bg-accent border-border text-ink shadow-sm cursor-default"
-                  : "bg-transparent border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-alt cursor-pointer"
+                  ? "bg-accent border-border text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)] cursor-default"
+                  : "bg-surface border-border text-text-secondary hover:-translate-x-px hover:-translate-y-px hover:text-ink hover:shadow-[2px_2px_0_var(--shadow-color)] cursor-pointer"
               }`}
             >
+              <span className="font-mono text-[10px] opacity-60">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               {sense.label}
             </button>
           ))}

@@ -80,15 +80,21 @@ export function ChatInputBar({
       <div className="px-4 pb-4 pt-2 md:px-6 md:pb-6">
         <div className="mx-auto max-w-2xl flex flex-col gap-2.5">
           {/* ── Main Input Container ── */}
-          <div className="rounded-2xl border-2 border-border bg-chat-surface shadow-lg focus-within:border-accent/50 focus-within:shadow-accent/5 transition-all duration-200">
+          <div className="border-2 border-border bg-chat-surface shadow-[4px_4px_0_var(--shadow-color)] focus-within:border-accent focus-within:shadow-[5px_5px_0_var(--shadow-color)] transition-all duration-200">
             {/* Textarea */}
             <div className="flex items-end gap-2 p-3">
+              <span
+                aria-hidden
+                className="select-none pb-2.5 pl-1 font-mono text-sm font-black text-accent"
+              >
+                ▶
+              </span>
               <textarea
                 ref={textareaRef}
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Message..."
+                placeholder="Nhắn cho Aria…"
                 rows={1}
                 className="flex-1 min-h-[42px] max-h-[200px] resize-none border-0 bg-transparent py-2 px-1 text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none"
               />
@@ -106,13 +112,13 @@ export function ChatInputBar({
                       }
                     }}
                     disabled={isLoading || voice.isTranscribing}
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 transition-all duration-200 cursor-pointer active:scale-95 ${
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center border-2 transition-all duration-150 cursor-pointer active:translate-x-px active:translate-y-px ${
                       voice.isListening
-                        ? "border-error text-error bg-error/10 animate-pulse"
+                        ? "border-error text-error bg-error/10 animate-pulse shadow-[2px_2px_0_var(--shadow-color)]"
                         : voice.isTranscribing
-                          ? "border-accent text-accent bg-accent/10"
-                          : "border-border text-text-muted bg-transparent hover:text-text-primary hover:border-border-strong"
-                    } disabled:opacity-40 disabled:cursor-not-allowed`}
+                          ? "border-accent text-accent-active bg-accent-light shadow-[2px_2px_0_var(--shadow-color)]"
+                          : "border-border text-text-muted bg-surface hover:text-ink shadow-[2px_2px_0_var(--shadow-color)]"
+                    } disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none`}
                     aria-label={
                       voice.isListening
                         ? "Stop recording"
@@ -135,7 +141,7 @@ export function ChatInputBar({
                 {isLoading ? (
                   <button
                     onClick={onStop}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-error text-white transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-border bg-error text-white transition-all duration-150 cursor-pointer shadow-[2px_2px_0_var(--shadow-color)] active:translate-x-px active:translate-y-px active:shadow-none"
                     aria-label="Stop response"
                   >
                     <Square className="h-3.5 w-3.5 fill-current" />
@@ -144,10 +150,10 @@ export function ChatInputBar({
                   <button
                     onClick={onSend}
                     disabled={!hasInput}
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-200 cursor-pointer active:scale-95 ${
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center border-2 transition-all duration-150 cursor-pointer ${
                       hasInput
-                        ? "bg-accent text-white shadow-sm hover:brightness-110"
-                        : "bg-transparent border-2 border-border text-text-muted cursor-not-allowed opacity-40"
+                        ? "border-border bg-accent text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)] hover:-translate-x-px hover:-translate-y-px hover:shadow-[3px_3px_0_var(--shadow-color)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+                        : "border-border bg-surface text-text-muted cursor-not-allowed opacity-40"
                     }`}
                   >
                     <Send className="h-3.5 w-3.5" />
@@ -157,20 +163,20 @@ export function ChatInputBar({
             </div>
 
             {/* ── Bottom toolbar ── */}
-            <div className="flex items-center justify-between border-t border-border/50 px-3 py-2">
+            <div className="flex items-center justify-between border-t-2 border-border bg-surface-alt px-3 py-2">
               <div className="flex items-center gap-2">
                 {/* Voice Mode pill */}
                 {voice.isSupported && tts.isSupported && (
                   <button
                     onClick={onToggleVoiceMode}
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 border-2 font-mono text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                       voiceMode
-                        ? "border-accent/50 bg-accent/10 text-accent"
-                        : "border-border bg-transparent text-text-muted hover:text-text-primary hover:border-border-strong"
+                        ? "border-accent bg-accent-light text-accent-active shadow-[2px_2px_0_var(--shadow-color)]"
+                        : "border-border bg-surface text-text-muted hover:text-ink"
                     }`}
                   >
                     <Mic className="h-3 w-3" />
-                    <span>{voiceMode ? `Voice (${voiceExchanges})` : "Voice"}</span>
+                    <span>{voiceMode ? `Voice · ${voiceExchanges}` : "Voice"}</span>
                   </button>
                 )}
 
@@ -178,21 +184,21 @@ export function ChatInputBar({
                 {voiceMode && (
                   <button
                     onClick={onTogglePronEnabled}
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 border-2 font-mono text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                       pronEnabled
-                        ? "border-success/50 bg-success/10 text-success"
-                        : "border-border bg-transparent text-text-muted hover:text-text-primary hover:border-border-strong"
+                        ? "border-success bg-success/10 text-success shadow-[2px_2px_0_var(--shadow-color)]"
+                        : "border-border bg-surface text-text-muted hover:text-ink"
                     }`}
                   >
                     <Volume2 className="h-3 w-3" />
-                    <span>Pronunciation</span>
+                    <span>Phát âm</span>
                     {pronEnabled && <Check className="h-3 w-3" />}
                   </button>
                 )}
               </div>
 
-              <span className="hidden sm:inline text-[10px] text-text-muted font-mono">
-                ↵ Send · ⇧↵ New line
+              <span className="hidden sm:inline font-mono text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                ↵ Gửi · ⇧↵ Xuống dòng
               </span>
             </div>
           </div>

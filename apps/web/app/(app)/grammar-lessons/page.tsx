@@ -2,17 +2,14 @@
 
 import {
   AlertTriangle,
-  ArrowRight,
+  ArrowUpRight,
   BookOpen,
   CheckCircle,
   FileText,
   Flame,
-  Map,
   RefreshCw,
-  Rocket,
   Star,
   Target,
-  Trophy,
   Zap,
 } from "lucide-react";
 import * as m from "motion/react-client";
@@ -144,12 +141,11 @@ export default function GrammarLessonsPage() {
 
   return (
     <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden">
-      {/* Content area */}
-      <div className="relative flex-1 overflow-y-auto z-[1] p-5">
+      <div className="relative z-[1] flex-1 overflow-y-auto p-5">
         {/* Soft ambient glow */}
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,color-mix(in_srgb,var(--accent)_5%,transparent),transparent_70%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,color-mix(in_srgb,var(--accent)_6%,transparent),transparent_70%)]" />
 
-        <div className={`relative mx-auto w-full ${activeTopic ? "max-w-[720px]" : "max-w-6xl"}`}>
+        <div className={`relative mx-auto w-full ${activeTopic ? "max-w-[720px]" : "max-w-5xl"}`}>
           {activeTopic ? (
             <LessonView
               topicId={activeTopic.id}
@@ -164,180 +160,160 @@ export default function GrammarLessonsPage() {
               }}
             />
           ) : (
-            <div className="flex flex-col md:grid md:grid-cols-[280px_1fr] lg:grid-cols-[340px_1fr] md:items-start gap-5">
-              {/* ── Left sidebar on desktop ── */}
-              <div className="flex flex-col gap-5 md:sticky md:top-0">
-                {/* ── Hero Stats Dashboard ── */}
-                <m.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 }}
-                >
-                  <Card
-                    shadowSize="md"
-                    className="rounded-2xl relative overflow-hidden bg-surface p-6"
-                  >
-                    {/* Top accent gradient bar */}
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-secondary to-success" />
-
-                    <div className="flex items-center gap-6 flex-wrap lg:flex-col lg:items-stretch">
-                      {/* SVG Circle progress */}
-                      <div className="relative w-[88px] h-[88px] shrink-0 lg:mx-auto">
-                        <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
-                          <circle
-                            cx="44"
-                            cy="44"
-                            r="38"
-                            fill="none"
-                            stroke="var(--border)"
-                            strokeWidth="8"
-                          />
-                          <circle
-                            cx="44"
-                            cy="44"
-                            r="38"
-                            fill="none"
-                            stroke="var(--accent)"
-                            strokeWidth="8"
-                            strokeLinecap="round"
-                            strokeDasharray={`${2 * Math.PI * 38}`}
-                            strokeDashoffset={`${2 * Math.PI * 38 * (1 - progressPct / 100)}`}
-                            className="transition-all duration-700"
-                          />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-2xl font-black text-ink font-display">
-                            {progressPct}%
-                          </div>
-                          <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider">
-                            Completed
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Stats grid */}
-                      <div className="flex-1 min-w-[200px] grid grid-cols-3 lg:grid-cols-1 gap-3">
-                        <StatCard
-                          icon={<BookOpen size={18} />}
-                          color="accent"
-                          label="Topics"
-                          value={`${tabStats.categories} groups`}
-                          sub={`${tabStats.totalTopics} lessons`}
-                        />
-                        <StatCard
-                          icon={<CheckCircle size={18} />}
-                          color="success"
-                          label="Completed"
-                          value={`${tabStats.completed}`}
-                          sub={`/${tabStats.totalTopics} lessons`}
-                        />
-                        <StatCard
-                          icon={progressPct === 100 ? <Trophy size={18} /> : <Flame size={18} />}
-                          color={progressPct === 100 ? "xp" : "fire"}
-                          label="In Progress"
-                          value={`${inProgressTopics.size}`}
-                          sub="topics"
-                        />
-                      </div>
+            <div className="flex flex-col gap-9 pb-10">
+              {/* ════════ MASTHEAD ════════ */}
+              <m.header
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative"
+              >
+                <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+                  {/* Title block */}
+                  <div className="min-w-0">
+                    <div className="mb-2 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-text-muted">
+                      <span className="inline-block h-2 w-2 rotate-45 bg-accent" />
+                      TOEIC · Chương trình Ngữ pháp
                     </div>
-                  </Card>
-                </m.div>
-
-                {/* Progress error */}
-                {progressError && (
-                  <div className="flex items-center gap-2.5 rounded-2xl text-xs font-bold py-3 px-4 bg-warning/10 text-warning border-2 border-warning/20">
-                    <AlertTriangle size={14} /> {progressError}
+                    <h1 className="m-0 font-display text-[clamp(2.4rem,6vw,3.6rem)] font-black uppercase leading-[0.92] tracking-tight text-ink">
+                      Lộ trình
+                      <br />
+                      <span className="relative inline-block">
+                        Ngữ pháp
+                        <span className="absolute -bottom-1 left-0 h-2 w-full bg-accent/60" />
+                      </span>
+                    </h1>
+                    <p className="mt-3 max-w-md font-medium leading-snug text-text-secondary">
+                      {tabStats.totalTopics} bài học xếp theo tần suất xuất hiện trong đề — học từ
+                      trên xuống để tối ưu điểm số.
+                    </p>
                   </div>
-                )}
 
-                {/* ── Recommended Topic CTA ── */}
-                {recommendedTopic && (
+                  {/* Giant completion figure */}
+                  <div className="relative shrink-0 border-2 border-border bg-surface px-6 py-4 shadow-[5px_5px_0_var(--shadow-color)]">
+                    <div className="absolute -right-2 -top-2 h-4 w-4 border-2 border-border bg-accent" />
+                    <div className="font-display text-[clamp(3rem,9vw,5rem)] font-black leading-[0.85] tabular-nums text-ink">
+                      {progressPct}
+                      <span className="text-accent">%</span>
+                    </div>
+                    <div className="mt-1 text-right font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-text-muted">
+                      Hoàn thành
+                    </div>
+                  </div>
+                </div>
+
+                {/* Spec strip */}
+                <div className="mt-6 grid grid-cols-2 divide-y-2 divide-border border-2 border-border bg-surface shadow-[4px_4px_0_var(--shadow-color)] sm:grid-cols-4 sm:divide-x-2 sm:divide-y-0">
+                  <SpecCell
+                    icon={<BookOpen size={15} />}
+                    label="Tổng bài"
+                    value={`${tabStats.totalTopics}`}
+                    sub={`${tabStats.categories} nhóm`}
+                  />
+                  <SpecCell
+                    icon={<CheckCircle size={15} />}
+                    label="Đã xong"
+                    value={`${tabStats.completed}`}
+                    sub={`/${tabStats.totalTopics} bài`}
+                    accent="success"
+                  />
+                  <SpecCell
+                    icon={<Flame size={15} />}
+                    label="Đang học"
+                    value={`${inProgressTopics.size}`}
+                    sub="chủ đề"
+                    accent="fire"
+                  />
+                  <SpecCell
+                    icon={<Star size={15} />}
+                    label="Còn lại"
+                    value={`${tabStats.totalTopics - tabStats.completed}`}
+                    sub="cần chinh phục"
+                  />
+                </div>
+
+                {/* Full-width progress rule */}
+                <div className="relative mt-4 h-3.5 w-full border-2 border-border bg-surface">
                   <m.div
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15 }}
-                  >
-                    <Card
-                      interactive
-                      bgType="transparent"
-                      shadowSize="sm"
-                      className="w-full rounded-2xl border-2 border-border cursor-pointer flex flex-row items-center gap-4 relative overflow-hidden text-left p-5 bg-accent"
-                      onClick={() =>
-                        setActiveTopic({
-                          id: recommendedTopic.id,
-                          title: recommendedTopic.title,
-                          level: recommendedTopic.level,
-                        })
-                      }
-                    >
-                      {/* Decorative shapes — brutalist geometric */}
-                      <div className="absolute -top-6 -right-6 w-[120px] h-[120px] rotate-12 bg-white/[0.08] pointer-events-none" />
-                      <div className="absolute -bottom-4 -left-4 w-[80px] h-[80px] -rotate-6 bg-white/[0.05] pointer-events-none" />
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progressPct}%` }}
+                    transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.2 }}
+                    className="absolute inset-y-0 left-0 bg-accent"
+                    style={{
+                      backgroundImage:
+                        "repeating-linear-gradient(45deg,transparent,transparent 7px,color-mix(in srgb,var(--shadow-color) 14%,transparent) 7px,color-mix(in srgb,var(--shadow-color) 14%,transparent) 9px)",
+                    }}
+                  />
+                </div>
+              </m.header>
 
-                      {/* Icon */}
-                      <div className="w-12 h-12 grid shrink-0 rounded-xl bg-white/15 place-items-center border-2 border-white/20">
-                        <Rocket className="h-6 w-6 text-white" />
-                      </div>
+              {progressError && (
+                <div className="flex items-center gap-2.5 border-2 border-warning/30 bg-warning/10 px-4 py-3 font-mono text-xs font-bold text-warning">
+                  <AlertTriangle size={14} /> {progressError}
+                </div>
+              )}
 
-                      {/* Text */}
-                      <div className="flex-1 relative">
-                        <div className="text-[10px] font-extrabold uppercase tracking-widest text-white/70 flex items-center gap-1">
-                          <Star size={10} className="fill-current" />
-                          Recommended Next Lesson
-                        </div>
-                        <div className="font-black font-display text-[17px] text-white mt-1 leading-tight">
-                          {recommendedTopic.title}
-                        </div>
-                        <div className="text-[11.5px] font-semibold text-white/65 mt-0.5">
-                          {recommendedTopic.level} · Click to start learning now
-                        </div>
-                      </div>
-
-                      {/* Arrow */}
-                      <div className="w-9 h-9 grid shrink-0 rounded-xl bg-white/15 place-items-center border-2 border-white/20">
-                        <ArrowRight className="h-4 w-4 text-white" />
-                      </div>
-                    </Card>
-                  </m.div>
-                )}
-
-                {/* ── Roadmap Integration ── */}
-                <m.div
+              {/* ════════ ASSIGNMENT TICKET (recommended) ════════ */}
+              {recommendedTopic && (
+                <m.button
+                  type="button"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="grid grid-cols-2 gap-3"
+                  transition={{ delay: 0.1 }}
+                  whileHover={{ x: -2, y: -2 }}
+                  whileTap={{ x: 0, y: 0 }}
+                  onClick={() =>
+                    setActiveTopic({
+                      id: recommendedTopic.id,
+                      title: recommendedTopic.title,
+                      level: recommendedTopic.level,
+                    })
+                  }
+                  className="group relative flex w-full items-stretch overflow-hidden border-2 border-border bg-accent text-left shadow-[5px_5px_0_var(--shadow-color)] transition-shadow hover:shadow-[7px_7px_0_var(--shadow-color)]"
                 >
-                  <QuickLinkCard
-                    href="/error-notebook"
-                    icon={FileText}
-                    label="Error Notebook"
-                    desc="Review your mistakes"
-                  />
-                  <QuickLinkCard
-                    href="/grammar-quiz"
-                    icon={FileText}
-                    label="Part 5 Quiz"
-                    desc="Real exam practice"
-                  />
-                </m.div>
-              </div>
-              {/* end left sidebar */}
+                  {/* Ticket stub */}
+                  <div className="relative flex shrink-0 items-center border-r-2 border-dashed border-black/30 px-4 sm:px-6">
+                    <span className="font-display text-2xl font-black uppercase tracking-tight text-black [writing-mode:vertical-rl] rotate-180 sm:text-3xl">
+                      Next
+                    </span>
+                  </div>
+                  {/* Decorative geometry */}
+                  <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rotate-12 bg-black/[0.07]" />
+                  <div className="pointer-events-none absolute -bottom-6 right-16 h-16 w-16 -rotate-6 bg-black/[0.05]" />
 
-              {/* ── Priority Roadmap ── */}
-              <m.div
+                  <div className="flex flex-1 items-center gap-4 px-5 py-5">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.22em] text-black/70">
+                        <Star size={11} className="fill-current" />
+                        Bài tiếp theo nên học
+                      </div>
+                      <div className="mt-1 font-display text-xl font-black leading-tight text-black sm:text-2xl">
+                        {recommendedTopic.title}
+                      </div>
+                      <div className="mt-1 font-mono text-[11px] font-bold text-black/65">
+                        Level {recommendedTopic.level} · Bấm để bắt đầu ngay
+                      </div>
+                    </div>
+                    <div className="grid h-11 w-11 shrink-0 place-items-center border-2 border-black bg-surface text-ink shadow-[3px_3px_0_rgba(0,0,0,0.45)] transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">
+                      <ArrowUpRight size={20} />
+                    </div>
+                  </div>
+                </m.button>
+              )}
+
+              {/* ════════ THE PROGRAM (roadmap) ════════ */}
+              <m.section
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-                className="flex flex-col gap-5"
+                transition={{ delay: 0.18 }}
               >
-                <div className="flex items-center gap-2.5">
-                  <Zap className="h-4 w-4 text-accent" />
-                  <h2 className="m-0 font-black text-ink font-display text-[17px]">
-                    Lộ trình Ngữ pháp theo ưu tiên
+                <div className="mb-5 flex items-center gap-3">
+                  <Zap className="h-5 w-5 text-accent" />
+                  <h2 className="m-0 font-display text-lg font-black uppercase tracking-tight text-ink">
+                    Chương trình học
                   </h2>
-                  <span className="text-[10px] font-extrabold rounded-lg text-accent px-2.5 py-0.5 bg-accent-light border-2 border-accent/20">
-                    {tabStats.totalTopics} lessons
+                  <div className="h-0.5 flex-1 bg-border" />
+                  <span className="border-2 border-border bg-surface px-2.5 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-ink shadow-[2px_2px_0_var(--shadow-color)]">
+                    {tabStats.totalTopics} bài
                   </span>
                 </div>
 
@@ -347,30 +323,66 @@ export default function GrammarLessonsPage() {
                   progressByTopic={progressByTopic}
                   onSelectTopic={(selection) => setActiveTopic(selection)}
                 />
+              </m.section>
 
-                {/* ── TOEIC Strategy Tips ── */}
-                <Card shadowSize="sm" className="mt-2">
-                  <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2">
-                    <Trophy className="text-[var(--xp)]" />
+              {/* ════════ APPENDIX (quick links + strategy) ════════ */}
+              <m.section
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.24 }}
+                className="flex flex-col gap-5"
+              >
+                <div className="flex items-center gap-3">
+                  <FileText className="h-4 w-4 text-text-muted" />
+                  <h2 className="m-0 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-text-muted">
+                    Phụ lục & Công cụ
+                  </h2>
+                  <div className="h-0.5 flex-1 bg-border" />
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <QuickLinkCard
+                    href="/error-notebook"
+                    icon={FileText}
+                    label="Sổ tay lỗi sai"
+                    desc="Ôn lại những câu đã sai"
+                  />
+                  <QuickLinkCard
+                    href="/grammar-quiz"
+                    icon={Target}
+                    label="Quiz Part 5"
+                    desc="Luyện đề như thi thật"
+                  />
+                </div>
+
+                <Card shadowSize="md" className="rounded-none border-2 border-border">
+                  <div className="mb-4 flex items-center gap-2 font-display text-base font-black text-ink">
+                    <span className="grid h-7 w-7 place-items-center border-2 border-border bg-accent text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)]">
+                      <Star size={14} className="fill-current" />
+                    </span>
                     Chiến lược từ người đạt 900 L&R
                   </div>
                   <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-                    {STRATEGY_TIPS.map((tip) => (
-                      <Card key={tip.title} shadowSize="sm" size="sm" bgType="alt">
-                        <div className="mb-2">
-                          <tip.icon className="h-5 w-5 text-accent-active" />
-                        </div>
-                        <div className="font-extrabold text-ink mb-1 text-[13.5px]">
+                    {STRATEGY_TIPS.map((tip, i) => (
+                      <div
+                        key={tip.title}
+                        className="relative border-2 border-border bg-surface-alt p-4"
+                      >
+                        <span className="absolute right-2 top-2 font-mono text-[10px] font-black text-text-muted/50">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <tip.icon className="mb-2 h-5 w-5 text-accent-active" />
+                        <div className="mb-1 font-display text-[13.5px] font-black text-ink">
                           {tip.title}
                         </div>
-                        <div className="text-xs text-text-secondary leading-normal font-medium">
+                        <div className="text-xs font-medium leading-normal text-text-secondary">
                           {tip.desc}
                         </div>
-                      </Card>
+                      </div>
                     ))}
                   </div>
                 </Card>
-              </m.div>
+              </m.section>
             </div>
           )}
         </div>
@@ -379,45 +391,42 @@ export default function GrammarLessonsPage() {
   );
 }
 
-/* ── Sub-components ── */
-
-function StatCard({
+/* ── Monospace stat cell for the masthead spec strip ── */
+function SpecCell({
   icon,
-  color,
   label,
   value,
   sub,
+  accent,
 }: {
   icon: React.ReactNode;
-  color: string;
   label: string;
   value: string;
   sub: string;
+  accent?: "success" | "fire";
 }) {
-  const colorMap: Record<string, { iconBg: string; iconText: string; border: string }> = {
-    accent: { iconBg: "bg-accent/10", iconText: "text-accent", border: "border-accent/15" },
-    success: { iconBg: "bg-success/10", iconText: "text-success", border: "border-success/15" },
-    fire: { iconBg: "bg-fire/10", iconText: "text-fire", border: "border-fire/15" },
-    xp: { iconBg: "bg-xp/10", iconText: "text-xp", border: "border-xp/15" },
-  };
-  const c = colorMap[color] ?? colorMap.accent;
-
+  const valueColor =
+    accent === "success" ? "text-success" : accent === "fire" ? "text-fire" : "text-ink";
   return (
-    <Card
-      bgType="alt"
-      shadowSize="none"
-      className="flex flex-col items-center text-center rounded-2xl py-3.5 px-2"
-    >
-      <div
-        className={`w-9 h-9 grid place-items-center rounded-xl ${c.iconBg} ${c.iconText} border-2 ${c.border} mb-2`}
+    <div className="flex items-center gap-3 px-4 py-3.5">
+      <span
+        className={`grid h-8 w-8 shrink-0 place-items-center border-2 border-border bg-bg-deep ${valueColor}`}
       >
         {icon}
+      </span>
+      <div className="min-w-0">
+        <div className="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
+          {label}
+        </div>
+        <div className="flex items-baseline gap-1">
+          <span
+            className={`font-display text-xl font-black leading-none tabular-nums ${valueColor}`}
+          >
+            {value}
+          </span>
+          <span className="font-mono text-[10px] font-semibold text-text-muted">{sub}</span>
+        </div>
       </div>
-      <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-widest">
-        {label}
-      </div>
-      <div className="text-lg font-black text-ink font-display leading-none mt-1">{value}</div>
-      <div className="text-[11px] font-semibold text-text-muted mt-0.5">{sub}</div>
-    </Card>
+    </div>
   );
 }

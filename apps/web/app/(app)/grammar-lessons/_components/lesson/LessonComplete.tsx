@@ -6,6 +6,7 @@ import {
   CircleCheckBig,
   GraduationCap,
   Lightbulb,
+  MessageSquare,
   RefreshCw,
   Star,
   Trophy,
@@ -28,6 +29,8 @@ interface LessonCompleteProps {
   wrongAnswers: GrammarLessonAnswer[];
   onBack: () => void;
   onRetry: () => void;
+  /** Open the English chatbot with a tailored practice prompt for this lesson. */
+  onPracticeChat: () => void;
 }
 
 function renderMedal(scorePct: number) {
@@ -59,11 +62,10 @@ export function LessonComplete({
   wrongAnswers,
   onBack,
   onRetry,
+  onPracticeChat,
 }: LessonCompleteProps) {
   const router = useRouter();
   const [showReview, setShowReview] = useState(false);
-
-
 
   return (
     <m.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}>
@@ -96,8 +98,6 @@ export function LessonComplete({
             You have already earned XP for this lesson.
           </p>
         )}
-
-
 
         {/* Incorrect-item review */}
         {wrongAnswers.length > 0 && (
@@ -159,6 +159,15 @@ export function LessonComplete({
             className="inline-flex items-center gap-1.5 rounded-lg text-accent-active cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-accent bg-accent-light shadow-sm"
           >
             <RefreshCw size={15} /> Retry Practice
+          </m.button>
+          <m.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onPracticeChat}
+            className="inline-flex items-center gap-1.5 rounded-lg text-accent-active cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-accent/25 bg-accent-light shadow-sm"
+          >
+            <MessageSquare size={15} /> Luyện với Chatbot
           </m.button>
           <m.button
             type="button"

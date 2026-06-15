@@ -1,11 +1,9 @@
 "use client";
 
-import { CheckCircle, ChevronRight, Zap } from "lucide-react";
+import { ArrowUpRight, Check, ChevronRight, Layers, Zap } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   type GrammarPoint,
   getTierTopicIds,
@@ -39,110 +37,43 @@ function categoryTopics(categoryId: string): GrammarTopic[] {
   );
 }
 
+/** Two-digit, zero-padded ordinal used in the syllabus gutter. */
+function ord(n: number): string {
+  return String(n + 1).padStart(2, "0");
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   PriorityTiers — "THE PROGRAM": a vertical, editorial grammar syllabus.
+   Each priority tier is a numbered section; each point is an oversized row
+   with a ghost ordinal in the gutter and a monospace focus note.
+   ──────────────────────────────────────────────────────────────────────── */
 export function PriorityTiers({ completedTopics, inProgressTopics, onSelectTopic }: Props) {
-  const isDesktop = useMediaQuery("(min-width: 1280px)");
-  const [expandedTier, setExpandedTier] = useState<string | null>("high");
-
-  // ── Desktop: Kanban board ──
-  if (isDesktop) {
-    return (
-      <div className="grid grid-cols-3 gap-4 items-start">
-        {PRIORITY_TIERS.map((tier, colIdx) => (
-          <TierColumn
-            key={tier.id}
-            tier={tier}
-            colIdx={colIdx}
-            completedTopics={completedTopics}
-            inProgressTopics={inProgressTopics}
-            onSelectTopic={onSelectTopic}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  // ── Mobile / Tablet: Accordion (original behavior) ──
   return (
-    <div className="flex flex-col gap-4">
-      {PRIORITY_TIERS.map((tier) => {
-        const topicIds = getTierTopicIds(tier);
-        const completed = topicIds.filter((id) => completedTopics.has(id)).length;
-        const pct = topicIds.length > 0 ? Math.round((completed / topicIds.length) * 100) : 0;
-        const isOpen = expandedTier === tier.id;
-
-        return (
-          <div
-            key={tier.id}
-            className="bg-surface rounded-xl overflow-hidden border-2 border-border"
-            style={{ boxShadow: "var(--shadow-sm)" }}
-          >
-            <button
-              type="button"
-              onClick={() => setExpandedTier(isOpen ? null : tier.id)}
-              className="w-full border-none bg-transparent cursor-pointer flex items-center gap-4 text-left py-5 px-6 hover:bg-surface-hover"
-            >
-              <div className="text-xl shrink-0">{tier.stars}</div>
-              <div className="flex-1 min-w-0">
-                <div className="text-base font-black text-ink font-display">{tier.title}</div>
-                <div className="text-xs text-text-muted font-semibold mt-0.5">{tier.subtitle}</div>
-              </div>
-              <div className="text-right shrink-0">
-                <div className="text-2xl font-black font-display" style={{ color: tier.color }}>
-                  {pct}%
-                </div>
-                <div className="text-[11px] text-text-muted font-bold">
-                  {completed}/{topicIds.length}
-                </div>
-              </div>
-              <m.div animate={{ rotate: isOpen ? 90 : 0 }} className="text-text-muted shrink-0">
-                <ChevronRight />
-              </m.div>
-            </button>
-
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <m.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="overflow-hidden"
-                >
-                  <div className="flex flex-col gap-2.5 px-6 pb-6">
-                    {tier.points.map((point) => (
-                      <PointRow
-                        key={point.id}
-                        point={point}
-                        tierColor={tier.color}
-                        completedTopics={completedTopics}
-                        inProgressTopics={inProgressTopics}
-                        onSelectTopic={onSelectTopic}
-                      />
-                    ))}
-                  </div>
-                </m.div>
-              )}
-            </AnimatePresence>
-          </div>
-        );
-      })}
+    <div className="flex flex-col gap-7">
+      {PRIORITY_TIERS.map((tier, tierIdx) => (
+        <TierSection
+          key={tier.id}
+          tier={tier}
+          tierIdx={tierIdx}
+          completedTopics={completedTopics}
+          inProgressTopics={inProgressTopics}
+          onSelectTopic={onSelectTopic}
+        />
+      ))}
     </div>
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────
-   Desktop Kanban Column — one per priority tier
-   ──────────────────────────────────────────────────────────────────────── */
-
-function TierColumn({
+/* ── One priority tier rendered as a numbered program section ── */
+function TierSection({
   tier,
-  colIdx,
+  tierIdx,
   completedTopics,
   inProgressTopics,
   onSelectTopic,
 }: {
   tier: PriorityTier;
-  colIdx: number;
+  tierIdx: number;
   completedTopics: Set<string>;
   inProgressTopics: Set<string>;
   onSelectTopic: (selection: TopicSelection) => void;
@@ -152,85 +83,90 @@ function TierColumn({
   const pct = topicIds.length > 0 ? Math.round((completed / topicIds.length) * 100) : 0;
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 16 }}
+    <m.section
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: colIdx * 0.08 }}
-      className="flex flex-col rounded-xl border-2 border-border bg-surface overflow-hidden"
-      style={{ boxShadow: "var(--shadow-sm)" }}
+      transition={{ delay: tierIdx * 0.08, type: "spring", stiffness: 260, damping: 26 }}
     >
-      {/* ── Column header ── */}
-      <div
-        className="p-4 border-b-2 border-border"
-        style={{
-          background: `color-mix(in srgb, ${tier.color} 6%, var(--surface))`,
-        }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="text-lg shrink-0">{tier.stars}</div>
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-black text-ink font-display leading-tight">
-              {tier.title}
+      {/* ── Section masthead ── */}
+      <div className="flex items-end justify-between gap-4 pb-2.5">
+        <div className="flex items-center gap-4 min-w-0">
+          {/* Program number block */}
+          <div
+            className="grid h-12 w-12 shrink-0 place-items-center border-2 border-border font-display text-lg font-black text-white shadow-[3px_3px_0_var(--shadow-color)]"
+            style={{ background: tier.color }}
+          >
+            {ord(tierIdx)}
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+              <span>Program {ord(tierIdx)}</span>
+              <span aria-hidden>{tier.stars}</span>
             </div>
-            <div className="text-[11px] text-text-muted font-semibold mt-0.5">{tier.subtitle}</div>
+            <h3 className="m-0 truncate font-display text-xl font-black leading-tight text-ink">
+              {tier.title}
+            </h3>
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="flex items-center gap-2.5 mt-3">
-          <div className="flex-1 h-[5px] rounded-full bg-border relative overflow-hidden">
-            <m.div
-              initial={{ width: 0 }}
-              animate={{ width: `${pct}%` }}
-              transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 + colIdx * 0.1 }}
-              className="absolute left-0 top-0 bottom-0 h-full rounded-full"
-              style={{ background: tier.color }}
-            />
-          </div>
-          <span
-            className="text-xs font-black shrink-0 tabular-nums font-mono"
+        {/* Tier ratio */}
+        <div className="shrink-0 text-right">
+          <div
+            className="font-display text-2xl font-black leading-none tabular-nums"
             style={{ color: pct > 0 ? tier.color : "var(--text-muted)" }}
           >
-            {completed}/{topicIds.length}
-          </span>
+            {completed}
+            <span className="text-text-muted">/{topicIds.length}</span>
+          </div>
+          <div className="font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+            {tier.subtitle}
+          </div>
         </div>
       </div>
 
-      {/* ── Column body — scrollable list of point cards ── */}
-      <div className="flex flex-col gap-2 p-3 max-h-[calc(100vh-320px)] overflow-y-auto">
+      {/* Heavy section rule with a fill segment */}
+      <div className="relative mb-3 h-1.5 w-full border-2 border-border bg-surface">
+        <m.div
+          initial={{ width: 0 }}
+          animate={{ width: `${pct}%` }}
+          transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.15 }}
+          className="absolute inset-y-0 left-0"
+          style={{ background: tier.color }}
+        />
+      </div>
+
+      {/* ── Points: bordered syllabus table with a numbered gutter ── */}
+      <div className="overflow-hidden border-2 border-border bg-surface shadow-[4px_4px_0_var(--shadow-color)]">
         {tier.points.map((point, idx) => (
-          <m.div
+          <PointRow
             key={point.id}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 + idx * 0.03 }}
-          >
-            <PointRow
-              point={point}
-              tierColor={tier.color}
-              completedTopics={completedTopics}
-              inProgressTopics={inProgressTopics}
-              onSelectTopic={onSelectTopic}
-            />
-          </m.div>
+            point={point}
+            index={idx}
+            isLast={idx === tier.points.length - 1}
+            tierColor={tier.color}
+            completedTopics={completedTopics}
+            inProgressTopics={inProgressTopics}
+            onSelectTopic={onSelectTopic}
+          />
         ))}
       </div>
-    </m.div>
+    </m.section>
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────
-   Shared Point Row — used in both accordion and kanban modes
-   ──────────────────────────────────────────────────────────────────────── */
-
+/* ── One syllabus row — either a direct lesson or an expandable group ── */
 function PointRow({
   point,
+  index,
+  isLast,
   tierColor,
   completedTopics,
   inProgressTopics,
   onSelectTopic,
 }: {
   point: GrammarPoint;
+  index: number;
+  isLast: boolean;
   tierColor: string;
   completedTopics: Set<string>;
   inProgressTopics: Set<string>;
@@ -249,6 +185,9 @@ function PointRow({
   const done = directDone || expandDone;
   const inProg = directInProg || (!isDirect && subTopics.some((t) => inProgressTopics.has(t.id)));
 
+  // For group points, a small "x/y" of sub-topics done.
+  const subDone = subTopics.filter((t) => completedTopics.has(t.id)).length;
+
   const handleClick = () => {
     if (point.ref.kind === "direct") {
       const topicId = point.ref.topicId;
@@ -264,38 +203,90 @@ function PointRow({
     }
   };
 
+  // Status drives the ordinal's treatment: solid when touched, ghost-outline otherwise.
+  const numberStyle = done
+    ? { color: "var(--success)" }
+    : inProg
+      ? { color: tierColor }
+      : {
+          color: "transparent",
+          WebkitTextStroke: "1.5px var(--border)",
+        };
+
   return (
-    <Card bgType="alt" shadowSize="none" size="sm" className="rounded-xl">
+    <div className={isLast ? "" : "border-b-2 border-border"}>
       <button
         type="button"
         onClick={handleClick}
-        className="w-full border-none bg-transparent cursor-pointer flex items-start gap-3 text-left"
+        className="group/row grid w-full grid-cols-[60px_1fr_auto] items-stretch border-none bg-transparent text-left transition-colors hover:bg-surface-hover sm:grid-cols-[76px_1fr_auto]"
       >
-        <div className="mt-0.5 shrink-0">
-          {done ? (
-            <CheckCircle className="text-success" size={16} />
-          ) : inProg ? (
-            <Zap className="text-accent" size={16} />
-          ) : (
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: tierColor, marginTop: 4, marginLeft: 4, marginRight: 4 }}
-            />
+        {/* Gutter ordinal */}
+        <div className="relative grid place-items-center border-r-2 border-border py-4">
+          <span
+            className="select-none font-display text-3xl font-black leading-none tabular-nums sm:text-4xl"
+            style={numberStyle}
+          >
+            {ord(index)}
+          </span>
+          {done && (
+            <span className="absolute right-1 top-1.5 grid h-4 w-4 place-items-center rounded-full bg-success text-white">
+              <Check size={11} strokeWidth={3.5} />
+            </span>
           )}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-extrabold text-ink">{point.title}</div>
-          <div className="text-[12px] text-text-secondary font-medium leading-snug mt-0.5">
-            {point.focusNote}
+
+        {/* Title + focus note */}
+        <div className="flex min-w-0 flex-col justify-center gap-1 py-3.5 pl-4 pr-3">
+          <div className="flex items-center gap-2">
+            <span className="truncate font-display text-[15px] font-black leading-tight text-ink">
+              {point.title}
+            </span>
+            {!isDirect && (
+              <span className="inline-flex shrink-0 items-center gap-1 border border-border bg-bg-deep px-1.5 py-px font-mono text-[9px] font-bold uppercase tracking-wider text-text-muted">
+                <Layers size={9} />
+                {subTopics.length}
+              </span>
+            )}
           </div>
+          <p className="m-0 flex items-start gap-1.5 font-mono text-[11.5px] font-medium leading-snug text-text-secondary">
+            <span className="mt-px shrink-0" style={{ color: tierColor }} aria-hidden>
+              ▶
+            </span>
+            <span className="line-clamp-2">{point.focusNote}</span>
+          </p>
         </div>
-        {!isDirect && (
-          <m.div animate={{ rotate: open ? 90 : 0 }} className="text-text-muted shrink-0 mt-0.5">
-            <ChevronRight size={16} />
-          </m.div>
-        )}
+
+        {/* Right meta column */}
+        <div className="flex items-center gap-2.5 pr-3.5 sm:pr-5">
+          {inProg && !done && (
+            <span className="hidden items-center gap-1 border-2 border-accent/30 bg-accent-light px-2 py-1 font-mono text-[9px] font-black uppercase tracking-wider text-accent-active sm:inline-flex">
+              <Zap size={10} className="fill-current" />
+              Đang học
+            </span>
+          )}
+          {!isDirect && (
+            <span
+              className="hidden font-mono text-[10px] font-bold tabular-nums text-text-muted sm:inline"
+              aria-hidden
+            >
+              {subDone}/{subTopics.length}
+            </span>
+          )}
+          {isDirect ? (
+            <span className="grid h-8 w-8 place-items-center border-2 border-border bg-surface text-ink shadow-[2px_2px_0_var(--shadow-color)] transition-transform group-hover/row:-translate-x-0.5 group-hover/row:-translate-y-0.5">
+              <ArrowUpRight size={15} />
+            </span>
+          ) : (
+            <span className="grid h-8 w-8 place-items-center border-2 border-border bg-surface text-ink">
+              <m.span animate={{ rotate: open ? 90 : 0 }} className="grid place-items-center">
+                <ChevronRight size={15} />
+              </m.span>
+            </span>
+          )}
+        </div>
       </button>
 
+      {/* Expandable module grid */}
       {!isDirect && (
         <AnimatePresence initial={false}>
           {open && (
@@ -303,44 +294,58 @@ function PointRow({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden"
+              transition={{ type: "spring", stiffness: 320, damping: 32 }}
+              className="overflow-hidden border-t-2 border-dashed border-border bg-bg-deep"
             >
-              <div className="flex flex-wrap gap-1.5 pt-3">
-                {subTopics.map((t) => {
-                  const tDone = completedTopics.has(t.id);
-                  const tProg = inProgressTopics.has(t.id);
-                  return (
-                    <button
-                      type="button"
-                      key={t.id}
-                      onClick={() =>
-                        onSelectTopic({
-                          id: t.id,
-                          title: t.title,
-                          level: t.level,
-                          focusNote: point.focusNote,
-                        })
-                      }
-                      className="flex items-center gap-1.5 py-1.5 px-3 text-xs font-bold cursor-pointer rounded-xl border border-border bg-surface text-text-secondary hover:border-accent/40"
-                    >
-                      {tDone ? (
-                        <CheckCircle size={11} className="text-success" />
-                      ) : tProg ? (
-                        <Zap size={11} className="text-accent" />
-                      ) : (
-                        <span className="text-[8.5px] font-extrabold px-1 py-px rounded bg-border text-text-muted">
-                          {t.level}
+              <div className="flex flex-col gap-2.5 px-4 py-4 sm:pl-[76px]">
+                <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-text-muted">
+                  Modules · {subTopics.length}
+                </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {subTopics.map((t) => {
+                    const tDone = completedTopics.has(t.id);
+                    const tProg = inProgressTopics.has(t.id);
+                    return (
+                      <button
+                        type="button"
+                        key={t.id}
+                        onClick={() =>
+                          onSelectTopic({
+                            id: t.id,
+                            title: t.title,
+                            level: t.level,
+                            focusNote: point.focusNote,
+                          })
+                        }
+                        className="group/mod flex items-center gap-2.5 border-2 border-border bg-surface px-3 py-2.5 text-left shadow-[2px_2px_0_var(--shadow-color)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_var(--shadow-color)] active:translate-x-0 active:translate-y-0 active:shadow-[1px_1px_0_var(--shadow-color)]"
+                      >
+                        <span
+                          className={`grid h-5 w-5 shrink-0 place-items-center border-2 border-border font-mono text-[8px] font-black ${
+                            tDone
+                              ? "bg-success text-white"
+                              : tProg
+                                ? "bg-accent text-text-on-accent"
+                                : "bg-bg-deep text-text-muted"
+                          }`}
+                        >
+                          {tDone ? <Check size={10} strokeWidth={3.5} /> : t.level}
                         </span>
-                      )}
-                      <span>{t.title}</span>
-                    </button>
-                  );
-                })}
+                        <span className="flex-1 truncate text-[12.5px] font-bold text-ink">
+                          {t.title}
+                        </span>
+                        <ArrowUpRight
+                          size={13}
+                          className="shrink-0 text-text-muted transition-transform group-hover/mod:-translate-y-0.5 group-hover/mod:translate-x-0.5"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </m.div>
           )}
         </AnimatePresence>
       )}
-    </Card>
+    </div>
   );
 }

@@ -55,10 +55,10 @@ function ActionButton({
       disabled={loading}
       aria-label={label}
       title={label}
-      className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-all duration-150 cursor-pointer active:scale-95 ${
+      className={`inline-flex items-center gap-1 border-2 px-2 py-1.5 text-[11px] font-semibold transition-all duration-150 cursor-pointer active:scale-95 ${
         active
-          ? "text-accent bg-accent/10"
-          : "text-text-muted hover:text-text-primary hover:bg-chat-surface-hover"
+          ? "border-accent/40 text-accent-active bg-accent-light"
+          : "border-transparent text-text-muted hover:border-border hover:text-text-primary hover:bg-chat-surface-hover"
       } ${className}`}
     >
       {loading ? (
@@ -99,7 +99,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="w-6 h-6 rounded-lg object-cover border-2 border-border"
+        className="w-7 h-7 object-cover border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]"
         referrerPolicy="no-referrer"
       />
     );
@@ -113,7 +113,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid place-items-center w-6 h-6 rounded-lg bg-accent/10 border-2 border-border text-[9px] font-bold text-accent">
+    <div className="grid place-items-center w-7 h-7 bg-ink border-2 border-border text-[9px] font-black text-bg shadow-[2px_2px_0_var(--shadow-color)]">
       {initials}
     </div>
   );
@@ -145,7 +145,7 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   };
 
   return (
-    <div className="relative my-3 rounded-xl border-2 border-border bg-chat-code-bg overflow-hidden shadow-sm">
+    <div className="relative my-3 border-2 border-border bg-chat-code-bg overflow-hidden shadow-[3px_3px_0_var(--shadow-color)]">
       <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border bg-chat-code-header text-[10px] text-text-muted font-mono font-bold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
@@ -300,12 +300,14 @@ export function ChatMessage({
   /* ── Divider ── */
   if (message.role === "divider") {
     return (
-      <div className="flex items-center gap-4 py-4 my-2">
+      <div className="flex items-center gap-3 py-4 my-2">
+        <span className="text-accent text-[10px]">◆</span>
         <div className="h-0.5 flex-1 bg-border" />
-        <span className="text-[10px] font-bold tracking-wider uppercase text-text-muted font-mono px-2">
+        <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-text-muted font-mono px-1">
           {message.text}
         </span>
         <div className="h-0.5 flex-1 bg-border" />
+        <span className="text-accent text-[10px]">◆</span>
       </div>
     );
   }
@@ -314,63 +316,88 @@ export function ChatMessage({
   const text = message.text.trim();
   if (!text && !isStreaming) return null;
 
+  /* ── User: right-aligned hard-shadow block ── */
+  if (isUser) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+        className="group relative w-full py-3"
+      >
+        <div className="mx-auto max-w-2xl px-2">
+          <div className="flex flex-col items-end">
+            <div className="mb-1.5 flex items-center gap-2">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-text-muted">
+                Bạn
+              </span>
+              <UserAvatar />
+            </div>
+            <div className="max-w-[85%] border-2 border-border bg-accent-light px-4 py-2.5 shadow-[3px_3px_0_var(--shadow-color)]">
+              <div className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
+                {text}
+              </div>
+            </div>
+            {!isStreaming && text && (
+              <div className="mt-1.5 flex items-center gap-0.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <CopyAction text={text} />
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  /* ── Assistant: open transmission on an avatar rail ── */
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`group relative w-full py-3 ${isUser ? "bg-chat-surface/30" : ""}`}
+      className="group relative w-full py-3"
     >
       <div className="mx-auto max-w-2xl px-2">
-        {/* ── Row: Avatar + Content ── */}
-        <div className="flex gap-3">
-          {/* Avatar column — 24px icon */}
-          <div className="shrink-0 pt-0.5">
-            {isUser ? (
-              <UserAvatar />
-            ) : persona ? (
-              <div className="w-6 h-6 rounded-lg overflow-hidden border-2 border-border">
-                <persona.avatar size={24} />
+        <div className="flex items-stretch gap-3">
+          {/* Avatar rail */}
+          <div className="flex shrink-0 flex-col items-center">
+            {persona ? (
+              <div className="grid h-7 w-7 place-items-center overflow-hidden border-2 border-border bg-bg-deep shadow-[2px_2px_0_var(--shadow-color)]">
+                <persona.avatar size={26} />
               </div>
             ) : (
-              <div className="w-6 h-6 rounded-lg bg-chat-surface border-2 border-border" />
+              <div className="h-7 w-7 border-2 border-border bg-chat-surface" />
             )}
+            <div className="mt-1.5 w-0.5 flex-1 bg-border/30" />
           </div>
 
           {/* Content column */}
-          <div className="min-w-0 flex-1">
-            {/* Sender label */}
+          <div className="min-w-0 flex-1 pb-1">
             <div className="mb-1.5 flex items-center gap-2">
-              <span className="text-xs font-bold text-ink leading-none">
-                {isUser ? "You" : (persona?.label.split(" —")[0] ?? "Tutor")}
+              <span className="font-mono text-[10px] font-black uppercase tracking-[0.18em] text-accent-active">
+                {persona?.label.split(" —")[0] ?? "Tutor"}
+                <span className="ml-1 text-text-muted/50">//</span>
               </span>
               {isStreaming && (
-                <span className="text-[10px] font-semibold text-accent animate-pulse">
-                  typing...
+                <span className="animate-pulse font-mono text-[10px] font-bold uppercase tracking-wider text-accent">
+                  ▸ đang gõ
                 </span>
               )}
             </div>
 
-            {/* Message body */}
-            {isUser ? (
-              <div className="text-sm leading-relaxed text-text-primary whitespace-pre-wrap">
-                {text}
-              </div>
-            ) : (
-              <MessageBody
-                text={text}
-                isStreaming={isStreaming}
-                onSendMessage={onSendMessage}
-                isChatLoading={isChatLoading}
-                onSpeak={onSpeak}
-                isSpeaking={isSpeaking}
-              />
-            )}
+            <MessageBody
+              text={text}
+              isStreaming={isStreaming}
+              onSendMessage={onSendMessage}
+              isChatLoading={isChatLoading}
+              onSpeak={onSpeak}
+              isSpeaking={isSpeaking}
+            />
 
             {/* ── Action bar — visible on hover ── */}
             {!isStreaming && text && (
-              <div className="mt-2 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                {!isUser && onSpeak && onStopSpeak && (
+              <div className="mt-2 flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                {onSpeak && onStopSpeak && (
                   <ActionButton
                     icon={isSpeaking ? Pause : Volume2}
                     label={isSpeaking ? "Stop" : "Listen"}
@@ -379,7 +406,7 @@ export function ChatMessage({
                     loading={isTtsLoading}
                   />
                 )}
-                {!isUser && isLastAssistant && onRegenerate && (
+                {isLastAssistant && onRegenerate && (
                   <ActionButton icon={RotateCcw} label="Regenerate" onClick={onRegenerate} />
                 )}
                 <CopyAction text={text} />

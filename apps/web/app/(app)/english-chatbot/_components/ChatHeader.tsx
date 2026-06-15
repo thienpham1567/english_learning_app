@@ -10,32 +10,39 @@ type Props = {
 export function ChatHeader({ personaId, isLoading }: Props) {
   const persona = findPersona(personaId);
   const Avatar = persona.avatar;
+  const name = persona.label.split(" —")[0];
 
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-chat-surface px-4 md:px-6 z-30">
-      <div className="flex items-center gap-3 animate-in fade-in duration-300" key={personaId}>
-        <div className="relative">
-          <Avatar size={32} />
-          {/* Online indicator dot */}
-          <div
-            className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-chat-bg transition-colors duration-300 ${
-              isLoading ? "bg-accent animate-pulse" : "bg-success"
-            }`}
-          />
+    <div className="z-30 flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-chat-surface px-4 md:px-6">
+      <div key={personaId} className="flex animate-in items-center gap-3 fade-in duration-300">
+        {/* Square portrait frame */}
+        <div className="grid h-9 w-9 place-items-center overflow-hidden border-2 border-border bg-bg-deep shadow-[2px_2px_0_var(--shadow-color)]">
+          <Avatar size={34} />
         </div>
 
         <div className="flex flex-col">
-          <span className="text-xs font-semibold text-ink leading-tight tracking-wide">
-            {persona.label}
+          <span className="font-display text-sm font-black leading-none tracking-tight text-ink">
+            {name}
           </span>
-          <span
-            className={`text-[10px] transition-colors duration-300 leading-none mt-0.5 ${
-              isLoading ? "text-accent font-medium" : "text-text-muted"
-            }`}
-          >
-            {isLoading ? "typing..." : persona.specialty}
+          <span className="mt-1 flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em]">
+            <span
+              className={`inline-block h-1.5 w-1.5 ${
+                isLoading ? "animate-pulse bg-accent" : "bg-success"
+              }`}
+            />
+            <span className={isLoading ? "text-accent" : "text-text-muted"}>
+              {isLoading ? "Đang soạn…" : "Online"}
+            </span>
+            <span className="text-text-muted/60">·</span>
+            <span className="text-text-muted">{persona.specialty}</span>
           </span>
         </div>
+      </div>
+
+      {/* Session marker */}
+      <div className="hidden items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted sm:flex">
+        <span className="text-accent">◆</span>
+        Live Session
       </div>
     </div>
   );

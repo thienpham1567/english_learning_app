@@ -2,7 +2,10 @@
 
 import { ArrowLeft, Loader2 } from "lucide-react";
 import * as m from "motion/react-client";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 import { Card } from "@/components/ui/card";
+import { buildGrammarChatbotPrompt } from "@/lib/grammar-lessons/chatbot-prompts";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import { useGrammarLesson } from "../_hooks/useGrammarLesson";
 import { ExercisePractice } from "./lesson/ExercisePractice";
@@ -33,6 +36,15 @@ export function LessonView({
   onComplete,
 }: Props) {
   const l = useGrammarLesson({ topicId, topicTitle, level, examMode, focusNote, onComplete });
+  const router = useRouter();
+
+  // Open the English chatbot with a tailored practice prompt for this lesson.
+  // The chatbot reads the `prompt` query param and auto-sends it.
+  const practiceWithChat = useCallback(() => {
+    const lessonTitle = l.lesson?.title ?? topicTitle;
+    const prompt = buildGrammarChatbotPrompt(topicId, lessonTitle);
+    router.push(`/english-chatbot?prompt=${encodeURIComponent(prompt)}`);
+  }, [router, topicId, topicTitle, l.lesson?.title]);
 
   return (
     <div className="max-w-[700px] mx-auto w-full">
@@ -84,6 +96,7 @@ export function LessonView({
             level={level}
             onRegenerate={() => l.generateLesson(true)}
             onStart={l.startExercises}
+            onPracticeChat={practiceWithChat}
           />
         </m.div>
       )}
@@ -122,6 +135,7 @@ export function LessonView({
           wrongAnswers={l.wrongAnswers}
           onBack={onBack}
           onRetry={l.startExercises}
+          onPracticeChat={practiceWithChat}
         />
       )}
     </div>

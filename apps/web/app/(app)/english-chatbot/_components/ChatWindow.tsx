@@ -102,6 +102,21 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 
+  // ── Seed from a `?prompt=` query param (e.g. "Luyện tập với Chatbot" from a
+  // grammar lesson). Auto-send once, on the base page only, then strip the
+  // param so a refresh or back-navigation never re-sends it. ──
+  const seededPromptRef = useRef(false);
+  useEffect(() => {
+    if (seededPromptRef.current || conversationId) return;
+    const prompt = new URLSearchParams(window.location.search).get("prompt");
+    if (!prompt) return;
+    seededPromptRef.current = true;
+    window.history.replaceState(null, "", "/english-chatbot");
+    chat.setInput(prompt);
+    setTimeout(() => chat.send(prompt), 50);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationId]);
+
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
   const lastMsg = chat.messages.at(-1);
   const streamingHasStarted = chat.isLoading && lastMsg?.role === "assistant";

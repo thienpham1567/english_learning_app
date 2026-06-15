@@ -31,6 +31,8 @@ interface LessonContentProps {
   level: string;
   onRegenerate: () => void;
   onStart: () => void;
+  /** Open the English chatbot with a tailored practice prompt for this lesson. */
+  onPracticeChat: () => void;
 }
 
 /** Reusable titled card section used throughout the theory view. */
@@ -75,7 +77,13 @@ function HighlightedExample({ en, highlight }: { en: string; highlight: string }
 }
 
 /** Theory view: concept, formula, usage, examples, and pitfalls before practice. */
-export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonContentProps) {
+export function LessonContent({
+  lesson,
+  level,
+  onRegenerate,
+  onStart,
+  onPracticeChat,
+}: LessonContentProps) {
   const { speak, isSpeaking, isLoading: isTtsLoading } = useTextToSpeech();
 
   return (
@@ -317,6 +325,18 @@ export function LessonContent({ lesson, level, onRegenerate, onStart }: LessonCo
         <Play className="h-4 w-4 fill-current" /> Start Practice — {lesson.exercises.length}{" "}
         questions
         <ChevronRight size={18} />
+      </m.button>
+
+      {/* Practice with chatbot */}
+      <m.button
+        type="button"
+        whileHover={{ scale: 1.01, y: -2 }}
+        whileTap={{ scale: 0.99 }}
+        onClick={onPracticeChat}
+        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-3.5 px-6 text-[14.5px] font-black text-accent-active bg-accent-light border-2 border-accent/25 shadow-sm hover:bg-accent-light/70 cursor-pointer font-display"
+      >
+        <MessageSquare className="h-4 w-4" /> Luyện tập với Chatbot
+        <ChevronRight size={17} />
       </m.button>
     </div>
   );
