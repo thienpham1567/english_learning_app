@@ -161,7 +161,7 @@ export async function GET(request: Request) {
     const payload = JSON.stringify({
       title,
       body: body.slice(0, 240),
-      url: "/toeic/progress",
+      url: "/toeic/practice",
     });
 
     for (const sub of subs) {

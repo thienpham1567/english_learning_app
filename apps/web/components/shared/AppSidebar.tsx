@@ -58,12 +58,10 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "TOEIC",
     items: [
       { href: "/toeic/practice", label: "ETS Practice", icon: ClipboardList },
-      { href: "/toeic/mock-test", label: "Mock Test", icon: Trophy },
       { href: "/toeic/listening", label: "Listening", icon: Headphones },
       { href: "/toeic/writing", label: "Writing", icon: Pencil },
       { href: "/toeic/speaking", label: "Speaking", icon: Mic },
       { href: "/toeic/dictation", label: "Dictation", icon: Volume2 },
-      { href: "/toeic/progress", label: "Progress", icon: Target },
     ],
   },
   {
@@ -71,7 +69,6 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Foundation",
     items: [
       { href: "/grammar-lessons", label: "Grammar", icon: GraduationCap },
-      { href: "/toeic/vocab", label: "TOEIC Vocab", icon: BookOpenText },
       { href: "/morphology", label: "Word Formation", icon: Blocks },
       { href: "/reading", label: "Reading", icon: BookOpen },
     ],

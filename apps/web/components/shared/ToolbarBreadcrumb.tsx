@@ -10,6 +10,7 @@ import {
   FileWarning,
   Flame,
   GraduationCap,
+  Headphones,
   LayoutDashboard,
   MessageSquare,
   Mic,
@@ -40,9 +41,7 @@ const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
   "/toeic/writing/runner": { eyebrow: "TOEIC Writing", title: "Writing Task", icon: <Pencil /> },
   "/toeic/speaking": { eyebrow: "TOEIC Speaking", title: "Speaking Practice", icon: <Mic /> },
   "/toeic/speaking/runner": { eyebrow: "TOEIC Speaking", title: "Speaking Task", icon: <Mic /> },
-  "/toeic/mock-test": { eyebrow: "TOEIC Mock Test", title: "Mock Exam", icon: <Trophy /> },
-  "/toeic/mock-test/runner": { eyebrow: "TOEIC Mock Test", title: "In Progress", icon: <Trophy /> },
-  "/toeic/vocab": { eyebrow: "TOEIC", title: "TOEIC Vocabulary", icon: <Star /> },
+  "/toeic/dictation": { eyebrow: "TOEIC", title: "Dictation", icon: <Headphones /> },
   "/grammar-lessons": { eyebrow: "Grammar", title: "Grammar", icon: <GraduationCap /> },
 
 

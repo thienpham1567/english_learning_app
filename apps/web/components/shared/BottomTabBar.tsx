@@ -79,12 +79,6 @@ const TOEIC_HUB_ITEMS: HubItem[] = [
     accent: "var(--accent)",
   },
   {
-    label: "Mock Test",
-    icon: <Trophy size={22} />,
-    href: "/toeic/mock-test",
-    accent: "var(--xp)",
-  },
-  {
     label: "Listening",
     icon: <Headphones size={22} />,
     href: "/toeic/listening",
@@ -108,12 +102,6 @@ const TOEIC_HUB_ITEMS: HubItem[] = [
     href: "/toeic/dictation",
     accent: "var(--info)",
   },
-  {
-    label: "Progress",
-    icon: <Target size={22} />,
-    href: "/toeic/progress",
-    accent: "var(--secondary)",
-  },
 ];
 
 const LEARN_HUB_ITEMS: HubItem[] = [
@@ -122,12 +110,6 @@ const LEARN_HUB_ITEMS: HubItem[] = [
     icon: <GraduationCap size={22} />,
     href: "/grammar-lessons",
     accent: "var(--module-grammar)",
-  },
-  {
-    label: "TOEIC Vocab",
-    icon: <BookOpenText size={22} />,
-    href: "/toeic/vocab",
-    accent: "var(--accent)",
   },
   {
     label: "Reading",

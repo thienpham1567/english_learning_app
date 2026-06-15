@@ -100,33 +100,14 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
   }
 
   if (items.length < 3) {
-    const studied = states.filter((s) => s.signalCount > 0).length;
-    if (studied >= 5) {
-      items.push({
-        id: "mock-mini",
-        title: "Mini mock test (100 questions)",
-        reason: "Calibrate predicted score",
-        href: "/toeic/mock-test",
-        estimatedMinutes: 60,
-        priority: "medium",
-      });
-    } else {
-      const [pack] = await db
-        .select({ topic: toeicVocab.topic })
-        .from(toeicVocab)
-        .orderBy(sql`random()`)
-        .limit(1);
-      if (pack) {
-        items.push({
-          id: `vocab-${pack.topic}`,
-          title: `15 words on topic: ${pack.topic}`,
-          reason: "Expand your TOEIC vocabulary",
-          href: `/toeic/vocab/learn?pack=${encodeURIComponent(pack.topic)}&mode=new`,
-          estimatedMinutes: 10,
-          priority: "medium",
-        });
-      }
-    }
+    items.push({
+      id: "extra-practice",
+      title: "Practice more TOEIC questions",
+      reason: "Keep building your skills",
+      href: "/toeic/practice",
+      estimatedMinutes: 30,
+      priority: "medium",
+    });
   }
 
   return items.slice(0, 3);
@@ -277,7 +258,7 @@ export async function HubWidgets() {
           </div>
           {predicted && (
             <Link
-              href="/toeic/progress"
+              href="/toeic/practice"
               className="text-accent text-xs font-extrabold no-underline hover:underline"
             >
               View detailed chart →
@@ -285,40 +266,22 @@ export async function HubWidgets() {
           )}
         </Card>
 
-        {/* Last Mock Card */}
+        {/* Practice CTA Card */}
         <Card shadowSize="sm" className="flex-col justify-between gap-3 p-[18px]">
           <div>
             <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
-              🎯 Latest Mock Test
+              🎯 TOEIC Practice
             </span>
-            {lastMock?.totalScaled ? (
-              <div className="mt-2">
-                <div className="text-text-primary font-display text-[26px] font-[950] leading-[1.1]">
-                  {lastMock.totalScaled}{" "}
-                  <span className="text-sm text-text-muted font-bold">/ 990</span>
-                </div>
-              </div>
-            ) : (
-              <div className="text-text-muted mt-3 text-[12.5px] font-[650]">
-                No mock tests taken yet
-              </div>
-            )}
+            <div className="text-text-muted mt-3 text-[12.5px] font-[650]">
+              Keep practicing to improve your score
+            </div>
           </div>
-          {lastMock?.totalScaled ? (
-            <Link
-              href={`/toeic/mock-test/${lastMock.id}/result`}
-              className="text-accent text-xs font-extrabold no-underline hover:underline"
-            >
-              View detailed results →
-            </Link>
-          ) : (
-            <Link
-              href="/toeic/mock-test"
-              className="text-accent text-xs font-extrabold no-underline hover:underline"
-            >
-              Take mock test now →
-            </Link>
-          )}
+          <Link
+            href="/toeic/practice"
+            className="text-accent text-xs font-extrabold no-underline hover:underline"
+          >
+            Start practice →
+          </Link>
         </Card>
 
         {/* Activity Card */}
