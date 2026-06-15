@@ -57,10 +57,10 @@ const TABS: TabItem[] = [
     action: "learn-hub",
   },
   {
-    key: "insights",
-    label: "Insights",
-    icon: <Brain size={21} />,
-    href: "/insights",
+    key: "review",
+    label: "Review",
+    icon: <FileWarning size={21} />,
+    href: "/error-notebook",
   },
   {
     key: "more",
@@ -107,12 +107,6 @@ const TOEIC_HUB_ITEMS: HubItem[] = [
     icon: <Volume2 size={22} />,
     href: "/toeic/dictation",
     accent: "var(--info)",
-  },
-  {
-    label: "Review",
-    icon: <CircleCheckBig size={22} />,
-    href: "/toeic/review",
-    accent: "var(--success)",
   },
   {
     label: "Progress",
@@ -190,11 +184,10 @@ const HUB_MAP: Record<string, { title: string; items: HubItem[] }> = {
 
 /* ─── Route Matching ─── */
 function getActiveTab(pathname: string): string {
-  if (pathname.startsWith("/insights")) return "insights";
+  if (pathname.startsWith("/error-notebook")) return "review";
   if (pathname.startsWith("/toeic")) return "toeic";
   if (
     pathname.startsWith("/grammar-lessons") ||
-    pathname.startsWith("/error-notebook") ||
     pathname.startsWith("/reading") ||
     pathname.startsWith("/morphology")
   )

@@ -26,7 +26,7 @@ const ACTIONS: Array<{
 }> = [
   { href: "/toeic/practice", label: "Practice Tests", icon: BookOpenText, available: true },
   { href: "/toeic/mock-test", label: "Mock Test", icon: Timer, available: true },
-  { href: "/toeic/review", label: "Review Errors", icon: Repeat, available: true },
+  { href: "/error-notebook", label: "Review Errors", icon: Repeat, available: true },
   { href: "/toeic/progress", label: "Progress", icon: TrendingUp, available: true },
   { href: "/toeic/listening", label: "Listening Hub", icon: Headphones, available: true },
   { href: "/toeic/dictation", label: "Dictation", icon: PenTool, available: true },

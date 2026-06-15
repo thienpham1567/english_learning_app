@@ -63,7 +63,7 @@ export async function GET(req: Request) {
       id: "review-due",
       title: `Ôn ${Math.min(dueCount, 20)} câu cần ôn`,
       reason: "Câu sai + từ vựng tới hạn SRS",
-      href: "/toeic/review",
+      href: "/error-notebook",
       estimatedMinutes: Math.min(20, dueCount),
       priority: "high",
     });

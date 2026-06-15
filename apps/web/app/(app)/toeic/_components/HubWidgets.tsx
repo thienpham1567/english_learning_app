@@ -53,7 +53,7 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
       id: "review-due",
       title: `Review ${Math.min(dueCount, 20)} items`,
       reason: "Incorrect items + vocab due",
-      href: "/toeic/review",
+      href: "/error-notebook",
       estimatedMinutes: Math.min(20, dueCount),
       priority: "high",
     });
@@ -358,7 +358,7 @@ export async function HubWidgets() {
           </div>
           {dueCount > 0 ? (
             <Link
-              href="/toeic/review"
+              href="/error-notebook"
               className="text-destructive text-xs font-extrabold no-underline hover:underline"
             >
               Review now →

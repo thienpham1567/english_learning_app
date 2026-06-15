@@ -78,11 +78,9 @@ const navGroups: (NavItem | NavGroup)[] = [
   },
   {
     key: "review",
-    label: "Review & Insights",
+    label: "Review",
     items: [
       { href: "/error-notebook", label: "Error Notebook", icon: FileWarning },
-      { href: "/toeic/review", label: "TOEIC Review", icon: CircleCheckBig },
-      { href: "/insights", label: "Insights", icon: Brain },
     ],
   },
   {
