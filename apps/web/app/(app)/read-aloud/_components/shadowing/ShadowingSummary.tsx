@@ -35,19 +35,22 @@ export function ShadowingSummary({
     <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl text-center border-2 border-accent p-6 shadow-md bg-gradient-to-br from-accent/10 to-xp/5"
+      className="text-center border-2 border-border p-6 shadow-[5px_5px_0_var(--shadow-color)] bg-accent-light"
     >
       <div className="flex justify-center mb-3">
         <m.div
           initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 16 }}
+          className="grid h-14 w-14 place-items-center border-2 border-border bg-surface shadow-[3px_3px_0_var(--shadow-color)]"
         >
-          <Award size={44} className="text-accent" />
+          <Award size={28} className="text-accent-active" />
         </m.div>
       </div>
 
-      <h3 className="mb-1 text-accent-active font-black text-lg">Shadowing Complete!</h3>
+      <h3 className="mb-1 text-ink font-display font-black uppercase tracking-tight text-lg">
+        Hoàn thành Shadowing!
+      </h3>
 
       {/* Average score ring */}
       <div
@@ -67,27 +70,23 @@ export function ShadowingSummary({
       {/* XP + skill rewards */}
       {isSubmitting ? (
         <div className="flex items-center justify-center gap-2 text-text-muted text-[13px] mb-4">
-          <Loader2 size={14} className="animate-spin" /> Saving your progress…
+          <Loader2 size={14} className="animate-spin" /> Đang lưu tiến độ…
         </div>
       ) : (
         <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
           {completion && completion.xpAwarded > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-xp/15 border-2 border-xp/30 text-xp font-black text-[13px] py-1 px-3">
+            <span className="inline-flex items-center gap-1 bg-xp/15 border-2 border-border text-xp font-black font-mono text-[12px] py-1 px-3 shadow-[2px_2px_0_var(--shadow-color)]">
               <Sparkles size={13} /> +{completion.xpAwarded} XP
             </span>
           )}
           {skill && (
             <span
-              className={`inline-flex items-center gap-1 rounded-full border-2 font-black text-[13px] py-1 px-3 ${
-                skill.levelUp
-                  ? "bg-success/15 border-success/30 text-success"
-                  : "bg-surface-alt border-border text-text-secondary"
+              className={`inline-flex items-center gap-1 border-2 border-border font-black font-mono text-[12px] py-1 px-3 shadow-[2px_2px_0_var(--shadow-color)] ${
+                skill.levelUp ? "bg-success/15 text-success" : "bg-surface text-text-secondary"
               }`}
             >
               <TrendingUp size={13} />
-              {skill.levelUp
-                ? `Listening Level Up: ${skill.cefr}!`
-                : `Listening Level: ${skill.cefr}`}
+              {skill.levelUp ? `Level Up: ${skill.cefr}!` : `Listening: ${skill.cefr}`}
             </span>
           )}
         </div>
@@ -100,7 +99,7 @@ export function ShadowingSummary({
           return (
             <span
               key={i}
-              className="text-[11px] font-bold py-1 px-2.5 rounded-lg border-2"
+              className="text-[11px] font-black font-mono py-1 px-2.5 border-2"
               style={{ color: scoreColor(s), borderColor: scoreColor(s) }}
             >
               #{i + 1}: {s}
@@ -110,12 +109,12 @@ export function ShadowingSummary({
       </div>
 
       <m.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ x: -1, y: -1 }}
+        whileTap={{ x: 0, y: 0 }}
         onClick={onRestart}
-        className="inline-flex items-center gap-2 rounded-xl text-ink text-[13px] font-black cursor-pointer font-body py-2.5 px-6 border-2 border-border bg-accent shadow-sm hover:bg-accent-hover"
+        className="inline-flex items-center gap-2 text-text-on-accent text-[13px] font-black uppercase tracking-tight cursor-pointer font-display py-2.5 px-6 border-2 border-border bg-accent shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
       >
-        <RefreshCw size={14} /> Practice Again
+        <RefreshCw size={14} /> Luyện lại
       </m.button>
     </m.div>
   );

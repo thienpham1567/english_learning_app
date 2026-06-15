@@ -103,8 +103,23 @@ export default function ReadAloudPage() {
   return (
     <div className="read-aloud-page-root h-full overflow-y-auto p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
+        {/* ─── Masthead ─── */}
+        <m.header initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
+          <div className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-text-muted">
+            <span className="inline-block h-2 w-2 rotate-45 bg-accent" />
+            Read Aloud · Luyện nghe &amp; nói
+          </div>
+          <h1 className="m-0 mt-1.5 font-display text-[clamp(1.8rem,4vw,2.4rem)] font-black uppercase leading-[0.95] tracking-tight text-ink">
+            Read{" "}
+            <span className="relative inline-block">
+              Aloud
+              <span className="absolute -bottom-1 left-0 h-1.5 w-full bg-accent/60" />
+            </span>
+          </h1>
+        </m.header>
+
         {/* ─── Mode Tabs ─── */}
-        <div className="read-aloud-mode-tabs flex gap-1.5 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm mb-6 max-w-2xl overflow-x-auto scrollbar-none">
+        <div className="read-aloud-mode-tabs flex gap-1 bg-surface-alt p-1 border-2 border-border shadow-[3px_3px_0_var(--shadow-color)] mb-6 max-w-2xl overflow-x-auto scrollbar-none">
           {MODE_TABS.map((tab) => {
             const isActive = mode === tab.key;
             return (
@@ -113,10 +128,10 @@ export default function ReadAloudPage() {
                 type="button"
                 onClick={() => setMode(tab.key)}
                 whileTap={{ scale: 0.98 }}
-                className={`flex-1 flex items-center gap-2.5 px-4 py-2.5 rounded-xl cursor-pointer transition-all duration-200 min-w-0 ${
+                className={`flex-1 flex items-center gap-2.5 px-4 py-2.5 cursor-pointer transition-all duration-200 min-w-0 ${
                   isActive
-                    ? "bg-accent text-text-on-accent border-none shadow-sm"
-                    : "bg-transparent text-text-secondary hover:text-text-primary"
+                    ? "bg-accent text-text-on-accent border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]"
+                    : "bg-transparent border-2 border-transparent text-text-secondary hover:text-text-primary"
                 }`}
               >
                 <m.span
@@ -127,11 +142,13 @@ export default function ReadAloudPage() {
                   <tab.Icon size={18} />
                 </m.span>
                 <div className="text-left min-w-0">
-                  <div className={`mode-label text-sm ${isActive ? "font-black" : "font-bold"}`}>
+                  <div
+                    className={`mode-label font-display text-sm uppercase tracking-tight ${isActive ? "font-black" : "font-bold"}`}
+                  >
                     {tab.label}
                   </div>
                   <div
-                    className={`mode-desc text-[10px] truncate ${isActive ? "opacity-75" : "opacity-50"}`}
+                    className={`mode-desc text-[10px] truncate font-mono ${isActive ? "opacity-75" : "opacity-50"}`}
                   >
                     {tab.desc}
                   </div>

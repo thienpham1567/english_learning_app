@@ -53,9 +53,9 @@ export function ShadowingStage({
 }: ShadowingStageProps) {
   const borderClass =
     step === "listening"
-      ? "border-accent shadow"
+      ? "border-accent"
       : step === "recording"
-        ? "border-error shadow-sm"
+        ? "border-error"
         : "border-border";
 
   return (
@@ -64,12 +64,12 @@ export function ShadowingStage({
         key={currentIdx}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className={`bg-surface rounded-xl flex flex-col gap-5 py-6 px-5 border-2 transition-colors duration-200 ${borderClass}`}
+        className={`bg-surface flex flex-col gap-5 py-6 px-5 border-2 shadow-[4px_4px_0_var(--shadow-color)] transition-colors duration-200 ${borderClass}`}
       >
         {/* Model sentence */}
         <div>
-          <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2 block">
-            Model Sentence
+          <span className="font-mono text-[10px] font-bold text-text-muted uppercase tracking-[0.18em] mb-2 flex items-center gap-1.5">
+            <span className="text-accent">▶</span> Câu mẫu
           </span>
           <span
             className="text-lg text-text-primary font-semibold block"
@@ -88,12 +88,12 @@ export function ShadowingStage({
               exit={{ opacity: 0 }}
             >
               <m.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ x: -1, y: -1 }}
+                whileTap={{ x: 0, y: 0 }}
                 onClick={onPlayReference}
-                className="w-full flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 rounded-2xl bg-accent text-ink text-[15px] font-black cursor-pointer font-body shadow hover:bg-accent-hover"
+                className="w-full flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 bg-accent text-text-on-accent text-[15px] font-black uppercase tracking-tight font-display cursor-pointer shadow-[4px_4px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] active:shadow-[1px_1px_0_var(--shadow-color)]"
               >
-                <Volume2 /> Listen to Model
+                <Volume2 /> Nghe câu mẫu
               </m.button>
             </m.div>
           )}
@@ -128,20 +128,20 @@ export function ShadowingStage({
             >
               <div className="flex gap-3">
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={onPlayReference}
-                  className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body shrink-0"
+                  className="flex items-center justify-center gap-1.5 py-3 px-4 border-2 border-border bg-surface-alt text-text-secondary text-[12px] font-bold uppercase font-mono cursor-pointer shrink-0 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none"
                 >
-                  <PlayCircle size={13} /> Listen Again
+                  <PlayCircle size={13} /> Nghe lại
                 </m.button>
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={onStartRecording}
-                  className="flex-1 flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 rounded-2xl bg-error text-white text-[15px] font-black cursor-pointer font-body shadow-sm hover:bg-error/95"
+                  className="flex-1 flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 bg-error text-white text-[15px] font-black uppercase tracking-tight font-display cursor-pointer shadow-[4px_4px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] active:shadow-[1px_1px_0_var(--shadow-color)]"
                 >
-                  <Mic size={14} /> Speak Now
+                  <Mic size={14} /> Nói ngay
                 </m.button>
               </div>
             </m.div>
@@ -164,12 +164,12 @@ export function ShadowingStage({
                   Recording <RecordingTimer />
                 </div>
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={onStopAndEvaluate}
-                  className="flex items-center justify-center gap-2 rounded-xl text-error text-sm font-extrabold cursor-pointer font-body py-3 px-7 border-2 border-error bg-error/10 hover:bg-error/20 transition-colors"
+                  className="flex items-center justify-center gap-2 text-error text-sm font-black uppercase font-mono cursor-pointer py-3 px-7 border-2 border-border bg-error/10 shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
                 >
-                  <StopCircle size={13} /> Stop & Grade
+                  <StopCircle size={13} /> Dừng &amp; chấm
                 </m.button>
               </div>
             </m.div>
@@ -184,8 +184,8 @@ export function ShadowingStage({
               className="text-center py-4 flex flex-col items-center justify-center gap-2"
             >
               <Loader2 className="animate-spin text-accent-active" size={24} />
-              <div className="text-sm font-black text-accent-active">
-                AI is grading your pronunciation…
+              <div className="font-mono text-sm font-black uppercase tracking-wide text-accent-active">
+                AI đang chấm phát âm…
               </div>
             </m.div>
           )}
@@ -204,21 +204,21 @@ export function ShadowingStage({
             <ShadowResult result={evalResult} referenceText={currentSentence} />
             <div className="mt-3 flex gap-3">
               <m.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ x: -1, y: -1 }}
+                whileTap={{ x: 0, y: 0 }}
                 onClick={onRetry}
-                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-surface text-text-primary text-sm font-bold cursor-pointer font-body hover:bg-surface-hover transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border-2 border-border bg-surface text-text-primary text-sm font-bold uppercase font-mono cursor-pointer shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none transition-shadow"
               >
-                <Redo size={13} /> Retry
+                <Redo size={13} /> Thử lại
               </m.button>
               {currentIdx < total - 1 && (
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={onNext}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-accent text-ink text-sm font-black cursor-pointer font-body shadow-sm hover:bg-accent-hover"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border-2 border-border bg-accent text-text-on-accent text-sm font-black uppercase tracking-tight font-display cursor-pointer shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
                 >
-                  Next Sentence <ChevronRight size={14} />
+                  Câu tiếp <ChevronRight size={14} />
                 </m.button>
               )}
             </div>

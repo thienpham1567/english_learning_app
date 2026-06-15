@@ -37,31 +37,31 @@ export function HistoryPanel({
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="overflow-hidden"
         >
-          <Card shadowSize="md" className="p-5">
+          <Card shadowSize="md" className="p-5 rounded-none shadow-[4px_4px_0_var(--shadow-color)]">
             {/* History header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <History className="text-accent text-base" />
-                <span className="text-sm font-extrabold text-text-primary">
-                  Listening History ({history.length})
+            <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
+              <div className="flex items-center gap-1.5">
+                <span className="text-accent">◆</span>
+                <span className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
+                  Lịch sử nghe ({history.length})
                 </span>
               </div>
               <div className="flex gap-2">
                 {history.length > 0 && (
                   <m.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ x: -1, y: -1 }}
+                    whileTap={{ x: 0, y: 0 }}
                     onClick={onClearAll}
-                    className="flex items-center gap-1 rounded-lg text-destructive font-bold cursor-pointer font-body py-1.5 px-3 text-[11.5px] border-2 border-error/20 bg-[color-mix(in_srgb,var(--error)_6%,transparent)]"
+                    className="flex items-center gap-1 text-error font-mono font-black uppercase tracking-wide cursor-pointer py-1.5 px-3 text-[10px] border-2 border-border bg-error/10 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none"
                   >
                     <Trash2 size={11} />
-                    Clear All
+                    Xoá hết
                   </m.button>
                 )}
                 <m.button
                   whileTap={{ scale: 0.95 }}
                   onClick={onClose}
-                  className="grid place-items-center w-7 h-7 rounded-lg border-2 border-border bg-surface-alt text-text-muted text-xs cursor-pointer"
+                  className="grid place-items-center w-7 h-7 border-2 border-border bg-surface-alt text-text-muted text-xs cursor-pointer shadow-[2px_2px_0_var(--shadow-color)] active:shadow-none"
                 >
                   <X />
                 </m.button>
@@ -88,12 +88,12 @@ export function HistoryPanel({
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.03 }}
-                      whileHover={{ x: 3, background: "var(--accent-light)" }}
+                      whileHover={{ x: -1, y: -1 }}
                       onClick={() => onReplay(entry)}
-                      className="flex items-center gap-3 rounded-lg border-2 border-border bg-surface-alt cursor-pointer py-3 px-3.5 transition-all duration-150"
+                      className="flex items-center gap-3 border-2 border-border bg-surface-alt cursor-pointer py-3 px-3.5 shadow-[2px_2px_0_var(--shadow-color)] transition-all duration-150 hover:bg-accent-light hover:shadow-[3px_3px_0_var(--shadow-color)]"
                     >
                       {/* Voice flag */}
-                      <div className="w-9 h-9 bg-surface border-2 border-border grid place-items-center text-lg shrink-0 rounded-xl">
+                      <div className="w-9 h-9 bg-surface border-2 border-border grid place-items-center text-lg shrink-0">
                         {voice?.flag ?? <Mic className="h-4 w-4 text-text-secondary" />}
                       </div>
 
@@ -111,7 +111,7 @@ export function HistoryPanel({
                             {timeAgo(entry.createdAt)}
                           </span>
                           {cached && (
-                            <span className="font-extrabold rounded-md text-success text-[9.5px] py-px px-1.5 bg-[color-mix(in srgb, var(--success) 10%, transparent)] border-2 border-[color-mix(in srgb, var(--success) 20%, transparent)] inline-flex items-center gap-0.5">
+                            <span className="font-black font-mono uppercase text-success text-[9px] py-px px-1.5 bg-success/10 border-2 border-success/30 inline-flex items-center gap-0.5">
                               <Zap className="h-2.5 w-2.5 fill-success text-success" /> Cached
                             </span>
                           )}
@@ -127,7 +127,7 @@ export function HistoryPanel({
                           onDelete(entry.id);
                           toast.success("Deleted history entry");
                         }}
-                        className="grid place-items-center w-7 h-7 rounded-lg bg-transparent text-destructive text-xs cursor-pointer shrink-0 border-2 border-[color-mix(in srgb, var(--error) 15%, transparent)] opacity-50 hover:opacity-100 hover:bg-[color-mix(in srgb, var(--error) 8%, transparent)] transition-all duration-150"
+                        className="grid place-items-center w-7 h-7 bg-surface text-error text-xs cursor-pointer shrink-0 border-2 border-border opacity-50 hover:opacity-100 hover:bg-error/10 transition-all duration-150"
                       >
                         <Trash2 />
                       </m.button>

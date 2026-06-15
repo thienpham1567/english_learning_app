@@ -49,24 +49,28 @@ export function PlaybackControls({
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="read-aloud-panel bg-surface rounded-xl border-2 border-border flex flex-col p-5 gap-4 shadow-md"
+        className="read-aloud-panel bg-surface border-2 border-border flex flex-col p-5 gap-4 shadow-[4px_4px_0_var(--shadow-color)]"
       >
-        <span className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
+        <span className="font-mono text-[11px] font-bold text-text-muted uppercase tracking-[0.18em] flex items-center gap-1.5">
           <m.span
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-            className="inline-flex text-text-muted"
+            className="inline-flex text-accent"
           >
             <Settings size={13} />
           </m.span>
-          Playback Configuration
+          Cấu hình phát
         </span>
 
         {/* Speed Controller */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[13px] text-text-secondary font-semibold">Reading Speed</span>
-            <span className="text-sm font-extrabold text-accent-active">{speed}x</span>
+            <span className="font-mono text-[11px] text-text-secondary font-bold uppercase tracking-wide">
+              Tốc độ đọc
+            </span>
+            <span className="font-mono text-sm font-black text-accent-active tabular-nums">
+              {speed}x
+            </span>
           </div>
 
           {/* Custom range slider */}
@@ -88,40 +92,40 @@ export function PlaybackControls({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onSpeedChange(preset)}
-                className={`flex-1 text-[11px] font-extrabold rounded-lg cursor-pointer py-1 transition-all duration-200 ${
+                className={`flex-1 font-mono text-[11px] font-black uppercase cursor-pointer py-1.5 transition-all duration-150 border-2 border-border ${
                   speed === preset
-                    ? "border-2 border-border bg-accent text-ink shadow-sm"
-                    : "border-2 border-border bg-surface-alt text-text-secondary hover:border-border-strong"
+                    ? "bg-accent text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)]"
+                    : "bg-surface-alt text-text-secondary hover:text-ink"
                 }`}
               >
-                {preset === 1.0 ? "Normal" : `${preset}x`}
+                {preset === 1.0 ? "1x" : `${preset}x`}
               </m.button>
             ))}
           </div>
         </div>
 
-        <div className="h-px bg-border my-1" />
+        <div className="h-0.5 bg-border my-1" />
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-2">
           <m.button
-            whileHover={canStart ? { scale: 1.02 } : {}}
-            whileTap={canStart ? { scale: 0.98 } : {}}
+            whileHover={canStart ? { x: -1, y: -1 } : {}}
+            whileTap={canStart ? { x: 0, y: 0 } : {}}
             onClick={onGenerate}
             disabled={!canStart}
-            className={`flex items-center justify-center gap-2.5 py-4 px-5 rounded-xl border-2 border-border text-base font-black font-body transition-all duration-200 ${
+            className={`flex items-center justify-center gap-2.5 py-4 px-5 border-2 border-border text-base font-black font-display uppercase tracking-tight transition-all duration-150 ${
               canStart
-                ? "cursor-pointer bg-accent text-ink shadow hover:bg-accent-hover"
-                : "cursor-not-allowed bg-bg-deep text-text-muted border-border/40"
+                ? "cursor-pointer bg-accent text-text-on-accent shadow-[4px_4px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] active:shadow-[1px_1px_0_var(--shadow-color)]"
+                : "cursor-not-allowed bg-bg-deep text-text-muted"
             }`}
           >
             {loading ? (
               <>
-                <Loader2 className="animate-spin" /> Processing voice...
+                <Loader2 className="animate-spin" /> Đang xử lý giọng…
               </>
             ) : (
               <>
-                <Volume2 /> Start Listening
+                <Volume2 /> Bắt đầu nghe
               </>
             )}
           </m.button>
@@ -135,29 +139,29 @@ export function PlaybackControls({
                 className="flex gap-2 mt-1"
               >
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={onTogglePlayback}
-                  className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface text-text-primary text-sm font-bold cursor-pointer border-2 border-border shadow-sm hover:bg-surface-hover"
+                  className="flex-1 flex items-center justify-center gap-2 p-3 bg-surface text-text-primary text-sm font-bold cursor-pointer border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none"
                 >
                   {playing ? (
                     <PauseCircle className="text-accent-active" />
                   ) : (
                     <PlayCircle className="text-success" />
                   )}
-                  {playing ? "Pause" : "Resume"}
+                  {playing ? "Tạm dừng" : "Tiếp tục"}
                 </m.button>
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={onStop}
-                  className="flex items-center justify-center rounded-xl text-destructive text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-error/10 hover:bg-error/20 shadow-sm"
+                  className="flex items-center justify-center text-error text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-error/10 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none"
                 >
                   <Undo size={16} />
                 </m.button>
                 <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ x: -1, y: -1 }}
+                  whileTap={{ x: 0, y: 0 }}
                   onClick={() => {
                     if (!audioUrl) return;
                     const a = document.createElement("a");
@@ -165,7 +169,7 @@ export function PlaybackControls({
                     a.download = `read-aloud-${Date.now()}.mp3`;
                     a.click();
                   }}
-                  className="flex items-center justify-center rounded-xl text-accent text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-accent/10 hover:bg-accent/20 shadow-sm"
+                  className="flex items-center justify-center text-accent-active text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-accent/10 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none"
                   title="Download audio"
                 >
                   <Download size={16} />
@@ -200,7 +204,7 @@ function WaveformVisualizer({
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="rounded-xl flex items-center justify-between gap-4 p-4 px-5 shadow-md border-2 border-accent bg-gradient-to-r from-surface to-surface-alt"
+        className="flex items-center justify-between gap-4 p-4 px-5 shadow-[4px_4px_0_var(--shadow-color)] border-2 border-border bg-surface"
       >
         <div className="waveform-container flex items-center gap-2.5">
           <m.div
@@ -210,7 +214,7 @@ function WaveformVisualizer({
           />
           <span className="text-sm font-bold text-text-primary">
             {loading ? (
-              "Compiling & generating audio..."
+              "Đang tạo audio…"
             ) : (
               <span className="inline-flex items-center gap-1 flex-wrap">
                 {selectedVoice.provider === "elevenlabs" ? (

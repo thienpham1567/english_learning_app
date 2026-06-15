@@ -37,14 +37,21 @@ export function ShadowingMode({
 
   if (!s.voiceSupported) {
     return (
-      <Card shadowSize="sm" className="text-center py-10 px-6">
+      <Card
+        shadowSize="sm"
+        className="text-center py-10 px-6 rounded-none shadow-[4px_4px_0_var(--shadow-color)]"
+      >
         <div className="flex justify-center mb-4">
-          <MicOff size={44} className="text-text-muted" />
+          <div className="grid h-14 w-14 place-items-center border-2 border-border bg-bg-deep text-text-muted shadow-[3px_3px_0_var(--shadow-color)]">
+            <MicOff size={28} />
+          </div>
         </div>
-        <h3 className="mb-2 text-text-primary">Microphone not supported</h3>
-        <span className="text-text-muted block max-w-[400px] mx-auto">
-          Your browser doesn't support audio recording. Try the latest Chrome, Edge, or Safari to
-          practice shadowing.
+        <h3 className="mb-2 font-display font-black uppercase text-text-primary">
+          Trình duyệt không hỗ trợ micro
+        </h3>
+        <span className="text-text-muted block max-w-[400px] mx-auto text-[13px]">
+          Trình duyệt của bạn không hỗ trợ ghi âm. Hãy dùng Chrome, Edge hoặc Safari bản mới để
+          luyện shadowing.
         </span>
       </Card>
     );

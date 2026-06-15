@@ -29,21 +29,15 @@ export function VoiceSelector({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="read-aloud-panel bg-surface rounded-2xl border-2 border-border flex flex-col p-5 gap-3.5 shadow-sm"
+      className="read-aloud-panel bg-surface border-2 border-border flex flex-col p-5 gap-3.5 shadow-[4px_4px_0_var(--shadow-color)]"
     >
-      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 font-display">
-        <m.span
-          animate={{ scale: [1, 1.15, 1] }}
-          transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
-          className="inline-flex text-accent"
-        >
-          <Volume2 size={13} />
-        </m.span>
-        Voice Selection
+      <span className="text-[11px] font-bold text-text-muted uppercase tracking-[0.18em] flex items-center gap-1.5 font-mono">
+        <span className="text-accent">◆</span>
+        Chọn giọng đọc
       </span>
 
       {/* ── Provider Toggle ── */}
-      <div className="flex gap-1.5 bg-bg-deep rounded-xl p-1 border border-border">
+      <div className="flex gap-1 bg-bg-deep p-1 border-2 border-border">
         {PROVIDERS.map((p) => {
           const isActive = provider === p.key;
           return (
@@ -51,16 +45,16 @@ export function VoiceSelector({
               key={p.key}
               whileTap={{ scale: 0.97 }}
               onClick={() => onProviderChange(p.key)}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-extrabold cursor-pointer transition-all duration-200 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 font-mono text-[11px] font-black uppercase tracking-wide cursor-pointer transition-all duration-150 border-2 ${
                 isActive
-                  ? "bg-surface border border-border shadow-sm text-text-primary"
-                  : "bg-transparent text-text-muted hover:text-text-secondary"
+                  ? "bg-surface border-border shadow-[2px_2px_0_var(--shadow-color)] text-ink"
+                  : "bg-transparent border-transparent text-text-muted hover:text-text-secondary"
               }`}
             >
               <p.icon size={13} className={isActive ? p.color : ""} />
               {p.label}
               {p.key === "elevenlabs" && (
-                <span className="text-[8px] font-bold bg-accent/15 text-accent rounded px-1 py-0.5">
+                <span className="text-[8px] font-black bg-accent text-text-on-accent border border-border px-1 py-0.5">
                   HD
                 </span>
               )}
@@ -86,9 +80,9 @@ export function VoiceSelector({
         <m.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="text-[10px] text-text-muted bg-accent/5 rounded-lg px-3 py-2 border border-accent/10"
+          className="font-mono text-[10px] text-text-muted bg-accent-light px-3 py-2 border-2 border-border"
         >
-          🎙 ElevenLabs — Premium quality voices. Free plan: 10,000 chars/month.
+          🎙 ElevenLabs — giọng chất lượng cao. Gói free: 10,000 ký tự/tháng.
         </m.div>
       )}
     </m.div>
@@ -106,13 +100,13 @@ function VoiceCard({
 }) {
   return (
     <m.button
-      whileHover={{ scale: 1.01, x: 2 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ x: -1, y: -1 }}
+      whileTap={{ x: 0, y: 0 }}
       onClick={onSelect}
-      className={`relative flex items-center gap-3 rounded-xl cursor-pointer text-left transition-all duration-200 py-3 px-3.5 ${
+      className={`relative flex items-center gap-3 cursor-pointer text-left transition-all duration-150 py-3 px-3.5 border-2 border-border ${
         isActive
-          ? "border-2 border-accent bg-accent-light shadow-sm"
-          : "border-2 border-border bg-surface-alt hover:border-accent/30"
+          ? "bg-accent-light shadow-[3px_3px_0_var(--shadow-color)]"
+          : "bg-surface-alt shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)]"
       }`}
     >
       <img
@@ -120,7 +114,7 @@ function VoiceCard({
         alt={v.name}
         width={40}
         height={40}
-        className="shrink-0 rounded-xl object-cover border-2 border-border"
+        className="shrink-0 object-cover border-2 border-border"
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
@@ -133,10 +127,10 @@ function VoiceCard({
           </span>
           <span className="text-[13px]">{v.flag}</span>
           <span
-            className={`text-[9px] rounded-md font-extrabold inline-flex items-center gap-0.5 py-0.5 px-1.5 border ${
+            className={`text-[9px] font-black inline-flex items-center gap-0.5 py-0.5 px-1.5 border-2 ${
               v.gender === "m"
-                ? "bg-info/10 text-info border-info/20"
-                : "bg-fire/10 text-fire border-fire/20"
+                ? "bg-info/10 text-info border-info/30"
+                : "bg-fire/10 text-fire border-fire/30"
             }`}
           >
             <User size={8} />
@@ -162,7 +156,7 @@ function VoiceCard({
       {isActive && (
         <m.div
           layoutId="selected-voice-indicator"
-          className="absolute w-[3px] right-0 top-[25%] bottom-[25%] bg-accent rounded-l-full"
+          className="absolute w-[4px] right-0 top-[20%] bottom-[20%] bg-accent"
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
       )}
