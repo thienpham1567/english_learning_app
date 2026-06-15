@@ -15,7 +15,7 @@ export default function EnglishChatbotLayout({ children: _children }: { children
 
   return (
     <ChatConversationProvider>
-      <div className="relative flex h-[calc(100%+48px)] max-h-[calc(100%+48px)] min-h-0 flex-1 -m-6 overflow-hidden bg-chat-bg">
+      <div className="relative flex h-full w-full min-h-0 flex-1 overflow-hidden bg-[var(--bg)]">
         {/* Desktop sidebar — always visible */}
         <div className="hidden md:block h-full">
           <ConversationList activeId={activeId} />

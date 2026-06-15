@@ -75,7 +75,7 @@ export function ChatInputBar({
   return (
     <div className="flex-shrink-0 z-25 relative">
       {/* Gradient fade from chat area */}
-      <div className="absolute -top-8 left-0 right-0 h-8 bg-gradient-to-t from-chat-bg to-transparent pointer-events-none" />
+      <div className="absolute -top-8 left-0 right-0 h-8 bg-gradient-to-t from-[var(--bg)] to-transparent pointer-events-none" />
 
       <div className="px-4 pb-4 pt-2 md:px-6 md:pb-6">
         <div className="mx-auto max-w-2xl flex flex-col gap-2.5">

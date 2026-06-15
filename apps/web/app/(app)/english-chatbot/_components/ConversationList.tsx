@@ -70,9 +70,12 @@ export function ConversationList({ activeId }: Props) {
   }, [filtered]);
 
   return (
-    <div className="relative flex h-full w-[260px] shrink-0 flex-col overflow-hidden border-r-2 border-border bg-chat-sidebar-bg text-text-secondary">
+    <div className="relative flex h-full w-[260px] shrink-0 flex-col overflow-hidden border-r-2 border-border bg-[var(--bg)] text-text-secondary">
+      {/* Dot pattern background */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px] z-0" />
+
       {/* ── Header ── */}
-      <div className="px-4 pt-5 pb-3 space-y-3">
+      <div className="relative z-10 px-4 pt-5 pb-3 space-y-3">
         <div className="flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-accent/10 text-accent">
             <Trophy className="h-3.5 w-3.5" />
@@ -113,10 +116,10 @@ export function ConversationList({ activeId }: Props) {
       </div>
 
       {/* ── Divider ── */}
-      <div className="mx-4 h-0.5 bg-border" />
+      <div className="relative z-10 mx-4 h-0.5 bg-border" />
 
       {/* ── Grouped Conversation List ── */}
-      <div className="flex-1 overflow-y-auto px-2 py-2 scrollbar-thin scrollbar-thumb-border-strong scrollbar-track-transparent">
+      <div className="relative z-10 flex-1 overflow-y-auto px-2 py-2 scrollbar-thin scrollbar-thumb-border-strong scrollbar-track-transparent">
         {grouped.length === 0 ? (
           <div className="py-10 px-4 text-center text-xs text-text-muted font-medium">
             {search ? "No conversations found" : "No conversations yet"}

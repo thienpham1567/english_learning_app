@@ -109,7 +109,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const hasMessages = chat.messages.length > 0;
 
   return (
-    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-chat-bg z-10">
+    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[var(--bg)] z-10">
+      {/* Dot pattern background */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px] z-0" />
+
       <ChatHeader personaId={selectedPersonaId} isLoading={chat.isLoading} />
 
       <div
