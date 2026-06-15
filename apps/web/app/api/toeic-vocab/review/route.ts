@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     });
   }
 
-  // Bridge to /my-vocabulary: ensure word exists in vocabularyCache + userVocabulary
+  // Bridge to vocabulary: ensure word exists in vocabularyCache + userVocabulary
   // so general vocab page sees TOEIC essentials alongside dictionary lookups.
   void (async () => {
     try {

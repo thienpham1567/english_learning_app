@@ -9,7 +9,7 @@ import {
   Headphones,
   HelpCircle,
   PenTool,
-  Search,
+
   Smile,
   Target,
   Trophy,
@@ -107,11 +107,10 @@ export const MODULE_LABELS: Record<string, string> = {
   "grammar-quiz": "Grammar",
   "grammar-lessons": "Lessons",
   "mock-test": "Mock Test",
-  "daily-challenge": "Daily Challenge",
+
   listening: "Listening",
   "toeic-practice": "TOEIC Practice",
   "toeic-mock-test": "TOEIC Mock",
-  "toeic-diagnostic": "TOEIC Diagnostic",
   "toeic-drill": "TOEIC Drill",
   "writing-practice": "Writing",
 };
@@ -124,11 +123,10 @@ export const MODULE_ICONS: Record<
   "grammar-quiz": FileText,
   "grammar-lessons": BookOpen,
   "mock-test": Target,
-  "daily-challenge": Zap,
+
   listening: Headphones,
   "toeic-practice": ClipboardList,
   "toeic-mock-test": Trophy,
-  "toeic-diagnostic": Search,
   "toeic-drill": Flame,
   "writing-practice": PenTool,
 };
@@ -163,7 +161,7 @@ export const MODULE_FILTER_OPTIONS = [
   { value: "grammar-quiz", label: "Grammar" },
   { value: "grammar-lessons", label: "Lessons" },
   { value: "mock-test", label: "Mock Test" },
-  { value: "daily-challenge", label: "Daily Challenge" },
+
   { value: "listening", label: "Listening" },
   { value: "toeic-practice", label: "TOEIC" },
   { value: "writing-practice", label: "Writing" },

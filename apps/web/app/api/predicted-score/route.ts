@@ -1,4 +1,4 @@
-import { activityLog, dailyChallenge, db, listeningExercise, userVocabulary } from "@repo/database";
+import { activityLog, db, errorLog, listeningExercise, userVocabulary } from "@repo/database";
 import { and, desc, eq, gte, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -24,16 +24,14 @@ export async function GET() {
 
   // Parallel queries
   const [grammarScores, listeningScores, vocabCount, weeklyHistory] = await Promise.all([
-    // Grammar quiz scores (daily challenges)
+    // Grammar scores (from error resolution rate)
     db
       .select({
-        score: dailyChallenge.score,
-        completedAt: dailyChallenge.completedAt,
+        total: sql<number>`count(*)::int`,
+        resolved: sql<number>`count(*) filter (where ${errorLog.isResolved} = true)::int`,
       })
-      .from(dailyChallenge)
-      .where(and(eq(dailyChallenge.userId, userId), sql`${dailyChallenge.completedAt} IS NOT NULL`))
-      .orderBy(desc(dailyChallenge.completedAt))
-      .limit(20),
+      .from(errorLog)
+      .where(eq(errorLog.userId, userId)),
 
     // Listening exercise scores
     db
@@ -65,28 +63,29 @@ export async function GET() {
       .orderBy(sql`date_trunc('week', ${activityLog.createdAt})`),
   ]);
 
-  const totalQuizzes = grammarScores.length;
+  const grammarTotal = grammarScores[0]?.total ?? 0;
+  const grammarResolved = grammarScores[0]?.resolved ?? 0;
   const totalListening = listeningScores.length;
 
   // Check minimum data requirements
-  if (totalQuizzes < 5 || totalListening < 3) {
+  if (grammarTotal < 5 || totalListening < 3) {
     return Response.json({
       predicted: null,
       insufficient: true,
-      quizzesNeeded: Math.max(0, 5 - totalQuizzes),
+      quizzesNeeded: Math.max(0, 5 - grammarTotal),
       listeningNeeded: Math.max(0, 3 - totalListening),
     });
   }
 
   // Calculate component scores
 
-  // 1. Grammar accuracy (avg of quiz scores, scale 0-100)
-  const grammarAvg = grammarScores.reduce((sum, q) => sum + (q.score ?? 0), 0) / totalQuizzes;
+  // 1. Grammar accuracy (error resolution rate, scale 0-100)
+  const grammarAvg = grammarTotal > 0 ? (grammarResolved / grammarTotal) * 100 : 50;
 
   // 2. Listening accuracy (avg percentage)
   const listeningAvg =
     listeningScores.reduce((sum, l) => {
-      const total = Math.max(l.total ?? 1, 1); // F4 fix: guard against 0-length questions
+      const total = Math.max(l.total ?? 1, 1);
       return sum + ((l.score ?? 0) / total) * 100;
     }, 0) / totalListening;
 
@@ -94,17 +93,15 @@ export async function GET() {
   const totalVocab = vocabCount[0]?.count ?? 0;
   const vocabScore = Math.min((totalVocab / 500) * 100, 100);
 
-  // 4. Mock test component (using best quiz scores as proxy)
-  const sortedScores = grammarScores.map((q) => q.score ?? 0).sort((a, b) => b - a);
-  const topScoresAvg =
-    sortedScores.slice(0, 3).reduce((s, v) => s + v, 0) / Math.min(3, sortedScores.length);
+  // 4. Top performance component
+  const topScoresAvg = grammarAvg;
 
   // Weighted prediction: grammar 40%, listening 30%, vocab 20%, top scores 10%
   const composite = grammarAvg * 0.4 + listeningAvg * 0.3 + vocabScore * 0.2 + topScoresAvg * 0.1;
 
   // Map composite (0-100) to TOEIC scale (10-990)
   const predicted = Math.round(10 + (composite / 100) * 980);
-  const confidence = Math.round(30 - Math.min(totalQuizzes + totalListening, 30)); // ±30 down to ±0
+  const confidence = Math.round(30 - Math.min(grammarTotal + totalListening, 30)); // ±30 down to ±0
 
   // Reading/Listening split (TOEIC is 495 max each)
   const readingBase = grammarAvg * 0.5 + vocabScore * 0.3 + topScoresAvg * 0.2;
@@ -130,7 +127,7 @@ export async function GET() {
       topScores: Math.round(topScoresAvg),
     },
     dataPoints: {
-      quizzes: totalQuizzes,
+      quizzes: grammarTotal,
       listening: totalListening,
       vocabulary: totalVocab,
     },

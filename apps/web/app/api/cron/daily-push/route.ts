@@ -158,7 +158,7 @@ export async function GET(request: Request) {
           body,
           icon: "/icon-192.png",
           badge: "/icon-192.png",
-          data: { url: "/daily-challenge" },
+          data: { url: "/toeic/practice" },
         }),
       );
       sent++;

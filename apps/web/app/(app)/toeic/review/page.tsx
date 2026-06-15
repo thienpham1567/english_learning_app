@@ -3,7 +3,6 @@ import { and, desc, eq, inArray, lte, sql } from "drizzle-orm";
 import { AlertTriangle, BookOpenText, RefreshCw } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
@@ -58,7 +57,6 @@ export default async function ToeicReviewPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
       <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
-        <RoadmapBanner />
         {/* Due cards */}
         <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
           {/* Incorrect Questions */}

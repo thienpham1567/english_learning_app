@@ -12,7 +12,6 @@ import { PWAProvider } from "@/components/shared/PWAProvider";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import { DashboardProvider } from "@/hooks/useDashboard";
 import { auth } from "@/lib/auth";
-import { RoadmapProvider } from "@/lib/curriculum/roadmap-context";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({
@@ -33,13 +32,11 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       <NuqsAdapter>
         <PWAProvider>
           <ExamModeProvider>
-            <RoadmapProvider>
-              <DashboardProvider>
+            <DashboardProvider>
                 <AppShell user={user}>
                   <ErrorBoundary>{children}</ErrorBoundary>
                 </AppShell>
               </DashboardProvider>
-            </RoadmapProvider>
           </ExamModeProvider>
         </PWAProvider>
       </NuqsAdapter>

@@ -2,7 +2,6 @@ import { db, toeicDictationItem } from "@repo/database";
 import { asc } from "drizzle-orm";
 import { ArrowRight, Headphones } from "lucide-react";
 import Link from "next/link";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Card } from "@/components/ui/card";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 
@@ -54,7 +53,6 @@ export default async function ToeicDictationPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
       <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
-        <RoadmapBanner />
         {["beginner", "intermediate", "advanced"].map((lv) => {
           const list = grouped[lv] ?? [];
           if (list.length === 0) return null;

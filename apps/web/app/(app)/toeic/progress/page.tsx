@@ -5,7 +5,6 @@ import { and, desc, eq, gte, isNotNull, like, or, sql } from "drizzle-orm";
 import { AlertTriangle, ArrowRight, TrendingDown, TrendingUp, Trophy, Zap } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { bandLabel, computePredictedScore } from "@/lib/toeic/predict";
@@ -87,7 +86,6 @@ export default async function ToeicProgressPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
       <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
-        <RoadmapBanner />
         {/* Predicted Score Card */}
         <Card shadowSize="sm" className="p-0 overflow-hidden relative">
           <div

@@ -193,7 +193,7 @@ function SignInContent() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: "/toeic/practice",
       });
     } catch {
       setError("Unable to connect to Google. Please try again.");

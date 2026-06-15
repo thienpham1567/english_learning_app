@@ -309,10 +309,10 @@ export default function GrammarLessonsPage() {
                   className="grid grid-cols-2 gap-3"
                 >
                   <QuickLinkCard
-                    href="/roadmap"
-                    icon={Map}
-                    label="Learning Roadmap"
-                    desc="24-week TOEIC plan"
+                    href="/error-notebook"
+                    icon={FileText}
+                    label="Error Notebook"
+                    desc="Review your mistakes"
                   />
                   <QuickLinkCard
                     href="/grammar-quiz"

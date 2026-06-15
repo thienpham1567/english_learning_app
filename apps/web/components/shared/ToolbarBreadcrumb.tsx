@@ -14,7 +14,7 @@ import {
   MessageSquare,
   Mic,
   Pencil,
-  RefreshCw,
+
   Star,
   Target,
   Timer,
@@ -33,10 +33,9 @@ type BreadcrumbEntry = {
 };
 
 const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
-  "/dashboard": { eyebrow: "Overview", title: "Dashboard", icon: <LayoutDashboard /> },
+
   "/toeic": { eyebrow: "TOEIC", title: "TOEIC Skills", icon: <Target /> },
   "/toeic/practice": { eyebrow: "ETS Practice", title: "TOEIC Practice", icon: <ClipboardList /> },
-  "/toeic/skills": { eyebrow: "TOEIC Prep", title: "TOEIC Skills", icon: <Target /> },
   "/toeic/writing": { eyebrow: "TOEIC Writing", title: "Writing Practice", icon: <Pencil /> },
   "/toeic/writing/runner": { eyebrow: "TOEIC Writing", title: "Writing Task", icon: <Pencil /> },
   "/toeic/speaking": { eyebrow: "TOEIC Speaking", title: "Speaking Practice", icon: <Mic /> },
@@ -45,19 +44,17 @@ const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
   "/toeic/mock-test/runner": { eyebrow: "TOEIC Mock Test", title: "In Progress", icon: <Trophy /> },
   "/toeic/vocab": { eyebrow: "TOEIC", title: "TOEIC Vocabulary", icon: <Star /> },
   "/grammar-lessons": { eyebrow: "Grammar", title: "Grammar", icon: <GraduationCap /> },
-  "/my-vocabulary": { eyebrow: "Vocabulary", title: "My Vocabulary", icon: <Star /> },
-  "/flashcards": { eyebrow: "Review", title: "Flashcards", icon: <RefreshCw /> },
-  "/daily-challenge": { eyebrow: "Daily", title: "Daily Challenge", icon: <Flame /> },
+
+
   "/error-notebook": { eyebrow: "Review", title: "Error Notebook", icon: <FileWarning /> },
   "/reading": { eyebrow: "TOEIC Reading", title: "Reading Practice", icon: <BookOpenText /> },
   "/ipa-chart": { eyebrow: "Pronunciation", title: "IPA Chart", icon: <Volume2 /> },
-  "/study-sets": { eyebrow: "Vocabulary", title: "Study Sets", icon: <BookOpen /> },
   "/read-aloud": { eyebrow: "Tools", title: "Read Aloud", icon: <Volume2 /> },
   "/writing-tools": { eyebrow: "Tools", title: "Writing Tools", icon: <Pencil /> },
   "/english-chatbot": { eyebrow: "Tools", title: "AI Chatbot", icon: <MessageSquare /> },
   "/smart-reader": { eyebrow: "Tools", title: "Smart Reader", icon: <BookOpenCheck /> },
   "/listening": { eyebrow: "TOEIC Listening", title: "Listening Practice", icon: <Mic /> },
-  "/roadmap": { eyebrow: "Study Plan", title: "Learning Roadmap", icon: <Target /> },
+
 };
 
 /**

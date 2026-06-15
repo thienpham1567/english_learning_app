@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 const TABS = [
   { href: "/toeic", label: "Overview" },
   { href: "/toeic/practice", label: "Practice" },
-  { href: "/toeic/skills", label: "Skills" },
 ];
 
 export function SubNav() {

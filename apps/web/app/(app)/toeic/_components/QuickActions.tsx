@@ -25,7 +25,6 @@ const ACTIONS: Array<{
   available: boolean;
 }> = [
   { href: "/toeic/practice", label: "Practice Tests", icon: BookOpenText, available: true },
-  { href: "/toeic/skills", label: "4 Skills", icon: Target, available: true },
   { href: "/toeic/mock-test", label: "Mock Test", icon: Timer, available: true },
   { href: "/toeic/review", label: "Review Errors", icon: Repeat, available: true },
   { href: "/toeic/progress", label: "Progress", icon: TrendingUp, available: true },

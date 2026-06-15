@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
 /**
- * Dictionary page consolidated — FloatingDictionaryWidget covers lookup.
- * Redirect to vocabulary management page.
+ * Dictionary page — FloatingDictionaryWidget covers lookup.
+ * Redirect to TOEIC practice.
  */
 export default function RedirectPage() {
-  redirect("/my-vocabulary");
+  redirect("/toeic/practice");
 }

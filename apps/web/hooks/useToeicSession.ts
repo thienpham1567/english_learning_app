@@ -3,7 +3,6 @@
 /**
  * Generic TOEIC session driver. Used by:
  *  - /toeic/practice  (mode: practice — sends each answer to server)
- *  - /toeic/diagnostic (mode: diagnostic — 30Q, 20m, writes baseline on complete)
  *  - /toeic/mock-test (mode: mock_test — 200Q, 2h)  [#2]
  *  - drill mode for SRS  [#8]
  *
@@ -15,7 +14,7 @@
 import { useCallback, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 
-export type ToeicSessionMode = "practice" | "mock_test" | "diagnostic" | "drill";
+export type ToeicSessionMode = "practice" | "mock_test" | "drill";
 
 export type ToeicSessionQuestion = {
   id: string;
@@ -23,7 +22,7 @@ export type ToeicSessionQuestion = {
   questionText: string | null;
   passageText: string | null;
   options: string[];
-  /** -1 when reveal is not allowed (mock_test/diagnostic until completion). */
+  /** -1 when reveal is not allowed (mock_test until completion). */
   correctIndex: number;
   explanationEn: string | null;
   explanationVi: string | null;
@@ -111,7 +110,7 @@ export function useToeicSession() {
       if (!q) return;
 
       const durationMs = Date.now() - questionShownAt.current;
-      // When server hides the answer (mock/diagnostic), correctIndex is -1 and we
+      // When server hides the answer (mock), correctIndex is -1 and we
       // cannot determine isCorrect locally. The /answer endpoint returns it.
       const localGuessIsCorrect =
         q.correctIndex === -1 || selectedIndex === null ? null : selectedIndex === q.correctIndex;

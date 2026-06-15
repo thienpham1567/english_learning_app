@@ -3,7 +3,6 @@ import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { ArrowRight, ClipboardList } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
@@ -30,7 +29,6 @@ export default async function ToeicWritingPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
       <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
-        <RoadmapBanner />
         {/* Start Test Card */}
         {seeded ? (
           <Link href="/toeic/writing/runner" className="no-underline group">

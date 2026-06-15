@@ -15,7 +15,7 @@ import {
   Target,
 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
-import { RewritePanel } from "@/app/(app)/toeic/skills/_components/writing/RewritePanel";
+import { RewritePanel } from "@/components/writing/RewritePanel";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { api } from "@/lib/api-client";

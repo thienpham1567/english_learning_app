@@ -30,17 +30,17 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/toeic-skills",
-        destination: "/toeic/skills",
+        destination: "/toeic",
         permanent: true,
       },
       {
         source: "/toeic-skills/:path*",
-        destination: "/toeic/skills/:path*",
+        destination: "/toeic",
         permanent: true,
       },
       {
         source: "/grammar-quiz",
-        destination: "/toeic/skills?tab=part5",
+        destination: "/toeic/grammar",
         permanent: true,
       },
       {
@@ -50,17 +50,17 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/writing-practice",
-        destination: "/toeic/skills?tab=writing",
+        destination: "/toeic/writing",
         permanent: true,
       },
       {
         source: "/listening",
-        destination: "/toeic/skills?tab=listening",
+        destination: "/toeic/listening",
         permanent: true,
       },
       {
         source: "/speaking-practice",
-        destination: "/toeic/skills?tab=speaking",
+        destination: "/toeic/speaking",
         permanent: true,
       },
     ];

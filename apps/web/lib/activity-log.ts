@@ -1,10 +1,8 @@
 import { activityLog, db } from "@repo/database";
 
 export type ActivityType =
-  | "flashcard_review"
   | "grammar_quiz"
   | "writing_practice"
-  | "daily_challenge"
   | "chatbot_session"
   | "voice_practice"
   | "listening_practice";

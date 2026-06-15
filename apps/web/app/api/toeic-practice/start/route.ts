@@ -5,7 +5,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 
 const BodySchema = z.object({
-  mode: z.enum(["practice", "mock_test", "diagnostic", "drill"]),
+  mode: z.enum(["practice", "mock_test", "drill"]),
   examCode: z.string().optional(),
   part: z
     .union([z.number().int().min(1).max(7), z.enum(["listening", "reading", "all"])])
@@ -35,20 +35,7 @@ export async function POST(req: Request) {
 
   let examIdFilter: string | undefined;
 
-  if (body.mode === "diagnostic") {
-    const [diag] = await db
-      .select()
-      .from(toeicExam)
-      .where(eq(toeicExam.code, "diagnostic_v1"))
-      .limit(1);
-    if (!diag) {
-      return Response.json(
-        { error: "Diagnostic exam not seeded. Run pnpm build:diagnostic first." },
-        { status: 500 },
-      );
-    }
-    examIdFilter = diag.id;
-  } else if (body.examCode && body.mode !== "drill") {
+  if (body.examCode && body.mode !== "drill") {
     const [exam] = await db
       .select()
       .from(toeicExam)
@@ -66,7 +53,7 @@ export async function POST(req: Request) {
   else if (body.part === "reading") partInClause = [5, 6, 7];
 
   const targetCount =
-    body.mode === "mock_test" ? 200 : body.mode === "diagnostic" ? 30 : body.count;
+    body.mode === "mock_test" ? 200 : body.count;
 
   const conditions = [];
   if (examIdFilter) conditions.push(eq(toeicQuestion.examId, examIdFilter));
@@ -75,7 +62,7 @@ export async function POST(req: Request) {
     conditions.push(sql`${toeicQuestion.skillIds} @> ${JSON.stringify([body.skill])}::jsonb`);
   }
 
-  const isOrderedTest = body.mode === "mock_test" || body.mode === "diagnostic";
+  const isOrderedTest = body.mode === "mock_test";
   let rows: (typeof toeicQuestion.$inferSelect)[];
 
   if (body.mode === "drill" && body.drillSource === "mistake") {

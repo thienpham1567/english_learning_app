@@ -468,7 +468,7 @@ export default function InsightsPage() {
 
           {/* ── CTA Banner ── */}
           <motion.div variants={itemVariants}>
-            <Link href="/daily-challenge" className="no-underline block">
+            <Link href="/toeic/practice" className="no-underline block">
               <Card
                 interactive
                 shadowSize="default"

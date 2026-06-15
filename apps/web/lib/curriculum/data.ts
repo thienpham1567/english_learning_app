@@ -53,7 +53,7 @@ export type Phase = {
   accentColor: string;
   weeks: Week[];
   checkpoint: {
-    type: "diagnostic" | "mock-mini" | "mock-full";
+    type: "mock-mini" | "mock-full";
     label: string;
     description: string;
     routePath: string;
@@ -110,8 +110,8 @@ const phase1Weeks: Week[] = [
             description: "Practice tense recognition with TOEIC Part 5 style questions",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "Part 5 Drill",
                 type: "drill",
               },
@@ -131,8 +131,8 @@ const phase1Weeks: Week[] = [
             description: "Learn 20 high-frequency office vocabulary words",
             exercises: [
               {
-                targetModule: "my-vocabulary",
-                routePath: "/my-vocabulary?tab=toeic",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
                 label: "Office Pack",
                 type: "learn",
               },
@@ -158,8 +158,8 @@ const phase1Weeks: Week[] = [
             description: "Learn Part 1 strategy: identify key objects, actions, locations",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=listening",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/listening",
                 label: "Part 1 Practice",
                 type: "practice",
               },
@@ -179,14 +179,14 @@ const phase1Weeks: Week[] = [
             description: "Review tenses + Part 1 listening exercises",
             exercises: [
               {
-                targetModule: "flashcards",
-                routePath: "/flashcards",
-                label: "Flashcard Review",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
+                label: "Vocabulary Review",
                 type: "practice",
               },
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=listening",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/listening",
                 label: "Listening Drill",
                 type: "drill",
               },
@@ -203,11 +203,11 @@ const phase1Weeks: Week[] = [
             id: uid(1, "sat", 0),
             skill: "review",
             title: "Weekly Review",
-            description: "Daily challenge + error review + flashcard SRS",
+            description: "Daily challenge + error review",
             exercises: [
               {
-                targetModule: "daily-challenge",
-                routePath: "/daily-challenge",
+                targetModule: "error-notebook",
+                routePath: "/error-notebook",
                 label: "Daily Challenge",
                 type: "practice",
               },
@@ -261,8 +261,8 @@ const phase1Weeks: Week[] = [
             description: "Part 5 questions focused on tense usage and signal words",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "Part 5 Drill",
                 type: "drill",
               },
@@ -282,8 +282,8 @@ const phase1Weeks: Week[] = [
             description: "20 essential business vocabulary words",
             exercises: [
               {
-                targetModule: "my-vocabulary",
-                routePath: "/my-vocabulary?tab=toeic",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
                 label: "Business Pack",
                 type: "learn",
               },
@@ -303,8 +303,8 @@ const phase1Weeks: Week[] = [
             description: "Learn Part 2 strategy: listen for question word, eliminate distractors",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=listening",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/listening",
                 label: "Part 2 Practice",
                 type: "practice",
               },
@@ -324,14 +324,14 @@ const phase1Weeks: Week[] = [
             description: "Review tenses + vocab + listening basics",
             exercises: [
               {
-                targetModule: "flashcards",
-                routePath: "/flashcards",
-                label: "SRS Review",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
+                label: "Vocabulary Review",
                 type: "practice",
               },
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "Mixed Quiz",
                 type: "quiz",
               },
@@ -351,8 +351,8 @@ const phase1Weeks: Week[] = [
             description: "Daily challenge + error review",
             exercises: [
               {
-                targetModule: "daily-challenge",
-                routePath: "/daily-challenge",
+                targetModule: "error-notebook",
+                routePath: "/error-notebook",
                 label: "Daily Challenge",
                 type: "practice",
               },
@@ -406,8 +406,8 @@ const phase1Weeks: Week[] = [
             description: "Practice identifying correct word forms",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "POS Drill",
                 type: "drill",
               },
@@ -427,8 +427,8 @@ const phase1Weeks: Week[] = [
             description: "Finance & accounting vocabulary",
             exercises: [
               {
-                targetModule: "my-vocabulary",
-                routePath: "/my-vocabulary?tab=toeic",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
                 label: "Finance Pack",
                 type: "learn",
               },
@@ -448,8 +448,8 @@ const phase1Weeks: Week[] = [
             description: "Combined Part 1-2 practice with different accents",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=listening",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/listening",
                 label: "Part 1-2 Review",
                 type: "practice",
               },
@@ -487,11 +487,11 @@ const phase1Weeks: Week[] = [
             id: uid(3, "sat", 0),
             skill: "review",
             title: "Weekly Review",
-            description: "Daily challenge + error review + flashcards",
+            description: "Daily challenge + error review",
             exercises: [
               {
-                targetModule: "daily-challenge",
-                routePath: "/daily-challenge",
+                targetModule: "error-notebook",
+                routePath: "/error-notebook",
                 label: "Daily Challenge",
                 type: "practice",
               },
@@ -539,8 +539,8 @@ const phase1Weeks: Week[] = [
             description: "Part 5 questions on articles and pronouns",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "Drill",
                 type: "drill",
               },
@@ -560,8 +560,8 @@ const phase1Weeks: Week[] = [
             description: "Marketing & advertising vocabulary",
             exercises: [
               {
-                targetModule: "my-vocabulary",
-                routePath: "/my-vocabulary?tab=toeic",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
                 label: "Marketing Pack",
                 type: "learn",
               },
@@ -602,9 +602,9 @@ const phase1Weeks: Week[] = [
             description: "Grammar + vocab + listening consolidated review",
             exercises: [
               {
-                targetModule: "flashcards",
-                routePath: "/flashcards",
-                label: "SRS Review",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
+                label: "Vocabulary Review",
                 type: "practice",
               },
             ],
@@ -623,8 +623,8 @@ const phase1Weeks: Week[] = [
             description: "Comprehensive review of Month 1 content",
             exercises: [
               {
-                targetModule: "daily-challenge",
-                routePath: "/daily-challenge",
+                targetModule: "error-notebook",
+                routePath: "/error-notebook",
                 label: "Daily Challenge",
                 type: "practice",
               },
@@ -662,10 +662,10 @@ const phase1Weeks: Week[] = [
                   : `Master ${wn === 7 ? "preposition" : "conjunction"} usage for Part 5`,
               exercises: [
                 {
-                  targetModule: wn <= 6 ? "my-vocabulary" : "grammar-lessons",
+                  targetModule: wn <= 6 ? "toeic-vocab" : "grammar-lessons",
                   routePath:
                     wn <= 6
-                      ? "/my-vocabulary?tab=toeic"
+                      ? "/toeic/vocab"
                       : `/grammar-lessons?topic=${wn === 7 ? "prepositions" : "conjunctions"}`,
                   label: wn <= 6 ? "Vocab Packs" : "Theory",
                   type: "learn" as ExerciseType,
@@ -682,13 +682,13 @@ const phase1Weeks: Week[] = [
             {
               id: uid(wn, "tue", 0),
               skill: (wn <= 6 ? "vocabulary" : "grammar") as Skill,
-              title: wn <= 6 ? "Vocab Quiz & Flashcards" : "Part 5 Targeted Drill",
-              description: wn <= 6 ? "Quiz + SRS review on new words" : "Focused grammar drill",
+              title: wn <= 6 ? "Vocab Quiz & Review" : "Part 5 Targeted Drill",
+              description: wn <= 6 ? "Quiz + vocabulary review on new words" : "Focused grammar drill",
               exercises: [
                 {
-                  targetModule: wn <= 6 ? "flashcards" : "toeic-skills",
-                  routePath: wn <= 6 ? "/flashcards" : "/toeic/skills?tab=part5",
-                  label: wn <= 6 ? "Flashcard Session" : "Part 5 Drill",
+                  targetModule: wn <= 6 ? "toeic-vocab" : "toeic-practice",
+                  routePath: wn <= 6 ? "/toeic/vocab" : "/toeic/grammar",
+                  label: wn <= 6 ? "Vocabulary Review" : "Part 5 Drill",
                   type: "drill" as ExerciseType,
                 },
               ],
@@ -707,8 +707,8 @@ const phase1Weeks: Week[] = [
               description: `Focused ${wn <= 6 ? "Part 1-2" : "Part 2"} exercises`,
               exercises: [
                 {
-                  targetModule: "toeic-skills",
-                  routePath: "/toeic/skills?tab=listening",
+                  targetModule: "toeic-practice",
+                  routePath: "/toeic/listening",
                   label: "Listening Drill",
                   type: "practice" as ExerciseType,
                 },
@@ -731,8 +731,8 @@ const phase1Weeks: Week[] = [
                   : "Apply strategies to full practice sets",
               exercises: [
                 {
-                  targetModule: wn <= 6 ? "reading" : "toeic-skills",
-                  routePath: wn <= 6 ? "/reading" : "/toeic/skills?tab=reading",
+                  targetModule: wn <= 6 ? "reading" : "toeic-practice",
+                  routePath: wn <= 6 ? "/reading" : "/reading",
                   label: wn <= 6 ? "Read Article" : "Reading Drill",
                   type: "practice" as ExerciseType,
                 },
@@ -752,9 +752,9 @@ const phase1Weeks: Week[] = [
               description: "Review all skills covered this week",
               exercises: [
                 {
-                  targetModule: "flashcards",
-                  routePath: "/flashcards",
-                  label: "SRS",
+                  targetModule: "toeic-vocab",
+                  routePath: "/toeic/vocab",
+                  label: "Vocabulary Review",
                   type: "practice" as ExerciseType,
                 },
                 {
@@ -779,8 +779,8 @@ const phase1Weeks: Week[] = [
               description: "Daily challenge + comprehensive review",
               exercises: [
                 {
-                  targetModule: "daily-challenge",
-                  routePath: "/daily-challenge",
+                  targetModule: "error-notebook",
+                  routePath: "/error-notebook",
                   label: "Challenge",
                   type: "practice" as ExerciseType,
                 },
@@ -824,11 +824,11 @@ const phase2Weeks: Week[] = ([9, 10, 11, 12, 13, 14, 15, 16] as const).map((wn) 
             description: `Learn strategies and techniques for ${topic.toLowerCase()}`,
             exercises: [
               {
-                targetModule: skill === "grammar" ? "grammar-lessons" : "toeic-skills",
+                targetModule: skill === "grammar" ? "grammar-lessons" : "toeic-practice",
                 routePath:
                   skill === "grammar"
                     ? `/grammar-lessons?topic=${wn === 9 ? "conditionals" : "gerunds"}`
-                    : `/toeic/skills?tab=${skill}`,
+                    : `/toeic/${skill}`,
                 label: "Theory",
                 type: "learn" as ExerciseType,
               },
@@ -848,8 +848,8 @@ const phase2Weeks: Week[] = ([9, 10, 11, 12, 13, 14, 15, 16] as const).map((wn) 
             description: "Apply strategies with targeted exercises",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: `/toeic/skills?tab=${skill === "grammar" ? "part5" : skill}`,
+                targetModule: "toeic-practice",
+                routePath: `/toeic/${skill === "grammar" ? "grammar" : skill}`,
                 label: "Practice",
                 type: "drill" as ExerciseType,
               },
@@ -869,8 +869,8 @@ const phase2Weeks: Week[] = ([9, 10, 11, 12, 13, 14, 15, 16] as const).map((wn) 
             description: "Continue vocabulary expansion",
             exercises: [
               {
-                targetModule: "my-vocabulary",
-                routePath: "/my-vocabulary?tab=toeic",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
                 label: "Vocab",
                 type: "learn" as ExerciseType,
               },
@@ -890,8 +890,8 @@ const phase2Weeks: Week[] = ([9, 10, 11, 12, 13, 14, 15, 16] as const).map((wn) 
             description: "Maintain other skills while focusing on primary",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: `/toeic/skills?tab=${skill === "listening" ? "reading" : "listening"}`,
+                targetModule: "toeic-practice",
+                routePath: `/toeic/${skill === "listening" ? "reading" : "listening"}`,
                 label: "Cross-skill",
                 type: "practice" as ExerciseType,
               },
@@ -911,9 +911,9 @@ const phase2Weeks: Week[] = ([9, 10, 11, 12, 13, 14, 15, 16] as const).map((wn) 
             description: "Combined practice across all skills studied",
             exercises: [
               {
-                targetModule: "flashcards",
-                routePath: "/flashcards",
-                label: "SRS",
+                targetModule: "toeic-vocab",
+                routePath: "/toeic/vocab",
+                label: "Vocabulary Review",
                 type: "practice" as ExerciseType,
               },
               {
@@ -938,8 +938,8 @@ const phase2Weeks: Week[] = ([9, 10, 11, 12, 13, 14, 15, 16] as const).map((wn) 
             description: "Daily challenge + comprehensive review",
             exercises: [
               {
-                targetModule: "daily-challenge",
-                routePath: "/daily-challenge",
+                targetModule: "error-notebook",
+                routePath: "/error-notebook",
                 label: "Challenge",
                 type: "practice" as ExerciseType,
               },
@@ -985,11 +985,11 @@ const phase3Weeks: Week[] = ([17, 18, 19, 20, 21, 22, 23, 24] as const).map((wn)
                 : `Focused practice on ${topic.toLowerCase()}`,
             exercises: [
               {
-                targetModule: wn === 17 || wn === 24 ? "toeic-mock-test" : "toeic-skills",
+                targetModule: wn === 17 || wn === 24 ? "toeic-mock-test" : "toeic-practice",
                 routePath:
                   wn === 17 || wn === 24
                     ? "/toeic/mock-test"
-                    : `/toeic/skills?tab=${skill === "review" ? "listening" : skill}`,
+                    : `/toeic/${skill === "review" ? "listening" : skill}`,
                 label: wn === 17 || wn === 24 ? "Mock Test" : "Practice",
                 type: (wn === 17 || wn === 24 ? "test" : "drill") as ExerciseType,
               },
@@ -1036,8 +1036,8 @@ const phase3Weeks: Week[] = ([17, 18, 19, 20, 21, 22, 23, 24] as const).map((wn)
             description: "AI-recommended exercises based on error patterns",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "Weak Area Drill",
                 type: "drill" as ExerciseType,
               },
@@ -1060,8 +1060,8 @@ const phase3Weeks: Week[] = ([17, 18, 19, 20, 21, 22, 23, 24] as const).map((wn)
             description: "Maintain breadth across all test sections",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: `/toeic/skills?tab=${wn >= 21 && wn <= 22 ? skill : "reading"}`,
+                targetModule: "toeic-practice",
+                routePath: `/toeic/${wn >= 21 && wn <= 22 ? skill : "practice"}`,
                 label: "Cross-skill",
                 type: "practice" as ExerciseType,
               },
@@ -1081,8 +1081,8 @@ const phase3Weeks: Week[] = ([17, 18, 19, 20, 21, 22, 23, 24] as const).map((wn)
             description: "Practice under time pressure — build exam stamina",
             exercises: [
               {
-                targetModule: "toeic-skills",
-                routePath: "/toeic/skills?tab=part5",
+                targetModule: "toeic-practice",
+                routePath: "/toeic/grammar",
                 label: "Timed Drill",
                 type: "drill" as ExerciseType,
               },
@@ -1102,8 +1102,8 @@ const phase3Weeks: Week[] = ([17, 18, 19, 20, 21, 22, 23, 24] as const).map((wn)
             description: "Comprehensive review + progress check",
             exercises: [
               {
-                targetModule: "daily-challenge",
-                routePath: "/daily-challenge",
+                targetModule: "error-notebook",
+                routePath: "/error-notebook",
                 label: "Challenge",
                 type: "practice" as ExerciseType,
               },
@@ -1138,10 +1138,10 @@ export const CURRICULUM: Curriculum = {
       accentColor: "var(--success)",
       weeks: phase1Weeks,
       checkpoint: {
-        type: "diagnostic",
+        type: "mock-mini",
         label: "Phase 1 Checkpoint",
-        description: "Mini diagnostic to assess grammar, vocabulary, and listening basics",
-        routePath: "/diagnostic",
+        description: "Mini assessment to evaluate grammar, vocabulary, and listening basics",
+        routePath: "/toeic/mock-test",
       },
     },
     {

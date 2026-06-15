@@ -5,23 +5,24 @@ import {
   BookOpen,
   BookOpenCheck,
   BookOpenText,
+  Brain,
   ChevronDown,
   CircleCheckBig,
+  ClipboardList,
   FileWarning,
-  Flame,
   GraduationCap,
+  Headphones,
   Languages,
-  LayoutDashboard,
-  Map,
   MessageSquare,
+  Mic,
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
   Pencil,
-  RefreshCw,
   Star,
   Sun,
   Target,
+  Trophy,
   Volume2,
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
@@ -52,34 +53,36 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
-  { href: "/roadmap", label: "Roadmap", icon: Map },
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/toeic/skills", label: "TOEIC Practice", icon: Target },
+  {
+    key: "toeic",
+    label: "TOEIC",
+    items: [
+      { href: "/toeic/practice", label: "ETS Practice", icon: ClipboardList },
+      { href: "/toeic/mock-test", label: "Mock Test", icon: Trophy },
+      { href: "/toeic/listening", label: "Listening", icon: Headphones },
+      { href: "/toeic/writing", label: "Writing", icon: Pencil },
+      { href: "/toeic/speaking", label: "Speaking", icon: Mic },
+      { href: "/toeic/dictation", label: "Dictation", icon: Volume2 },
+      { href: "/toeic/progress", label: "Progress", icon: Target },
+    ],
+  },
   {
     key: "foundation",
     label: "Foundation",
     items: [
-      {
-        href: "/grammar-lessons",
-        label: "Grammar",
-        icon: GraduationCap,
-      },
+      { href: "/grammar-lessons", label: "Grammar", icon: GraduationCap },
       { href: "/toeic/vocab", label: "TOEIC Vocab", icon: BookOpenText },
       { href: "/morphology", label: "Word Formation", icon: Blocks },
-      { href: "/my-vocabulary", label: "Vocabulary", icon: Star },
-      { href: "/flashcards", label: "Flashcard Review", icon: RefreshCw },
+      { href: "/reading", label: "Reading", icon: BookOpen },
     ],
   },
   {
-    key: "daily",
-    label: "Daily",
+    key: "review",
+    label: "Review & Insights",
     items: [
-      {
-        href: "/daily-challenge",
-        label: "Daily Challenge",
-        icon: Flame,
-      },
       { href: "/error-notebook", label: "Error Notebook", icon: FileWarning },
+      { href: "/toeic/review", label: "TOEIC Review", icon: CircleCheckBig },
+      { href: "/insights", label: "Insights", icon: Brain },
     ],
   },
   {
@@ -220,30 +223,6 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
 
   function getBadge(href: string): React.ReactNode {
     if (!badges) return null;
-    if (href === "/flashcards" && badges.flashcardsDue > 0) {
-      return (
-        <Badge className="ml-auto px-1.5 py-0 text-[10px] bg-accent text-text-on-accent border-0 font-black shadow-sm">
-          {badges.flashcardsDue}
-        </Badge>
-      );
-    }
-
-    if (href === "/daily-challenge") {
-      return (
-        <m.span
-          initial={{ scale: 0.8 }}
-          animate={{ scale: [0.8, 1.15, 1] }}
-          transition={{ repeat: Infinity, duration: 3 }}
-          className="text-xs leading-none ml-auto"
-        >
-          {badges.dailyChallengeCompleted ? (
-            <CircleCheckBig className="text-success" size={14} />
-          ) : (
-            <Flame className="text-[var(--fire)]" size={14} />
-          )}
-        </m.span>
-      );
-    }
     return null;
   }
 
@@ -315,7 +294,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         className="relative z-[1] flex flex-col pt-0.5 flex-1 overflow-y-auto overflow-x-hidden gap-0.5 scrollbar-none"
       >
         {navGroups.map((entry, groupIndex) => {
-          // ─── Standalone items (Dashboard, TOEIC) ───
+          // ─── Standalone items ───
           if ("href" in entry) {
             const { href, label, icon: Icon } = entry;
             const active = pathname === href || pathname.startsWith(`${href}/`);
@@ -344,7 +323,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             );
           }
 
-          // ─── Groups (Foundation, Daily, Tools) ───
+          // ─── Groups ───
           const group = entry as NavGroup;
           const groupHasActive = group.items.some(
             (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),

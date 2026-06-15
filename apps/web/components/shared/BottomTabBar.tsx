@@ -1,19 +1,21 @@
 "use client";
 
 import {
+  BookOpen,
+  BookOpenCheck,
   BookOpenText,
+  Brain,
+  CircleCheckBig,
+  ClipboardList,
   FileWarning,
-  Flame,
   GraduationCap,
-  HelpCircle,
+  Headphones,
   Languages,
-  LayoutDashboard,
   LayoutGrid,
-  Map,
   MessageSquare,
+  Mic,
   Pencil,
   RefreshCw,
-  Star,
   Target,
   Trophy,
   Volume2,
@@ -30,7 +32,7 @@ interface TabItem {
   label: string;
   icon: ReactNode;
   href?: string;
-  action?: "exam-hub" | "review-hub" | "more-hub";
+  action?: "toeic-hub" | "learn-hub" | "more-hub";
 }
 
 interface HubItem {
@@ -40,31 +42,25 @@ interface HubItem {
   accent?: string;
 }
 
-/* ─── Tab Config ─── */
+/* ─── Tab Config (4 tabs) ─── */
 const TABS: TabItem[] = [
-  {
-    key: "roadmap",
-    label: "Roadmap",
-    icon: <Map size={21} />,
-    href: "/roadmap",
-  },
-  {
-    key: "home",
-    label: "Home",
-    icon: <LayoutDashboard size={21} />,
-    href: "/dashboard",
-  },
   {
     key: "toeic",
     label: "TOEIC",
     icon: <Target size={21} />,
-    href: "/toeic/skills",
+    action: "toeic-hub",
   },
   {
-    key: "review",
-    label: "Review",
-    icon: <RefreshCw size={21} />,
-    action: "review-hub",
+    key: "learn",
+    label: "Learn",
+    icon: <BookOpen size={21} />,
+    action: "learn-hub",
+  },
+  {
+    key: "insights",
+    label: "Insights",
+    icon: <Brain size={21} />,
+    href: "/insights",
   },
   {
     key: "more",
@@ -75,34 +71,58 @@ const TABS: TabItem[] = [
 ];
 
 /* ─── Hub Items Config ─── */
-const REVIEW_HUB_ITEMS: HubItem[] = [
+const TOEIC_HUB_ITEMS: HubItem[] = [
   {
-    label: "Error Notebook",
-    icon: <FileWarning size={22} />,
-    href: "/error-notebook",
-    accent: "var(--error)",
+    label: "ETS Practice",
+    icon: <ClipboardList size={22} />,
+    href: "/toeic/practice",
+    accent: "var(--accent)",
   },
   {
-    label: "Flashcard Review",
-    icon: <RefreshCw size={22} />,
-    href: "/flashcards",
+    label: "Mock Test",
+    icon: <Trophy size={22} />,
+    href: "/toeic/mock-test",
+    accent: "var(--xp)",
+  },
+  {
+    label: "Listening",
+    icon: <Headphones size={22} />,
+    href: "/toeic/listening",
+    accent: "var(--module-listening)",
+  },
+  {
+    label: "Writing",
+    icon: <Pencil size={22} />,
+    href: "/toeic/writing",
+    accent: "var(--module-writing)",
+  },
+  {
+    label: "Speaking",
+    icon: <Mic size={22} />,
+    href: "/toeic/speaking",
+    accent: "var(--module-speaking)",
+  },
+  {
+    label: "Dictation",
+    icon: <Volume2 size={22} />,
+    href: "/toeic/dictation",
     accent: "var(--info)",
   },
   {
-    label: "Daily Challenge",
-    icon: <Flame size={22} />,
-    href: "/daily-challenge",
-    accent: "var(--fire)",
+    label: "Review",
+    icon: <CircleCheckBig size={22} />,
+    href: "/toeic/review",
+    accent: "var(--success)",
+  },
+  {
+    label: "Progress",
+    icon: <Target size={22} />,
+    href: "/toeic/progress",
+    accent: "var(--secondary)",
   },
 ];
 
-const MORE_HUB_ITEMS: HubItem[] = [
-  {
-    label: "TOEIC Vocab",
-    icon: <BookOpenText size={22} />,
-    href: "/toeic/vocab",
-    accent: "var(--accent)",
-  },
+const LEARN_HUB_ITEMS: HubItem[] = [
   {
     label: "Grammar",
     icon: <GraduationCap size={22} />,
@@ -110,18 +130,44 @@ const MORE_HUB_ITEMS: HubItem[] = [
     accent: "var(--module-grammar)",
   },
   {
-    label: "Vocabulary",
-    icon: <Star size={22} />,
-    href: "/my-vocabulary",
+    label: "TOEIC Vocab",
+    icon: <BookOpenText size={22} />,
+    href: "/toeic/vocab",
     accent: "var(--accent)",
   },
+  {
+    label: "Reading",
+    icon: <BookOpen size={22} />,
+    href: "/reading",
+    accent: "var(--module-reading)",
+  },
+  {
+    label: "Error Notebook",
+    icon: <FileWarning size={22} />,
+    href: "/error-notebook",
+    accent: "var(--error)",
+  },
+];
+
+const MORE_HUB_ITEMS: HubItem[] = [
   {
     label: "AI Chatbot",
     icon: <MessageSquare size={22} />,
     href: "/english-chatbot",
     accent: "var(--secondary)",
   },
-  { label: "Read Aloud", icon: <Volume2 size={22} />, href: "/read-aloud", accent: "var(--info)" },
+  {
+    label: "Smart Reader",
+    icon: <BookOpenCheck size={22} />,
+    href: "/smart-reader",
+    accent: "var(--accent)",
+  },
+  {
+    label: "Read Aloud",
+    icon: <Volume2 size={22} />,
+    href: "/read-aloud",
+    accent: "var(--info)",
+  },
   {
     label: "IPA Chart",
     icon: <Languages size={22} />,
@@ -137,34 +183,32 @@ const MORE_HUB_ITEMS: HubItem[] = [
 ];
 
 const HUB_MAP: Record<string, { title: string; items: HubItem[] }> = {
-  review: { title: "Review & Practice", items: REVIEW_HUB_ITEMS },
+  toeic: { title: "TOEIC Practice", items: TOEIC_HUB_ITEMS },
+  learn: { title: "Learn & Review", items: LEARN_HUB_ITEMS },
   more: { title: "More Features", items: MORE_HUB_ITEMS },
 };
 
 /* ─── Route Matching ─── */
 function getActiveTab(pathname: string): string {
-  if (pathname.startsWith("/roadmap")) return "roadmap";
-  if (pathname.startsWith("/dashboard")) return "home";
+  if (pathname.startsWith("/insights")) return "insights";
   if (pathname.startsWith("/toeic")) return "toeic";
   if (
+    pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/error-notebook") ||
-    pathname.startsWith("/flashcards") ||
-    pathname.startsWith("/daily-challenge")
+    pathname.startsWith("/reading") ||
+    pathname.startsWith("/morphology")
   )
-    return "review";
+    return "learn";
   if (
     pathname.startsWith("/english-chatbot") ||
     pathname.startsWith("/read-aloud") ||
-    pathname.startsWith("/grammar-lessons") ||
-    pathname.startsWith("/my-vocabulary") ||
     pathname.startsWith("/ipa-chart") ||
     pathname.startsWith("/writing-tools") ||
-    pathname.startsWith("/pdf-reader") ||
-    pathname.startsWith("/reading") ||
-    pathname.startsWith("/study-sets")
+    pathname.startsWith("/smart-reader") ||
+    pathname.startsWith("/pdf-reader")
   )
     return "more";
-  return "home";
+  return "toeic";
 }
 
 /* ─── Hub Card ─── */
@@ -209,12 +253,14 @@ export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
-  const [activeHub, setActiveHub] = useState<"review" | "more" | null>(null);
+  const [activeHub, setActiveHub] = useState<"toeic" | "learn" | "more" | null>(null);
 
   const handleTabClick = useCallback(
     (tab: TabItem) => {
-      if (tab.action === "review-hub") {
-        setActiveHub((prev) => (prev === "review" ? null : "review"));
+      if (tab.action === "toeic-hub") {
+        setActiveHub((prev) => (prev === "toeic" ? null : "toeic"));
+      } else if (tab.action === "learn-hub") {
+        setActiveHub((prev) => (prev === "learn" ? null : "learn"));
       } else if (tab.action === "more-hub") {
         setActiveHub((prev) => (prev === "more" ? null : "more"));
       } else if (tab.href) {
@@ -277,7 +323,7 @@ export function BottomTabBar() {
 
               {/* Hub grid */}
               <div
-                className={`grid gap-2.5 px-3.5 pb-4 ${hubData.items.length <= 2 ? "grid-cols-2" : "grid-cols-3"}`}
+                className={`grid gap-2.5 px-3.5 pb-4 ${hubData.items.length <= 3 ? "grid-cols-3" : "grid-cols-4"}`}
               >
                 {hubData.items.map((item, idx) => (
                   <HubCard key={item.href} item={item} index={idx} onNavigate={handleHubNavigate} />

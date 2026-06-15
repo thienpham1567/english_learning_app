@@ -176,10 +176,10 @@ export async function POST(request: Request) {
   }
 
   // Award XP: 5 per word reviewed
-  const xp = correctCount * XP_VALUES.FLASHCARD_REVIEW;
+  const xp = correctCount * XP_VALUES.TOEIC_VOCAB_REVIEW;
   if (xp > 0) {
     void awardXP(userId, xp).catch(() => {});
-    logActivity(userId, "flashcard_review", xp, {
+    logActivity(userId, "grammar_quiz", xp, {
       source: "vocabulary-review",
       reviewed: results.length,
       correct: correctCount,

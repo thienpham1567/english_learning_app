@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { clearWritingDraft } from "@/app/(app)/toeic/skills/_components/writing/WritingEditor";
+import { clearWritingDraft } from "@/components/writing/WritingEditor";
 import { api } from "@/lib/api-client";
 import type {
   WritingCategory,

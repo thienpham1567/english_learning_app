@@ -15,7 +15,6 @@ import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { GRAMMAR_TOPIC_TO_WEEK, getUnitIdForGrammarTopic } from "@/lib/curriculum/grammar-mapping";
 import type { GrammarLessonAnswer } from "@/lib/grammar-lessons/schema";
 
 interface LessonCompleteProps {
@@ -64,8 +63,7 @@ export function LessonComplete({
   const router = useRouter();
   const [showReview, setShowReview] = useState(false);
 
-  const unitId = getUnitIdForGrammarTopic(topicId);
-  const mapping = unitId ? GRAMMAR_TOPIC_TO_WEEK[topicId] : null;
+
 
   return (
     <m.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}>
@@ -99,23 +97,7 @@ export function LessonComplete({
           </p>
         )}
 
-        {/* Roadmap auto-completion */}
-        {unitId && mapping && (
-          <m.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="my-4"
-          >
-            <a
-              href={`/roadmap/week/${mapping.weekNumber}`}
-              className="no-underline inline-flex items-center gap-2 rounded-xl border-2 border-success/30 bg-success/10 px-4 py-2.5 text-xs font-bold text-success hover:bg-success/15 transition-colors"
-            >
-              <CircleCheckBig size={14} />
-              Roadmap Week {mapping.weekNumber} — unit auto-completed ✓
-            </a>
-          </m.div>
-        )}
+
 
         {/* Incorrect-item review */}
         {wrongAnswers.length > 0 && (

@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
-import { getUnitIdForGrammarTopic } from "@/lib/curriculum/grammar-mapping";
-import { useRoadmap } from "@/lib/curriculum/roadmap-context";
+
 import {
   type GrammarLessonAnswer,
   type GrammarLessonData,
@@ -43,7 +42,7 @@ export function useGrammarLesson({
   focusNote,
   onComplete,
 }: UseGrammarLessonArgs) {
-  const { completeUnit } = useRoadmap();
+
 
   const [state, setState] = useState<LessonState>("loading");
   const [lesson, setLesson] = useState<GrammarLessonData | null>(null);
@@ -226,8 +225,6 @@ export function useGrammarLesson({
       onComplete(topicId, fallbackProgress);
     }
 
-    const roadmapUnitId = getUnitIdForGrammarTopic(topicId);
-    if (roadmapUnitId) completeUnit(roadmapUnitId);
     setState("complete");
   }, [
     lesson,
@@ -240,7 +237,6 @@ export function useGrammarLesson({
     examMode,
     level,
     onComplete,
-    completeUnit,
     resetExerciseInput,
   ]);
 

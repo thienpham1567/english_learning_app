@@ -216,7 +216,7 @@ export async function HubWidgets() {
 
         {planItems.length === 0 ? (
           <div className="text-text-muted text-[13px] font-medium py-2">
-            Complete the diagnostic test to receive personalized study recommendations.
+            Start practicing to receive personalized study recommendations.
           </div>
         ) : (
           <div className="grid gap-2.5">

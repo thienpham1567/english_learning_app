@@ -3,10 +3,8 @@ import { sql } from "drizzle-orm";
 
 /** XP point values per activity type */
 export const XP_VALUES = {
-  FLASHCARD_REVIEW: 10, // per card
   QUIZ_COMPLETE: 50,
   WRITING_SUBMISSION: 100,
-  DAILY_CHALLENGE: 30,
   LISTENING_PRACTICE: 40,
   // TOEIC actions
   TOEIC_ANSWER_CORRECT: 5,

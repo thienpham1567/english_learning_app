@@ -3,7 +3,6 @@
 import { BarChart2, Brain, ClipboardList, FlaskConical } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
-import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { api } from "@/lib/api-client";
 import { AnalysisTab } from "./_components/AnalysisTab";
 import { ListTab } from "./_components/ListTab";
@@ -61,7 +60,6 @@ export default function ErrorNotebookPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
       {/* ─── Roadmap Context ─── */}
-      <RoadmapBanner className="relative z-[1] shrink-0 px-5 pt-3 max-w-6xl" />
 
       {/* ─── Tab switcher ─── */}
       <div className="relative z-[1] shrink-0 px-5 pt-3 pb-2 max-w-6xl mx-auto w-full">

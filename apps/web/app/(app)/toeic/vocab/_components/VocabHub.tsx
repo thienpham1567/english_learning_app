@@ -1,9 +1,8 @@
 "use client";
 
-import { AlertTriangle, BookOpen, MapPin } from "lucide-react";
+import { AlertTriangle, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { getVocabRoadmapWeek } from "@/lib/curriculum/vocab-mapping";
 
 type Pack = { topic: string; label: string; total: number; learned: number };
 
@@ -46,7 +45,6 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
       >
         {packs.map((p) => {
           const pct = p.total > 0 ? Math.round((p.learned / p.total) * 100) : 0;
-          const roadmapWeek = getVocabRoadmapWeek(p.topic);
           return (
             <Link
               key={p.topic}
@@ -57,11 +55,6 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
                 <div className="flex items-center gap-2 text-base font-bold text-text-primary">
                   <BookOpen size={16} className="text-accent" />
                   <span className="flex-1">{p.label}</span>
-                  {roadmapWeek && (
-                    <span className="text-[10px] font-extrabold text-accent/80 bg-accent/8 rounded-md py-0.5 px-2 flex items-center gap-1 shrink-0">
-                      <MapPin size={9} /> W{roadmapWeek.weekNumber}
-                    </span>
-                  )}
                 </div>
                 <div className="text-[13px] text-text-muted mt-2 font-medium">
                   {p.learned} / {p.total} words · {pct}%

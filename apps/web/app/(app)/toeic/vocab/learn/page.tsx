@@ -1,12 +1,10 @@
 "use client";
 
-import { BookOpenText, CheckCircle, MapPin } from "lucide-react";
+import { BookOpenText, CheckCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
-import { useRoadmap } from "@/lib/curriculum/roadmap-context";
-import { getUnitIdForVocabTopic, getVocabRoadmapWeek } from "@/lib/curriculum/vocab-mapping";
 
 type VocabWord = {
   id: string;
@@ -33,7 +31,7 @@ function LearnRunner() {
   const params = useSearchParams();
   const pack = params.get("pack");
   const mode = (params.get("mode") ?? "new") as "new" | "review";
-  const { completeUnit } = useRoadmap();
+
 
   const [words, setWords] = useState<VocabWord[]>([]);
   const [progress, setProgress] = useState<Record<string, Progress>>({});
@@ -92,10 +90,7 @@ function LearnRunner() {
     return <div className="p-6">Loading vocabulary... (or empty pack)</div>;
   }
   if (done) {
-    // Auto-complete roadmap unit for this vocab pack
-    const roadmapWeek = pack ? getVocabRoadmapWeek(pack) : null;
-    const unitId = pack ? getUnitIdForVocabTopic(pack) : null;
-    if (unitId) completeUnit(unitId);
+    // Session complete
 
     return (
       <Card shadowSize="sm" className="p-6 max-w-[500px] mx-auto">
@@ -117,15 +112,6 @@ function LearnRunner() {
             Easy: {stats.easy}
           </span>
         </div>
-        {roadmapWeek && (
-          <a
-            href={`/roadmap/week/${roadmapWeek.weekNumber}`}
-            className="no-underline flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border-2 border-success/30 bg-success/8 text-xs font-bold text-success hover:bg-success/12 transition-colors mb-4"
-          >
-            <MapPin size={12} />
-            Roadmap Week {roadmapWeek.weekNumber} — vocab unit auto-completed ✓
-          </a>
-        )}
         <div className="text-center">
           <button
             className="py-2.5 px-5 rounded-xl border-none bg-accent text-[var(--text-on-accent)] font-extrabold text-sm cursor-pointer shadow-sm"

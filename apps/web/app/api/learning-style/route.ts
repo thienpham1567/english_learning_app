@@ -19,14 +19,14 @@ const STYLE_MAP: Record<string, string[]> = {
   visual: ["flashcard_review", "study_set"],
   reading: ["grammar_lesson"],
   conversational: ["chatbot_session", "voice_practice", "listening_practice"],
-  practice: ["grammar_quiz", "daily_challenge", "writing_practice"],
+  practice: ["grammar_quiz", "writing_practice"],
 };
 
 const STYLE_INFO: Record<string, { icon: string; name: string; description: string }> = {
   visual: {
     icon: "👁️",
     name: "Học trực quan",
-    description: "Bạn học tốt nhất qua hình ảnh và flashcard",
+    description: "Bạn học tốt nhất qua hình ảnh và ôn từ vựng",
   },
   reading: { icon: "📖", name: "Học qua đọc", description: "Bạn thích đọc và phân tích ngữ pháp" },
   conversational: {
@@ -44,13 +44,12 @@ const STYLE_INFO: Record<string, { icon: string; name: string; description: stri
 const MODULE_LABELS: Record<string, { label: string; href: string }> = {
   grammar_quiz: { label: "Grammar Quiz", href: "/grammar-quiz" },
   chatbot_session: { label: "Trò chuyện AI", href: "/english-chatbot" },
-  flashcard_review: { label: "Flashcards", href: "/flashcards" },
+  flashcard_review: { label: "Vocabulary Review", href: "/toeic/vocab" },
   writing_practice: { label: "Luyện viết", href: "/writing-practice" },
   grammar_lesson: { label: "Bài học ngữ pháp", href: "/grammar-lessons" },
-  study_set: { label: "Chủ đề học tập", href: "/study-sets" },
   voice_practice: { label: "Luyện nói", href: "/pronunciation" },
   listening_practice: { label: "Luyện nghe", href: "/listening" },
-  daily_challenge: { label: "Thử thách", href: "/daily-challenge" },
+
 };
 
 const MIN_ACTIVITIES = 10;
@@ -130,11 +129,11 @@ export async function GET() {
       });
     }
 
-    // Always suggest study sets for cross-skill
-    if (!suggestions.some((s) => s.href === "/study-sets")) {
+    // Always suggest grammar for cross-skill
+    if (!suggestions.some((s) => s.href === "/grammar-lessons")) {
       suggestions.push({
-        label: "Học theo chủ đề",
-        href: "/study-sets",
+        label: "Học ngữ pháp",
+        href: "/grammar-lessons",
         reason: "Kết hợp nhiều kỹ năng cùng lúc",
       });
     }

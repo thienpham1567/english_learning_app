@@ -6,8 +6,7 @@
  *   2. produceReviewTask + createReviewTask → review_task table (on incorrect)
  *
  * Mastery updates happen via review-task completions in the existing
- * review-completion module (not here). The diagnostic /complete endpoint
- * seeds initial userSkillState from %correct per skill.
+ * review-completion module (not here).
  */
 
 import { createReviewTask } from "@repo/database";
@@ -18,7 +17,7 @@ const log = routeLogger("toeic/event-emitter");
 
 export type EmitToeicEventInput = {
   userId: string;
-  moduleType: "toeic_practice" | "toeic_mock_test" | "toeic_diagnostic";
+  moduleType: "toeic_practice" | "toeic_mock_test";
   attemptId: string;
   questionId: string;
   skillIds: string[];

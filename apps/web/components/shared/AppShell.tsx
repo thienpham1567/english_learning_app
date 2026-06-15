@@ -71,9 +71,13 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className={`flex flex-col flex-1 overflow-hidden min-h-0 ${isMobile ? "p-3 pb-20" : "p-6"}`}
+              className={`relative flex flex-col flex-1 overflow-hidden min-h-0 ${isMobile ? "p-3 pb-20" : "p-6"}`}
             >
-              {children}
+              {/* Dot pattern background */}
+              <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px] z-0" />
+              <div className="relative z-[1] flex flex-col flex-1 overflow-hidden min-h-0">
+                {children}
+              </div>
             </m.main>
           </AnimatePresence>
 

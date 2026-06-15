@@ -10,7 +10,6 @@ import { awardXP, XP_VALUES } from "@/lib/xp";
 const MODE_TO_SOURCE_MODULE: Record<string, string> = {
   practice: "toeic-practice",
   mock_test: "toeic-mock-test",
-  diagnostic: "toeic-diagnostic",
   drill: "toeic-drill",
 };
 
@@ -27,10 +26,9 @@ const BodySchema = z.object({
   durationMsOff: z.number().int().min(0).optional(),
 });
 
-const MODE_TO_MODULE: Record<string, "toeic_practice" | "toeic_mock_test" | "toeic_diagnostic"> = {
+const MODE_TO_MODULE: Record<string, "toeic_practice" | "toeic_mock_test"> = {
   practice: "toeic_practice",
   mock_test: "toeic_mock_test",
-  diagnostic: "toeic_diagnostic",
   drill: "toeic_practice",
 };
 
@@ -133,7 +131,7 @@ export async function POST(req: Request) {
   }
 
   // Bridge to error-notebook: persist incorrect answers to errorLog so users
-  // see TOEIC mistakes alongside grammar-quiz/daily-challenge errors.
+  // see TOEIC mistakes alongside grammar-quiz errors.
   if (isCorrect === false && body.selectedIndex !== null) {
     void db
       .insert(errorLog)
