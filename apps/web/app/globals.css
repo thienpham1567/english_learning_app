@@ -118,7 +118,7 @@
   /* ── Primary Accent — Vibrant Neo-Brutalist Gold ── */
   --accent: #FFB800;
   --accent-hover: #E5A500;
-  --accent-light: #FFF9E6;
+  --accent-light: #FFE8A3;
   --accent-muted: rgba(255, 184, 0, 0.08);
   --accent-active: #B45309; /* Deep amber for high contrast text/links in light mode */
   --text-on-accent: #000000;
