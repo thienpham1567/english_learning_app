@@ -265,14 +265,7 @@ export function FloatingDictionaryWidget() {
                 className="border-none bg-transparent text-[13px] font-body text-ink flex-1 min-w-0 outline-none"
               />
             </form>
-            <button
-              onClick={handleOpenFullPage}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-transparent text-text-muted text-[11px] font-bold cursor-pointer shrink-0 whitespace-nowrap py-1.5 px-2.5 sm:px-3 border-2 border-border transition-all duration-150 hover:text-accent hover:border-accent"
-            >
-              <span className="hidden sm:inline">Open full dictionary</span>
-              <span className="sm:hidden">Full</span>
-              <ArrowRight size={10} />
-            </button>
+
           </div>
 
           {/* Dictionary result */}
