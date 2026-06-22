@@ -71,7 +71,7 @@ function Card({
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col overflow-hidden border-2 border-border text-sm",
+        "group/card flex flex-col overflow-hidden border border-border text-sm",
         // Padding/gap sizes
         size === "sm"
           ? "p-4 gap-3 rounded-lg"
@@ -86,17 +86,15 @@ function Card({
         accentClasses,
         // Interactive animations
         interactive && [
-          "transition-all duration-150 cursor-pointer",
-          // Hover state: lift up and make shadow deeper
-          "hover:-translate-x-0.5 hover:-translate-y-0.5",
+          "transition-all duration-200 cursor-pointer",
+          // Hover state: soft vertical lift
+          "hover:-translate-y-0.5 hover:shadow-md",
           shadowSize === "sm" && "hover:shadow",
           shadowSize === "default" && "hover:shadow-md",
           shadowSize === "md" && "hover:shadow-lg",
           shadowSize === "lg" && "hover:shadow-xl",
-          // Active state: press down to original or smaller shadow
-          "active:translate-x-0 active:translate-y-0",
-          shadowSize === "default" && "active:shadow-sm",
-          shadowSize === "md" && "active:shadow",
+          // Active state: subtle press scale
+          "active:translate-y-0 active:scale-[0.99]",
         ],
         className,
       )}
@@ -155,7 +153,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center gap-4 mt-auto border-t-2 border-border pt-4 -mx-6 -mb-6 px-6 py-4 bg-surface-alt group-data-[size=sm]/card:-mx-4 group-data-[size=sm]/card:-mb-4 group-data-[size=sm]/card:px-4 group-data-[size=sm]/card:py-3 group-data-[size=lg]/card:-mx-8 group-data-[size=lg]/card:-mb-8 group-data-[size=lg]/card:px-8 group-data-[size=lg]/card:py-5",
+        "flex items-center gap-4 mt-auto border-t border-border pt-4 -mx-6 -mb-6 px-6 py-4 bg-surface-alt group-data-[size=sm]/card:-mx-4 group-data-[size=sm]/card:-mb-4 group-data-[size=sm]/card:px-4 group-data-[size=sm]/card:py-3 group-data-[size=lg]/card:-mx-8 group-data-[size=lg]/card:-mb-8 group-data-[size=lg]/card:px-8 group-data-[size=lg]/card:py-5",
         className,
       )}
       {...props}

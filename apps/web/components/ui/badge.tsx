@@ -5,17 +5,17 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-md border-2 border-border px-2 py-0.5 text-[10px] font-black uppercase tracking-wider transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
+  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3!",
   {
     variants: {
       variant: {
-        default: "bg-accent text-ink",
-        secondary: "bg-secondary text-secondary-foreground",
-        destructive: "bg-destructive text-destructive-foreground",
-        outline: "bg-surface-alt text-foreground",
+        default: "bg-accent-light border-transparent text-accent-active",
+        secondary: "bg-secondary/10 border-transparent text-secondary",
+        destructive: "bg-destructive/10 border-transparent text-destructive",
+        outline: "bg-surface-alt border-border text-text-secondary",
         ghost:
           "border-transparent bg-transparent hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
-        link: "text-ink underline underline-offset-4 hover:underline",
+        link: "text-primary underline underline-offset-4 hover:underline",
       },
     },
     defaultVariants: {

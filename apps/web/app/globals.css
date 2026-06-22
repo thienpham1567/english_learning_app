@@ -97,8 +97,8 @@
 
 :root {
   /* ══════════════════════════════════════════════
-     NEO-BRUTALISM DESIGN TOKENS
-     Bold borders · Hard shadows · Flat colors
+     SOFT UI & MODERN MINIMALIST DESIGN TOKENS
+     Soft shadows · Elegant borders · Curated colors
      ══════════════════════════════════════════════ */
 
   /* ── Mockup Colors ── */
@@ -107,53 +107,53 @@
   --mockup-text-muted: #94A3B8;
   --mockup-text-muted-dark: #64748B;
 
-  /* ── Backgrounds — warm, sand cream, flat ── */
-  --bg: #F8F6F0;
-  --bg-deep: #EEEBE3;
+  /* ── Backgrounds — Soft slate neutrals ── */
+  --bg: #F8FAFC;
+  --bg-deep: #F1F5F9;
   --surface: #ffffff;
-  --surface-hover: #F1EFE6;
-  --surface-alt: #FDFDFB;
+  --surface-hover: #F8FAFC;
+  --surface-alt: #FFFFFF;
   --card-bg: var(--surface);
 
-  /* ── Primary Accent — Vibrant Neo-Brutalist Gold ── */
-  --accent: #FFB800;
-  --accent-hover: #E5A500;
-  --accent-light: #FFE8A3;
-  --accent-muted: rgba(255, 184, 0, 0.08);
-  --accent-active: #B45309; /* Deep amber for high contrast text/links in light mode */
-  --text-on-accent: #000000;
+  /* ── Primary Accent — Modern Indigo ── */
+  --accent: #6366F1;
+  --accent-hover: #4F46E5;
+  --accent-light: #EEF2FF;
+  --accent-muted: rgba(99, 102, 241, 0.08);
+  --accent-active: #4F46E5;
+  --text-on-accent: #ffffff;
 
-  --secondary: #2D5BFF;
-  --tertiary: #5B7EA8;
+  --secondary: #0EA5E9;
+  --tertiary: #64748B;
 
-  /* ── Ink & Typography — pure black for maximum brutalist contrast ── */
-  --ink: #000000;
-  --text-primary: #000000;
-  --text-secondary: #333333;
-  --text-muted: #666666;
+  /* ── Ink & Typography — Elegant Slate Text ── */
+  --ink: #0F172A;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
   --text: var(--text-primary);
 
-  /* ── Borders — thick, solid black ── */
-  --border: #000000;
-  --border-strong: #000000;
+  /* ── Borders — thin, subtle slate divider ── */
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
 
-  /* ── Shadows — hard offset, zero blur ── */
-  --shadow-color: #000000;
-  --shadow-sm: 2px 2px 0 var(--shadow-color);
-  --shadow: 3px 3px 0 var(--shadow-color);
-  --shadow-md: 4px 4px 0 var(--shadow-color);
-  --shadow-lg: 6px 6px 0 var(--shadow-color);
-  --shadow-xl: 8px 8px 0 var(--shadow-color);
+  /* ── Shadows — soft multi-layer blurred shadows ── */
+  --shadow-color: rgba(15, 23, 42, 0.06);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+  --shadow-md: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
+  --shadow-lg: 0 20px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
+  --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.12);
 
-  /* ── Radius — minimal, brutalist ── */
-  --radius: 4px;
-  --radius-sm: 0px;
-  --radius-md: 2px;
-  --radius-lg: 4px;
-  --radius-xl: 4px;
-  --radius-2xl: 6px;
+  /* ── Radius — rounder and softer ── */
+  --radius: 12px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
 
-  /* ── Fonts — geometric bold for headings ── */
+  /* ── Fonts ── */
   --font-display: "Space Grotesk", -apple-system, sans-serif;
   --font-body: "Source Sans 3", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
@@ -163,56 +163,56 @@
   --duration-normal: 200ms;
   --duration-slow: 350ms;
 
-  /* ── Sidebar — dark brutalist ── */
-  --sidebar-bg: #0A0A0A;
-  --sidebar-glow: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255, 184, 0, 0.06) 0%, transparent 70%);
-  --sidebar-text: #8A8A8A;
+  /* ── Sidebar ── */
+  --sidebar-bg: #0F172A;
+  --sidebar-glow: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
+  --sidebar-text: #94A3B8;
   --sidebar-text-active: #ffffff;
-  --sidebar-text-muted: #555555;
-  --sidebar-border: #1E1E1E;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
-  --sidebar-active-bg: rgba(255, 184, 0, 0.12);
+  --sidebar-text-muted: #475569;
+  --sidebar-border: #1E293B;
+  --sidebar-item-hover: rgba(255, 255, 255, 0.04);
+  --sidebar-active-bg: rgba(99, 102, 241, 0.12);
 
   /* ── Semantic Colors ── */
-  --accent-rgb: 255, 184, 0;
-  --success: #00C853;
-  --error: #FF1744;
-  --warning: #FF9100;
-  --info: #2979FF;
-  --info-rgb: 41, 121, 255;
+  --accent-rgb: 99, 102, 241;
+  --success: #10B981;
+  --error: #EF4444;
+  --warning: #F59E0B;
+  --info: #0EA5E9;
+  --info-rgb: 14, 165, 233;
 
   /* ── XP & Gamification ── */
-  --xp: #FFB800;
-  --fire: #FF6D00;
-  --success-bg: rgba(0, 200, 83, 0.08);
-  --error-bg: rgba(255, 23, 68, 0.08);
-  --warning-bg: rgba(255, 145, 0, 0.08);
-  --info-bg: rgba(41, 121, 255, 0.08);
+  --xp: #F59E0B;
+  --fire: #F97316;
+  --success-bg: rgba(16, 185, 129, 0.08);
+  --error-bg: rgba(239, 68, 68, 0.08);
+  --warning-bg: rgba(245, 158, 11, 0.08);
+  --info-bg: rgba(14, 165, 233, 0.08);
 
-  /* ── CEFR Level Colors — flat, distinct, high-contrast ── */
-  --cefr-a1: var(--error);          /* Red — Beginner */
-  --cefr-a2: var(--warning);        /* Orange — Elementary */
-  --cefr-b1: var(--xp);             /* Gold — Intermediate */
-  --cefr-b2: var(--success);        /* Green — Upper-Intermediate */
-  --cefr-c1: var(--info);           /* Blue — Advanced */
-  --cefr-c2: var(--module-grammar); /* Purple — Proficiency */
+  /* ── CEFR Level Colors ── */
+  --cefr-a1: var(--error);
+  --cefr-a2: var(--warning);
+  --cefr-b1: var(--xp);
+  --cefr-b2: var(--success);
+  --cefr-c1: var(--info);
+  --cefr-c2: var(--module-grammar);
 
-  /* ── Module Colors — flat, saturated ── */
+  /* ── Module Colors ── */
   --module-grammar: #8B5CF6;
-  --module-listening: #2979FF;
-  --module-writing: #00C853;
-  --module-reading: #0EA5E9;
-  --module-vocabulary: #FFB800;
-  --module-speaking: #FF6D00;
+  --module-listening: #0EA5E9;
+  --module-writing: #10B981;
+  --module-reading: #06B6D4;
+  --module-vocabulary: #F59E0B;
+  --module-speaking: #F97316;
   --module-review: #EC4899;
   --module-assessment: #6366F1;
 
   /* ── Heatmap Colors ── */
   --heatmap-0: rgba(0, 0, 0, 0.04);
-  --heatmap-1: #DBEAFE;
-  --heatmap-2: #60A5FA;
-  --heatmap-3: #FFB800;
-  --heatmap-4: #92400E;
+  --heatmap-1: #EEF2FF;
+  --heatmap-2: #C7D2FE;
+  --heatmap-3: #818CF8;
+  --heatmap-4: #4F46E5;
 
   /* ── Chatbot surfaces ── */
   --chat-bg: var(--bg-deep);
@@ -226,136 +226,136 @@
   --chat-code-header: var(--bg);
 
   /* ── Shadcn/ui Token Mapping ── */
-  --background: #F8F6F0;
-  --foreground: #000000;
+  --background: #F8FAFC;
+  --foreground: #0F172A;
   --card: #ffffff;
-  --card-foreground: #000000;
+  --card-foreground: #0F172A;
   --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #FFB800;
-  --primary-foreground: #000000;
-  --secondary: #2D5BFF;
+  --popover-foreground: #0F172A;
+  --primary: #6366F1;
+  --primary-foreground: #ffffff;
+  --secondary: #0EA5E9;
   --secondary-foreground: #ffffff;
-  --muted: #F1EFE6;
-  --muted-foreground: #666666;
-  --accent: #FFB800;
-  --accent-foreground: #000000;
-  --destructive: #FF1744;
-  --input: #000000;
-  --ring: #FFB800;
+  --muted: #F1F5F9;
+  --muted-foreground: #475569;
+  --accent: #EEF2FF;
+  --accent-foreground: #4F46E5;
+  --destructive: #EF4444;
+  --input: #E2E8F0;
+  --ring: #6366F1;
 }
 
 /* ── Dark Theme Tokens ── */
 [data-theme="dark"] {
-  /* Backgrounds — deep, flat */
-  --bg: #0A0A0A;
-  --bg-deep: #020202;
-  --surface: #121212;
-  --surface-hover: #1A1A1A;
-  --surface-alt: #0E0E0E;
+  /* Backgrounds ── */
+  --bg: #0B0F19;
+  --bg-deep: #070A13;
+  --surface: #1E293B;
+  --surface-hover: #334155;
+  --surface-alt: #111B2D;
   --card-bg: var(--surface);
 
-  /* Accent — bright gold for dark contrast */
-  --accent: #FFD043;
-  --accent-hover: #FFDE75;
-  --accent-light: rgba(255, 208, 67, 0.1);
-  --accent-muted: rgba(255, 208, 67, 0.06);
-  --accent-active: #FFD043; /* Bright gold for high contrast on dark backgrounds */
-  --text-on-accent: #0A0A0A;
+  /* Accent ── */
+  --accent: #818CF8;
+  --accent-hover: #6366F1;
+  --accent-light: rgba(129, 140, 248, 0.08);
+  --accent-muted: rgba(129, 140, 248, 0.05);
+  --accent-active: #818CF8;
+  --text-on-accent: #0B0F19;
 
-  --secondary: #60A5FA;
-  --tertiary: #7A9CC4;
+  --secondary: #38BDF8;
+  --tertiary: #64748B;
 
-  /* Typography — high contrast */
-  --ink: #F5F5F5;
-  --text-primary: #E8E8E8;
-  --text-secondary: #ABABAB;   /* 6.5:1 contrast — PASSES WCAG AA */
-  --text-muted: #8A8A8A;       /* 5.2:1 contrast — PASSES WCAG AA */
+  /* Typography ── */
+  --ink: #F8FAFC;
+  --text-primary: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #64748B;
   --text: var(--text-primary);
 
-  /* Borders — visible on dark */
-  --border: #444444;
-  --border-strong: #666666;
+  /* Borders ── */
+  --border: #334155;
+  --border-strong: #475569;
 
-  /* Shadows — dark hard offset */
-  --shadow-color: #000000;
-  --shadow-sm: 2px 2px 0 var(--shadow-color);
-  --shadow: 3px 3px 0 var(--shadow-color);
-  --shadow-md: 4px 4px 0 var(--shadow-color);
-  --shadow-lg: 6px 6px 0 var(--shadow-color);
-  --shadow-xl: 8px 8px 0 var(--shadow-color);
+  /* Shadows ── */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+  --shadow-md: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
+  --shadow-lg: 0 20px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
 
-  /* Sidebar — deep dark */
-  --sidebar-bg: #060606;
-  --sidebar-glow: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255, 208, 67, 0.05) 0%, transparent 70%);
-  --sidebar-text: #666666;
-  --sidebar-text-active: #F5F5F5;
-  --sidebar-text-muted: #444444;
-  --sidebar-border: #1A1A1A;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.05);
-  --sidebar-active-bg: rgba(255, 208, 67, 0.12);
+  /* Sidebar ── */
+  --sidebar-bg: #070A13;
+  --sidebar-glow: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(129, 140, 248, 0.04) 0%, transparent 70%);
+  --sidebar-text: #64748B;
+  --sidebar-text-active: #F8FAFC;
+  --sidebar-text-muted: #334155;
+  --sidebar-border: #1E293B;
+  --sidebar-item-hover: rgba(255, 255, 255, 0.04);
+  --sidebar-active-bg: rgba(129, 140, 248, 0.12);
 
-  /* Semantic colors — brighter for dark */
-  --accent-rgb: 255, 208, 67;
-  --success: #00E676;
-  --error: #FF5252;
-  --warning: #FFAB40;
-  --info: #448AFF;
-  --info-rgb: 68, 138, 255;
+  /* Semantic colors ── */
+  --accent-rgb: 129, 140, 248;
+  --success: #34D399;
+  --error: #F87171;
+  --warning: #FBBF24;
+  --info: #38BDF8;
+  --info-rgb: 56, 189, 248;
 
-  --xp: #FFD043;
-  --fire: #FF9100;
-  --success-bg: rgba(0, 230, 118, 0.1);
-  --error-bg: rgba(255, 82, 82, 0.1);
-  --warning-bg: rgba(255, 171, 64, 0.1);
-  --info-bg: rgba(68, 138, 255, 0.1);
+  --xp: #818CF8;
+  --fire: #FB923C;
+  --success-bg: rgba(52, 211, 153, 0.1);
+  --error-bg: rgba(248, 113, 113, 0.1);
+  --warning-bg: rgba(251, 191, 36, 0.1);
+  --info-bg: rgba(56, 189, 248, 0.1);
 
-  /* Module Colors — brighter */
+  /* Module Colors ── */
   --module-grammar: #A78BFA;
-  --module-listening: #448AFF;
-  --module-writing: #00E676;
-  --module-reading: #38BDF8;
-  --module-vocabulary: #FFD043;
-  --module-speaking: #FF9100;
+  --module-listening: #38BDF8;
+  --module-writing: #34D399;
+  --module-reading: #22D3EE;
+  --module-vocabulary: #FBBF24;
+  --module-speaking: #FB923C;
   --module-review: #F472B6;
   --module-assessment: #818CF8;
 
   /* Heatmap */
-  --heatmap-0: rgba(255, 255, 255, 0.04);
+  --heatmap-0: rgba(255, 255, 255, 0.02);
   --heatmap-1: rgba(96, 165, 250, 0.15);
   --heatmap-2: rgba(96, 165, 250, 0.35);
-  --heatmap-3: rgba(255, 208, 67, 0.6);
-  --heatmap-4: rgba(255, 208, 67, 0.85);
+  --heatmap-3: rgba(129, 140, 248, 0.6);
+  --heatmap-4: rgba(129, 140, 248, 0.85);
 
   /* Chatbot */
-  --chat-bg: #0A0A0A;
-  --chat-surface: #121212;
-  --chat-surface-hover: #1A1A1A;
-  --chat-bubble-ai: rgba(18, 18, 18, 0.4);
-  --chat-sidebar-bg: #020202;
-  --chat-sidebar-border: #222222;
-  --chat-input-bg: rgba(18, 18, 18, 0.2);
-  --chat-code-bg: #1A1A1A;
-  --chat-code-header: rgba(2, 2, 2, 0.4);
+  --chat-bg: #070A13;
+  --chat-surface: #1E293B;
+  --chat-surface-hover: #334155;
+  --chat-bubble-ai: rgba(30, 41, 59, 0.4);
+  --chat-sidebar-bg: #070A13;
+  --chat-sidebar-border: #1E293B;
+  --chat-input-bg: rgba(30, 41, 59, 0.2);
+  --chat-code-bg: #0F172A;
+  --chat-code-header: rgba(7, 10, 19, 0.4);
 
   /* Shadcn dark mapping */
-  --background: #0A0A0A;
-  --foreground: #F5F5F5;
-  --card: #121212;
-  --card-foreground: #F5F5F5;
-  --popover: #121212;
-  --popover-foreground: #F5F5F5;
-  --primary: #FFD043;
-  --primary-foreground: #0A0A0A;
-  --secondary: #60A5FA;
-  --secondary-foreground: #E8E8E8;
-  --muted: #1A1A1A;
-  --muted-foreground: #8A8A8A;
-  --accent: #FFD043;
-  --accent-foreground: #0A0A0A;
-  --destructive: #FF5252;
-  --input: #222222;
-  --ring: #FFD043;
+  --background: #0B0F19;
+  --foreground: #F8FAFC;
+  --card: #1E293B;
+  --card-foreground: #F8FAFC;
+  --popover: #1E293B;
+  --popover-foreground: #F8FAFC;
+  --primary: #818CF8;
+  --primary-foreground: #0B0F19;
+  --secondary: #38BDF8;
+  --secondary-foreground: #F1F5F9;
+  --muted: #334155;
+  --muted-foreground: #CBD5E1;
+  --accent: #1E293B;
+  --accent-foreground: #818CF8;
+  --destructive: #F87171;
+  --input: #334155;
+  --ring: #818CF8;
 }
 
 
@@ -1157,3 +1157,26 @@ button:focus-visible {
     @apply font-sans;
   }
 }
+
+/* ── Soft UI Global Overrides ── */
+/* Override all border-2 and border-t-2 to 1px for clean minimalist look */
+.border-2,
+.border-t-2,
+.border-b-2,
+.border-l-2,
+.border-r-2 {
+  border-width: 1px !important;
+}
+
+.divide-y-2 > :not([hidden]) ~ :not([hidden]) {
+  border-top-width: 1px !important;
+}
+.divide-x-2 > :not([hidden]) ~ :not([hidden]) {
+  border-left-width: 1px !important;
+}
+
+/* Transform custom hard offset shadows to soft blurred shadows */
+[class*="shadow-["] {
+  box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color) !important;
+}
+

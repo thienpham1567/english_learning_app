@@ -226,7 +226,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
       initial={false}
       animate={{ width: isExpanded ? 252 : 66 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-3.5 px-2 border-r-2 border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] relative"
+      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-3.5 px-2 border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] relative"
     >
       {/* Subtle accent glow at top */}
       <div

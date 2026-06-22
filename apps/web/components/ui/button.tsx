@@ -5,33 +5,33 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border-2 border-transparent bg-clip-padding text-sm font-black whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-xl border border-transparent bg-clip-padding text-sm font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
-          "bg-accent border-border text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-primary border-transparent text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-[0.98] cursor-pointer duration-200 transition-all",
         outline:
-          "bg-surface border-border text-foreground shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-surface border-border text-foreground shadow-sm hover:bg-surface-hover active:scale-[0.98] cursor-pointer duration-200 transition-all",
         secondary:
-          "bg-secondary border-border text-white shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-secondary border-transparent text-white shadow-sm hover:bg-secondary/90 active:scale-[0.98] cursor-pointer duration-200 transition-all",
         ghost:
-          "border-transparent bg-transparent hover:bg-surface-hover hover:text-foreground cursor-pointer duration-100 transition-all",
+          "border-transparent bg-transparent hover:bg-surface-hover hover:text-foreground active:scale-[0.98] cursor-pointer duration-200 transition-all",
         destructive:
-          "bg-destructive border-border text-white shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
-        link: "text-ink underline underline-offset-4 hover:text-accent cursor-pointer duration-100 transition-all",
-        /* ── New Neo-Brutalist Variants ── */
+          "bg-destructive border-transparent text-white shadow-sm hover:bg-destructive/90 active:scale-[0.98] cursor-pointer duration-200 transition-all",
+        link: "text-primary underline underline-offset-4 hover:text-primary/90 cursor-pointer duration-200 transition-all",
+        /* ── Soft UI Variants ── */
         subtle:
-          "bg-accent-light border border-border/40 text-accent-active shadow-none hover:border-accent/40 cursor-pointer duration-100 transition-all",
+          "bg-accent-light border border-transparent text-accent-active shadow-none hover:bg-accent-light/80 active:scale-[0.98] cursor-pointer duration-200 transition-all",
         dashed:
-          "bg-transparent border-2 border-dashed border-border text-text-secondary shadow-none hover:border-accent hover:text-accent cursor-pointer duration-100 transition-all",
+          "bg-transparent border border-dashed border-border text-text-secondary shadow-none hover:border-primary hover:text-primary active:scale-[0.98] cursor-pointer duration-200 transition-all",
       },
       size: {
         default:
-          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+          "h-8 gap-1.5 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5",
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-3 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+        lg: "h-9 gap-1.5 px-3.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
         xl: "h-11 gap-2 px-5 text-[15px] has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
         icon: "size-8",
         "icon-xs":
