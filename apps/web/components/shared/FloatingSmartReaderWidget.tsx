@@ -101,7 +101,7 @@ export function FloatingSmartReaderWidget() {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.94 }}
           transition={{ type: "spring", stiffness: 350, damping: 20 }}
-          className="w-12 h-12 rounded-2xl cursor-pointer bg-secondary text-white flex items-center justify-center border border-border shadow hover:shadow-lg transition-shadow duration-200"
+          className="w-12 h-12 rounded-2xl cursor-pointer bg-secondary text-secondary-foreground flex items-center justify-center border border-border shadow hover:shadow-lg transition-shadow duration-200"
         >
           <BookOpenCheck size={20} strokeWidth={2.2} />
         </m.button>
@@ -156,7 +156,7 @@ export function FloatingSmartReaderWidget() {
                   disabled={!input.trim() || isLoading}
                   className={`inline-flex items-center gap-2 border rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
                     input.trim() && !isLoading
-                      ? "border-border bg-secondary text-white shadow-sm hover:shadow-md active:scale-[0.98]"
+                      ? "border-border bg-secondary text-secondary-foreground shadow-sm hover:shadow-md active:scale-[0.98]"
                       : "border-border bg-surface-hover text-text-muted cursor-not-allowed opacity-50"
                   }`}
                 >

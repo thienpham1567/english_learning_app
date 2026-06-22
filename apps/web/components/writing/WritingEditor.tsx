@@ -129,7 +129,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             <button
               type="button"
               onClick={restoreDraft}
-              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border border-border shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
+              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-warning-foreground border border-border shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
             >
               Restore
             </button>

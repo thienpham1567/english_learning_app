@@ -20,10 +20,13 @@
 
   --color-error: var(--error);
   --color-error-bg: var(--error-bg);
+  --color-error-foreground: var(--error-foreground);
   --color-success: var(--success);
   --color-success-bg: var(--success-bg);
+  --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-bg: var(--warning-bg);
+  --color-warning-foreground: var(--warning-foreground);
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -116,21 +119,21 @@
   --card-bg: var(--surface);
 
   /* ── Primary Accent — Modern Indigo ── */
-  --accent: #6366F1;
-  --accent-hover: #4F46E5;
+  --accent: #4F46E5;
+  --accent-hover: #4338CA;
   --accent-light: #EEF2FF;
-  --accent-muted: rgba(99, 102, 241, 0.08);
-  --accent-active: #4F46E5;
+  --accent-muted: rgba(79, 70, 229, 0.08);
+  --accent-active: #4338CA;
   --text-on-accent: #ffffff;
 
-  --secondary: #0EA5E9;
+  --secondary: #0369A1;
   --tertiary: #64748B;
 
   /* ── Ink & Typography — Elegant Slate Text ── */
   --ink: #0F172A;
   --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
+  --text-secondary: #334155;
+  --text-muted: #57687C;
   --text: var(--text-primary);
 
   /* ── Borders — thin, subtle slate divider ── */
@@ -173,21 +176,27 @@
   --sidebar-item-hover: rgba(255, 255, 255, 0.04);
   --sidebar-active-bg: rgba(99, 102, 241, 0.12);
 
-  /* ── Semantic Colors ── */
-  --accent-rgb: 99, 102, 241;
-  --success: #10B981;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --info: #0EA5E9;
-  --info-rgb: 14, 165, 233;
+  --accent-rgb: 79, 70, 229;
+  --success: #15803D;
+  --error: #DC2626;
+  --warning: #B45309;
+  --info: #0369A1;
+  --info-rgb: 3, 105, 161;
+
+  /* Status foregrounds for high contrast badge/button text */
+  --success-foreground: #ffffff;
+  --error-foreground: #ffffff;
+  --warning-foreground: #ffffff;
+  --info-foreground: #ffffff;
+  --secondary-foreground: #ffffff;
 
   /* ── XP & Gamification ── */
-  --xp: #F59E0B;
-  --fire: #F97316;
-  --success-bg: rgba(16, 185, 129, 0.08);
-  --error-bg: rgba(239, 68, 68, 0.08);
-  --warning-bg: rgba(245, 158, 11, 0.08);
-  --info-bg: rgba(14, 165, 233, 0.08);
+  --xp: #B45309;
+  --fire: #C2410C;
+  --success-bg: rgba(21, 128, 61, 0.08);
+  --error-bg: rgba(220, 38, 38, 0.08);
+  --warning-bg: rgba(180, 83, 9, 0.08);
+  --info-bg: rgba(3, 105, 161, 0.08);
 
   /* ── CEFR Level Colors ── */
   --cefr-a1: var(--error);
@@ -270,7 +279,7 @@
   --ink: #F8FAFC;
   --text-primary: #F1F5F9;
   --text-secondary: #CBD5E1;
-  --text-muted: #64748B;
+  --text-muted: #A1B0C4;
   --text: var(--text-primary);
 
   /* Borders ── */
@@ -302,6 +311,13 @@
   --warning: #FBBF24;
   --info: #38BDF8;
   --info-rgb: 56, 189, 248;
+
+  /* Status foregrounds for high contrast badge/button text */
+  --success-foreground: #0B0F19;
+  --error-foreground: #0B0F19;
+  --warning-foreground: #0B0F19;
+  --info-foreground: #0B0F19;
+  --secondary-foreground: #0B0F19;
 
   --xp: #818CF8;
   --fire: #FB923C;
@@ -952,6 +968,10 @@ button:focus-visible {
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-success-foreground: var(--success-foreground);
+  --color-error-foreground: var(--error-foreground);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info-foreground: var(--info-foreground);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);

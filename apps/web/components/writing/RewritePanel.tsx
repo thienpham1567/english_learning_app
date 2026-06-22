@@ -116,8 +116,16 @@ function VariantCard({ variant, original }: { variant: RewriteVariant; original:
         <div className="flex items-center gap-2">
           <span style={{ color: meta.color }}>{meta.icon}</span>
           <span
-            className="px-2.5 py-0.5 rounded-lg text-[10px] font-bold text-white uppercase tracking-wider"
-            style={{ backgroundColor: meta.color }}
+            className="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider"
+            style={{
+              backgroundColor: meta.color,
+              color:
+                variant.level === "natural"
+                  ? "var(--success-foreground)"
+                  : variant.level === "formal"
+                    ? "var(--info-foreground)"
+                    : "var(--text-on-accent)",
+            }}
           >
             {meta.label}
           </span>
@@ -254,7 +262,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
         className={`px-5 py-2.5 rounded-lg border border-border text-xs font-bold flex items-center gap-1.5 self-start cursor-pointer transition-all duration-100 ${
           !sentence.trim() || overLimit || loading
             ? "bg-bg-deep text-text-muted cursor-not-allowed opacity-50"
-            : "bg-accent text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+            : "bg-accent text-text-on-accent shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
         }`}
       >
         {loading ? (

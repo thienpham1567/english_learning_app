@@ -270,29 +270,29 @@ export default function GrammarLessonsPage() {
                   className="group relative flex w-full items-stretch overflow-hidden rounded-2xl border border-border bg-accent text-left shadow-md transition-shadow hover:shadow-lg"
                 >
                   {/* Ticket stub */}
-                  <div className="relative flex shrink-0 items-center border-r border-dashed border-black/20 px-4 sm:px-6">
-                    <span className="font-display text-2xl font-bold uppercase tracking-tight text-black [writing-mode:vertical-rl] rotate-180 sm:text-3xl">
+                  <div className="relative flex shrink-0 items-center border-r border-dashed border-text-on-accent/20 px-4 sm:px-6">
+                    <span className="font-display text-2xl font-bold uppercase tracking-tight text-text-on-accent [writing-mode:vertical-rl] rotate-180 sm:text-3xl">
                       Next
                     </span>
                   </div>
                   {/* Decorative geometry */}
-                  <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rotate-12 bg-black/[0.07]" />
-                  <div className="pointer-events-none absolute -bottom-6 right-16 h-16 w-16 -rotate-6 bg-black/[0.05]" />
+                  <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rotate-12 bg-text-on-accent/[0.07]" />
+                  <div className="pointer-events-none absolute -bottom-6 right-16 h-16 w-16 -rotate-6 bg-text-on-accent/[0.05]" />
 
                   <div className="flex flex-1 items-center gap-4 px-5 py-5">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-black/60">
+                      <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-text-on-accent/70">
                         <Star size={11} className="fill-current" />
                         Bài tiếp theo nên học
                       </div>
-                      <div className="mt-1 font-display text-xl font-bold leading-tight text-black sm:text-2xl">
+                      <div className="mt-1 font-display text-xl font-bold leading-tight text-text-on-accent sm:text-2xl">
                         {recommendedTopic.title}
                       </div>
-                      <div className="mt-1 text-[11px] font-medium text-black/55">
+                      <div className="mt-1 text-[11px] font-medium text-text-on-accent/80">
                         Level {recommendedTopic.level} · Bấm để bắt đầu ngay
                       </div>
                     </div>
-                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-black/20 bg-surface text-ink shadow-sm transition-transform group-hover:scale-105">
+                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-text-on-accent/20 bg-surface text-ink shadow-sm transition-transform group-hover:scale-105">
                       <ArrowUpRight size={20} />
                     </div>
                   </div>

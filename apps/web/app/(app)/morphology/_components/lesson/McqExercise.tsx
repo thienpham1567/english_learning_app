@@ -40,10 +40,10 @@ export function McqExercise({ exercise, revealed, onAnswer }: McqExerciseProps) 
           let badge = "bg-surface-alt text-text-secondary border-border";
           if (revealed && isCorrect) {
             container = "border-success bg-success/10 text-success font-bold";
-            badge = "bg-success text-white border-success";
+            badge = "bg-success text-success-foreground border-success";
           } else if (revealed && isSelected && !isCorrect) {
             container = "border-error bg-error/10 text-error font-bold";
-            badge = "bg-error text-white border-error";
+            badge = "bg-error text-error-foreground border-error";
           } else if (revealed) {
             container = "border-border bg-surface text-text-muted opacity-50";
           } else if (isSelected) {

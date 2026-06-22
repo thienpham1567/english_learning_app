@@ -14,7 +14,7 @@ const buttonVariants = cva(
         outline:
           "bg-surface border-border text-foreground shadow-sm hover:bg-surface-hover active:scale-[0.98] cursor-pointer duration-200 transition-all",
         secondary:
-          "bg-secondary border-transparent text-white shadow-sm hover:bg-secondary/90 active:scale-[0.98] cursor-pointer duration-200 transition-all",
+          "bg-secondary border-transparent text-secondary-foreground shadow-sm hover:bg-secondary/90 active:scale-[0.98] cursor-pointer duration-200 transition-all",
         ghost:
           "border-transparent bg-transparent hover:bg-surface-hover hover:text-foreground active:scale-[0.98] cursor-pointer duration-200 transition-all",
         destructive:
