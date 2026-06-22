@@ -91,7 +91,7 @@ export function MatchExercise({ exercise, revealed, onAnswer }: MatchExercisePro
                 type="button"
                 onClick={() => pickLeft(p.left)}
                 disabled={revealed}
-                className={`text-left rounded-xl border-2 py-2.5 px-3 text-[13px] font-bold transition-colors ${
+                className={`text-left rounded-xl border py-2.5 px-3 text-[13px] font-bold transition-colors ${
                   revealed ? "cursor-default" : "cursor-pointer"
                 } ${leftState(p.left)}`}
               >
@@ -126,7 +126,7 @@ export function MatchExercise({ exercise, revealed, onAnswer }: MatchExercisePro
                 onClick={() => pickRight(right)}
                 disabled={revealed || used || !selectedLeft}
                 whileTap={revealed || used ? undefined : { scale: 0.98 }}
-                className={`text-left rounded-xl border-2 py-2.5 px-3 text-[13px] font-medium transition-colors ${
+                className={`text-left rounded-xl border py-2.5 px-3 text-[13px] font-medium transition-colors ${
                   used
                     ? "border-border bg-surface-alt text-text-muted opacity-50 cursor-default"
                     : selectedLeft

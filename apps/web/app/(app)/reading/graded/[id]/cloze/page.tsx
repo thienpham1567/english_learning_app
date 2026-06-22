@@ -193,7 +193,7 @@ export default function ClozeTestPage() {
               )}
             </div>
             <h3
-              className="m-0 mb-1 text-3xl font-black"
+              className="m-0 mb-1 text-3xl font-bold"
               style={{
                 color:
                   score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)",
@@ -209,7 +209,7 @@ export default function ClozeTestPage() {
               <button
                 type="button"
                 onClick={handleRetry}
-                className="rounded-xl border-2 border-border bg-surface text-text-secondary font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
+                className="rounded-xl border border-border bg-surface text-text-secondary font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
               >
                 <RefreshCw size={14} /> Retry
               </button>
@@ -336,7 +336,7 @@ export default function ClozeTestPage() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-xl font-bold h-12 text-[15px] self-center px-8 border-2 border-border bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2 shadow-sm"
+            className="rounded-xl font-bold h-12 text-[15px] self-center px-8 border border-border bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2 shadow-sm"
           >
             <CheckCircle size={16} /> Submit Quiz ({totalCount} questions)
           </button>

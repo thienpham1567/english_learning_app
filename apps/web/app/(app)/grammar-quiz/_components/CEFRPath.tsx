@@ -52,7 +52,7 @@ export function CEFRPath({
       shadowSize="sm"
       className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6"
     >
-      <h3 className="text-xl font-black font-display text-text-primary m-0">TOEIC Part 5 Quiz</h3>
+      <h3 className="text-xl font-bold font-display text-text-primary m-0">TOEIC Part 5 Quiz</h3>
       <p className="mt-1 text-[13px] text-text-secondary font-medium">
         Practice Part 5 multiple choice questions designed to match real exam standards
       </p>
@@ -60,7 +60,7 @@ export function CEFRPath({
       {/* Source mode toggle */}
       {onSourceModeChange && (
         <div className="mt-5 mb-1 relative z-[1]">
-          <div className="inline-flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-xl">
+          <div className="inline-flex gap-1 p-1 bg-surface-alt border border-border rounded-xl">
             {[
               { value: "ai" as const, label: "AI Mode", icon: <Zap size={13} /> },
               { value: "ets" as const, label: "ETS Exam", icon: <BookOpen size={13} /> },
@@ -69,7 +69,7 @@ export function CEFRPath({
                 key={opt.value}
                 type="button"
                 onClick={() => onSourceModeChange(opt.value)}
-                className={`flex items-center justify-center gap-1.5 font-bold rounded-lg border-2 py-1 px-3 text-xs cursor-pointer transition-all duration-150 ${
+                className={`flex items-center justify-center gap-1.5 font-bold rounded-lg border py-1 px-3 text-xs cursor-pointer transition-all duration-150 ${
                   sourceMode === opt.value
                     ? "border-accent bg-accent-light text-ink font-extrabold"
                     : "border-border bg-surface-alt text-text-secondary hover:text-ink"
@@ -120,7 +120,7 @@ export function CEFRPath({
                     }}
                   >
                     {isSelected ? (
-                      <Check className="text-xs font-black text-[var(--text-on-accent)]" />
+                      <Check className="text-xs font-bold text-[var(--text-on-accent)]" />
                     ) : (
                       <span className="text-[10px] font-extrabold text-text-muted">
                         {level.label}
@@ -195,7 +195,7 @@ export function CEFRPath({
         whileTap={{ scale: 0.98 }}
         onClick={onStart}
         disabled={isLoading}
-        className="mt-6 h-11 w-full rounded-lg border-2 border-border font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[14.5px] text-[var(--text-on-accent)] shadow-sm"
+        className="mt-6 h-11 w-full rounded-lg border border-border font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[14.5px] text-[var(--text-on-accent)] shadow-sm"
         style={{
           background: "var(--accent)",
         }}

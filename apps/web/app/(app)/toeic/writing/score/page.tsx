@@ -331,7 +331,7 @@ export default function EssayScorePage() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Paste the prompt here so that the AI can evaluate Task Response more accurately..."
-                className="w-full h-[60px] p-3 border-2 border-border text-[13px]"
+                className="w-full h-[60px] p-3 border border-border text-[13px]"
                 style={{
                   borderRadius: 10,
                   background: "var(--card-bg)",
@@ -364,7 +364,7 @@ export default function EssayScorePage() {
                 value={essayText}
                 onChange={(e) => setEssayText(e.target.value)}
                 placeholder="Write or paste your essay here..."
-                className="w-full h-[280px] p-4 rounded-xl border-2 border-border text-sm"
+                className="w-full h-[280px] p-4 rounded-xl border border-border text-sm"
                 style={{
                   background: "var(--card-bg)",
                   color: "var(--text)",
@@ -407,7 +407,7 @@ export default function EssayScorePage() {
           <div className="flex flex-col gap-4">
             {/* Overall score */}
             <div
-              className="p-6 rounded-2xl border-2 border-border text-center"
+              className="p-6 rounded-2xl border border-border text-center"
               style={{ background: "var(--card-bg)" }}
             >
               <div className="relative w-[100px] h-[100px] mx-auto">
@@ -520,7 +520,7 @@ export default function EssayScorePage() {
               return (
                 <div
                   key={c.key}
-                  className="p-4 rounded-xl border-2 border-border"
+                  className="p-4 rounded-xl border border-border"
                   style={{ background: "var(--card-bg)" }}
                 >
                   <div className="flex justify-between mb-1">
@@ -536,7 +536,7 @@ export default function EssayScorePage() {
 
             {/* Essay with inline highlights */}
             <div
-              className="p-4 rounded-xl border-2 border-border"
+              className="p-4 rounded-xl border border-border"
               style={{ background: "var(--card-bg)" }}
             >
               <div className="flex justify-between mb-2">
@@ -566,7 +566,7 @@ export default function EssayScorePage() {
             {/* Inline issues list */}
             {result.inlineIssues.length > 0 && (
               <div
-                className="p-4 rounded-xl border-2 border-border"
+                className="p-4 rounded-xl border border-border"
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">
@@ -592,7 +592,7 @@ export default function EssayScorePage() {
               style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}
             >
               <div
-                className="p-4 rounded-xl border-2 border-border"
+                className="p-4 rounded-xl border border-border"
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">
@@ -605,7 +605,7 @@ export default function EssayScorePage() {
                 </ul>
               </div>
               <div
-                className="p-4 rounded-xl border-2 border-border"
+                className="p-4 rounded-xl border border-border"
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">

@@ -77,7 +77,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               </div>
               <button
                 onClick={onClose}
-                className="grid place-items-center w-8 h-8 rounded-lg border-2 border-border bg-transparent text-text-muted cursor-pointer text-sm transition-all duration-150 hover:bg-surface-alt"
+                className="grid place-items-center w-8 h-8 rounded-lg border border-border bg-transparent text-text-muted cursor-pointer text-sm transition-all duration-150 hover:bg-surface-alt"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -101,10 +101,10 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                         key={i}
                         className={`px-3.5 py-2.5 rounded-xl text-sm ${
                           isCorrect
-                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-2 border-success text-success font-bold"
+                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border border-success text-success font-bold"
                             : isWrong
-                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-2 border-error text-error font-bold"
-                              : "bg-surface-alt border-2 border-border text-text-primary font-medium"
+                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border border-error text-error font-bold"
+                              : "bg-surface-alt border border-border text-text-primary font-medium"
                         }`}
                       >
                         {isCorrect && <CheckCircle className="h-3 w-3 inline mr-1.5" />}
@@ -119,7 +119,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               {/* Answer comparison (when no options) */}
               {(!error.options || error.options.length === 0) && (
                 <div className="flex gap-2 mb-5">
-                  <div className="flex-1 px-3.5 py-3 rounded-xl bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-3 rounded-xl bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-error uppercase mb-1 flex items-center gap-1">
                       <XCircle className="h-2.5 w-2.5" /> Your Answer
                     </div>
@@ -127,7 +127,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                       {error.userAnswer || "(Empty)"}
                     </div>
                   </div>
-                  <div className="flex-1 px-3.5 py-3 rounded-xl bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-3 rounded-xl bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-success uppercase mb-1 flex items-center gap-1">
                       <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                     </div>
@@ -157,7 +157,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               </div>
 
               {/* Meta info */}
-              <div className="px-3.5 py-3 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1.5">
+              <div className="px-3.5 py-3 rounded-xl bg-surface-alt border border-border text-xs text-text-muted flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5" />
                   <span>
@@ -203,7 +203,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleResolve}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl border-2 border-border bg-success text-white text-sm font-extrabold cursor-pointer font-body shadow-sm"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl border border-border bg-success text-white text-sm font-extrabold cursor-pointer font-body shadow-sm"
                 >
                   <CheckCircle className="h-4 w-4" /> Mark as resolved
                 </m.button>

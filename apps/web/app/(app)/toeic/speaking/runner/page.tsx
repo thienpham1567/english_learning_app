@@ -187,7 +187,7 @@ export default function SpeakingRunnerPage() {
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
         <button
-          className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+          className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
           onClick={() => router.push("/toeic/speaking")}
         >
           Về Hub
@@ -202,7 +202,7 @@ export default function SpeakingRunnerPage() {
           Cần quyền microphone để làm Speaking test. Cho phép trong cài đặt browser rồi reload.
         </div>
         <button
-          className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+          className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
           onClick={() => router.push("/toeic/speaking")}
         >
           Về Hub
@@ -307,7 +307,7 @@ export default function SpeakingRunnerPage() {
 
         {phase === "recording" && (
           <button
-            className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+            className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
             onClick={() => void stopAndSubmit()}
           >
             Dừng + Nộp câu này
@@ -315,7 +315,7 @@ export default function SpeakingRunnerPage() {
         )}
         {phase === "prep" && (
           <button
-            className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+            className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
             onClick={() => void startRecording()}
           >
             Sẵn sàng — bắt đầu ghi sớm

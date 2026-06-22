@@ -68,7 +68,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
     <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-surface border-2 border-border p-5 flex flex-col gap-5 shadow-[4px_4px_0_var(--shadow-color)]"
+      className="bg-surface border border-border p-5 flex flex-col gap-5 shadow-md"
     >
       {/* Overall Score Ring */}
       <div className="flex items-center gap-5">
@@ -80,7 +80,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
         >
           <div className="w-16 h-16 rounded-full bg-surface grid place-items-center">
             <div className="text-center">
-              <div className="text-[22px] font-black" style={{ color: grade.color }}>
+              <div className="text-[22px] font-bold" style={{ color: grade.color }}>
                 {result.overall}
               </div>
               <div className="text-[9px] font-bold text-text-muted">/ 100</div>
@@ -112,14 +112,14 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
           return (
             <div
               key={s.label}
-              className="py-2.5 px-3.5 bg-surface-alt border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]"
+              className="py-2.5 px-3.5 bg-surface-alt border border-border shadow-sm"
             >
               <div className="flex justify-between items-center">
                 <span className="text-xs font-semibold text-text-secondary flex items-center gap-1">
                   <s.Icon size={12} className="text-text-muted" />
                   {s.label}
                 </span>
-                <span className="text-base font-black" style={{ color: g.color }}>
+                <span className="text-base font-bold" style={{ color: g.color }}>
                   {s.value}
                 </span>
               </div>
@@ -141,7 +141,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       {/* Word-level feedback */}
       {result.wordScores.length > 0 && (
         <div>
-          <span className="font-mono text-[10px] font-bold text-text-muted uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5">
+          <span className="text-[10px] font-semibold text-text-muted uppercase tracking-[0.12em] mb-2.5 flex items-center gap-1.5">
             <FileText size={13} />
             Chi tiết từng từ
           </span>
@@ -152,7 +152,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                 <span
                   key={i}
                   title={w.tip || undefined}
-                  className={`py-1 px-2.5 text-sm font-bold inline-flex items-center gap-1 transition-transform duration-100 border-2 ${
+                  className={`py-1 px-2.5 text-sm font-bold inline-flex items-center gap-1 transition-transform duration-100 border ${
                     WORD_SCORE_STYLES[w.score] ?? "text-text-secondary bg-surface-alt border-border"
                   } ${w.tip ? "cursor-help" : "cursor-default"}`}
                 >
@@ -171,7 +171,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                 .map((w, i) => (
                   <div
                     key={i}
-                    className="py-2 px-3 bg-surface-alt border-2 border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
+                    className="py-2 px-3 bg-surface-alt border border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
                   >
                     <span
                       className={`font-extrabold shrink-0 ${
@@ -196,15 +196,15 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       )}
 
       {/* Transcript comparison */}
-      <div className="py-3 px-3.5 bg-surface-alt border-2 border-border">
-        <span className="font-mono text-[10px] font-bold text-text-muted uppercase tracking-[0.15em] flex items-center gap-1 mb-1.5">
+      <div className="py-3 px-3.5 bg-surface-alt border border-border">
+        <span className="text-[10px] font-semibold text-text-muted uppercase tracking-[0.12em] flex items-center gap-1 mb-1.5">
           <Target size={12} />
           Câu mẫu
         </span>
         <span className="text-[13px] text-text-primary block mb-2.5 leading-normal">
           {referenceText}
         </span>
-        <span className="font-mono text-[10px] font-bold text-text-muted uppercase tracking-[0.15em] flex items-center gap-1 mb-1.5">
+        <span className="text-[10px] font-semibold text-text-muted uppercase tracking-[0.12em] flex items-center gap-1 mb-1.5">
           <Mic size={12} />
           Bạn đã nói
         </span>

@@ -103,7 +103,7 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
               </div>
               <div className="text-xs text-text-muted">{s.pool} questions</div>
               <button
-                className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+                className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
                 onClick={() => startDrill(s.skill)}
               >
                 Drill

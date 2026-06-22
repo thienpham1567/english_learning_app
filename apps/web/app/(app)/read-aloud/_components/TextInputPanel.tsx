@@ -44,11 +44,11 @@ export function TextInputPanel({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="read-aloud-panel bg-surface border-2 border-border flex flex-col relative p-5 gap-4 shadow-[4px_4px_0_var(--shadow-color)]"
+      className="bg-surface border border-border rounded-2xl flex flex-col relative p-5 gap-4 shadow-sm"
     >
       {/* Header Actions */}
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <span className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted flex items-center gap-1.5">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted flex items-center gap-1.5">
           <FileText size={13} className="text-accent" />
           Đoạn văn tiếng Anh
         </span>
@@ -73,13 +73,13 @@ export function TextInputPanel({
             "Paste or enter an English passage here to listen...\n\nClick on sample passages below for a quick start."
           }
           maxLength={MAX_CHARS}
-          className="read-aloud-textarea w-full h-[320px] text-base font-body leading-[1.75] outline-none p-4 border-2 border-border bg-surface-alt text-ink focus:border-accent transition-colors"
+          className="w-full h-[320px] text-base leading-[1.75] outline-none p-4 border border-border rounded-xl bg-surface-alt text-ink focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all duration-200"
           style={{ resize: "vertical" }}
         />
       </div>
 
       {/* Text Stats */}
-      <div className="read-aloud-text-stats flex items-center justify-between px-1 flex-wrap gap-2">
+      <div className="flex items-center justify-between px-1 flex-wrap gap-2">
         <div className="flex gap-4">
           <Stat label="Words" value={wordCount.toLocaleString()} />
           <Stat
@@ -88,9 +88,9 @@ export function TextInputPanel({
           />
         </div>
         {wordCount > 0 && (
-          <div className="flex items-center gap-1.5 bg-accent-light border-2 border-border py-1 px-2.5 shadow-[2px_2px_0_var(--shadow-color)]">
-            <Timer size={12} className="text-accent-active" />
-            <span className="font-mono text-[11px] text-text-secondary font-bold uppercase tracking-wide">
+          <div className="flex items-center gap-1.5 bg-accent/5 border border-accent/15 py-1 px-2.5 rounded-full">
+            <Timer size={12} className="text-accent" />
+            <span className="text-[11px] text-text-secondary font-medium tabular-nums">
               ~{estimatedMinutes} phút
             </span>
           </div>
@@ -117,15 +117,15 @@ function ToolButton({
 }) {
   return (
     <m.button
-      whileHover={{ x: -1, y: -1 }}
-      whileTap={{ x: 0, y: 0 }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className={`flex items-center gap-1.5 py-1.5 px-3 font-bold cursor-pointer font-mono text-[11.5px] uppercase tracking-wide border-2 border-border transition-all duration-150 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none ${
+      className={`flex items-center gap-1.5 py-1.5 px-3 font-semibold cursor-pointer text-[11.5px] rounded-lg border border-border transition-all duration-200 shadow-sm hover:shadow ${
         active
           ? "bg-accent text-text-on-accent"
           : danger
-            ? "bg-surface text-error"
-            : "bg-surface text-text-secondary hover:text-ink"
+            ? "bg-surface text-error hover:bg-error/5"
+            : "bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover"
       }`}
     >
       {icon}
@@ -138,7 +138,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center gap-1 font-mono">
       <span className="text-text-muted text-[11px] uppercase tracking-wide">{label}</span>
-      <span className="font-bold text-text-secondary text-[12px]">{value}</span>
+      <span className="font-semibold text-text-secondary text-[12px]">{value}</span>
     </div>
   );
 }

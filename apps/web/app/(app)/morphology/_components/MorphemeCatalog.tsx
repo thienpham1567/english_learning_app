@@ -21,7 +21,7 @@ export function MorphemeCatalog({ progress, onSelect }: MorphemeCatalogProps) {
     <div className="flex flex-col gap-6">
       {MORPHEME_TYPE_ORDER.map((type) => (
         <div key={type}>
-          <h3 className="text-[12.5px] font-black text-text-secondary uppercase tracking-wider mb-3">
+          <h3 className="text-[12.5px] font-bold text-text-secondary uppercase tracking-wider mb-3">
             {MORPHEME_TYPE_LABELS[type]}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -34,12 +34,12 @@ export function MorphemeCatalog({ progress, onSelect }: MorphemeCatalogProps) {
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => onSelect(item)}
-                  className={`text-left rounded-xl border-2 p-4 bg-surface cursor-pointer transition-colors shadow-sm hover:border-accent ${
+                  className={`text-left rounded-xl border p-4 bg-surface cursor-pointer transition-colors shadow-sm hover:border-accent ${
                     done ? "border-success/40" : "border-border"
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-black text-accent-active text-lg font-mono">
+                    <span className="font-bold text-accent-active text-lg font-mono">
                       {item.morpheme}
                     </span>
                     {done && <CircleCheckBig size={16} className="text-success" />}

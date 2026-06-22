@@ -86,11 +86,11 @@ function StatCard({
       <Card
         size="sm"
         shadowSize="sm"
-        className={cn("flex-row items-center gap-3.5 cursor-default bg-surface border-2", c.border)}
+        className={cn("flex-row items-center gap-3.5 cursor-default bg-surface border", c.border)}
       >
         <span
           className={cn(
-            "w-10 h-10 rounded-xl grid place-items-center border-2 shrink-0",
+            "w-10 h-10 rounded-xl grid place-items-center border shrink-0",
             c.iconBg,
             c.iconText,
             c.border,
@@ -99,7 +99,7 @@ function StatCard({
           {icon}
         </span>
         <div>
-          <div className={cn("text-[28px] font-black leading-none font-display", c.text)}>
+          <div className={cn("text-[28px] font-bold leading-none font-display", c.text)}>
             {value}
           </div>
           <div className="text-[10px] text-text-muted font-bold mt-0.5 uppercase tracking-wide">
@@ -196,11 +196,11 @@ export function OverviewTab({
             bgType="accent-light"
             className="flex-row items-center gap-4"
           >
-            <div className="w-12 h-12 rounded-xl bg-accent/10 border-2 border-accent/15 grid place-items-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/15 grid place-items-center shrink-0">
               <Brain className="h-6 w-6 text-accent" />
             </div>
             <div className="text-left">
-              <div className="text-base font-black text-ink font-display">
+              <div className="text-base font-bold text-ink font-display">
                 Review Now — {dueCount} errors to recall
               </div>
               <div className="text-xs text-text-muted font-medium mt-0.5">
@@ -229,7 +229,7 @@ export function OverviewTab({
                   transition={{ delay: i * 0.05 }}
                   className="flex items-center gap-3"
                 >
-                  <span className="shrink-0 w-8 h-8 rounded-lg bg-accent/8 border-2 border-accent/15 grid place-items-center">
+                  <span className="shrink-0 w-8 h-8 rounded-lg bg-accent/8 border border-accent/15 grid place-items-center">
                     {(() => {
                       const Icon = MODULE_ICONS[mod] || FileText;
                       return <Icon className="h-4 w-4 text-accent" />;
@@ -246,7 +246,7 @@ export function OverviewTab({
                       className="h-full rounded-full bg-gradient-to-r from-accent to-accent-hover"
                     />
                   </div>
-                  <span className="text-xs font-black text-ink w-8 text-right tabular-nums">
+                  <span className="text-xs font-bold text-ink w-8 text-right tabular-nums">
                     {count}
                   </span>
                 </m.div>

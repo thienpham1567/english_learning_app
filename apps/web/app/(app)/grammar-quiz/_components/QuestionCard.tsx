@@ -42,7 +42,7 @@ export function QuestionCard({
             Question {questionNumber} / {total}
           </span>
           <span
-            className="rounded-md bg-surface-alt border-2 border-border font-bold text-accent"
+            className="rounded-md bg-surface-alt border border-border font-bold text-accent"
             style={{ padding: "3px 8px", fontSize: 11.5 }}
           >
             {question.grammarTopic}
@@ -78,7 +78,7 @@ export function QuestionCard({
           style={{ marginBottom: 14 }}
         >
           <span
-            className="items-center gap-1.5 rounded-lg font-black"
+            className="items-center gap-1.5 rounded-lg font-bold"
             style={{
               display: "inline-flex",
               background: "var(--fire)",
@@ -247,7 +247,7 @@ export function QuestionCard({
                   >
                     <Lightbulb /> Explanation Detail
                   </span>
-                  <div className="flex overflow-hidden rounded-md border-2 border-border">
+                  <div className="flex overflow-hidden rounded-md border border-border">
                     {(["vi", "en"] as const).map((l) => (
                       <button
                         key={l}
@@ -306,7 +306,7 @@ export function QuestionCard({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           onClick={onNext}
-          className="mt-4 w-full rounded-xl font-extrabold border-2 border-border cursor-pointer flex items-center justify-center gap-1.5"
+          className="mt-4 w-full rounded-xl font-extrabold border border-border cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background: "var(--accent)",
             padding: "12px 0",

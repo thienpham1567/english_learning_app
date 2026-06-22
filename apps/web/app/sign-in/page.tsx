@@ -74,7 +74,7 @@ function FloatingCards() {
         <m.div
           animate={{ y: [0, -6, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border-2 border-white/10 rounded-xl shadow-2xl"
+          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
         >
           {/* Circular Progress */}
           <div className="relative w-16 h-16 shrink-0">
@@ -125,7 +125,7 @@ function FloatingCards() {
         <m.div
           animate={{ y: [0, 5, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-          className="flex flex-col gap-3 items-stretch p-5 bg-black/70 backdrop-blur-xl border-2 border-white/10 rounded-xl shadow-2xl"
+          className="flex flex-col gap-3 items-stretch p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
         >
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase text-mockup-text-muted">
@@ -158,9 +158,9 @@ function FloatingCards() {
         <m.div
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border-2 border-white/10 rounded-xl shadow-2xl"
+          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
         >
-          <div className="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-accent/12 border-2 border-accent/20 text-accent">
+          <div className="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-accent/12 border border-accent/20 text-accent">
             <Bot size={18} />
           </div>
           <div className="flex flex-col gap-1">
@@ -227,12 +227,12 @@ function SignInContent() {
             x: 1,
           }}
           transition={{ type: "spring", stiffness: 400 }}
-          className="w-11 h-11 shrink-0 grid place-items-center rounded-lg border-2 border-ink bg-accent text-ink shadow-[3px_3px_0px_var(--ink)] cursor-pointer"
+          className="w-11 h-11 shrink-0 grid place-items-center rounded-lg border border-ink bg-accent text-ink shadow-[3px_3px_0px_var(--ink)] cursor-pointer"
         >
           <LogoMark size={22} />
         </m.div>
         <div className="flex flex-col">
-          <div className="font-display text-xl font-black leading-none tracking-tight uppercase text-ink">
+          <div className="font-display text-xl font-bold leading-none tracking-tight uppercase text-ink">
             TOEIC<span className="text-accent">Master</span>
           </div>
           <div className="text-[10px] font-bold uppercase tracking-widest text-text-muted mt-0.5">
@@ -244,7 +244,7 @@ function SignInContent() {
       {/* Heading */}
       <m.h1
         variants={fadeUp}
-        className="font-display text-3xl md:text-4xl font-black leading-[1.15] tracking-tight text-ink mb-3"
+        className="font-display text-3xl md:text-4xl font-bold leading-[1.15] tracking-tight text-ink mb-3"
       >
         Your TOEIC Journey
         <br />
@@ -265,7 +265,7 @@ function SignInContent() {
             key={s.label}
             whileHover={{ y: -3, boxShadow: "3px 3px 0 var(--ink)" }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border-2 transition-transform duration-150 cursor-default"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border transition-transform duration-150 cursor-default"
             style={{
               color: s.color,
               backgroundColor: `color-mix(in srgb, ${s.color} 8%, transparent)`,
@@ -286,7 +286,7 @@ function SignInContent() {
           transition={{ type: "spring", stiffness: 400, damping: 22 }}
           onClick={handleGoogleSignIn}
           disabled={isLoading}
-          className="flex items-center justify-center gap-3 w-full h-14 text-sm font-extrabold font-body text-ink bg-card border-2 border-border rounded-xl cursor-pointer shadow transition-all duration-150 relative overflow-hidden"
+          className="flex items-center justify-center gap-3 w-full h-14 text-sm font-extrabold font-body text-ink bg-card border border-border rounded-xl cursor-pointer shadow transition-all duration-150 relative overflow-hidden"
           id="signin-google-button"
         >
           {isLoading ? (
@@ -314,7 +314,7 @@ function SignInContent() {
       {/* Trust Badges */}
       <m.div
         variants={fadeIn}
-        className="mt-6 p-4 md:p-5 bg-surface-alt border-2 border-border rounded-xl flex flex-col gap-2.5 shadow-sm"
+        className="mt-6 p-4 md:p-5 bg-surface-alt border border-border rounded-xl flex flex-col gap-2.5 shadow-sm"
       >
         <div className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-text-secondary">
           <Award size={14} className="text-accent shrink-0" />
@@ -335,7 +335,7 @@ function SignInContent() {
         <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-4 p-3.5 md:p-4 text-center text-xs md:text-sm font-bold text-error bg-error-bg border-2 border-border rounded-lg shadow-sm"
+          className="mt-4 p-3.5 md:p-4 text-center text-xs md:text-sm font-bold text-error bg-error-bg border border-border rounded-lg shadow-sm"
         >
           {error}
         </m.div>
@@ -367,7 +367,7 @@ export default function SignInPage() {
           {/* Eyebrow */}
           <m.div
             variants={fadeUp}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold tracking-wide text-accent bg-accent/10 border-2 border-accent/20 rounded-lg mb-7"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold tracking-wide text-accent bg-accent/10 border border-accent/20 rounded-lg mb-7"
           >
             <CheckCircle size={14} />
             <span>Trusted by 10,000+ learners</span>
@@ -375,7 +375,7 @@ export default function SignInPage() {
 
           <m.h2
             variants={fadeUp}
-            className="m-0 font-display text-[56px] font-black leading-[1.08] tracking-tight text-mockup-text"
+            className="m-0 font-display text-[56px] font-bold leading-[1.08] tracking-tight text-mockup-text"
           >
             Conquer
             <br />
@@ -426,7 +426,7 @@ export default function SignInPage() {
         <div className="grain-overlay" />
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px]" />
 
-        <div className="relative z-10 w-full max-w-[460px] bg-card border-2 border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-lg">
+        <div className="relative z-10 w-full max-w-[460px] bg-card border border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-lg">
           <Suspense fallback={<div className="text-text-muted text-center p-6">Loading...</div>}>
             <SignInContent />
           </Suspense>

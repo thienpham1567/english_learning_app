@@ -120,7 +120,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
     <div className="mx-auto w-full max-w-2xl">
       {/* Draft restore offer (AC #6) */}
       {draftOffer && (
-        <div className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-border bg-warning-bg px-4 py-3 shadow-sm">
+        <div className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border border-border bg-warning-bg px-4 py-3 shadow-sm">
           <span className="text-xs text-text-primary flex items-center gap-1.5 font-semibold">
             <PenSquare className="h-4 w-4 shrink-0 text-warning" />
             <span>You have an unfinished draft. Restore?</span>
@@ -129,14 +129,14 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             <button
               type="button"
               onClick={restoreDraft}
-              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border-2 border-border shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
+              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border border-border shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
             >
               Restore
             </button>
             <button
               type="button"
               onClick={dismissDraft}
-              className="rounded-xl border-2 border-border bg-surface px-3.5 py-1.5 text-xs font-bold text-text-secondary hover:bg-surface-hover transition cursor-pointer"
+              className="rounded-xl border border-border bg-surface px-3.5 py-1.5 text-xs font-bold text-text-secondary hover:bg-surface-hover transition cursor-pointer"
             >
               Dismiss
             </button>
@@ -145,7 +145,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       )}
 
       {/* Prompt display */}
-      <div className="rounded-xl border-2 border-border bg-bg-deep p-4">
+      <div className="rounded-xl border border-border bg-bg-deep p-4">
         <span className="text-[11px] font-semibold uppercase tracking-widest text-accent">
           {CATEGORY_LABELS[category]} · Prompt
         </span>
@@ -156,7 +156,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       {hints.length > 0 && (
         <div className="mt-3">
           <button
-            className="flex w-full items-center gap-2 rounded-lg border-2 border-border bg-warning-bg px-3 py-2 text-left text-sm font-medium text-text-primary hover:bg-warning-bg/60 transition cursor-pointer"
+            className="flex w-full items-center gap-2 rounded-lg border border-border bg-warning-bg px-3 py-2 text-left text-sm font-medium text-text-primary hover:bg-warning-bg/60 transition cursor-pointer"
             onClick={() => setShowHints(!showHints)}
           >
             <Lightbulb className="h-4 w-4 shrink-0 text-warning" />
@@ -169,7 +169,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
           </button>
 
           {showHints && (
-            <div className="mt-1.5 space-y-1.5 rounded-lg border-2 border-border bg-warning-bg px-3 py-2.5">
+            <div className="mt-1.5 space-y-1.5 rounded-lg border border-border bg-warning-bg px-3 py-2.5">
               {hints.map((hint, i) => (
                 <p key={i} className="flex gap-2 text-[13px] leading-relaxed text-text-secondary">
                   <span className="shrink-0 font-semibold text-warning">{i + 1}.</span>
@@ -184,7 +184,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       {/* Editor */}
       <div className="relative mt-4">
         <textarea
-          className="min-h-[280px] w-full resize-y rounded-xl border-2 border-border bg-surface p-4 text-sm leading-relaxed text-ink placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 max-[720px]:min-h-[200px]"
+          className="min-h-[280px] w-full resize-y rounded-xl border border-border bg-surface p-4 text-sm leading-relaxed text-ink placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 max-[720px]:min-h-[200px]"
           placeholder="Write your response here..."
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -194,7 +194,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
         <div className="mt-2">
           <div className="flex items-center gap-3">
             {/* Progress bar */}
-            <div className="flex-1 h-1.5 rounded-full bg-bg-deep border-2 border-border/20 overflow-hidden">
+            <div className="flex-1 h-1.5 rounded-full bg-bg-deep border border-border/20 overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-300 ease-out ${progressBgClass}`}
                 style={{
@@ -237,7 +237,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             <span>Draft saved</span>
           </span>
           <button
-            className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border-2 border-border shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"
+            className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border border-border shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"
             disabled={wordCount < minWords || isSubmitting}
             onClick={handleSubmit}
           >

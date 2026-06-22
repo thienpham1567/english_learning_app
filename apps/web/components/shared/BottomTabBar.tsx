@@ -204,10 +204,10 @@ function HubCard({
       transition={{ delay: index * 0.04, type: "spring", stiffness: 400, damping: 28 }}
       whileTap={{ scale: 0.95 }}
       onClick={() => onNavigate(item.href)}
-      className="flex flex-col items-center justify-center gap-2.5 rounded-2xl bg-surface border-2 border-border p-4 cursor-pointer shadow-sm active:shadow-none transition-shadow duration-100"
+      className="flex flex-col items-center justify-center gap-2.5 rounded-2xl bg-surface border border-border p-4 cursor-pointer shadow-sm active:shadow-none transition-shadow duration-100"
     >
       <div
-        className="w-11 h-11 rounded-xl border-2 border-border grid place-items-center shadow-sm"
+        className="w-11 h-11 rounded-xl border border-border grid place-items-center shadow-sm"
         style={{
           background: `color-mix(in srgb, ${item.accent ?? "var(--accent)"} 10%, var(--surface))`,
           borderColor: `color-mix(in srgb, ${item.accent ?? "var(--accent)"} 25%, var(--border))`,
@@ -216,7 +216,7 @@ function HubCard({
       >
         {item.icon}
       </div>
-      <span className="text-[12px] font-black text-ink leading-tight text-center">
+      <span className="text-[12px] font-bold text-ink leading-tight text-center">
         {item.label}
       </span>
     </m.button>
@@ -279,7 +279,7 @@ export function BottomTabBar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 40 }}
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              className="fixed bottom-[72px] left-3 right-3 z-[21] bg-bg rounded-2xl border-2 border-border shadow-lg overflow-hidden"
+              className="fixed bottom-[72px] left-3 right-3 z-[21] bg-bg rounded-2xl border border-border shadow-lg overflow-hidden"
               style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
             >
               {/* Hub header */}
@@ -290,7 +290,7 @@ export function BottomTabBar() {
                 <button
                   type="button"
                   onClick={() => setActiveHub(null)}
-                  className="w-7 h-7 rounded-lg border-2 border-border bg-surface text-text-muted grid place-items-center cursor-pointer hover:bg-surface-hover hover:text-ink transition-colors"
+                  className="w-7 h-7 rounded-lg border border-border bg-surface text-text-muted grid place-items-center cursor-pointer hover:bg-surface-hover hover:text-ink transition-colors"
                 >
                   <X size={13} />
                 </button>

@@ -115,15 +115,15 @@ export function DictionaryResultCard({
   if (isLoading) {
     return (
       <div className="dictionary-result-card bg-surface min-h-[400px]">
-        <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+        <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
           <span className="inline-block h-2 w-2 animate-pulse bg-accent" />
           Đang tra cứu…
         </div>
         <div className="mt-5 flex flex-col gap-4">
-          <div className="h-9 w-3/5 border-2 border-border bg-bg-deep animate-pulse" />
+          <div className="h-9 w-3/5 border border-border bg-bg-deep animate-pulse" />
           <div className="flex gap-2">
-            <div className="h-6 w-20 border-2 border-border bg-bg-deep animate-pulse" />
-            <div className="h-6 w-14 border-2 border-border bg-bg-deep animate-pulse" />
+            <div className="h-6 w-20 border border-border bg-bg-deep animate-pulse" />
+            <div className="h-6 w-14 border border-border bg-bg-deep animate-pulse" />
           </div>
           {[1, 2, 3].map((i) => (
             <div
@@ -142,10 +142,10 @@ export function DictionaryResultCard({
     return (
       <div className="dictionary-result-card bg-surface min-h-[400px]">
         <div className="flex min-h-[360px] flex-col items-center justify-center gap-4">
-          <div className="grid h-16 w-16 place-items-center border-2 border-border bg-bg-deep text-text-muted shadow-[4px_4px_0_var(--shadow-color)]">
+          <div className="grid h-16 w-16 place-items-center border border-border bg-bg-deep text-text-muted shadow-md">
             <BookOpen className="h-7 w-7" />
           </div>
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">
             {!hasSearched ? "Nhập một từ để tra cứu" : "Không có kết quả"}
           </p>
         </div>
@@ -175,19 +175,19 @@ export function DictionaryResultCard({
           {/* Brutalist accent spine */}
           <div className="w-1.5 shrink-0 bg-accent" />
           <div className="min-w-0">
-            <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
               <span className="text-accent">◆</span>
               Từ điển
             </div>
-            <h2 className="dictionary-result-heading leading-[0.95] font-display font-black text-ink break-words m-0 mt-1">
+            <h2 className="dictionary-result-heading leading-[0.95] font-display font-bold text-ink break-words m-0 mt-1">
               {vocabulary.headword}
             </h2>
             <div className="mt-2.5 flex items-center gap-2 flex-wrap">
-              <span className="border-2 border-border bg-accent px-2.5 py-0.5 font-mono text-[11px] font-black uppercase tracking-wide text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)] whitespace-nowrap">
+              <span className="border border-border bg-accent px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-text-on-accent rounded-lg shadow-sm whitespace-nowrap">
                 {posDisplay}
               </span>
               {numberLabel && (
-                <span className="border-2 border-border bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-text-muted whitespace-nowrap">
+                <span className="border border-border bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-text-muted whitespace-nowrap">
                   {numberLabel}
                 </span>
               )}
@@ -198,7 +198,7 @@ export function DictionaryResultCard({
                     "text-text-secondary border-border bg-bg-deep";
                   return (
                     <span
-                      className={`border-2 px-2.5 py-0.5 font-mono text-[11px] font-black uppercase tracking-wide ${badgeClass}`}
+                      className={`border px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide ${badgeClass}`}
                     >
                       {vocabulary.level}
                     </span>
@@ -212,9 +212,9 @@ export function DictionaryResultCard({
                     ? `${vocabulary.register} — ${info.tooltipEn}`
                     : vocabulary.register;
                   return (
-                    <span className="relative group border-2 border-border bg-accent-light px-2.5 py-0.5 font-mono text-[11px] font-bold text-text-primary cursor-help">
+                    <span className="relative group border border-border bg-accent-light px-2.5 py-0.5 text-[11px] font-semibold text-text-primary rounded-lg cursor-help">
                       {display}
-                      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 border-2 border-border bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-[3px_3px_0_var(--shadow-color)]">
+                      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 border border-border bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow">
                         {tooltip}
                       </span>
                     </span>
@@ -227,7 +227,7 @@ export function DictionaryResultCard({
         {saved != null && onToggleSaved && (
           <button
             onClick={onToggleSaved}
-            className={`grid w-9 h-9 shrink-0 place-items-center border-2 border-border cursor-pointer shadow-[2px_2px_0_var(--shadow-color)] transition-all duration-150 hover:-translate-x-px hover:-translate-y-px hover:shadow-[3px_3px_0_var(--shadow-color)] active:translate-x-0 active:translate-y-0 active:shadow-none ${
+            className={`grid w-9 h-9 shrink-0 place-items-center border border-border cursor-pointer shadow-sm transition-all duration-150 hover:-translate-x-px hover:-translate-y-px hover:shadow active:translate-x-0 active:translate-y-0 active:shadow-none ${
               saved ? "bg-accent text-text-on-accent" : "bg-surface text-text-muted hover:text-ink"
             }`}
             aria-label={saved ? "Remove word from saved" : "Save this word"}
@@ -241,8 +241,8 @@ export function DictionaryResultCard({
       {hasDualPhonetics ? (
         <div className="anim-fade-in mt-4 flex flex-wrap items-center gap-2.5">
           {vocabulary.phoneticsUs && (
-            <div className="flex items-stretch border-2 border-border bg-bg-deep pr-1.5 shadow-[2px_2px_0_var(--shadow-color)]">
-              <span className="grid place-items-center bg-ink px-2 text-[10px] font-black text-bg">
+            <div className="flex items-stretch border border-border bg-bg-deep pr-1.5 shadow-sm">
+              <span className="grid place-items-center bg-ink px-2 text-[10px] font-bold text-bg">
                 US
               </span>
               <span className="px-2.5 py-1 text-sm font-mono text-ink font-bold">
@@ -252,8 +252,8 @@ export function DictionaryResultCard({
             </div>
           )}
           {vocabulary.phoneticsUk && (
-            <div className="flex items-stretch border-2 border-border bg-bg-deep pr-1.5 shadow-[2px_2px_0_var(--shadow-color)]">
-              <span className="grid place-items-center bg-ink px-2 text-[10px] font-black text-bg">
+            <div className="flex items-stretch border border-border bg-bg-deep pr-1.5 shadow-sm">
+              <span className="grid place-items-center bg-ink px-2 text-[10px] font-bold text-bg">
                 UK
               </span>
               <span className="px-2.5 py-1 text-sm font-mono text-ink font-bold">
@@ -264,7 +264,7 @@ export function DictionaryResultCard({
           )}
         </div>
       ) : vocabulary.phonetic ? (
-        <span className="anim-fade-in mt-4 inline-block border-2 border-border bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-accent-active">
+        <span className="anim-fade-in mt-4 inline-block border border-border bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-accent-active">
           {vocabulary.phonetic}
         </span>
       ) : null}
@@ -284,7 +284,7 @@ export function DictionaryResultCard({
       {/* ── Sense tabs ── */}
       <div className="mt-6">
         <div className="mb-3 flex items-center gap-2">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
             Nghĩa · {vocabulary.senses.length}
           </span>
           <span className="h-0.5 flex-1 bg-border" />
@@ -304,10 +304,10 @@ export function DictionaryResultCard({
               aria-selected={activeKey === sense.id}
               tabIndex={activeKey === sense.id ? 0 : -1}
               onClick={() => setActiveKey(sense.id)}
-              className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-bold border-2 transition-all duration-150 ${
+              className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-bold border transition-all duration-150 ${
                 activeKey === sense.id
-                  ? "bg-accent border-border text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)] cursor-default"
-                  : "bg-surface border-border text-text-secondary hover:-translate-x-px hover:-translate-y-px hover:text-ink hover:shadow-[2px_2px_0_var(--shadow-color)] cursor-pointer"
+                  ? "bg-accent border-border text-text-on-accent shadow-sm cursor-default"
+                  : "bg-surface border-border text-text-secondary hover:-translate-x-px hover:-translate-y-px hover:text-ink hover:shadow-sm cursor-pointer"
               }`}
             >
               <span className="font-mono text-[10px] opacity-60">

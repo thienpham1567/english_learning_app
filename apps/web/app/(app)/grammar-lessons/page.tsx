@@ -170,16 +170,15 @@ export default function GrammarLessonsPage() {
                 <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
                   {/* Title block */}
                   <div className="min-w-0">
-                    <div className="mb-2 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-text-muted">
-                      <span className="inline-block h-2 w-2 rotate-45 bg-accent" />
+                    <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
                       TOEIC · Chương trình Ngữ pháp
                     </div>
-                    <h1 className="m-0 font-display text-[clamp(2.4rem,6vw,3.6rem)] font-black uppercase leading-[0.92] tracking-tight text-ink">
+                    <h1 className="m-0 font-display text-[clamp(2.4rem,6vw,3.6rem)] font-bold uppercase leading-[0.92] tracking-tight text-ink">
                       Lộ trình
                       <br />
                       <span className="relative inline-block">
-                        Ngữ pháp
-                        <span className="absolute -bottom-1 left-0 h-2 w-full bg-accent/60" />
+                        <span className="text-accent">Ngữ pháp</span>
                       </span>
                     </h1>
                     <p className="mt-3 max-w-md font-medium leading-snug text-text-secondary">
@@ -189,20 +188,20 @@ export default function GrammarLessonsPage() {
                   </div>
 
                   {/* Giant completion figure */}
-                  <div className="relative shrink-0 border-2 border-border bg-surface px-6 py-4 shadow-[5px_5px_0_var(--shadow-color)]">
-                    <div className="absolute -right-2 -top-2 h-4 w-4 border-2 border-border bg-accent" />
-                    <div className="font-display text-[clamp(3rem,9vw,5rem)] font-black leading-[0.85] tabular-nums text-ink">
+                  <div className="relative shrink-0 border border-border bg-surface px-6 py-4 rounded-2xl shadow-md">
+                    <div className="absolute -right-1.5 -top-1.5 h-3 w-3 rounded-full bg-accent shadow-sm" />
+                    <div className="font-display text-[clamp(3rem,9vw,5rem)] font-bold leading-[0.85] tabular-nums text-ink">
                       {progressPct}
                       <span className="text-accent">%</span>
                     </div>
-                    <div className="mt-1 text-right font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-text-muted">
+                    <div className="mt-1 text-right text-[10px] font-semibold uppercase tracking-[0.18em] text-text-muted">
                       Hoàn thành
                     </div>
                   </div>
                 </div>
 
                 {/* Spec strip */}
-                <div className="mt-6 grid grid-cols-2 divide-y-2 divide-border border-2 border-border bg-surface shadow-[4px_4px_0_var(--shadow-color)] sm:grid-cols-4 sm:divide-x-2 sm:divide-y-0">
+                <div className="mt-6 grid grid-cols-2 divide-y divide-border border border-border bg-surface rounded-2xl shadow-sm sm:grid-cols-4 sm:divide-x sm:divide-y-0">
                   <SpecCell
                     icon={<BookOpen size={15} />}
                     label="Tổng bài"
@@ -232,12 +231,12 @@ export default function GrammarLessonsPage() {
                 </div>
 
                 {/* Full-width progress rule */}
-                <div className="relative mt-4 h-3.5 w-full border-2 border-border bg-surface">
+                <div className="relative mt-4 h-2.5 w-full rounded-full border border-border bg-surface overflow-hidden">
                   <m.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPct}%` }}
                     transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.2 }}
-                    className="absolute inset-y-0 left-0 bg-accent"
+                    className="absolute inset-y-0 left-0 bg-accent rounded-full"
                     style={{
                       backgroundImage:
                         "repeating-linear-gradient(45deg,transparent,transparent 7px,color-mix(in srgb,var(--shadow-color) 14%,transparent) 7px,color-mix(in srgb,var(--shadow-color) 14%,transparent) 9px)",
@@ -247,7 +246,7 @@ export default function GrammarLessonsPage() {
               </m.header>
 
               {progressError && (
-                <div className="flex items-center gap-2.5 border-2 border-warning/30 bg-warning/10 px-4 py-3 font-mono text-xs font-bold text-warning">
+                <div className="flex items-center gap-2.5 border border-warning/20 bg-warning/5 px-4 py-3 rounded-xl text-xs font-semibold text-warning">
                   <AlertTriangle size={14} /> {progressError}
                 </div>
               )}
@@ -259,8 +258,8 @@ export default function GrammarLessonsPage() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  whileHover={{ x: -2, y: -2 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() =>
                     setActiveTopic({
                       id: recommendedTopic.id,
@@ -268,11 +267,11 @@ export default function GrammarLessonsPage() {
                       level: recommendedTopic.level,
                     })
                   }
-                  className="group relative flex w-full items-stretch overflow-hidden border-2 border-border bg-accent text-left shadow-[5px_5px_0_var(--shadow-color)] transition-shadow hover:shadow-[7px_7px_0_var(--shadow-color)]"
+                  className="group relative flex w-full items-stretch overflow-hidden rounded-2xl border border-border bg-accent text-left shadow-md transition-shadow hover:shadow-lg"
                 >
                   {/* Ticket stub */}
-                  <div className="relative flex shrink-0 items-center border-r-2 border-dashed border-black/30 px-4 sm:px-6">
-                    <span className="font-display text-2xl font-black uppercase tracking-tight text-black [writing-mode:vertical-rl] rotate-180 sm:text-3xl">
+                  <div className="relative flex shrink-0 items-center border-r border-dashed border-black/20 px-4 sm:px-6">
+                    <span className="font-display text-2xl font-bold uppercase tracking-tight text-black [writing-mode:vertical-rl] rotate-180 sm:text-3xl">
                       Next
                     </span>
                   </div>
@@ -282,18 +281,18 @@ export default function GrammarLessonsPage() {
 
                   <div className="flex flex-1 items-center gap-4 px-5 py-5">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.22em] text-black/70">
+                      <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-black/60">
                         <Star size={11} className="fill-current" />
                         Bài tiếp theo nên học
                       </div>
-                      <div className="mt-1 font-display text-xl font-black leading-tight text-black sm:text-2xl">
+                      <div className="mt-1 font-display text-xl font-bold leading-tight text-black sm:text-2xl">
                         {recommendedTopic.title}
                       </div>
-                      <div className="mt-1 font-mono text-[11px] font-bold text-black/65">
+                      <div className="mt-1 text-[11px] font-medium text-black/55">
                         Level {recommendedTopic.level} · Bấm để bắt đầu ngay
                       </div>
                     </div>
-                    <div className="grid h-11 w-11 shrink-0 place-items-center border-2 border-black bg-surface text-ink shadow-[3px_3px_0_rgba(0,0,0,0.45)] transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">
+                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-black/20 bg-surface text-ink shadow-sm transition-transform group-hover:scale-105">
                       <ArrowUpRight size={20} />
                     </div>
                   </div>
@@ -308,11 +307,11 @@ export default function GrammarLessonsPage() {
               >
                 <div className="mb-5 flex items-center gap-3">
                   <Zap className="h-5 w-5 text-accent" />
-                  <h2 className="m-0 font-display text-lg font-black uppercase tracking-tight text-ink">
+                  <h2 className="m-0 font-display text-lg font-bold uppercase tracking-tight text-ink">
                     Chương trình học
                   </h2>
                   <div className="h-0.5 flex-1 bg-border" />
-                  <span className="border-2 border-border bg-surface px-2.5 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-ink shadow-[2px_2px_0_var(--shadow-color)]">
+                  <span className="border border-border bg-surface px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider text-ink shadow-sm">
                     {tabStats.totalTopics} bài
                   </span>
                 </div>
@@ -334,7 +333,7 @@ export default function GrammarLessonsPage() {
               >
                 <div className="flex items-center gap-3">
                   <FileText className="h-4 w-4 text-text-muted" />
-                  <h2 className="m-0 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-text-muted">
+                  <h2 className="m-0 text-[11px] font-semibold uppercase tracking-[0.15em] text-text-muted">
                     Phụ lục & Công cụ
                   </h2>
                   <div className="h-0.5 flex-1 bg-border" />
@@ -355,9 +354,9 @@ export default function GrammarLessonsPage() {
                   />
                 </div>
 
-                <Card shadowSize="md" className="rounded-none border-2 border-border">
-                  <div className="mb-4 flex items-center gap-2 font-display text-base font-black text-ink">
-                    <span className="grid h-7 w-7 place-items-center border-2 border-border bg-accent text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)]">
+                <Card shadowSize="sm" className="rounded-2xl border border-border">
+                  <div className="mb-4 flex items-center gap-2 font-display text-base font-bold text-ink">
+                    <span className="grid h-7 w-7 place-items-center rounded-lg border border-border bg-accent text-text-on-accent shadow-sm">
                       <Star size={14} className="fill-current" />
                     </span>
                     Chiến lược từ người đạt 900 L&R
@@ -366,13 +365,13 @@ export default function GrammarLessonsPage() {
                     {STRATEGY_TIPS.map((tip, i) => (
                       <div
                         key={tip.title}
-                        className="relative border-2 border-border bg-surface-alt p-4"
+                        className="relative border border-border bg-surface-alt rounded-xl p-4"
                       >
-                        <span className="absolute right-2 top-2 font-mono text-[10px] font-black text-text-muted/50">
+                        <span className="absolute right-2 top-2 text-[10px] font-medium text-text-muted/40">
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         <tip.icon className="mb-2 h-5 w-5 text-accent-active" />
-                        <div className="mb-1 font-display text-[13.5px] font-black text-ink">
+                        <div className="mb-1 font-display text-[13.5px] font-bold text-ink">
                           {tip.title}
                         </div>
                         <div className="text-xs font-medium leading-normal text-text-secondary">
@@ -410,17 +409,17 @@ function SpecCell({
   return (
     <div className="flex items-center gap-3 px-4 py-3.5">
       <span
-        className={`grid h-8 w-8 shrink-0 place-items-center border-2 border-border bg-bg-deep ${valueColor}`}
+        className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-bg-deep ${valueColor}`}
       >
         {icon}
       </span>
       <div className="min-w-0">
-        <div className="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-text-muted">
+        <div className="text-[9px] font-semibold uppercase tracking-[0.12em] text-text-muted">
           {label}
         </div>
         <div className="flex items-baseline gap-1">
           <span
-            className={`font-display text-xl font-black leading-none tabular-nums ${valueColor}`}
+            className={`font-display text-xl font-bold leading-none tabular-nums ${valueColor}`}
           >
             {value}
           </span>

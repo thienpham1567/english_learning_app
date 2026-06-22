@@ -25,12 +25,12 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className={`rounded-lg p-6 text-center border-2 border-border shadow ${
+        className={`rounded-lg p-6 text-center border border-border shadow ${
           isGood ? "bg-success-bg" : "bg-error-bg"
         }`}
       >
         <div
-          className={`text-5xl font-black font-mono leading-none ${
+          className={`text-5xl font-bold font-mono leading-none ${
             isGood ? "text-[var(--success)]" : "text-[var(--error)]"
           }`}
         >
@@ -39,7 +39,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
         <div className="text-base font-bold mt-2 text-text-primary">
           {result.correct}/{result.total} correct answers
         </div>
-        <div className="inline-flex items-center gap-1.5 mt-3 py-1.5 px-3.5 rounded-lg text-accent text-[13px] font-bold bg-accent-muted border-2 border-border shadow-sm">
+        <div className="inline-flex items-center gap-1.5 mt-3 py-1.5 px-3.5 rounded-lg text-accent text-[13px] font-bold bg-accent-muted border border-border shadow-sm">
           <Trophy size={14} /> +{result.xpEarned} XP
         </div>
         {scriptRevealed && (
@@ -61,7 +61,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 30 }}
-              className={`bg-surface border-2 border-border rounded-lg p-3.5 ${
+              className={`bg-surface border border-border rounded-lg p-3.5 ${
                 r.correct
                   ? "border-l-4 border-l-[var(--success)]"
                   : "border-l-4 border-l-[var(--error)]"
@@ -110,7 +110,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
       {/* New Exercise Button */}
       <Button
         onClick={onNewExercise}
-        className="w-full h-12 text-[15px] font-black flex items-center justify-center gap-2.5"
+        className="w-full h-12 text-[15px] font-bold flex items-center justify-center gap-2.5"
       >
         <RefreshCw size={16} /> New Exercise
       </Button>

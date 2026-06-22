@@ -84,7 +84,7 @@ export default function IpaChartPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search phoneme, word, or tip..."
-            className="pl-8 pr-8 py-2 text-xs font-bold rounded-xl border-2 border-border bg-surface text-ink placeholder-text-muted focus:border-accent/40 focus:ring-1 focus:ring-accent/20 outline-none transition-all w-[220px]"
+            className="pl-8 pr-8 py-2 text-xs font-bold rounded-xl border border-border bg-surface text-ink placeholder-text-muted focus:border-accent/40 focus:ring-1 focus:ring-accent/20 outline-none transition-all w-[220px]"
           />
           {search && (
             <button
@@ -109,7 +109,7 @@ export default function IpaChartPage() {
                 key={key}
                 onClick={() => setTab(key)}
                 whileTap={{ scale: 0.97 }}
-                className={`border-2 cursor-pointer text-[13px] font-black flex items-center gap-2 py-2 px-4.5 rounded-xl transition-all duration-100 ${
+                className={`border cursor-pointer text-[13px] font-bold flex items-center gap-2 py-2 px-4.5 rounded-xl transition-all duration-100 ${
                   isActive
                     ? "bg-accent text-text-on-accent border-border shadow-sm"
                     : "bg-transparent text-text-secondary border-transparent hover:text-text-primary hover:bg-surface-hover"
@@ -146,7 +146,7 @@ export default function IpaChartPage() {
                   key={value}
                   onClick={() => setAccent(value)}
                   whileTap={{ scale: 0.95 }}
-                  className={`rounded-lg border-2 cursor-pointer text-xs font-black py-1.5 px-3.5 transition-all duration-100 ${
+                  className={`rounded-lg border cursor-pointer text-xs font-bold py-1.5 px-3.5 transition-all duration-100 ${
                     isActive
                       ? "bg-accent text-text-on-accent border-border shadow-sm"
                       : "bg-transparent text-text-secondary border-transparent hover:text-text-primary"
@@ -253,7 +253,7 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   return (
     <span className="flex items-center gap-1.5 text-text-secondary font-bold text-[11px]">
       <span
-        className="w-2.5 h-2.5 rounded-full shrink-0 border-2 border-border shadow-sm"
+        className="w-2.5 h-2.5 rounded-full shrink-0 border border-border shadow-sm"
         style={{ background: color }}
       />
       {label}
@@ -274,11 +274,11 @@ function SectionHeader({
   return (
     <div className="flex items-center gap-3 mb-4">
       <div className="w-1.5 h-5 rounded-sm shrink-0" style={{ background: color }} />
-      <h3 className="m-0 font-black text-ink font-display text-sm uppercase tracking-wide">
+      <h3 className="m-0 font-bold text-ink font-display text-sm uppercase tracking-wide">
         {label}
       </h3>
       <span
-        className="text-[10px] font-extrabold rounded-lg py-0.5 px-2.5 border-2"
+        className="text-[10px] font-extrabold rounded-lg py-0.5 px-2.5 border"
         style={{
           background: `color-mix(in srgb, ${color} 8%, var(--surface-alt))`,
           color: color,

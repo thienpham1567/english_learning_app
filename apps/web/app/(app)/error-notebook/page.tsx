@@ -63,7 +63,7 @@ export default function ErrorNotebookPage() {
 
       {/* ─── Tab switcher ─── */}
       <div className="relative z-[1] shrink-0 px-5 pt-3 pb-2 max-w-6xl mx-auto w-full">
-        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm max-w-5xl overflow-x-auto scrollbar-none">
+        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border border-border shadow-sm max-w-5xl overflow-x-auto scrollbar-none">
           {TABS.map((t) => (
             <m.button
               key={t.key}
@@ -71,7 +71,7 @@ export default function ErrorNotebookPage() {
               whileTap={{ scale: 0.97 }}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-[12.5px] cursor-pointer transition-all duration-150 min-w-0 ${
                 tab === t.key
-                  ? "bg-accent text-text-on-accent font-black border-none shadow-sm"
+                  ? "bg-accent text-text-on-accent font-bold border-none shadow-sm"
                   : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
               }`}
             >
@@ -79,7 +79,7 @@ export default function ErrorNotebookPage() {
               <span className="truncate">{t.label}</span>
               {/* Due badge on Review tab */}
               {t.key === "review" && dueCount > 0 && (
-                <span className="text-[9px] font-black px-1.5 rounded-lg bg-error text-white min-w-[16px] text-center leading-4">
+                <span className="text-[9px] font-bold px-1.5 rounded-lg bg-error text-white min-w-[16px] text-center leading-4">
                   {dueCount > 99 ? "99+" : dueCount}
                 </span>
               )}

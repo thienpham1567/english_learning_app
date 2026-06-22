@@ -184,7 +184,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
             {sense.patterns.map((pattern) => (
               <span
                 key={pattern}
-                className="font-mono text-xs bg-bg-deep border-2 border-border rounded px-2.5 py-1 text-text-secondary whitespace-nowrap"
+                className="font-mono text-xs bg-bg-deep border border-border rounded px-2.5 py-1 text-text-secondary whitespace-nowrap"
               >
                 {pattern}
               </span>
@@ -217,7 +217,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               type="button"
               aria-expanded={isCollocationsOpen}
               onClick={() => setIsCollocationsOpen((open) => !open)}
-              className="inline-flex items-center rounded-lg border-2 border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
+              className="inline-flex items-center rounded-lg border border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
             >
               {isCollocationsOpen ? "Show Less" : `Show More (${collocations.length - 3})`}
             </button>
@@ -237,7 +237,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
             <h3 className={SENSE_HEADER_STYLE}>
               <BookOpen className="h-3 w-3" />
               Synonyms & Antonyms
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border-2 border-accent/20 normal-case tracking-normal">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border border-accent/20 normal-case tracking-normal">
                 {synonyms.length + antonyms.length}
               </span>
             </h3>
@@ -259,7 +259,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                         key={word}
                         type="button"
                         onClick={() => onSearch?.(word)}
-                        className="rounded-lg bg-success/5 px-3 py-1 text-[13px] font-bold text-success border-2 border-success/20 cursor-pointer transition-all duration-150 hover:bg-success/15 hover:border-success/40"
+                        className="rounded-lg bg-success/5 px-3 py-1 text-[13px] font-bold text-success border border-success/20 cursor-pointer transition-all duration-150 hover:bg-success/15 hover:border-success/40"
                       >
                         {word}
                       </button>
@@ -279,7 +279,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                         key={word}
                         type="button"
                         onClick={() => onSearch?.(word)}
-                        className="rounded-lg bg-warning/5 px-3 py-1 text-[13px] font-bold text-warning border-2 border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
+                        className="rounded-lg bg-warning/5 px-3 py-1 text-[13px] font-bold text-warning border border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
                       >
                         {word}
                       </button>
@@ -304,7 +304,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                 key={expr}
                 type="button"
                 onClick={() => onSearch?.(expr)}
-                className="rounded-lg border-2 border-border bg-surface px-3.5 py-1 text-[13px] font-bold font-display text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
+                className="rounded-lg border border-border bg-surface px-3.5 py-1 text-[13px] font-bold font-display text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
               >
                 {expr}
               </button>
@@ -314,7 +314,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       )}
 
       {sense.commonMistakesVi.length > 0 && (
-        <section className="flex flex-col gap-2.5 rounded-lg bg-warning-bg border-2 border-warning p-3.5 px-4">
+        <section className="flex flex-col gap-2.5 rounded-lg bg-warning-bg border border-warning p-3.5 px-4">
           <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-warning m-0">
             <AlertTriangle className="h-3 w-3" />
             Common Mistakes

@@ -91,7 +91,7 @@ export function ScoreSummary({
       </m.div>
 
       <h2
-        className="text-2xl font-black text-text-primary font-display"
+        className="text-2xl font-bold text-text-primary font-display"
         style={{ margin: "0 0 6px" }}
       >
         Quiz Results
@@ -124,7 +124,7 @@ export function ScoreSummary({
             Accuracy Score
           </span>
           <div
-            className="font-black flex items-baseline gap-1"
+            className="font-bold flex items-baseline gap-1"
             style={{ fontSize: 26, marginTop: 2 }}
           >
             <span>{score}</span>
@@ -140,7 +140,7 @@ export function ScoreSummary({
           >
             Accuracy
           </span>
-          <div className="font-black" style={{ fontSize: 26, marginTop: 2 }}>
+          <div className="font-bold" style={{ fontSize: 26, marginTop: 2 }}>
             {pct}%
           </div>
         </div>
@@ -182,7 +182,7 @@ export function ScoreSummary({
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 + 0.2 }}
-                className="flex items-center justify-between rounded-lg border-2 border-border"
+                className="flex items-center justify-between rounded-lg border border-border"
                 style={{
                   padding: "12px 14px",
                   background: isWeak

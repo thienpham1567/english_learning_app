@@ -186,11 +186,11 @@ export async function HubWidgets() {
       {/* Daily Plan — full width on top */}
       <Card shadowSize="sm" className="p-[18px]">
         <div className="flex justify-between items-center mb-3.5">
-          <h3 className="m-0 font-black text-text-primary flex items-center gap-1.5 text-[15.5px]">
+          <h3 className="m-0 font-bold text-text-primary flex items-center gap-1.5 text-[15.5px]">
             <Calendar className="text-accent w-4.5 h-4.5" />
             <span>🎯 Recommended for Today</span>
           </h3>
-          <span className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border-2 border-border px-2 py-0.5">
+          <span className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border border-border px-2 py-0.5">
             {planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} mins estimated
           </span>
         </div>
@@ -207,10 +207,10 @@ export async function HubWidgets() {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="grid gap-3 items-center rounded-lg bg-surface-alt text-text-primary grid-cols-[auto_1fr_auto] p-3 px-3.5 border-2 border-border no-underline transition-all duration-150 hover:border-accent"
+                  className="grid gap-3 items-center rounded-lg bg-surface-alt text-text-primary grid-cols-[auto_1fr_auto] p-3 px-3.5 border border-border no-underline transition-all duration-150 hover:border-accent"
                 >
                   <span
-                    className="text-[10.5px] font-black rounded-md px-2 py-0.5 border"
+                    className="text-[10.5px] font-bold rounded-md px-2 py-0.5 border"
                     style={{
                       background: colorSet.bg,
                       color: colorSet.text,

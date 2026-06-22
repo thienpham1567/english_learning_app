@@ -100,7 +100,7 @@ export function Logo({ collapsed = false }: LogoProps) {
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
             className="flex flex-col justify-center"
           >
-            <m.span className="font-display text-[18px] font-black leading-[1.1] tracking-[-0.03em] text-ink uppercase">
+            <m.span className="font-display text-[18px] font-bold leading-[1.1] tracking-[-0.03em] text-ink uppercase">
               TOEIC
               <m.span className="text-accent"> Master</m.span>
             </m.span>

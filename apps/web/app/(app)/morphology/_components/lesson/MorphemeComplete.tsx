@@ -65,7 +65,7 @@ export function MorphemeComplete({
           </m.div>
         </div>
 
-        <h2 className="mb-1 text-2xl font-black text-text-primary font-display flex items-center justify-center">
+        <h2 className="mb-1 text-2xl font-bold text-text-primary font-display flex items-center justify-center">
           {renderMedal(scorePct)} {morpheme} mastered!
         </h2>
 
@@ -77,7 +77,7 @@ export function MorphemeComplete({
         >
           <div className="w-[84px] h-[84px] rounded-full bg-surface grid place-items-center">
             <div>
-              <div className="text-[26px] font-black leading-none" style={{ color }}>
+              <div className="text-[26px] font-bold leading-none" style={{ color }}>
                 {scorePct}
               </div>
               <div className="text-[9px] font-bold text-text-muted mt-0.5">
@@ -88,7 +88,7 @@ export function MorphemeComplete({
         </div>
 
         {xpAwarded > 0 ? (
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-xp/15 border-2 border-xp/30 text-xp font-black text-[13px] py-1 px-3 mb-5">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-xp/15 border border-xp/30 text-xp font-bold text-[13px] py-1 px-3 mb-5">
             <Sparkles size={14} /> +{xpAwarded} XP
           </div>
         ) : alreadyCompleted ? (
@@ -103,7 +103,7 @@ export function MorphemeComplete({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onBack}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-surface text-text-primary cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-border shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-surface text-text-primary cursor-pointer font-bold text-[13.5px] py-2.5 px-5 border border-border shadow-sm"
           >
             <ArrowLeft size={15} /> Back to list
           </m.button>
@@ -112,7 +112,7 @@ export function MorphemeComplete({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onRetry}
-            className="inline-flex items-center gap-1.5 rounded-lg text-text-on-accent cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-border bg-accent shadow-sm hover:bg-accent-hover"
+            className="inline-flex items-center gap-1.5 rounded-lg text-text-on-accent cursor-pointer font-bold text-[13.5px] py-2.5 px-5 border border-border bg-accent shadow-sm hover:bg-accent-hover"
           >
             <RefreshCw size={15} /> Practice Again
           </m.button>

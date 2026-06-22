@@ -96,27 +96,24 @@ export function EmptyState({ onSuggestedPrompt }: Props) {
       {/* ── Broadcast card ── */}
       <motion.div
         variants={itemVariants}
-        className="relative border-2 border-border bg-chat-surface p-6 shadow-[5px_5px_0_var(--shadow-color)]"
+        className="relative border border-border bg-chat-surface rounded-2xl p-6 shadow-md"
       >
-        {/* Corner notch */}
-        <div className="absolute -right-2 -top-2 h-4 w-4 border-2 border-border bg-accent" />
+        {/* Corner accent dot */}
+        <div className="absolute -right-1.5 -top-1.5 h-3 w-3 rounded-full bg-accent shadow-sm" />
 
         <div className="flex items-start gap-4">
-          <div className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden border-2 border-border bg-bg-deep shadow-[3px_3px_0_var(--shadow-color)]">
+          <div className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-border bg-bg-deep shadow-sm">
             <Avatar size={62} />
           </div>
           <div className="min-w-0 pt-1">
-            <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
-              <span className="text-accent">◆</span>
+            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent inline-block" />
               {coach.specialty}
             </div>
-            <h2 className="mt-1.5 font-display text-2xl font-black uppercase leading-[0.95] tracking-tight text-ink md:text-[28px]">
+            <h2 className="mt-1.5 font-display text-2xl font-bold uppercase leading-[0.95] tracking-tight text-ink md:text-[28px]">
               Gia sư TOEIC
               <br />
-              <span className="relative inline-block">
-                của bạn
-                <span className="absolute -bottom-0.5 left-0 h-1.5 w-full bg-accent/60" />
-              </span>
+                <span className="text-accent">của bạn</span>
             </h2>
           </div>
         </div>
@@ -130,11 +127,11 @@ export function EmptyState({ onSuggestedPrompt }: Props) {
         <div className="mt-4 flex flex-wrap gap-2">
           {coach.suggestedPrompts.map((prompt) => (
             <motion.button
-              whileHover={{ x: -1, y: -1 }}
-              whileTap={{ x: 0, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               key={prompt}
               onClick={() => onSuggestedPrompt(prompt)}
-              className="max-w-[280px] truncate border-2 border-border bg-surface px-3 py-1.5 text-xs font-bold text-text-secondary shadow-[2px_2px_0_var(--shadow-color)] transition-all hover:bg-accent-light hover:text-accent-active hover:shadow-[3px_3px_0_var(--shadow-color)]"
+              className="max-w-[280px] truncate border border-border bg-surface rounded-lg px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm transition-all hover:bg-accent/5 hover:text-accent hover:shadow"
             >
               {prompt}
             </motion.button>
@@ -145,7 +142,7 @@ export function EmptyState({ onSuggestedPrompt }: Props) {
       {/* ── Skill grid ── */}
       <motion.div variants={itemVariants} className="mt-6">
         <div className="mb-2.5 flex items-center gap-2.5">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
             Kỹ năng & Bài luyện
           </span>
           <div className="h-0.5 flex-1 bg-border" />
@@ -153,18 +150,18 @@ export function EmptyState({ onSuggestedPrompt }: Props) {
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {SKILL_STARTERS.map((s, i) => (
             <motion.button
-              whileHover={{ x: -1, y: -1 }}
-              whileTap={{ x: 0, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               key={s.label}
               onClick={() => onSuggestedPrompt(s.prompt)}
-              className="group relative flex flex-col gap-1.5 border-2 border-border bg-chat-surface p-3 text-left shadow-[2px_2px_0_var(--shadow-color)] transition-all hover:bg-accent-light hover:shadow-[4px_4px_0_var(--shadow-color)]"
+              className="group relative flex flex-col gap-1.5 border border-border bg-chat-surface rounded-xl p-3 text-left shadow-sm transition-all hover:bg-accent/5 hover:shadow-md"
             >
-              <span className="absolute right-2 top-2 font-mono text-[10px] font-black text-text-muted/40">
+              <span className="absolute right-2 top-2 text-[10px] font-medium text-text-muted/30">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <s.icon className="h-5 w-5 text-accent-active" />
-              <span className="font-display text-[12.5px] font-black text-ink">{s.label}</span>
-              <span className="font-mono text-[9.5px] uppercase tracking-wide text-text-muted leading-tight">
+              <span className="font-display text-[12.5px] font-bold text-ink">{s.label}</span>
+              <span className="text-[9.5px] uppercase tracking-wide text-text-muted leading-tight">
                 {s.desc}
               </span>
             </motion.button>

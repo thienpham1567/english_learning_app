@@ -118,7 +118,7 @@ export default function WritingRunnerPage() {
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
         <button
-          className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+          className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
           onClick={() => router.push("/toeic/writing")}
         >
           Back to Hub
@@ -166,7 +166,7 @@ export default function WritingRunnerPage() {
             )}
             <Card
               shadowSize="sm"
-              className="border-2 border-border"
+              className="border border-border"
               style={{ background: "color-mix(in srgb, var(--accent) 8%, var(--surface))" }}
             >
               <div className="text-[13px] text-text-muted">
@@ -230,14 +230,14 @@ export default function WritingRunnerPage() {
         />
         <div className="flex gap-2 justify-end">
           <button
-            className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+            className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
             onClick={skipQuestion}
             disabled={submitting}
           >
             Skip
           </button>
           <button
-            className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+            className="py-2 px-4 rounded-lg border border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
             disabled={!text.trim()}
             onClick={submit}
           >

@@ -42,7 +42,7 @@ export function RecentLookups({ words, onSelect }: Props) {
           key={word}
           type="button"
           onClick={() => onSelect(word)}
-          className="shrink-0 rounded-lg border-2 border-border bg-surface py-1 px-3 text-xs font-bold text-text-primary cursor-pointer whitespace-nowrap transition-all duration-150 hover:border-accent hover:bg-accent-light"
+          className="shrink-0 rounded-lg border border-border bg-surface py-1 px-3 text-xs font-bold text-text-primary cursor-pointer whitespace-nowrap transition-all duration-150 hover:border-accent hover:bg-accent-light"
         >
           {word}
         </button>

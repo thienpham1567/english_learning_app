@@ -232,7 +232,7 @@ export default function DictationMode({ examMode }: Props) {
   return (
     <div className="w-full max-w-2xl mx-auto">
       {error && (
-        <div className="py-2.5 px-4 rounded-lg text-[var(--error)] mb-4 text-[13px] bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
+        <div className="py-2.5 px-4 rounded-lg text-[var(--error)] mb-4 text-[13px] bg-error-bg border border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
           <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
@@ -242,15 +242,15 @@ export default function DictationMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow"
+          className="text-center p-8 border border-border rounded-lg bg-surface shadow"
         >
           <Pencil size={48} className="text-accent mx-auto mb-3" />
-          <h2 className="mb-2 text-lg font-black text-text-primary">Dictation</h2>
+          <h2 className="mb-2 text-lg font-bold text-text-primary">Dictation</h2>
           <p className="text-text-secondary mb-2 text-[13px]">Listen → Type → Check each word</p>
           <p className="text-text-secondary text-xs mb-6">
             5 sentences per session · Max 3 replays · +25 XP
           </p>
-          <Button onClick={startSession} className="h-11 px-8 text-[15px] font-black">
+          <Button onClick={startSession} className="h-11 px-8 text-[15px] font-bold">
             Start Dictation
           </Button>
         </motion.div>
@@ -283,7 +283,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Instruction */}
-          <div className="p-4 rounded-lg text-center border-2 border-border bg-surface flex items-center justify-center gap-2">
+          <div className="p-4 rounded-lg text-center border border-border bg-surface flex items-center justify-center gap-2">
             <Headphones className="h-4 w-4 text-accent shrink-0" />
             <p className="text-sm text-text-secondary m-0">Listen and type the sentence you hear</p>
           </div>
@@ -319,14 +319,14 @@ export default function DictationMode({ examMode }: Props) {
                 checkAnswer();
               }
             }}
-            className="w-full h-[100px] p-4 rounded-lg border-2 border-border text-[15px] leading-relaxed bg-surface text-text-primary font-[inherit] resize-y outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all"
+            className="w-full h-[100px] p-4 rounded-lg border border-border text-[15px] leading-relaxed bg-surface text-text-primary font-[inherit] resize-y outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all"
           />
 
           {/* Check button */}
           <Button
             onClick={checkAnswer}
             disabled={!typedText.trim()}
-            className="h-11 text-[15px] font-black flex items-center justify-center gap-1.5"
+            className="h-11 text-[15px] font-bold flex items-center justify-center gap-1.5"
           >
             Check{" "}
             <motion.span
@@ -347,7 +347,7 @@ export default function DictationMode({ examMode }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`p-6 rounded-lg border-2 border-border text-center bg-surface shadow`}
+            className={`p-6 rounded-lg border border-border text-center bg-surface shadow`}
           >
             {/* Custom circular progress */}
             <div className="relative w-[100px] h-[100px] mx-auto mb-3">
@@ -379,7 +379,7 @@ export default function DictationMode({ examMode }: Props) {
                 />
               </svg>
               <span
-                className={`absolute inset-0 flex items-center justify-center text-3xl font-black ${scoreColorClass(accuracy)}`}
+                className={`absolute inset-0 flex items-center justify-center text-3xl font-bold ${scoreColorClass(accuracy)}`}
               >
                 {accuracy}%
               </span>
@@ -406,7 +406,7 @@ export default function DictationMode({ examMode }: Props) {
           </motion.div>
 
           {/* Word diff */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <div className="p-4 rounded-lg border border-border bg-surface">
             <p className="text-xs text-text-secondary mb-2 font-bold">Word Analysis:</p>
             <div className="flex flex-wrap gap-1.5">
               {diff.map((w, i) => (
@@ -438,7 +438,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Revealed original */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <div className="p-4 rounded-lg border border-border bg-surface">
             <p className="text-xs text-text-secondary font-bold mb-1">Original Sentence:</p>
             <p className="text-base font-bold mb-1 text-text-primary">{currentSentence.text}</p>
             <p className="text-[13px] text-text-secondary mb-2 font-serif">{currentSentence.ipa}</p>
@@ -449,7 +449,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* What you typed */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <div className="p-4 rounded-lg border border-border bg-surface">
             <p className="text-xs text-text-secondary font-bold mb-1">You typed:</p>
             <p className="text-[15px] m-0 italic text-text-primary">&ldquo;{typedText}&rdquo;</p>
           </div>
@@ -460,13 +460,13 @@ export default function DictationMode({ examMode }: Props) {
               onClick={retryCurrent}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
+              className="rounded-lg border border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
             >
               <RefreshCw size={14} /> Retry
             </motion.button>
             <Button
               onClick={nextSentence}
-              className="text-[13px] font-black py-2.5 px-5 flex items-center gap-1.5"
+              className="text-[13px] font-bold py-2.5 px-5 flex items-center gap-1.5"
             >
               {currentIdx < sentences.length - 1 ? (
                 <>
@@ -487,7 +487,7 @@ export default function DictationMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow"
+          className="text-center p-8 border border-border rounded-lg bg-surface shadow"
         >
           <div className="mb-4">
             {avgScore >= 80 ? (
@@ -498,7 +498,7 @@ export default function DictationMode({ examMode }: Props) {
               <XCircle size={48} className="text-[var(--error)] mx-auto" />
             )}
           </div>
-          <h2 className="mb-2 text-lg font-black text-text-primary">Dictation Completed!</h2>
+          <h2 className="mb-2 text-lg font-bold text-text-primary">Dictation Completed!</h2>
           <p className="text-text-secondary mb-2">
             Average Accuracy:{" "}
             <strong className={`text-3xl ${scoreColorClass(avgScore)}`}>{avgScore}%</strong>
@@ -529,7 +529,7 @@ export default function DictationMode({ examMode }: Props) {
             {sessionScores.map((s, i) => (
               <span
                 key={i}
-                className={`text-[13px] font-bold py-1 px-2.5 rounded-lg border-2 ${scoreBorderColor(s)} ${scoreBgColor(s)} ${scoreColorClass(s)}`}
+                className={`text-[13px] font-bold py-1 px-2.5 rounded-lg border ${scoreBorderColor(s)} ${scoreBgColor(s)} ${scoreColorClass(s)}`}
               >
                 Sentence {i + 1}: {s}%
               </span>
@@ -537,7 +537,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
           <Button
             onClick={startSession}
-            className="h-10 px-6 text-sm font-black flex items-center gap-1.5 mx-auto"
+            className="h-10 px-6 text-sm font-bold flex items-center gap-1.5 mx-auto"
           >
             <RefreshCw size={14} /> Practice Again
           </Button>

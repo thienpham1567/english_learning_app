@@ -136,7 +136,7 @@ function CopyButton({ text }: { text: string }) {
         setTimeout(() => setCopied(false), 2000);
       }}
       title="Copy"
-      className={`border-2 border-border bg-surface cursor-pointer text-[12px] py-1 px-2.5 rounded-lg font-bold flex items-center gap-1.5 transition-all duration-100 hover:-translate-y-px hover:shadow-sm active:translate-y-px active:shadow-none ${copied ? "text-success border-success/30" : "text-text-secondary"}`}
+      className={`border border-border bg-surface cursor-pointer text-[12px] py-1 px-2.5 rounded-lg font-bold flex items-center gap-1.5 transition-all duration-100 hover:-translate-y-px hover:shadow-sm active:translate-y-px active:shadow-none ${copied ? "text-success border-success/30" : "text-text-secondary"}`}
     >
       {copied ? (
         <>
@@ -201,7 +201,7 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
           <span className="text-[11px] text-text-secondary italic">Rule: {error.rule}</span>
 
           {/* Explanation — Vietnamese first (primary for learners), English below */}
-          <div className="py-2.5 px-3.5 rounded-lg bg-surface-alt border-2 border-border text-[13px] leading-relaxed">
+          <div className="py-2.5 px-3.5 rounded-lg bg-surface-alt border border-border text-[13px] leading-relaxed">
             {error.explanationVi && (
               <>
                 <span className="font-bold text-text-secondary text-[11px] uppercase tracking-wide">
@@ -378,7 +378,7 @@ export function GrammarChecker() {
       {/* Example prompts — only show when textarea is empty */}
       {!text.trim() && !result && (
         <div>
-          <span className="text-[11px] font-black uppercase text-text-muted flex items-center gap-1.5 mb-2.5 tracking-widest">
+          <span className="text-[11px] font-bold uppercase text-text-muted flex items-center gap-1.5 mb-2.5 tracking-widest">
             <Zap size={10} />
             Try now
           </span>
@@ -493,7 +493,7 @@ export function GrammarChecker() {
                 >
                   <CircleCheckBig className="text-success text-xl" />
                   <div>
-                    <div className="text-base font-black text-success font-display">Excellent!</div>
+                    <div className="text-base font-bold text-success font-display">Excellent!</div>
                     <div className="text-xs text-text-muted mt-0.5">No errors detected</div>
                   </div>
                 </div>

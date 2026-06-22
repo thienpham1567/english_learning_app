@@ -54,7 +54,7 @@ export function LessonView({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={onBack}
-        className="inline-flex items-center gap-2 py-2 px-4 border-2 border-border rounded-lg bg-surface text-accent-active cursor-pointer text-[13px] font-bold mb-4 shadow-sm"
+        className="inline-flex items-center gap-2 py-2 px-4 border border-border rounded-lg bg-surface text-accent-active cursor-pointer text-[13px] font-bold mb-4 shadow-sm"
       >
         <ArrowLeft size={15} /> Lesson List
       </m.button>
@@ -74,14 +74,14 @@ export function LessonView({
 
       {/* Error */}
       {l.error && (
-        <div className="p-6 rounded-xl text-center border-2 border-error/25 bg-error/5">
+        <div className="p-6 rounded-xl text-center border border-error/25 bg-error/5">
           <p className="font-bold text-sm text-error">{l.error}</p>
           <m.button
             type="button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => l.generateLesson(false)}
-            className="mt-3 rounded-lg cursor-pointer font-black py-2 px-5 bg-error text-text-on-accent border-2 border-border"
+            className="mt-3 rounded-lg cursor-pointer font-bold py-2 px-5 bg-error text-text-on-accent border border-border"
           >
             Retry
           </m.button>

@@ -1159,24 +1159,49 @@ button:focus-visible {
 }
 
 /* ── Soft UI Global Overrides ── */
-/* Override all border-2 and border-t-2 to 1px for clean minimalist look */
-.border-2,
-.border-t-2,
-.border-b-2,
-.border-l-2,
-.border-r-2 {
-  border-width: 1px !important;
+
+/* Auto-round all bordered surface panels (cards, containers, modals) */
+[class*="bg-surface"][class*="border-border"]:not(table):not(thead):not(tbody):not(tr):not(td):not(th):not(hr),
+[class*="bg-surface-alt"][class*="border-border"]:not(table):not(thead):not(tbody):not(tr):not(td):not(th):not(hr),
+[class*="bg-bg-deep"][class*="border-border"]:not(table):not(thead):not(tbody):not(tr):not(td):not(th):not(hr),
+[class*="bg-accent-light"][class*="border-border"]:not(table):not(thead):not(tbody):not(tr):not(td):not(th):not(hr) {
+  border-radius: var(--radius-xl) !important;
 }
 
-.divide-y-2 > :not([hidden]) ~ :not([hidden]) {
-  border-top-width: 1px !important;
-}
-.divide-x-2 > :not([hidden]) ~ :not([hidden]) {
-  border-left-width: 1px !important;
+/* Auto-round all bordered buttons and interactive elements */
+button[class*="border-border"]:not([class*="rounded-"]),
+[role="button"][class*="border-border"]:not([class*="rounded-"]) {
+  border-radius: var(--radius-lg) !important;
 }
 
-/* Transform custom hard offset shadows to soft blurred shadows */
+/* Auto-round all bordered standalone elements without explicit rounding */
+[class*="border-border"]:not([class*="rounded-"]):not(table):not(thead):not(tbody):not(tr):not(td):not(th):not(hr):not(div[class*="h-px"]):not(div[class*="h-0"]):not([class*="divide-"]):not(span[class*="h-"]):not([class*="border-b"]):not([class*="border-t"]):not([class*="border-l"]):not([class*="border-r"]) {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* Rounded avatars */
+img[class*="border-border"] {
+  border-radius: var(--radius-xl) !important;
+}
+
+/* Soften font-extrabold globally to font-semibold for Soft UI feel */
+.font-extrabold {
+  font-weight: 600 !important;
+}
+
+/* Smooth transitions on all interactive bordered elements */
+button[class*="border-border"],
+[role="button"][class*="border-border"],
+a[class*="border-border"] {
+  transition: all 0.2s ease !important;
+}
+
+/* Transform any remaining custom hard offset shadows to soft blurred shadows */
 [class*="shadow-["] {
   box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color) !important;
 }
 
+/* Ensure all rounded corners for pulse/skeleton elements */
+.animate-pulse {
+  border-radius: var(--radius-md) !important;
+}

@@ -122,7 +122,7 @@ function SentenceCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="rounded-xl border-2 border-border bg-bg-deep/20 p-4 space-y-4"
+      className="rounded-xl border border-border bg-bg-deep/20 p-4 space-y-4"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -228,7 +228,7 @@ function SentenceCard({
           {s.patterns.map((p, i) => (
             <div
               key={i}
-              className="rounded-lg border-2 border-accent/20 bg-accent/5 p-3 space-y-1.5"
+              className="rounded-lg border border-accent/20 bg-accent/5 p-3 space-y-1.5"
             >
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[10px] font-bold text-accent bg-accent/15 px-2 py-0.5 rounded-md">
@@ -309,7 +309,7 @@ function LegacyGrammar({ g }: { g: LegacyGrammar }) {
         </div>
       ))}
       {g.keyPatterns?.map((p, i) => (
-        <div key={i} className="rounded-lg border-2 border-accent/20 bg-accent/5 p-3">
+        <div key={i} className="rounded-lg border border-accent/20 bg-accent/5 p-3">
           <span className="text-[10px] font-bold text-accent bg-accent/15 px-2 py-0.5 rounded-md">
             {p.pattern}
           </span>
@@ -382,7 +382,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
     >
       {/* ── Source Text Card ── */}
       {sourceText && (
-        <div className="rounded-2xl border-2 border-border bg-surface p-5 space-y-3 shadow-sm">
+        <div className="rounded-2xl border border-border bg-surface p-5 space-y-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4 text-accent shrink-0" />
@@ -422,7 +422,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
       )}
 
       {/* ── Natural Translation ── */}
-      <div className="rounded-2xl border-2 border-border bg-surface p-5 space-y-3 shadow-sm">
+      <div className="rounded-2xl border border-border bg-surface p-5 space-y-3 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-base">🇻🇳</span>
@@ -431,7 +431,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
             </span>
           </div>
           <span
-            className={`inline-flex items-center px-2 py-0.5 rounded-lg border-2 text-[9px] font-bold uppercase tracking-wide ${diffConfig.color}`}
+            className={`inline-flex items-center px-2 py-0.5 rounded-lg border text-[9px] font-bold uppercase tracking-wide ${diffConfig.color}`}
           >
             {diffConfig.label}
           </span>
@@ -442,7 +442,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
 
       {/* ── Grammar Analysis ── */}
       {(isNewGrammar || isLegacyGrammar) && (
-        <div className="rounded-2xl border-2 border-border bg-surface shadow-sm overflow-hidden">
+        <div className="rounded-2xl border border-border bg-surface shadow-sm overflow-hidden">
           <button
             onClick={() => setExpandedGrammar(!expandedGrammar)}
             className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-surface-hover/30 transition-colors cursor-pointer"
@@ -469,7 +469,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
             (isNewGrammar && sentences ? (
               <div className="border-t border-border/50 px-5 py-4 space-y-4">
                 {focusSummary && (
-                  <div className="rounded-xl bg-accent/5 border-2 border-accent/20 p-3 flex gap-2.5">
+                  <div className="rounded-xl bg-accent/5 border border-accent/20 p-3 flex gap-2.5">
                     <Target className="h-4 w-4 text-accent shrink-0 mt-0.5" />
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-accent font-mono">
@@ -497,7 +497,7 @@ export function SmartReaderResult({ result, tts, sourceText }: Props) {
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="rounded-2xl border-2 border-accent/20 bg-accent/5 p-4 flex gap-3"
+          className="rounded-2xl border border-accent/20 bg-accent/5 p-4 flex gap-3"
         >
           <Lightbulb className="h-4 w-4 text-accent shrink-0 mt-0.5" />
           <div>

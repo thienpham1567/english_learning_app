@@ -98,10 +98,10 @@ export function FloatingSmartReaderWidget() {
           title="Smart Reader — analyze a sentence"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.06, x: -1, y: -1 }}
-          whileTap={{ scale: 0.94, x: 0, y: 0 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.94 }}
           transition={{ type: "spring", stiffness: 350, damping: 20 }}
-          className="w-12 h-12 rounded-2xl cursor-pointer bg-secondary text-white flex items-center justify-center border-2 border-border shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] transition-shadow duration-200"
+          className="w-12 h-12 rounded-2xl cursor-pointer bg-secondary text-white flex items-center justify-center border border-border shadow hover:shadow-lg transition-shadow duration-200"
         >
           <BookOpenCheck size={20} strokeWidth={2.2} />
         </m.button>
@@ -109,14 +109,14 @@ export function FloatingSmartReaderWidget() {
 
       {/* ─── Result modal ─── */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="p-0 gap-0 w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[760px] sm:max-w-[760px] max-h-[85vh] overflow-hidden flex flex-col rounded-none shadow-[8px_8px_0_var(--shadow-color)]">
+        <DialogContent className="p-0 gap-0 w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[760px] sm:max-w-[760px] max-h-[85vh] overflow-hidden flex flex-col rounded-2xl shadow-xl">
           <DialogTitle className="sr-only">Smart Reader</DialogTitle>
 
           {/* Input zone */}
-          <div className="bg-surface border-b-2 border-border shrink-0">
+          <div className="bg-surface border-b border-border shrink-0">
             <div className="flex items-center gap-2 px-4 sm:px-5 pt-3.5">
               <span className="text-secondary text-sm leading-none">◆</span>
-              <span className="text-xs font-black uppercase tracking-[0.18em] text-ink font-mono">
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-ink font-mono">
                 Smart Reader
               </span>
               <span className="text-text-muted/50">·</span>
@@ -154,9 +154,9 @@ export function FloatingSmartReaderWidget() {
                   type="button"
                   onClick={analyze}
                   disabled={!input.trim() || isLoading}
-                  className={`inline-flex items-center gap-2 border-2 px-4 py-2 font-mono text-xs font-black uppercase tracking-wider transition-all duration-150 cursor-pointer ${
+                  className={`inline-flex items-center gap-2 border rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
                     input.trim() && !isLoading
-                      ? "border-border bg-secondary text-white shadow-[3px_3px_0_var(--shadow-color)] hover:-translate-x-px hover:-translate-y-px hover:shadow-[4px_4px_0_var(--shadow-color)] active:translate-x-0 active:translate-y-0 active:shadow-[1px_1px_0_var(--shadow-color)]"
+                      ? "border-border bg-secondary text-white shadow-sm hover:shadow-md active:scale-[0.98]"
                       : "border-border bg-surface-hover text-text-muted cursor-not-allowed opacity-50"
                   }`}
                 >
@@ -179,18 +179,18 @@ export function FloatingSmartReaderWidget() {
           {/* Result zone */}
           <div className="p-4 sm:p-5 overflow-y-auto flex-1 min-h-0">
             {error ? (
-              <div className="flex items-start gap-2.5 border-2 border-error bg-error/10 p-4 text-sm text-error font-semibold shadow-[3px_3px_0_color-mix(in_srgb,var(--error)_35%,transparent)]">
+              <div className="flex items-start gap-2.5 border border-error/30 bg-error/10 p-4 rounded-xl text-sm text-error font-semibold shadow-sm">
                 <span className="font-mono">⚠</span>
                 {error}
               </div>
             ) : isLoading ? (
               <div className="space-y-4">
-                <div className="border-2 border-border bg-surface p-5 space-y-3 shadow-[3px_3px_0_var(--shadow-color)]">
+                <div className="border border-border bg-surface p-5 space-y-3 shadow-sm rounded-xl">
                   <div className="h-3.5 w-32 bg-bg-deep animate-pulse" />
                   <div className="h-4 w-full bg-bg-deep animate-pulse" />
                   <div className="h-4 w-3/4 bg-bg-deep animate-pulse" />
                 </div>
-                <div className="border-2 border-border bg-surface p-5 space-y-3 shadow-[3px_3px_0_var(--shadow-color)]">
+                <div className="border border-border bg-surface p-5 space-y-3 shadow-sm rounded-xl">
                   <div className="h-3.5 w-40 bg-bg-deep animate-pulse" />
                   <div className="h-4 w-2/3 bg-bg-deep animate-pulse" />
                 </div>
@@ -199,12 +199,12 @@ export function FloatingSmartReaderWidget() {
               <SmartReaderResult result={result} tts={tts} sourceText={sourceText} />
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 py-14 text-center">
-                <div className="grid h-14 w-14 place-items-center border-2 border-border bg-bg-deep text-secondary shadow-[4px_4px_0_var(--shadow-color)]">
+                <div className="grid h-14 w-14 place-items-center border border-border bg-bg-deep text-secondary shadow-sm rounded-xl">
                   <BookOpenCheck className="h-6 w-6" />
                 </div>
                 <p className="max-w-[320px] text-xs font-medium leading-relaxed text-text-muted">
                   Dán một câu hoặc đoạn tiếng Anh ở trên rồi bấm{" "}
-                  <span className="font-mono font-black uppercase tracking-wide text-secondary">
+                  <span className="font-semibold uppercase tracking-wide text-secondary">
                     Phân tích
                   </span>
                   .

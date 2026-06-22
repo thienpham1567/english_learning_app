@@ -68,7 +68,7 @@ export default async function ToeicDictationPage() {
                   >
                     <Headphones size={16} className={meta.textClass} />
                   </div>
-                  <h3 className="text-sm font-black text-ink font-display uppercase tracking-wider m-0">
+                  <h3 className="text-sm font-bold text-ink font-display uppercase tracking-wider m-0">
                     {meta.label}
                   </h3>
                 </div>
@@ -88,8 +88,8 @@ export default async function ToeicDictationPage() {
                       href={`/toeic/dictation/${item.id}`}
                       className="no-underline group"
                     >
-                      <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border-2 border-border bg-surface-alt hover:border-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150 cursor-pointer">
-                        <span className="text-xs font-black text-text-muted font-mono">
+                      <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border border-border bg-surface-alt hover:border-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150 cursor-pointer">
+                        <span className="text-xs font-bold text-text-muted font-mono">
                           #{i + 1}
                         </span>
                         <span

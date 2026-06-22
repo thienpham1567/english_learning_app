@@ -117,7 +117,7 @@ export function ToeicExerciseCard({
   const scorePct = result ? Math.round((result.score / total) * 100) : 0;
 
   return (
-    <div className="my-3 rounded-xl border-2 border-amber-400/40 bg-amber-50 overflow-hidden">
+    <div className="my-3 rounded-xl border border-amber-400/40 bg-amber-50 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-amber-100/70 border-b border-amber-300/40">
         <div className="flex items-center gap-2">
@@ -196,7 +196,7 @@ export function ToeicExerciseCard({
                           key={opt.letter}
                           onClick={() => setAnswer(q.index, opt.letter)}
                           disabled={submitted}
-                          className={`flex items-center gap-2 rounded-lg border-2 px-3 py-1.5 text-left text-[13px] transition-all ${
+                          className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-left text-[13px] transition-all ${
                             isCorrectOpt
                               ? "border-success/50 bg-success/10 text-success font-semibold"
                               : isWrongChosen
@@ -227,7 +227,7 @@ export function ToeicExerciseCard({
                       if (e.key === "Enter" && allAnswered && !submitted) handleSubmit();
                     }}
                     placeholder="Your answer…"
-                    className={`mt-2 px-3 py-1 w-full max-w-[260px] text-sm rounded-lg border-2 outline-none transition-all ${
+                    className={`mt-2 px-3 py-1 w-full max-w-[260px] text-sm rounded-lg border outline-none transition-all ${
                       submitted
                         ? r?.correct
                           ? "border-success/40 bg-success/10 text-success font-semibold"
@@ -267,7 +267,7 @@ export function ToeicExerciseCard({
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
               allAnswered && !isLoading
                 ? "bg-accent text-white shadow-sm hover:brightness-110"
-                : "bg-surface-hover border-2 border-border text-text-muted cursor-not-allowed opacity-50"
+                : "bg-surface-hover border border-border text-text-muted cursor-not-allowed opacity-50"
             }`}
           >
             <Send className="h-3 w-3" />
@@ -288,7 +288,7 @@ export function ToeicExerciseCard({
             <button
               onClick={handleAskCoach}
               disabled={isLoading}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold border-2 border-accent/30 text-accent hover:bg-accent/10 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-accent/30 text-accent hover:bg-accent/10 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
             >
               Ask coach about my mistakes
             </button>

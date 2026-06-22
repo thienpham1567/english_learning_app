@@ -36,7 +36,7 @@ export function SpeakerLegend({ turns }: Props) {
   if (entries.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2.5 py-2 px-3 bg-surface border-2 border-border rounded-lg text-xs">
+    <div className="flex flex-wrap gap-2.5 py-2 px-3 bg-surface border border-border rounded-lg text-xs">
       <span className="text-text-muted font-semibold">Speakers:</span>
       {entries.map(([id, turn]) => (
         <span key={id} className="inline-flex items-center gap-1.5">

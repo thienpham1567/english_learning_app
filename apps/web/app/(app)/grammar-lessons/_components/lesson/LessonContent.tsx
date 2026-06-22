@@ -47,7 +47,7 @@ function Section({
 }) {
   return (
     <Card shadowSize="sm" className="rounded-xl bg-surface">
-      <span className="flex items-center gap-1.5 text-[11.5px] font-black text-text-secondary uppercase tracking-wider mb-3.5">
+      <span className="flex items-center gap-1.5 text-[11.5px] font-bold text-text-secondary uppercase tracking-wider mb-3.5">
         {icon}
         {title}
       </span>
@@ -100,7 +100,7 @@ export function LessonContent({
             <BookOpen size={20} className="text-text-on-accent" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="m-0 text-xl font-black text-text-primary font-display leading-tight">
+            <h2 className="m-0 text-xl font-bold text-text-primary font-display leading-tight">
               {lesson.title}
             </h2>
             <p className="mt-1 text-sm text-text-secondary font-medium leading-normal">
@@ -108,7 +108,7 @@ export function LessonContent({
             </p>
           </div>
           <div className="flex gap-1.5 shrink-0 items-center">
-            <span className="text-[11px] font-black text-accent-active rounded-full bg-accent-light border-2 border-accent/20 py-1 px-3">
+            <span className="text-[11px] font-bold text-accent-active rounded-full bg-accent-light border border-accent/20 py-1 px-3">
               {level}
             </span>
             <m.button
@@ -116,7 +116,7 @@ export function LessonContent({
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={onRegenerate}
-              className="inline-flex items-center gap-1 border-2 border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3 font-bold shadow-sm hover:text-text-primary"
+              className="inline-flex items-center gap-1 border border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3 font-bold shadow-sm hover:text-text-primary"
             >
               <RefreshCw size={13} /> Regenerate
             </m.button>
@@ -131,10 +131,10 @@ export function LessonContent({
           bgType="accent-light"
           className="rounded-xl text-center border-accent/20"
         >
-          <span className="flex items-center justify-center gap-1.5 text-[11px] text-accent-active font-black uppercase tracking-widest mb-2.5">
+          <span className="flex items-center justify-center gap-1.5 text-[11px] text-accent-active font-bold uppercase tracking-widest mb-2.5">
             <Calculator size={13} /> Core Structure
           </span>
-          <p className="m-0 font-black text-accent-active font-mono text-[19px] tracking-wide break-words">
+          <p className="m-0 font-bold text-accent-active font-mono text-[19px] tracking-wide break-words">
             {lesson.formula}
           </p>
         </Card>
@@ -146,7 +146,7 @@ export function LessonContent({
           {lesson.explanationEn ?? lesson.explanation}
         </p>
         <div className="mt-3.5 py-3 px-4 rounded-lg bg-surface-alt border-l-4 border-accent">
-          <span className="text-[11.5px] font-black text-accent-active inline-flex items-center gap-1">
+          <span className="text-[11.5px] font-bold text-accent-active inline-flex items-center gap-1">
             <FileText className="h-3.5 w-3.5" /> Giải thích
           </span>
           <p className="mt-1.5 m-0 text-text-secondary font-medium text-[13.5px] leading-relaxed">
@@ -162,9 +162,9 @@ export function LessonContent({
             {lesson.usageNotes.map((note, idx) => (
               <div
                 key={idx}
-                className="flex gap-3 items-start rounded-lg bg-surface-alt border-2 border-border py-3 px-3.5"
+                className="flex gap-3 items-start rounded-lg bg-surface-alt border border-border py-3 px-3.5"
               >
-                <div className="w-6 h-6 rounded-lg bg-accent-light text-accent-active grid place-items-center text-xs font-black shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-accent-light text-accent-active grid place-items-center text-xs font-bold shrink-0">
                   {idx + 1}
                 </div>
                 <p className="m-0 text-text-primary font-medium text-[13.5px] leading-relaxed">
@@ -183,7 +183,7 @@ export function LessonContent({
             {lesson.toeicTips.map((tip, idx) => (
               <div
                 key={idx}
-                className="flex gap-2.5 items-start rounded-lg bg-surface-alt border-2 border-border py-3 px-3.5"
+                className="flex gap-2.5 items-start rounded-lg bg-surface-alt border border-border py-3 px-3.5"
               >
                 <Lightbulb className="h-3.5 w-3.5 text-warning shrink-0 mt-0.5" />
                 <p className="m-0 text-text-primary font-semibold text-[13.5px] leading-relaxed">
@@ -202,7 +202,7 @@ export function LessonContent({
             {lesson.timeSignals.map((signal, idx) => (
               <span
                 key={idx}
-                className="text-[13px] font-bold rounded-lg py-1 px-3 bg-info text-white border-2 border-border"
+                className="text-[13px] font-bold rounded-lg py-1 px-3 bg-info text-white border border-border"
               >
                 {signal}
               </span>
@@ -219,16 +219,16 @@ export function LessonContent({
         >
           <div className="flex flex-col gap-3">
             {lesson.confusionPairs.map((pair, idx) => (
-              <div key={idx} className="rounded-lg border-2 border-border overflow-hidden">
+              <div key={idx} className="rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-2">
                   <div className="py-2.5 px-3.5 bg-info/5 border-r border-border">
-                    <div className="text-xs font-black text-info mb-1">{pair.structureA}</div>
+                    <div className="text-xs font-bold text-info mb-1">{pair.structureA}</div>
                     <p className="m-0 text-text-primary font-medium text-[12.5px] leading-normal italic">
                       {pair.exampleA}
                     </p>
                   </div>
                   <div className="py-2.5 px-3.5 bg-accent/5">
-                    <div className="text-xs font-black text-accent-active mb-1">
+                    <div className="text-xs font-bold text-accent-active mb-1">
                       {pair.structureB}
                     </div>
                     <p className="m-0 text-text-primary font-medium text-[12.5px] leading-normal italic">
@@ -253,7 +253,7 @@ export function LessonContent({
         <Section icon={<MessageSquare size={14} />} title="Examples">
           <div className="flex flex-col gap-2.5">
             {lesson.examples.map((ex, idx) => (
-              <div key={idx} className="rounded-lg bg-surface-alt border-2 border-border p-3.5">
+              <div key={idx} className="rounded-lg bg-surface-alt border border-border p-3.5">
                 <div className="flex items-start gap-2.5">
                   <p className="flex-1 m-0 font-bold text-text-primary text-[14.5px] leading-normal">
                     <HighlightedExample en={ex.en} highlight={ex.highlight} />
@@ -289,7 +289,7 @@ export function LessonContent({
         >
           <div className="flex flex-col gap-2.5">
             {lesson.commonMistakes.map((mItem, idx) => (
-              <div key={idx} className="rounded-lg border-2 border-error/15 bg-error/5 p-3.5">
+              <div key={idx} className="rounded-lg border border-error/15 bg-error/5 p-3.5">
                 <div className="flex items-start gap-1.5 font-bold text-error text-[13.5px]">
                   <XCircle size={15} className="shrink-0 mt-0.5" />
                   <span className="line-through">{mItem.wrong}</span>
@@ -320,7 +320,7 @@ export function LessonContent({
         whileHover={{ scale: 1.01, y: -2 }}
         whileTap={{ scale: 0.99 }}
         onClick={onStart}
-        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-4 px-6 text-base font-black text-text-on-accent bg-accent border-2 border-border shadow-md hover:bg-accent-hover cursor-pointer font-display"
+        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-4 px-6 text-base font-bold text-text-on-accent bg-accent border border-border shadow-md hover:bg-accent-hover cursor-pointer font-display"
       >
         <Play className="h-4 w-4 fill-current" /> Start Practice — {lesson.exercises.length}{" "}
         questions
@@ -333,7 +333,7 @@ export function LessonContent({
         whileHover={{ scale: 1.01, y: -2 }}
         whileTap={{ scale: 0.99 }}
         onClick={onPracticeChat}
-        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-3.5 px-6 text-[14.5px] font-black text-accent-active bg-accent-light border-2 border-accent/25 shadow-sm hover:bg-accent-light/70 cursor-pointer font-display"
+        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-3.5 px-6 text-[14.5px] font-bold text-accent-active bg-accent-light border border-accent/25 shadow-sm hover:bg-accent-light/70 cursor-pointer font-display"
       >
         <MessageSquare className="h-4 w-4" /> Luyện tập với Chatbot
         <ChevronRight size={17} />

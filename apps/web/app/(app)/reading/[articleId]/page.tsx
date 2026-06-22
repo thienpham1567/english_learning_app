@@ -253,7 +253,7 @@ export default function ArticleReaderPage() {
               onClick={() => router.push("/reading")}
               whileHover={{ scale: 1.05, x: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="items-center gap-2 py-1.5 px-3.5 rounded-lg border-2 border-border bg-surface text-text-secondary font-extrabold cursor-pointer"
+              className="items-center gap-2 py-1.5 px-3.5 rounded-lg border border-border bg-surface text-text-secondary font-extrabold cursor-pointer"
               style={{ display: "inline-flex", fontSize: 12.5 }}
             >
               <ArrowLeft />
@@ -261,7 +261,7 @@ export default function ArticleReaderPage() {
             </m.button>
 
             <span
-              className="text-[11px] font-black rounded-md text-accent uppercase tracking-wider"
+              className="text-[11px] font-bold rounded-md text-accent uppercase tracking-wider"
               style={{
                 padding: "4px 10px",
                 background: "var(--accent-light)",
@@ -338,7 +338,7 @@ export default function ArticleReaderPage() {
                       setSpeakingIdx(null);
                     }
                   }}
-                  className="w-[140px] py-1 px-2 rounded-lg border-2 border-border bg-surface-alt text-text-primary text-sm font-bold cursor-pointer outline-none"
+                  className="w-[140px] py-1 px-2 rounded-lg border border-border bg-surface-alt text-text-primary text-sm font-bold cursor-pointer outline-none"
                 >
                   <option value="us">🇺🇸 US English</option>
                   <option value="uk">🇬🇧 UK English</option>
@@ -399,7 +399,7 @@ export default function ArticleReaderPage() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     title="Analyze grammar"
-                    className="w-[26px] h-[26px] rounded-lg border-2 border-border flex items-center justify-center"
+                    className="w-[26px] h-[26px] rounded-lg border border-border flex items-center justify-center"
                     style={{
                       background: grammarResults[idx]?.length
                         ? "linear-gradient(135deg, var(--accent), var(--secondary))"
@@ -423,7 +423,7 @@ export default function ArticleReaderPage() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     title="Listen to this paragraph"
-                    className="w-[26px] h-[26px] rounded-lg border-2 border-border flex items-center justify-center"
+                    className="w-[26px] h-[26px] rounded-lg border border-border flex items-center justify-center"
                     style={{
                       background:
                         speakingIdx === idx
@@ -464,7 +464,7 @@ export default function ArticleReaderPage() {
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                  className="fixed z-[901] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] bg-surface rounded-xl border-2 border-border overflow-hidden shadow-xl"
+                  className="fixed z-[901] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] bg-surface rounded-xl border border-border overflow-hidden shadow-xl"
                 >
                   {/* Header banner */}
                   <div
@@ -476,7 +476,7 @@ export default function ArticleReaderPage() {
                     }}
                   >
                     <Lightbulb size={16} />
-                    <span className="font-black text-[14.5px]">
+                    <span className="font-bold text-[14.5px]">
                       Grammar Analysis
                     </span>
                     <span
@@ -488,7 +488,7 @@ export default function ArticleReaderPage() {
                     <button
                       type="button"
                       onClick={() => setGrammarPopup(null)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[13px] font-black text-white/80 hover:text-white cursor-pointer bg-transparent border-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[13px] font-bold text-white/80 hover:text-white cursor-pointer bg-transparent border-none"
                     >
                       ✕
                     </button>
@@ -499,13 +499,13 @@ export default function ArticleReaderPage() {
                     {grammarResults[grammarPopup].map((pattern, pi) => (
                       <div
                         key={pi}
-                        className="rounded-lg bg-surface-alt border-2 border-border py-3 px-3.5"
+                        className="rounded-lg bg-surface-alt border border-border py-3 px-3.5"
                         style={{
                           borderLeft: `4.5px solid ${PATTERN_COLORS[pattern.color] ?? "var(--border)"}`,
                         }}
                       >
                         <span
-                          className="font-black block mb-1.5 text-[13.5px]"
+                          className="font-bold block mb-1.5 text-[13.5px]"
                           style={{
                             color:
                               PATTERN_COLORS[pattern.color] ?? "var(--accent)",
@@ -514,7 +514,7 @@ export default function ArticleReaderPage() {
                           {pattern.name}
                         </span>
 
-                        <div className="bg-surface rounded-md py-1.5 px-2.5 mb-2 font-bold text-text-primary border-2 border-border font-mono text-[12.5px]">
+                        <div className="bg-surface rounded-md py-1.5 px-2.5 mb-2 font-bold text-text-primary border border-border font-mono text-[12.5px]">
                           &quot;{pattern.phrase}&quot;
                         </div>
 

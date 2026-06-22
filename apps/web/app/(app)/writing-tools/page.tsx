@@ -71,7 +71,7 @@ export default function WritingToolsPage() {
                 key={t.value}
                 onClick={() => setActive(t.value)}
                 whileTap={{ scale: 0.97 }}
-                className={`flex-1 py-2.5 px-4 rounded-lg cursor-pointer flex items-center justify-center gap-2 text-[13px] font-black transition-all duration-100 min-w-max border-2 ${
+                className={`flex-1 py-2.5 px-4 rounded-lg cursor-pointer flex items-center justify-center gap-2 text-[13px] font-bold transition-all duration-100 min-w-max border ${
                   isActive
                     ? "bg-accent text-text-on-accent border-border shadow-sm"
                     : "bg-transparent text-text-secondary border-transparent hover:text-text-primary hover:bg-surface-hover"

@@ -38,7 +38,7 @@ export function QuickLinkCard({
           <span className="text-2xl">{emoji}</span>
         )}
         <div>
-          <div className="font-extrabold text-ink text-[13.5px]">{label}</div>
+          <div className="font-bold text-ink text-[13.5px]">{label}</div>
           <div className="text-[11px] text-text-muted font-semibold">{desc}</div>
         </div>
       </Card>

@@ -241,7 +241,7 @@ export default function SmartReaderPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="rounded-2xl border-2 border-border bg-surface shadow-sm overflow-hidden">
+            <div className="rounded-2xl border border-border bg-surface shadow-sm overflow-hidden">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -277,7 +277,7 @@ export default function SmartReaderPage() {
                   {/* History button */}
                   <button
                     onClick={() => setShowHistory(!showHistory)}
-                    className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all cursor-pointer border-2 ${
+                    className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all cursor-pointer border ${
                       showHistory
                         ? "border-accent bg-accent/10 text-accent"
                         : "border-border text-text-muted hover:border-accent/40 hover:text-accent"
@@ -299,7 +299,7 @@ export default function SmartReaderPage() {
                     className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95 ${
                       input.trim() && !isLoading
                         ? "bg-accent text-white shadow-sm hover:brightness-110"
-                        : "bg-surface-hover border-2 border-border text-text-muted cursor-not-allowed opacity-50"
+                        : "bg-surface-hover border border-border text-text-muted cursor-not-allowed opacity-50"
                     }`}
                   >
                     {isLoading ? (
@@ -329,7 +329,7 @@ export default function SmartReaderPage() {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <div className="rounded-2xl border-2 border-border bg-surface shadow-sm">
+                <div className="rounded-2xl border border-border bg-surface shadow-sm">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-accent" />
@@ -438,7 +438,7 @@ export default function SmartReaderPage() {
                       setInput(sample.text);
                       analyze(sample.text);
                     }}
-                    className="flex flex-col gap-1.5 rounded-xl border-2 border-border bg-surface p-3.5 text-left hover:border-accent/40 hover:bg-accent/5 transition-all cursor-pointer group"
+                    className="flex flex-col gap-1.5 rounded-xl border border-border bg-surface p-3.5 text-left hover:border-accent/40 hover:bg-accent/5 transition-all cursor-pointer group"
                   >
                     <span className="text-xs font-bold text-ink group-hover:text-accent transition-colors">
                       {sample.label}
@@ -457,7 +457,7 @@ export default function SmartReaderPage() {
             <m.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="rounded-xl border-2 border-error bg-error/10 p-4 text-sm text-error font-semibold"
+              className="rounded-xl border border-error bg-error/10 p-4 text-sm text-error font-semibold"
             >
               {error}
             </m.div>
@@ -466,13 +466,13 @@ export default function SmartReaderPage() {
           {/* Loading skeleton */}
           {isLoading && (
             <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-              <div className="rounded-xl border-2 border-border bg-surface p-5 space-y-3">
+              <div className="rounded-xl border border-border bg-surface p-5 space-y-3">
                 <div className="h-4 w-32 rounded-lg bg-surface-hover animate-pulse" />
                 <div className="h-4 w-full rounded-lg bg-surface-hover animate-pulse" />
                 <div className="h-4 w-3/4 rounded-lg bg-surface-hover animate-pulse" />
                 <div className="h-4 w-1/2 rounded-lg bg-surface-hover animate-pulse" />
               </div>
-              <div className="rounded-xl border-2 border-border bg-surface p-5 space-y-3">
+              <div className="rounded-xl border border-border bg-surface p-5 space-y-3">
                 <div className="h-4 w-40 rounded-lg bg-surface-hover animate-pulse" />
                 <div className="h-4 w-full rounded-lg bg-surface-hover animate-pulse" />
                 <div className="h-4 w-2/3 rounded-lg bg-surface-hover animate-pulse" />

@@ -143,7 +143,7 @@ export default function SummarizeMode({ examMode }: Props) {
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-5">
       {/* Error banner */}
       {error && (
-        <div className="py-2.5 px-4 rounded-lg text-[var(--error)] text-[13px] bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
+        <div className="py-2.5 px-4 rounded-lg text-[var(--error)] text-[13px] bg-error-bg border border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
           <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
         </div>
       )}
@@ -158,7 +158,7 @@ export default function SummarizeMode({ examMode }: Props) {
           {/* Wrap idle content in Card */}
           <div className="text-center mb-6">
             <FileText size={40} className="text-accent mx-auto mb-2" />
-            <h2 className="text-lg font-black m-0 mb-1.5 text-text-primary">
+            <h2 className="text-lg font-bold m-0 mb-1.5 text-text-primary">
               Listen &amp; Summarize
             </h2>
             <p className="text-text-secondary m-0 text-[13px]">
@@ -178,7 +178,7 @@ export default function SummarizeMode({ examMode }: Props) {
                   onClick={() => setSelectedLevel(l)}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.97 }}
-                  className={`py-1.5 px-3.5 rounded-lg font-bold text-[13px] cursor-pointer border-2 transition-all duration-100 ${
+                  className={`py-1.5 px-3.5 rounded-lg font-bold text-[13px] cursor-pointer border transition-all duration-100 ${
                     selectedLevel === l
                       ? "border-accent bg-accent text-ink shadow-sm -translate-y-0.5"
                       : "border-border bg-surface text-text-primary hover:bg-surface-hover"
@@ -193,7 +193,7 @@ export default function SummarizeMode({ examMode }: Props) {
             </p>
           </div>
 
-          <Button onClick={startSession} className="w-full h-11 text-[15px] font-black">
+          <Button onClick={startSession} className="w-full h-11 text-[15px] font-bold">
             Start
           </Button>
         </motion.div>
@@ -249,7 +249,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 onChange={(e) => setSummaryText(e.target.value)}
                 placeholder="Write your summary here... (minimum 30 words, maximum 400 words)"
                 rows={6}
-                className="w-full rounded-lg border-2 border-border text-sm p-3.5 bg-surface leading-[1.7] resize-y text-text-primary font-[inherit] outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all"
+                className="w-full rounded-lg border border-border text-sm p-3.5 bg-surface leading-[1.7] resize-y text-text-primary font-[inherit] outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all"
               />
               {/* Word count indicator */}
               <div className="flex justify-between items-center text-xs">
@@ -266,7 +266,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 <Button
                   onClick={submitSummary}
                   disabled={!wcOk}
-                  className="text-[13px] font-black py-2.5 px-5 flex items-center gap-1.5"
+                  className="text-[13px] font-bold py-2.5 px-5 flex items-center gap-1.5"
                 >
                   <Send size={14} /> Submit
                 </Button>
@@ -281,7 +281,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 onClick={() => setState("writing")}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                className="rounded-lg bg-transparent text-accent text-[13px] font-black cursor-pointer py-2.5 px-6 border-2 border-accent hover:bg-accent-light hover:shadow-sm transition-all duration-100"
+                className="rounded-lg bg-transparent text-accent text-[13px] font-bold cursor-pointer py-2.5 px-6 border border-accent hover:bg-accent-light hover:shadow-sm transition-all duration-100"
               >
                 Finished Listening → Start Summarizing
               </motion.button>
@@ -331,7 +331,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 />
               </svg>
               <span
-                className={`absolute inset-0 flex items-center justify-center text-[26px] font-black ${scoreColorClass(result.overall)}`}
+                className={`absolute inset-0 flex items-center justify-center text-[26px] font-bold ${scoreColorClass(result.overall)}`}
               >
                 {result.overall}
               </span>
@@ -347,7 +347,7 @@ export default function SummarizeMode({ examMode }: Props) {
               ].map(({ label, value }) => (
                 <div key={label}>
                   <p className="text-[11px] text-text-secondary mb-1">{label}</p>
-                  <p className={`text-lg font-black m-0 ${scoreColorClass(value)}`}>{value}</p>
+                  <p className={`text-lg font-bold m-0 ${scoreColorClass(value)}`}>{value}</p>
                 </div>
               ))}
             </div>
@@ -444,13 +444,13 @@ export default function SummarizeMode({ examMode }: Props) {
               }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
+              className="rounded-lg border border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
             >
               <RefreshCw size={14} /> Rewrite
             </motion.button>
             <Button
               onClick={startSession}
-              className="text-[13px] font-black py-2.5 px-5 flex items-center gap-1.5"
+              className="text-[13px] font-bold py-2.5 px-5 flex items-center gap-1.5"
             >
               New Exercise
             </Button>

@@ -93,17 +93,17 @@ function TierSection({
         <div className="flex items-center gap-4 min-w-0">
           {/* Program number block */}
           <div
-            className="grid h-12 w-12 shrink-0 place-items-center border-2 border-border font-display text-lg font-black text-white shadow-[3px_3px_0_var(--shadow-color)]"
+            className="grid h-12 w-12 shrink-0 place-items-center border border-border font-display text-lg font-bold text-white shadow"
             style={{ background: tier.color }}
           >
             {ord(tierIdx)}
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-text-muted">
+            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
               <span>Program {ord(tierIdx)}</span>
               <span aria-hidden>{tier.stars}</span>
             </div>
-            <h3 className="m-0 truncate font-display text-xl font-black leading-tight text-ink">
+            <h3 className="m-0 truncate font-display text-xl font-bold leading-tight text-ink">
               {tier.title}
             </h3>
           </div>
@@ -112,20 +112,20 @@ function TierSection({
         {/* Tier ratio */}
         <div className="shrink-0 text-right">
           <div
-            className="font-display text-2xl font-black leading-none tabular-nums"
+            className="font-display text-2xl font-bold leading-none tabular-nums"
             style={{ color: pct > 0 ? tier.color : "var(--text-muted)" }}
           >
             {completed}
             <span className="text-text-muted">/{topicIds.length}</span>
           </div>
-          <div className="font-mono text-[10px] font-bold uppercase tracking-widest text-text-muted">
+          <div className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">
             {tier.subtitle}
           </div>
         </div>
       </div>
 
       {/* Heavy section rule with a fill segment */}
-      <div className="relative mb-3 h-1.5 w-full border-2 border-border bg-surface">
+      <div className="relative mb-3 h-1.5 w-full border border-border bg-surface">
         <m.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -136,7 +136,7 @@ function TierSection({
       </div>
 
       {/* ── Points: bordered syllabus table with a numbered gutter ── */}
-      <div className="overflow-hidden border-2 border-border bg-surface shadow-[4px_4px_0_var(--shadow-color)]">
+      <div className="overflow-hidden border border-border bg-surface shadow-md">
         {tier.points.map((point, idx) => (
           <PointRow
             key={point.id}
@@ -223,7 +223,7 @@ function PointRow({
         {/* Gutter ordinal */}
         <div className="relative grid place-items-center border-r-2 border-border py-4">
           <span
-            className="select-none font-display text-3xl font-black leading-none tabular-nums sm:text-4xl"
+            className="select-none font-display text-3xl font-bold leading-none tabular-nums sm:text-4xl"
             style={numberStyle}
           >
             {ord(index)}
@@ -238,11 +238,11 @@ function PointRow({
         {/* Title + focus note */}
         <div className="flex min-w-0 flex-col justify-center gap-1 py-3.5 pl-4 pr-3">
           <div className="flex items-center gap-2">
-            <span className="truncate font-display text-[15px] font-black leading-tight text-ink">
+            <span className="truncate font-display text-[15px] font-bold leading-tight text-ink">
               {point.title}
             </span>
             {!isDirect && (
-              <span className="inline-flex shrink-0 items-center gap-1 border border-border bg-bg-deep px-1.5 py-px font-mono text-[9px] font-bold uppercase tracking-wider text-text-muted">
+              <span className="inline-flex shrink-0 items-center gap-1 border border-border bg-bg-deep px-1.5 py-px text-[9px] font-semibold uppercase tracking-wider text-text-muted">
                 <Layers size={9} />
                 {subTopics.length}
               </span>
@@ -259,7 +259,7 @@ function PointRow({
         {/* Right meta column */}
         <div className="flex items-center gap-2.5 pr-3.5 sm:pr-5">
           {inProg && !done && (
-            <span className="hidden items-center gap-1 border-2 border-accent/30 bg-accent-light px-2 py-1 font-mono text-[9px] font-black uppercase tracking-wider text-accent-active sm:inline-flex">
+            <span className="hidden items-center gap-1 border border-accent/30 bg-accent-light px-2 py-1 text-[9px] font-semibold uppercase tracking-wider text-accent-active sm:inline-flex">
               <Zap size={10} className="fill-current" />
               Đang học
             </span>
@@ -273,11 +273,11 @@ function PointRow({
             </span>
           )}
           {isDirect ? (
-            <span className="grid h-8 w-8 place-items-center border-2 border-border bg-surface text-ink shadow-[2px_2px_0_var(--shadow-color)] transition-transform group-hover/row:-translate-x-0.5 group-hover/row:-translate-y-0.5">
+            <span className="grid h-8 w-8 place-items-center border border-border bg-surface text-ink shadow-sm transition-transform group-hover/row:-translate-x-0.5 group-hover/row:-translate-y-0.5">
               <ArrowUpRight size={15} />
             </span>
           ) : (
-            <span className="grid h-8 w-8 place-items-center border-2 border-border bg-surface text-ink">
+            <span className="grid h-8 w-8 place-items-center border border-border bg-surface text-ink">
               <m.span animate={{ rotate: open ? 90 : 0 }} className="grid place-items-center">
                 <ChevronRight size={15} />
               </m.span>
@@ -298,7 +298,7 @@ function PointRow({
               className="overflow-hidden border-t-2 border-dashed border-border bg-bg-deep"
             >
               <div className="flex flex-col gap-2.5 px-4 py-4 sm:pl-[76px]">
-                <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-text-muted">
+                <div className="text-[9px] font-semibold uppercase tracking-[0.2em] text-text-muted">
                   Modules · {subTopics.length}
                 </div>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -317,10 +317,10 @@ function PointRow({
                             focusNote: point.focusNote,
                           })
                         }
-                        className="group/mod flex items-center gap-2.5 border-2 border-border bg-surface px-3 py-2.5 text-left shadow-[2px_2px_0_var(--shadow-color)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_var(--shadow-color)] active:translate-x-0 active:translate-y-0 active:shadow-[1px_1px_0_var(--shadow-color)]"
+                        className="group/mod flex items-center gap-2.5 border border-border bg-surface px-3 py-2.5 text-left shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow active:translate-x-0 active:translate-y-0 active:shadow-sm"
                       >
                         <span
-                          className={`grid h-5 w-5 shrink-0 place-items-center border-2 border-border font-mono text-[8px] font-black ${
+                          className={`grid h-5 w-5 shrink-0 place-items-center border border-border font-mono text-[8px] font-bold ${
                             tDone
                               ? "bg-success text-white"
                               : tProg

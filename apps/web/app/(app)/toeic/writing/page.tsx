@@ -45,7 +45,7 @@ export default async function ToeicWritingPage() {
               />
 
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl grid place-items-center shrink-0 bg-info/10 border-2 border-info/20">
+                <div className="w-14 h-14 rounded-2xl grid place-items-center shrink-0 bg-info/10 border border-info/20">
                   <ClipboardList className="text-info" size={24} />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -55,7 +55,7 @@ export default async function ToeicWritingPage() {
                     Essay (30 mins)
                   </CardDescription>
                   <div className="flex flex-wrap gap-1.5 mt-3">
-                    <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border-2 border-warning/20 px-2 py-0.5">
+                    <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2 py-0.5">
                       AI grading after submission
                     </span>
                   </div>
@@ -70,7 +70,7 @@ export default async function ToeicWritingPage() {
         ) : (
           <Card shadowSize="sm" className="p-0 overflow-hidden">
             <div className="flex flex-col items-center justify-center py-16 text-center px-6">
-              <div className="w-14 h-14 rounded-2xl bg-surface-alt border-2 border-border grid place-items-center mb-3">
+              <div className="w-14 h-14 rounded-2xl bg-surface-alt border border-border grid place-items-center mb-3">
                 <ClipboardList className="text-text-muted" size={24} />
               </div>
               <p className="text-sm font-bold text-text-secondary mb-1">
@@ -86,7 +86,7 @@ export default async function ToeicWritingPage() {
         {/* History */}
         <Card shadowSize="sm" className="p-0 overflow-hidden">
           <div className="px-5 py-3.5 border-b-2 border-border bg-surface-alt">
-            <h3 className="text-sm font-black text-ink font-display uppercase tracking-wider m-0">
+            <h3 className="text-sm font-bold text-ink font-display uppercase tracking-wider m-0">
               Writing History
             </h3>
           </div>
@@ -94,7 +94,7 @@ export default async function ToeicWritingPage() {
           <div className="p-4">
             {history.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="w-14 h-14 rounded-2xl bg-surface-alt border-2 border-border grid place-items-center mb-3">
+                <div className="w-14 h-14 rounded-2xl bg-surface-alt border border-border grid place-items-center mb-3">
                   <ClipboardList className="text-text-muted" size={24} />
                 </div>
                 <p className="text-sm font-bold text-text-secondary mb-1">
@@ -112,7 +112,7 @@ export default async function ToeicWritingPage() {
                     href={`/toeic/writing/${h.id}/result`}
                     className="no-underline group"
                   >
-                    <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border-2 border-border bg-surface-alt hover:border-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150 cursor-pointer">
+                    <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-border bg-surface-alt hover:border-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150 cursor-pointer">
                       <div className="min-w-0">
                         <div className="text-sm font-bold text-ink truncate">
                           {new Date(h.completedAt!).toLocaleString("en-US")}
@@ -122,7 +122,7 @@ export default async function ToeicWritingPage() {
                         </div>
                       </div>
                       <div className="text-right shrink-0 flex items-center gap-2">
-                        <span className="text-lg font-black text-accent font-display tabular-nums">
+                        <span className="text-lg font-bold text-accent font-display tabular-nums">
                           {h.scaledScore ?? "—"}
                         </span>
                         <span className="text-xs text-text-muted font-bold">/ 200</span>

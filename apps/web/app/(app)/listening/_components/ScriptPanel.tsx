@@ -93,7 +93,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
         onClick={handleToggle}
         whileHover={{ y: -1 }}
         whileTap={{ scale: 0.98 }}
-        className={`flex items-center justify-center gap-2 cursor-pointer text-[13px] font-bold py-2.5 px-4 rounded-lg border-2 border-border transition-all duration-100 ${
+        className={`flex items-center justify-center gap-2 cursor-pointer text-[13px] font-bold py-2.5 px-4 rounded-lg border border-border transition-all duration-100 ${
           isRevealed
             ? "bg-warning-bg text-[var(--warning)] border-[color-mix(in_srgb,var(--warning)_40%,var(--border))]"
             : "bg-surface text-text-secondary hover:bg-surface-hover"
@@ -116,7 +116,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="flex flex-col gap-2.5 p-3.5 px-4.5 rounded-lg border-2 border-[color-mix(in_srgb,var(--warning)_30%,var(--border))] bg-warning-bg"
+            className="flex flex-col gap-2.5 p-3.5 px-4.5 rounded-lg border border-[color-mix(in_srgb,var(--warning)_30%,var(--border))] bg-warning-bg"
           >
             <div className="flex items-center gap-2 text-[13px] font-semibold text-[var(--warning)]">
               <AlertTriangle size={15} /> Viewing the script will reduce XP by 30% for this exercise
@@ -125,13 +125,13 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
             <div className="flex gap-2">
               <button
                 onClick={handleConfirm}
-                className="flex-1 rounded-lg border-2 border-border text-xs font-bold cursor-pointer py-2 px-3.5 bg-[var(--warning)] text-ink shadow-sm hover:-translate-y-0.5 transition-all duration-100"
+                className="flex-1 rounded-lg border border-border text-xs font-bold cursor-pointer py-2 px-3.5 bg-[var(--warning)] text-ink shadow-sm hover:-translate-y-0.5 transition-all duration-100"
               >
                 Show Script
               </button>
               <button
                 onClick={handleCancel}
-                className="flex-1 rounded-lg border-2 border-border bg-surface text-xs font-medium cursor-pointer py-2 px-3.5 text-text-primary hover:bg-surface-hover transition-all duration-100"
+                className="flex-1 rounded-lg border border-border bg-surface text-xs font-medium cursor-pointer py-2 px-3.5 text-text-primary hover:bg-surface-hover transition-all duration-100"
               >
                 Cancel
               </button>

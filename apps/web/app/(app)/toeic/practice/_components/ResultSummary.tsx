@@ -80,7 +80,7 @@ export function ResultSummary({
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2" style={{ paddingLeft: 4 }}>
             <XCircle className="text-destructive text-base" />
-            <h4 className="m-0 font-black text-text-primary" style={{ fontSize: 14.5 }}>
+            <h4 className="m-0 font-bold text-text-primary" style={{ fontSize: 14.5 }}>
               Details of {wrong.length} incorrect answers
             </h4>
           </div>
@@ -100,7 +100,7 @@ export function ResultSummary({
                       Question #{q.number}
                     </span>
                     <span
-                      className="text-[10px] font-black rounded-md bg-surface-alt text-text-secondary border-2 border-border"
+                      className="text-[10px] font-bold rounded-md bg-surface-alt text-text-secondary border border-border"
                       style={{ padding: "2px 8px" }}
                     >
                       Part {q.part}
@@ -144,7 +144,7 @@ export function ResultSummary({
 
                   {q.explanationVi && (
                     <div
-                      className="bg-surface-alt border-2 border-border text-text-secondary font-medium"
+                      className="bg-surface-alt border border-border text-text-secondary font-medium"
                       style={{
                         padding: "10px 12px",
                         borderRadius: "var(--radius-md)",

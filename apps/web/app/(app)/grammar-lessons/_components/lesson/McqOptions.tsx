@@ -45,12 +45,12 @@ export function McqOptions({ options, answer, selected, revealed, onSelect }: Mc
             disabled={revealed}
             whileHover={revealed ? undefined : { x: 2 }}
             whileTap={revealed ? undefined : { scale: 0.995 }}
-            className={`flex w-full items-center gap-3 py-3 px-3.5 rounded-xl text-left text-sm border-2 transition-colors duration-150 ${
+            className={`flex w-full items-center gap-3 py-3 px-3.5 rounded-xl text-left text-sm border transition-colors duration-150 ${
               revealed ? "cursor-default" : "cursor-pointer"
             } ${container}`}
           >
             <span
-              className={`grid place-items-center w-7 h-7 rounded-lg text-xs font-black shrink-0 border-2 ${badge}`}
+              className={`grid place-items-center w-7 h-7 rounded-lg text-xs font-bold shrink-0 border ${badge}`}
             >
               {revealed && isCorrect ? (
                 <CircleCheckBig size={15} />

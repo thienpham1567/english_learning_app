@@ -133,7 +133,7 @@ export function ListeningDashboard({
       <div className="flex gap-2.5">
         <Button
           onClick={onStartExercise}
-          className="flex-1 h-12 text-sm font-black flex items-center justify-center gap-2"
+          className="flex-1 h-12 text-sm font-bold flex items-center justify-center gap-2"
         >
           <Volume2 size={16} />
           {recommendedLevel ? `Practice ${recommendedLevel}` : "New Exercise"}
@@ -142,7 +142,7 @@ export function ListeningDashboard({
           onClick={onOpenHistory}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="flex items-center justify-center gap-1.5 border-2 border-border bg-surface text-text-secondary text-[13px] font-bold cursor-pointer py-3.5 px-4.5 rounded-lg hover:bg-surface-hover hover:shadow-sm transition-all duration-100"
+          className="flex items-center justify-center gap-1.5 border border-border bg-surface text-text-secondary text-[13px] font-bold cursor-pointer py-3.5 px-4.5 rounded-lg hover:bg-surface-hover hover:shadow-sm transition-all duration-100"
         >
           <History size={15} />
           History
@@ -169,7 +169,7 @@ export function ListeningDashboard({
                 key={item.id}
                 className="flex items-center gap-2.5 rounded-lg text-xs py-2 px-2.5 bg-accent-muted"
               >
-                <span className="text-[9px] font-extrabold text-accent font-mono py-0.5 px-1.5 rounded-sm bg-accent-muted border-2 border-accent/20">
+                <span className="text-[9px] font-extrabold text-accent font-mono py-0.5 px-1.5 rounded-sm bg-accent-muted border border-accent/20">
                   {item.level}
                 </span>
                 <span className="flex-1 text-text-secondary font-medium">
@@ -208,7 +208,7 @@ export function ListeningDashboard({
             {stats.byLevel.map((bl) => (
               <div
                 key={bl.level}
-                className="py-2 px-3 rounded-lg border-2 border-border text-center w-[70px] bg-accent-muted"
+                className="py-2 px-3 rounded-lg border border-border text-center w-[70px] bg-accent-muted"
               >
                 <div className="text-sm font-extrabold text-accent font-mono">{bl.level}</div>
                 <div className="text-[11px] text-text-secondary">
@@ -243,7 +243,7 @@ function StatCard({
   return (
     <motion.div
       whileHover={{ y: -3, scale: 1.02 }}
-      className="border-2 border-border bg-card text-card-foreground text-center py-3.5 px-3 rounded-lg shadow-sm cursor-default"
+      className="border border-border bg-card text-card-foreground text-center py-3.5 px-3 rounded-lg shadow-sm cursor-default"
     >
       <div className={`text-lg mb-1.5 flex justify-center ${iconColor}`}>{icon}</div>
       <div

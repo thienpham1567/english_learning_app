@@ -145,7 +145,7 @@ function CopyButton({ text }: { text: string }) {
         setTimeout(() => setCopied(false), 2000);
       }}
       title="Copy"
-      className={`border-2 border-border bg-surface cursor-pointer text-[12px] py-1 px-2.5 rounded-lg font-bold flex items-center gap-1.5 transition-all duration-100 hover:-translate-y-px hover:shadow-sm active:translate-y-px active:shadow-none ${copied ? "text-success border-success/30" : "text-text-secondary"}`}
+      className={`border border-border bg-surface cursor-pointer text-[12px] py-1 px-2.5 rounded-lg font-bold flex items-center gap-1.5 transition-all duration-100 hover:-translate-y-px hover:shadow-sm active:translate-y-px active:shadow-none ${copied ? "text-success border-success/30" : "text-text-secondary"}`}
     >
       {copied ? (
         <>
@@ -281,7 +281,7 @@ export function Paraphraser() {
                   setResult(null);
                 }}
                 title={m.description}
-                className={`text-[13px] cursor-pointer flex items-center gap-1.5 shrink-0 py-2 px-3.5 rounded-lg font-bold transition-all duration-100 border-2 ${
+                className={`text-[13px] cursor-pointer flex items-center gap-1.5 shrink-0 py-2 px-3.5 rounded-lg font-bold transition-all duration-100 border ${
                   active
                     ? "border-accent bg-accent text-text-on-accent shadow-sm"
                     : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:-translate-y-px hover:shadow-sm active:translate-y-0 active:shadow-none"
@@ -347,7 +347,7 @@ export function Paraphraser() {
           {/* Example prompts — show when empty */}
           {!text.trim() && !result && (
             <div className="mt-2">
-              <span className="text-[11px] font-black uppercase text-text-muted flex items-center gap-1.5 mb-1.5 tracking-widest">
+              <span className="text-[11px] font-bold uppercase text-text-muted flex items-center gap-1.5 mb-1.5 tracking-widest">
                 <Zap size={10} />
                 Try now
               </span>

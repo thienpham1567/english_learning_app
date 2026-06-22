@@ -18,7 +18,7 @@ export function SubNav() {
       animate={{ opacity: 1, y: 0 }}
       className="flex justify-center gap-1.5 pt-3 px-6 pb-1 overflow-x-auto shrink-0"
     >
-      <div className="flex gap-1 bg-surface border-2 border-border rounded-xl p-1 shadow-sm w-fit">
+      <div className="flex gap-1 bg-surface border border-border rounded-xl p-1 shadow-sm w-fit">
         {TABS.map((t) => {
           const active =
             pathname === t.href || (t.href !== "/toeic" && pathname?.startsWith(t.href));

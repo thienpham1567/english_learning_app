@@ -109,7 +109,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
           >
             {/* Header */}
             <div className="flex items-center justify-between py-4 px-5 border-b-2 border-border shrink-0">
-              <div className="flex items-center gap-2 text-base font-black text-text-primary">
+              <div className="flex items-center gap-2 text-base font-bold text-text-primary">
                 <History size={18} className="text-accent" />
                 Listening History
               </div>
@@ -117,7 +117,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                 onClick={onClose}
                 whileHover={{ rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                className="w-8 h-8 rounded-lg border-2 border-border bg-surface grid place-items-center cursor-pointer hover:bg-surface-hover transition-colors"
+                className="w-8 h-8 rounded-lg border border-border bg-surface grid place-items-center cursor-pointer hover:bg-surface-hover transition-colors"
               >
                 <X size={16} />
               </motion.button>
@@ -129,7 +129,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                 <Filter size={12} /> Filters
               </div>
               {/* Mode pills */}
-              <div className="flex gap-1 flex-wrap bg-bg-deep border-2 border-border rounded-lg p-1">
+              <div className="flex gap-1 flex-wrap bg-bg-deep border border-border rounded-lg p-1">
                 {FILTER_MODES.map((m) => {
                   const isActive = (history.mode ?? "all") === m.value;
                   return (
@@ -138,7 +138,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                       onClick={() => history.setMode(m.value === "all" ? null : m.value)}
                       className={`flex-1 min-w-[60px] py-1.5 px-2 rounded-md text-[11px] font-bold cursor-pointer transition-all duration-100 ${
                         isActive
-                          ? "bg-accent text-ink border-2 border-border shadow-sm -translate-y-0.5"
+                          ? "bg-accent text-ink border border-border shadow-sm -translate-y-0.5"
                           : "bg-transparent text-text-secondary hover:bg-surface-hover"
                       }`}
                     >
@@ -153,7 +153,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                   onChange={(e) =>
                     history.setLevel(e.target.value === "all" ? null : e.target.value)
                   }
-                  className="flex-1 h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm transition-all cursor-pointer"
+                  className="flex-1 h-8 rounded-lg border border-border bg-surface-alt px-2.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm transition-all cursor-pointer"
                 >
                   <option value="all">All Levels</option>
                   <option value="A1">A1</option>
@@ -167,7 +167,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                   onClick={() => history.setBookmarkedOnly(!history.bookmarkedOnly)}
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.97 }}
-                  className={`flex items-center gap-1 rounded-lg cursor-pointer text-xs font-bold py-1 px-2.5 border-2 transition-all duration-100 ${
+                  className={`flex items-center gap-1 rounded-lg cursor-pointer text-xs font-bold py-1 px-2.5 border transition-all duration-100 ${
                     history.bookmarkedOnly
                       ? "border-[var(--xp)] bg-[color-mix(in_srgb,var(--xp)_8%,transparent)] text-[var(--xp)]"
                       : "border-border bg-transparent text-text-muted hover:bg-surface-hover"
@@ -220,7 +220,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                   onClick={() => history.goToPage(Math.max(1, history.page - 1))}
                   disabled={history.page <= 1}
                   whileHover={history.page > 1 ? { x: -2 } : {}}
-                  className={`p-1.5 rounded-lg border-2 border-border ${
+                  className={`p-1.5 rounded-lg border border-border ${
                     history.page <= 1
                       ? "text-border cursor-not-allowed"
                       : "text-text-primary cursor-pointer hover:bg-surface-hover"
@@ -235,7 +235,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                   onClick={() => history.goToPage(Math.min(totalPages, history.page + 1))}
                   disabled={history.page >= totalPages}
                   whileHover={history.page < totalPages ? { x: 2 } : {}}
-                  className={`p-1.5 rounded-lg border-2 border-border ${
+                  className={`p-1.5 rounded-lg border border-border ${
                     history.page >= totalPages
                       ? "text-border cursor-not-allowed"
                       : "text-text-primary cursor-pointer hover:bg-surface-hover"
@@ -271,7 +271,7 @@ function HistoryCard({
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04, type: "spring", stiffness: 350, damping: 30 }}
-      className={`flex items-center gap-3 border-2 border-border bg-surface py-3 px-3.5 rounded-lg transition-all duration-100 ${
+      className={`flex items-center gap-3 border border-border bg-surface py-3 px-3.5 rounded-lg transition-all duration-100 ${
         onReplay
           ? "cursor-pointer hover:bg-surface-hover hover:shadow-sm hover:-translate-y-0.5"
           : "cursor-default"

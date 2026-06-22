@@ -87,7 +87,7 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
 
         {/* Type label badge */}
         <span
-          className="text-[8.5px] font-black uppercase tracking-wider rounded-lg mb-3 self-end py-0.5 px-2 border-2"
+          className="text-[8.5px] font-bold uppercase tracking-wider rounded-lg mb-3 self-end py-0.5 px-2 border"
           style={{
             background: `color-mix(in srgb, ${accentColor} 8%, transparent)`,
             color: accentColor,
@@ -101,7 +101,7 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
         <m.div
           animate={pulsing ? { scale: [1, 1.18, 1], rotate: [0, 2, -2, 0] } : {}}
           transition={{ duration: 0.4 }}
-          className="font-black font-mono leading-none text-center text-[36px] mb-1.5"
+          className="font-bold font-mono leading-none text-center text-[36px] mb-1.5"
           style={{ color: accentColor }}
         >
           /{symbol}/
@@ -138,9 +138,9 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
                 disabled={isBusy}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.95 }}
-                className={`flex-1 inline-flex items-center justify-center gap-1 rounded-xl text-[10px] font-extrabold border-2 py-1.5 transition-all duration-100 ${isBusy ? "cursor-wait" : "cursor-pointer"} ${
+                className={`flex-1 inline-flex items-center justify-center gap-1 rounded-xl text-[10px] font-extrabold border py-1.5 transition-all duration-100 ${isBusy ? "cursor-wait" : "cursor-pointer"} ${
                   isActive
-                    ? "border-border text-ink font-black shadow-sm"
+                    ? "border-border text-ink font-bold shadow-sm"
                     : "border-border bg-surface-alt text-text-secondary hover:bg-surface-hover"
                 }`}
                 style={
@@ -173,7 +173,7 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
               setShowPairs((p) => !p);
             }}
             whileTap={{ scale: 0.96 }}
-            className="w-full mt-2 text-[9px] font-black uppercase tracking-wider text-text-muted cursor-pointer bg-transparent border-none hover:text-accent transition-colors py-1"
+            className="w-full mt-2 text-[9px] font-bold uppercase tracking-wider text-text-muted cursor-pointer bg-transparent border-none hover:text-accent transition-colors py-1"
           >
             {showPairs ? "▾ Hide" : "▸ Minimal pairs"} ({pairs.length})
           </m.button>

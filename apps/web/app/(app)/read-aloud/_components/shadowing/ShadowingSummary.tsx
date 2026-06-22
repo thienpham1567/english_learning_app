@@ -35,20 +35,20 @@ export function ShadowingSummary({
     <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="text-center border-2 border-border p-6 shadow-[5px_5px_0_var(--shadow-color)] bg-accent-light"
+      className="text-center border border-border p-6 shadow-lg bg-accent-light"
     >
       <div className="flex justify-center mb-3">
         <m.div
           initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 16 }}
-          className="grid h-14 w-14 place-items-center border-2 border-border bg-surface shadow-[3px_3px_0_var(--shadow-color)]"
+          className="grid h-14 w-14 place-items-center border border-border bg-surface shadow"
         >
           <Award size={28} className="text-accent-active" />
         </m.div>
       </div>
 
-      <h3 className="mb-1 text-ink font-display font-black uppercase tracking-tight text-lg">
+      <h3 className="mb-1 text-ink font-display font-bold uppercase tracking-tight text-lg">
         Hoàn thành Shadowing!
       </h3>
 
@@ -59,7 +59,7 @@ export function ShadowingSummary({
       >
         <div className="w-[84px] h-[84px] rounded-full bg-surface grid place-items-center">
           <div>
-            <div className="text-[26px] font-black leading-none" style={{ color }}>
+            <div className="text-[26px] font-bold leading-none" style={{ color }}>
               {avgScore}
             </div>
             <div className="text-[9px] font-bold text-text-muted mt-0.5">/ 100</div>
@@ -75,13 +75,13 @@ export function ShadowingSummary({
       ) : (
         <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
           {completion && completion.xpAwarded > 0 && (
-            <span className="inline-flex items-center gap-1 bg-xp/15 border-2 border-border text-xp font-black font-mono text-[12px] py-1 px-3 shadow-[2px_2px_0_var(--shadow-color)]">
+            <span className="inline-flex items-center gap-1 bg-xp/15 border border-border text-xp font-bold font-mono text-[12px] py-1 px-3 shadow-sm">
               <Sparkles size={13} /> +{completion.xpAwarded} XP
             </span>
           )}
           {skill && (
             <span
-              className={`inline-flex items-center gap-1 border-2 border-border font-black font-mono text-[12px] py-1 px-3 shadow-[2px_2px_0_var(--shadow-color)] ${
+              className={`inline-flex items-center gap-1 border border-border font-bold font-mono text-[12px] py-1 px-3 shadow-sm ${
                 skill.levelUp ? "bg-success/15 text-success" : "bg-surface text-text-secondary"
               }`}
             >
@@ -99,7 +99,7 @@ export function ShadowingSummary({
           return (
             <span
               key={i}
-              className="text-[11px] font-black font-mono py-1 px-2.5 border-2"
+              className="text-[11px] font-bold font-mono py-1 px-2.5 border"
               style={{ color: scoreColor(s), borderColor: scoreColor(s) }}
             >
               #{i + 1}: {s}
@@ -109,10 +109,10 @@ export function ShadowingSummary({
       </div>
 
       <m.button
-        whileHover={{ x: -1, y: -1 }}
-        whileTap={{ x: 0, y: 0 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={onRestart}
-        className="inline-flex items-center gap-2 text-text-on-accent text-[13px] font-black uppercase tracking-tight cursor-pointer font-display py-2.5 px-6 border-2 border-border bg-accent shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+        className="inline-flex items-center gap-2 text-text-on-accent text-[13px] font-bold uppercase tracking-tight cursor-pointer font-display py-2.5 px-6 border border-border bg-accent shadow hover:shadow-md active:shadow-none transition-shadow"
       >
         <RefreshCw size={14} /> Luyện lại
       </m.button>

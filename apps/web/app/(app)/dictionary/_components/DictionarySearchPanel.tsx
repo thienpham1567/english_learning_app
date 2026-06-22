@@ -184,7 +184,7 @@ export function DictionarySearchPanel({
           {suggestions.length > 0 && (
             <ul
               role="listbox"
-              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border-2 border-border bg-surface shadow-lg list-none p-0 m-0"
+              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-border bg-surface shadow-lg list-none p-0 m-0"
             >
               {suggestions.map((s, i) => (
                 <li
@@ -216,7 +216,7 @@ export function DictionarySearchPanel({
             onSubmit(draft.trim());
           }}
           disabled={isLoading}
-          className="mt-5 w-full rounded-xl bg-accent py-2.5 text-sm font-black text-ink border-2 border-border cursor-pointer transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-hover active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-5 w-full rounded-xl bg-accent py-2.5 text-sm font-bold text-ink border border-border cursor-pointer transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-hover active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Searching..." : "Search"}
         </button>

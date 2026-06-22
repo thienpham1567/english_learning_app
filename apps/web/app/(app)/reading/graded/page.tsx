@@ -127,7 +127,7 @@ export default function GradedReaderPage() {
         </div>
 
         {/* Level filter pills */}
-        <div className="rounded-2xl py-3 px-4 border-2 border-border">
+        <div className="rounded-2xl py-3 px-4 border border-border">
           <div className="flex flex-wrap items-center gap-2">
             <Filter className="text-text-muted text-sm" />
             {LEVELS.map((lv) => {
@@ -168,7 +168,7 @@ export default function GradedReaderPage() {
               <div
                 key={p.id}
                 onClick={() => router.push(`/reading/graded/${p.id}`)}
-                className="rounded-2xl cursor-pointer py-3.5 px-5 border-2 border-border hover:border-accent hover:bg-accent-light transition-all duration-200"
+                className="rounded-2xl cursor-pointer py-3.5 px-5 border border-border hover:border-accent hover:bg-accent-light transition-all duration-200"
                 style={{ opacity: p.isRead ? 0.75 : 1 }}
               >
                 <div className="flex items-center gap-3.5">

@@ -46,7 +46,7 @@ export function WordAnalyzer() {
   return (
     <div className="max-w-[700px] mx-auto w-full flex flex-col gap-4">
       <Card shadowSize="sm" className="rounded-xl bg-surface">
-        <span className="flex items-center gap-1.5 text-[11.5px] font-black text-text-secondary uppercase tracking-wider mb-3">
+        <span className="flex items-center gap-1.5 text-[11.5px] font-bold text-text-secondary uppercase tracking-wider mb-3">
           <Wand2 size={14} /> Analyze a word
         </span>
         <div className="flex gap-2">
@@ -63,7 +63,7 @@ export function WordAnalyzer() {
                 if (e.key === "Enter") analyze();
               }}
               placeholder="e.g. unbelievable, transportation…"
-              className="w-full rounded-xl bg-surface text-text-primary text-sm py-3 pl-9 pr-4 border-2 border-border outline-none transition-colors focus:border-accent"
+              className="w-full rounded-xl bg-surface text-text-primary text-sm py-3 pl-9 pr-4 border border-border outline-none transition-colors focus:border-accent"
             />
           </div>
           <m.button
@@ -72,7 +72,7 @@ export function WordAnalyzer() {
             whileTap={word.trim() ? { scale: 0.97 } : undefined}
             onClick={analyze}
             disabled={!word.trim() || loading}
-            className={`inline-flex items-center gap-1.5 rounded-xl text-[13px] font-black py-3 px-5 border-2 transition-colors ${
+            className={`inline-flex items-center gap-1.5 rounded-xl text-[13px] font-bold py-3 px-5 border transition-colors ${
               word.trim()
                 ? "bg-accent text-text-on-accent border-border cursor-pointer hover:bg-accent-hover"
                 : "bg-surface-alt text-text-muted border-border cursor-default"
@@ -84,7 +84,7 @@ export function WordAnalyzer() {
       </Card>
 
       {error && (
-        <div className="p-4 rounded-xl text-center border-2 border-error/25 bg-error/5">
+        <div className="p-4 rounded-xl text-center border border-error/25 bg-error/5">
           <p className="font-bold text-sm text-error m-0">{error}</p>
         </div>
       )}
@@ -97,21 +97,21 @@ export function WordAnalyzer() {
         >
           {/* Morpheme breakdown */}
           <Card shadowSize="sm" className="rounded-xl bg-surface">
-            <span className="text-[11.5px] font-black text-text-secondary uppercase tracking-wider mb-3 block">
+            <span className="text-[11.5px] font-bold text-text-secondary uppercase tracking-wider mb-3 block">
               Breakdown of "{result.word}"
             </span>
             <div className="flex flex-wrap items-stretch gap-2">
               {result.parts.map((part, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border-2 px-3 py-2 min-w-[90px]"
+                  className="rounded-lg border px-3 py-2 min-w-[90px]"
                   style={{
                     borderColor: PART_COLOR[part.type],
                     background: `color-mix(in srgb, ${PART_COLOR[part.type]} 8%, transparent)`,
                   }}
                 >
                   <div
-                    className="font-black font-mono text-[15px]"
+                    className="font-bold font-mono text-[15px]"
                     style={{ color: PART_COLOR[part.type] }}
                   >
                     {part.surface}
@@ -130,7 +130,7 @@ export function WordAnalyzer() {
           {/* Word family */}
           {result.family.length > 0 && (
             <Card shadowSize="sm" className="rounded-xl bg-surface">
-              <span className="text-[11.5px] font-black text-text-secondary uppercase tracking-wider mb-3.5 block">
+              <span className="text-[11.5px] font-bold text-text-secondary uppercase tracking-wider mb-3.5 block">
                 Word Family
               </span>
               <div className="flex flex-col gap-2.5">

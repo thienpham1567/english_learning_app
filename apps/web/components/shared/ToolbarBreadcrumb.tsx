@@ -94,18 +94,18 @@ export function ToolbarBreadcrumb() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.05, type: "spring", stiffness: 400 }}
-          className="w-[30px] h-[30px] rounded-lg grid text-sm text-accent shrink-0 bg-accent-light border-2 border-border shadow-sm place-items-center"
+          className="w-[30px] h-[30px] rounded-lg grid text-sm text-accent shrink-0 bg-accent-light border border-border shadow-sm place-items-center"
         >
           {crumb.icon}
         </m.div>
 
         {/* Text */}
         <div className="flex flex-col justify-center">
-          <span className="text-[10px] uppercase leading-none font-black text-accent tracking-widest">
+          <span className="text-[10px] uppercase leading-none font-bold text-accent tracking-widest">
             {crumb.eyebrow}
           </span>
           <h5
-            className="text-[13px] font-black font-display text-ink mt-0.5 leading-tight"
+            className="text-[13px] font-bold font-display text-ink mt-0.5 leading-tight"
             style={{ margin: "2px 0 0" }}
           >
             {crumb.title}

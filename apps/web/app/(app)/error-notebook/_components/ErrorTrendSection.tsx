@@ -105,7 +105,7 @@ function TrendRow({ trend, errors }: { trend: CategoryTrend; errors: TrendInput[
         : "var(--text-muted)";
 
   return (
-    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-surface border-2 border-border transition-all duration-150 hover:shadow-sm">
+    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-surface border border-border transition-all duration-150 hover:shadow-sm">
       <span className="shrink-0 w-7 h-7 rounded-lg bg-accent/5 grid place-items-center text-accent">
         <IconComponent className="h-4 w-4" />
       </span>

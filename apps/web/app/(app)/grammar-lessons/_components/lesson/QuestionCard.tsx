@@ -62,12 +62,12 @@ export function QuestionCard({
     >
       {/* Tags */}
       <div className="flex items-center gap-2 mb-3.5">
-        <span className="text-[10.5px] font-black text-accent-active rounded-md bg-accent-light py-0.5 px-2">
+        <span className="text-[10.5px] font-bold text-accent-active rounded-md bg-accent-light py-0.5 px-2">
           {TYPE_LABELS[exercise.type] ?? exercise.type}
         </span>
         {tier && (
           <span
-            className="text-[10.5px] font-black rounded-md py-0.5 px-2"
+            className="text-[10.5px] font-bold rounded-md py-0.5 px-2"
             style={{
               color: `var(--${tier.color})`,
               background: `color-mix(in srgb, var(--${tier.color}) 10%, transparent)`,
@@ -90,7 +90,7 @@ export function QuestionCard({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onUseHint}
-          className="inline-flex items-center gap-1.5 py-1.5 px-3 mb-4 text-xs font-bold cursor-pointer rounded-md border-2 border-warning/30 bg-warning/5 text-warning"
+          className="inline-flex items-center gap-1.5 py-1.5 px-3 mb-4 text-xs font-bold cursor-pointer rounded-md border border-warning/30 bg-warning/5 text-warning"
         >
           <Eye size={13} /> View Hint
         </m.button>
@@ -99,7 +99,7 @@ export function QuestionCard({
         <m.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-lg mb-4 py-2.5 px-3.5 text-[13px] text-text-secondary font-medium border-2 border-warning/20 bg-warning/5 inline-flex items-start gap-2"
+          className="rounded-lg mb-4 py-2.5 px-3.5 text-[13px] text-text-secondary font-medium border border-warning/20 bg-warning/5 inline-flex items-start gap-2"
         >
           <Lightbulb size={14} className="text-warning shrink-0 mt-0.5" />
           <span>{exercise.hint}</span>

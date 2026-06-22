@@ -194,7 +194,7 @@ export function ExerciseCard({ text, title, onSubmitAnswers, isLoading }: Props)
   if (questions.length === 0) return null;
 
   return (
-    <div className="my-3 rounded-xl border-2 border-accent/20 bg-accent/3 overflow-hidden">
+    <div className="my-3 rounded-xl border border-accent/20 bg-accent/3 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-accent/5 border-b border-accent/10">
         <div className="flex items-center gap-2">
@@ -238,7 +238,7 @@ export function ExerciseCard({ text, title, onSubmitAnswers, isLoading }: Props)
                         }
                       }}
                       placeholder="..."
-                      className={`inline-block mx-1 px-2 py-0.5 w-[120px] text-sm text-center font-medium rounded-lg border-2 outline-none transition-all duration-200 ${
+                      className={`inline-block mx-1 px-2 py-0.5 w-[120px] text-sm text-center font-medium rounded-lg border outline-none transition-all duration-200 ${
                         submitted
                           ? "bg-accent/10 border-accent/30 text-accent font-bold"
                           : "bg-surface border-border focus:border-accent/50 text-ink placeholder:text-text-muted/40"
@@ -264,7 +264,7 @@ export function ExerciseCard({ text, title, onSubmitAnswers, isLoading }: Props)
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95 ${
               allFilled && !isLoading
                 ? "bg-accent text-white shadow-sm hover:brightness-110"
-                : "bg-surface-hover border-2 border-border text-text-muted cursor-not-allowed opacity-50"
+                : "bg-surface-hover border border-border text-text-muted cursor-not-allowed opacity-50"
             }`}
           >
             <Send className="h-3 w-3" />

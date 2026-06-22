@@ -116,7 +116,7 @@ export function TopicGrid({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.04, type: "spring", stiffness: 300, damping: 25 }}
-            className={`rounded-2xl bg-surface overflow-hidden border-2 transition-all duration-200 ${
+            className={`rounded-2xl bg-surface overflow-hidden border transition-all duration-200 ${
               isExpanded ? "border-accent/30 shadow-md" : "border-border shadow-sm hover:shadow-md"
             }`}
           >
@@ -127,7 +127,7 @@ export function TopicGrid({
             >
               {/* Icon container */}
               <div
-                className="relative grid w-11 h-11 rounded-xl text-lg shrink-0 place-items-center text-white shadow-sm transition-transform duration-200 group-hover:scale-105 border-2 border-white/10"
+                className="relative grid w-11 h-11 rounded-xl text-lg shrink-0 place-items-center text-white shadow-sm transition-transform duration-200 group-hover:scale-105 border border-white/10"
                 style={{
                   background: allDone ? "var(--success)" : cat.color,
                 }}
@@ -143,7 +143,7 @@ export function TopicGrid({
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <span className="font-black text-ink text-[14px] leading-tight truncate">
+                  <span className="font-bold text-ink text-[14px] leading-tight truncate">
                     {cat.title}
                   </span>
                 </div>
@@ -161,7 +161,7 @@ export function TopicGrid({
                     />
                   </div>
                   <span
-                    className="text-xs font-black shrink-0 w-9 text-right tabular-nums"
+                    className="text-xs font-bold shrink-0 w-9 text-right tabular-nums"
                     style={{
                       color: allDone
                         ? "var(--success)"
@@ -206,7 +206,7 @@ export function TopicGrid({
                       onClick={() => onSelectTopic(topic.id, topic.title, topic.level)}
                       whileHover={{ x: 3 }}
                       whileTap={{ scale: 0.995 }}
-                      className={`flex w-full items-center gap-3 rounded-xl cursor-pointer text-left py-2.5 px-3.5 transition-all duration-150 group/topic border-2 ${
+                      className={`flex w-full items-center gap-3 rounded-xl cursor-pointer text-left py-2.5 px-3.5 transition-all duration-150 group/topic border ${
                         isRecommended
                           ? "border-accent/25 bg-accent-light"
                           : isDone
@@ -216,7 +216,7 @@ export function TopicGrid({
                     >
                       {/* Step index circle */}
                       <span
-                        className={`w-7 h-7 rounded-lg grid place-items-center shrink-0 text-[11px] font-extrabold border-2 transition-all duration-150 ${
+                        className={`w-7 h-7 rounded-lg grid place-items-center shrink-0 text-[11px] font-extrabold border transition-all duration-150 ${
                           isDone
                             ? "bg-success text-white border-success/30"
                             : "bg-bg-deep text-text-secondary border-border"
@@ -262,7 +262,7 @@ export function TopicGrid({
                       )}
 
                       {isRecommended && (
-                        <span className="text-[9px] rounded-lg font-extrabold py-0.5 px-2 bg-warning/12 text-warning inline-flex items-center gap-1 border-2 border-warning/20">
+                        <span className="text-[9px] rounded-lg font-extrabold py-0.5 px-2 bg-warning/12 text-warning inline-flex items-center gap-1 border border-warning/20">
                           <Star size={8} className="fill-current" />
                           REC
                         </span>

@@ -66,7 +66,7 @@ export function ErrorPatternSummary({ errors }: Props) {
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-warning font-display">
           Common Error Patterns
         </span>
-        <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-warning/10 text-warning border-2 border-warning/20">
+        <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-warning/10 text-warning border border-warning/20">
           {patterns.length} patterns
         </span>
         <div className="flex-1 h-px bg-border" />
@@ -85,7 +85,7 @@ export function ErrorPatternSummary({ errors }: Props) {
               <div
                 className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b-2 border-border" : ""}`}
               >
-                <span className="shrink-0 w-8 h-8 rounded-xl bg-accent/8 border-2 border-accent/15 grid place-items-center text-accent">
+                <span className="shrink-0 w-8 h-8 rounded-xl bg-accent/8 border border-accent/15 grid place-items-center text-accent">
                   {(() => {
                     const IconComponent = CATEGORY_ICONS[pattern.category.key] || HelpCircle;
                     return <IconComponent className="h-4 w-4" />;
@@ -105,7 +105,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                     if (!impact) return null;
                     return (
                       <div className="flex items-center gap-1.5 mt-1.5">
-                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-lg bg-accent/8 text-accent border-2 border-accent/15 inline-flex items-center gap-1">
+                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-lg bg-accent/8 text-accent border border-accent/15 inline-flex items-center gap-1">
                           <TrendingUp className="h-3 w-3 text-success" /> ~{impact.estimatedPoints}{" "}
                           pts
                         </span>
@@ -124,7 +124,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                   )}
                   <Link
                     href={pattern.nextAction.href}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-lg border-2 border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-lg border border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
                   >
                     {actionLabel} <ChevronRight className="h-2.5 w-2.5" />
                   </Link>

@@ -391,7 +391,7 @@ export function ExamWordLists({ onSelect }: Props) {
   return (
     <div className="flex flex-col gap-3">
       {/* Tab header */}
-      <div className="flex rounded-lg overflow-hidden border-2 border-border bg-bg-deep">
+      <div className="flex rounded-lg overflow-hidden border border-border bg-bg-deep">
         {(["toeic", "ielts"] as const).map((tab) => (
           <button
             key={tab}
@@ -402,7 +402,7 @@ export function ExamWordLists({ onSelect }: Props) {
             }}
             className={`flex-1 py-2.5 text-[13px] font-bold tracking-wider uppercase border-none cursor-pointer transition-all duration-200 ${
               activeTab === tab
-                ? "bg-accent text-ink font-black"
+                ? "bg-accent text-ink font-bold"
                 : "bg-transparent text-text-muted hover:text-text-primary"
             }`}
           >
@@ -426,7 +426,7 @@ export function ExamWordLists({ onSelect }: Props) {
               <button
                 type="button"
                 onClick={() => setExpandedCategory(isExpanded ? null : cat.label)}
-                className={`flex w-full items-center justify-between px-3 py-2 rounded-sm border-2 cursor-pointer transition-all duration-200 text-[13px] font-bold ${
+                className={`flex w-full items-center justify-between px-3 py-2 rounded-sm border cursor-pointer transition-all duration-200 text-[13px] font-bold ${
                   isExpanded
                     ? "bg-accent-light text-ink border-accent-hover"
                     : "bg-surface border-border text-text-primary hover:bg-surface-alt"
@@ -442,8 +442,8 @@ export function ExamWordLists({ onSelect }: Props) {
                   <span
                     className={`text-[11px] font-extrabold px-2 py-0.5 rounded-lg ${
                       isExpanded
-                        ? "bg-accent text-ink border-2 border-border"
-                        : "bg-bg-deep text-text-muted border-2 border-border/20"
+                        ? "bg-accent text-ink border border-border"
+                        : "bg-bg-deep text-text-muted border border-border/20"
                     }`}
                   >
                     {cat.words.length}
@@ -461,7 +461,7 @@ export function ExamWordLists({ onSelect }: Props) {
                       key={word}
                       type="button"
                       onClick={() => onSelect(word)}
-                      className="rounded-lg border-2 border-border bg-surface px-3 py-1 text-xs text-text-secondary font-bold cursor-pointer transition-all duration-150 whitespace-nowrap hover:border-accent hover:text-ink hover:bg-accent-light"
+                      className="rounded-lg border border-border bg-surface px-3 py-1 text-xs text-text-secondary font-bold cursor-pointer transition-all duration-150 whitespace-nowrap hover:border-accent hover:text-ink hover:bg-accent-light"
                     >
                       {word}
                     </button>

@@ -39,14 +39,14 @@ export function ShadowingMode({
     return (
       <Card
         shadowSize="sm"
-        className="text-center py-10 px-6 rounded-none shadow-[4px_4px_0_var(--shadow-color)]"
+        className="text-center py-10 px-6 rounded-2xl shadow-md"
       >
         <div className="flex justify-center mb-4">
-          <div className="grid h-14 w-14 place-items-center border-2 border-border bg-bg-deep text-text-muted shadow-[3px_3px_0_var(--shadow-color)]">
+          <div className="grid h-14 w-14 place-items-center border border-border bg-bg-deep text-text-muted shadow">
             <MicOff size={28} />
           </div>
         </div>
-        <h3 className="mb-2 font-display font-black uppercase text-text-primary">
+        <h3 className="mb-2 font-display font-bold uppercase text-text-primary">
           Trình duyệt không hỗ trợ micro
         </h3>
         <span className="text-text-muted block max-w-[400px] mx-auto text-[13px]">

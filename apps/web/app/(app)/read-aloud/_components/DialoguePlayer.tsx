@@ -207,15 +207,15 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
         <m.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-surface border-2 border-border flex flex-col gap-4 p-6 shadow-[4px_4px_0_var(--shadow-color)]"
+          className="bg-surface border border-border flex flex-col gap-4 p-6 shadow-md"
         >
-          <h3 className="m-0 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted flex items-center gap-1.5">
+          <h3 className="m-0 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted flex items-center gap-1.5">
             <span className="text-accent">◆</span> Tạo hội thoại mới
           </h3>
 
           {/* Topic input */}
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-text-muted block mb-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-text-muted block mb-1.5">
               Chủ đề (tuỳ chọn)
             </span>
             <input
@@ -223,13 +223,13 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="vd: gọi cà phê, phỏng vấn xin việc…"
-              className="w-full border-2 border-border bg-surface-alt text-text-primary text-sm font-body px-3.5 py-2.5 outline-none focus:border-accent transition-colors"
+              className="w-full border border-border bg-surface-alt text-text-primary text-sm font-body px-3.5 py-2.5 outline-none focus:border-accent transition-colors"
             />
           </div>
 
           {/* Speaker count */}
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-text-muted block mb-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-text-muted block mb-1.5">
               Số người nói
             </span>
             <div className="flex gap-2">
@@ -240,9 +240,9 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                     key={n}
                     type="button"
                     onClick={() => onSpeakerCountChange(n)}
-                    className={`flex-1 font-mono font-black uppercase text-[12px] cursor-pointer py-2.5 transition-all border-2 border-border ${
+                    className={`flex-1 font-semibold uppercase text-[12px] rounded-lg cursor-pointer py-2.5 transition-all border border-border ${
                       isActive
-                        ? "bg-accent text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)]"
+                        ? "bg-accent text-text-on-accent shadow-sm"
                         : "bg-surface-alt text-text-secondary hover:text-ink"
                     }`}
                   >
@@ -255,7 +255,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
 
           {/* Length */}
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-text-muted block mb-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-text-muted block mb-1.5">
               Độ dài
             </span>
             <div className="flex gap-2">
@@ -266,9 +266,9 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                     key={len}
                     type="button"
                     onClick={() => setLength(len)}
-                    className={`flex-1 font-mono font-black uppercase text-[11px] cursor-pointer py-2.5 transition-all border-2 border-border ${
+                    className={`flex-1 font-semibold uppercase text-[11px] rounded-lg cursor-pointer py-2.5 transition-all border border-border ${
                       isActive
-                        ? "bg-accent text-text-on-accent shadow-[2px_2px_0_var(--shadow-color)]"
+                        ? "bg-accent text-text-on-accent shadow-sm"
                         : "bg-surface-alt text-text-secondary hover:text-ink"
                     }`}
                   >
@@ -281,14 +281,14 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
 
           {/* Generate button */}
           <m.button
-            whileHover={dlg.generating ? {} : { x: -1, y: -1 }}
-            whileTap={dlg.generating ? {} : { x: 0, y: 0 }}
+            whileHover={dlg.generating ? {} : { scale: 1.02 }}
+            whileTap={dlg.generating ? {} : { scale: 0.98 }}
             onClick={handleGenerate}
             disabled={dlg.generating}
-            className={`flex items-center justify-center gap-2.5 border-2 border-border text-[15px] font-black font-display uppercase tracking-tight py-3.5 px-5 transition-all ${
+            className={`flex items-center justify-center gap-2.5 border border-border text-[15px] font-bold font-display uppercase tracking-tight py-3.5 px-5 transition-all ${
               dlg.generating
                 ? "bg-bg-deep text-text-muted cursor-wait"
-                : "bg-accent text-text-on-accent cursor-pointer shadow-[4px_4px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] active:shadow-[1px_1px_0_var(--shadow-color)]"
+                : "bg-accent text-text-on-accent cursor-pointer shadow-md hover:shadow-lg active:shadow-sm"
             }`}
           >
             {dlg.generating ? (
@@ -309,9 +309,9 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-surface border-2 border-border p-5 shadow-[4px_4px_0_var(--shadow-color)]"
+            className="bg-surface border border-border p-5 shadow-md"
           >
-            <span className="font-mono text-[11px] font-bold text-text-muted flex items-center gap-1.5 mb-3 uppercase tracking-[0.18em]">
+            <span className="text-[11px] font-semibold text-text-muted flex items-center gap-1.5 mb-3 uppercase tracking-[0.18em]">
               <Bookmark size={13} className="text-accent" /> Hội thoại đã lưu (
               {dlg.savedDialogues.length})
             </span>
@@ -322,9 +322,9 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.03 }}
-                  whileHover={{ x: -1, y: -1 }}
+                  whileHover={{ scale: 1.02 }}
                   onClick={() => dlg.loadDialogue(saved)}
-                  className="flex items-center gap-3 border-2 border-border bg-surface-alt cursor-pointer p-3 shadow-[2px_2px_0_var(--shadow-color)] transition-all duration-150 hover:shadow-[3px_3px_0_var(--shadow-color)]"
+                  className="flex items-center gap-3 border border-border bg-surface-alt cursor-pointer p-3 shadow-sm transition-all duration-150 hover:shadow"
                 >
                   {/* Speaker flags */}
                   <div className="flex shrink-0 gap-0.5">
@@ -415,10 +415,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="bg-surface border-2 border-border py-4 px-5 shadow-[4px_4px_0_var(--shadow-color)]">
+      <div className="bg-surface border border-border py-4 px-5 shadow-md">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <span className="text-base font-black font-display text-text-primary flex items-center gap-1.5">
+            <span className="text-base font-bold font-display text-text-primary flex items-center gap-1.5">
               <MessageSquare size={16} className="text-accent-active" /> {dlg.dialogue.title}
             </span>
             <span className="font-mono text-text-muted text-[11px] uppercase tracking-wide">
@@ -427,10 +427,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
           </div>
           <div className="flex gap-2 shrink-0">
             <m.button
-              whileHover={{ x: -1, y: -1 }}
-              whileTap={{ x: 0, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={dlg.isPlaying ? dlg.stop : () => dlg.playAll(speed)}
-              className={`flex items-center gap-1.5 py-2 px-4 text-[12px] font-black uppercase font-mono cursor-pointer border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none transition-shadow ${
+              className={`flex items-center gap-1.5 py-2 px-4 text-[12px] font-semibold uppercase rounded-lg cursor-pointer border border-border shadow-sm hover:shadow active:shadow-none transition-shadow ${
                 dlg.isPlaying ? "bg-error/15 text-error" : "bg-accent text-text-on-accent"
               }`}
             >
@@ -449,10 +449,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               )}
             </m.button>
             <m.button
-              whileHover={{ x: -1, y: -1 }}
-              whileTap={{ x: 0, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={dlg.reset}
-              className="flex items-center gap-1.5 border-2 border-border bg-surface-alt text-text-secondary text-[12px] font-bold uppercase font-mono cursor-pointer py-2 px-3.5 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+              className="flex items-center gap-1.5 border border-border bg-surface-alt text-text-secondary text-[12px] font-semibold uppercase rounded-lg cursor-pointer py-2 px-3.5 shadow-sm hover:shadow active:shadow-none transition-shadow"
             >
               <Redo size={14} /> Reset
             </m.button>
@@ -466,14 +466,14 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             return (
               <div
                 key={a.speaker}
-                className={`flex items-center gap-2 py-1.5 pr-3 pl-1 border-2 border-border ${colors.tw}`}
+                className={`flex items-center gap-2 py-1.5 pr-3 pl-1 border border-border ${colors.tw}`}
               >
                 <img
                   src={a.avatar}
                   alt={a.voiceName}
                   width={24}
                   height={24}
-                  className="object-cover border-2 border-border"
+                  className="object-cover border border-border"
                 />
                 <span className="text-xs font-bold" style={{ color: colors.text }}>
                   {a.voiceName}
@@ -486,7 +486,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
       </div>
 
       {/* Chat bubbles */}
-      <div className="flex flex-col gap-3.5 bg-surface-alt border-2 border-border p-5 shadow-[4px_4px_0_var(--shadow-color)]">
+      <div className="flex flex-col gap-3.5 bg-surface-alt border border-border p-5 shadow-md">
         {dlg.dialogue.lines.map((line, i) => {
           const isLeft = line.speaker === "A";
           const colors = SPEAKER_COLORS[line.speaker] ?? SPEAKER_COLORS.A;
@@ -504,7 +504,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               className={`flex gap-3 items-start ${isLeft ? "flex-row" : "flex-row-reverse"}`}
             >
               {/* Avatar */}
-              <div className="dialogue-avatar w-[42px] h-[42px] overflow-hidden shrink-0 border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]">
+              <div className="dialogue-avatar w-[42px] h-[42px] overflow-hidden shrink-0 border border-border shadow-sm">
                 <img
                   src={assignment?.avatar ?? "/avatars/austin.png"}
                   alt={assignment?.voiceName ?? "Speaker"}
@@ -571,7 +571,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center border-2 border-border p-5 shadow-[4px_4px_0_var(--shadow-color)] bg-accent-light"
+          className="text-center border border-border p-5 shadow-md bg-accent-light"
         >
           <div className="flex justify-center mb-2.5">
             <m.div
@@ -582,7 +582,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               <Headphones size={36} />
             </m.div>
           </div>
-          <span className="font-display text-base font-black uppercase tracking-tight text-text-primary block mb-1">
+          <span className="font-display text-base font-bold uppercase tracking-tight text-text-primary block mb-1">
             Nghe hội thoại trước
           </span>
           <span className="mx-auto mb-4 text-xs text-text-secondary max-w-[360px] block">
@@ -591,11 +591,11 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
 
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <m.button
-              whileHover={dlg.isLoading ? {} : { x: -1, y: -1 }}
-              whileTap={dlg.isLoading ? {} : { x: 0, y: 0 }}
+              whileHover={dlg.isLoading ? {} : { scale: 1.02 }}
+              whileTap={dlg.isLoading ? {} : { scale: 0.98 }}
               onClick={isListeningPreview ? dlg.stop : listenPreview}
               disabled={dlg.isLoading}
-              className={`w-[210px] justify-center flex items-center gap-2 text-[14px] font-black font-display uppercase tracking-tight py-3.5 px-6 border-2 border-border transition-all shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none ${
+              className={`w-[210px] justify-center flex items-center gap-2 text-[14px] font-bold font-display uppercase tracking-tight py-3.5 px-6 border border-border transition-all shadow hover:shadow-md active:shadow-none ${
                 isListeningPreview ? "bg-error text-white" : "bg-accent text-text-on-accent"
               }`}
             >
@@ -615,10 +615,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             </m.button>
 
             <m.button
-              whileHover={{ x: -1, y: -1 }}
-              whileTap={{ x: 0, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={skipListenPreview}
-              className="flex items-center gap-1.5 border-2 border-border bg-surface text-text-muted text-[12px] font-bold uppercase font-mono cursor-pointer py-3 px-5 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+              className="flex items-center gap-1.5 border border-border bg-surface text-text-muted text-[12px] font-semibold uppercase rounded-lg cursor-pointer py-3 px-5 shadow-sm hover:shadow active:shadow-none transition-shadow"
             >
               Bỏ qua →
             </m.button>
@@ -653,18 +653,18 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-surface border-2 border-border py-4 px-5 shadow-[4px_4px_0_var(--shadow-color)]"
+          className="bg-surface border border-border py-4 px-5 shadow-md"
         >
           {/* Replay button */}
           <div className="mb-3 flex items-center justify-between gap-2 flex-wrap">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-text-muted flex items-center gap-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-text-muted flex items-center gap-1.5">
               <Mic size={13} className="text-accent" /> Nhập vai — chọn nhân vật muốn luyện
             </span>
             <m.button
-              whileHover={{ x: -1, y: -1 }}
-              whileTap={{ x: 0, y: 0 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={listenPreview}
-              className="flex items-center gap-1 border-2 border-border bg-surface-alt text-text-muted text-[10px] font-bold uppercase font-mono cursor-pointer py-1 px-3 shadow-[2px_2px_0_var(--shadow-color)] active:shadow-none"
+              className="flex items-center gap-1 border border-border bg-surface-alt text-text-muted text-[10px] font-semibold uppercase rounded-lg cursor-pointer py-1 px-3 shadow-sm active:shadow-none"
             >
               <PlayCircle size={12} /> Nghe lại
             </m.button>
@@ -675,10 +675,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               return (
                 <m.button
                   key={a.speaker}
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => startRolePlay(a.speaker)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-black cursor-pointer font-body border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-bold cursor-pointer font-body border border-border shadow-sm hover:shadow active:shadow-none transition-shadow"
                   style={{
                     background: SPEAKER_COLORS[a.speaker]?.bg ?? "var(--surface-alt)",
                     color: SPEAKER_COLORS[a.speaker]?.text ?? "var(--text-primary)",
@@ -699,10 +699,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="bg-surface border-2 border-accent py-4 px-5 flex flex-col gap-3 shadow-[4px_4px_0_var(--shadow-color)]"
+            className="bg-surface border border-accent py-4 px-5 flex flex-col gap-3 shadow-md"
           >
             <div className="flex justify-between items-center gap-2 flex-wrap">
-              <span className="font-mono text-[12px] font-black uppercase tracking-wide text-accent-active flex items-center gap-1.5">
+              <span className="text-[12px] font-semibold uppercase tracking-wide text-accent-active flex items-center gap-1.5">
                 <Mic size={14} /> Đang nhập vai —{" "}
                 {dlg.dialogue!.lines.find((l) => l.speaker === rolePlaySpeaker)?.name ?? "..."}
               </span>
@@ -713,7 +713,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   setRolePlayStep("idle");
                   dlg.stop();
                 }}
-                className="border-2 border-border bg-surface-alt text-text-muted text-[11px] font-bold uppercase font-mono cursor-pointer py-1 px-3 shadow-[2px_2px_0_var(--shadow-color)] active:shadow-none"
+                className="border border-border bg-surface-alt text-text-muted text-[11px] font-semibold uppercase rounded-lg cursor-pointer py-1 px-3 shadow-sm active:shadow-none"
               >
                 Thoát
               </m.button>
@@ -721,10 +721,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
 
             {rolePlayStep === "idle" && (
               <m.button
-                whileHover={{ x: -1, y: -1 }}
-                whileTap={{ x: 0, y: 0 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => playRolePlayLine(0)}
-                className="w-full p-3 border-2 border-border bg-accent text-text-on-accent text-sm font-black uppercase tracking-tight cursor-pointer font-display shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                className="w-full p-3 border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight cursor-pointer font-display shadow hover:shadow-md active:shadow-none transition-shadow"
               >
                 Bắt đầu
               </m.button>
@@ -737,7 +737,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="w-[12px] h-[12px] rounded-sm bg-accent"
                 />
-                <span className="text-sm font-black text-accent-active">
+                <span className="text-sm font-bold text-accent-active">
                   Listening to speaker...
                 </span>
               </div>
@@ -759,10 +759,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   &quot;{dlg.dialogue!.lines[rolePlayLineIndex]?.text}&quot;
                 </span>
                 <m.button
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={stopAndEvaluateRolePlay}
-                  className="flex items-center gap-2 text-error text-sm font-black uppercase font-mono cursor-pointer py-2.5 px-6 border-2 border-border bg-error/10 shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                  className="flex items-center gap-2 text-error text-sm font-bold uppercase font-mono cursor-pointer py-2.5 px-6 border border-border bg-error/10 shadow hover:shadow-md active:shadow-none transition-shadow"
                 >
                   <StopCircle size={16} /> Dừng &amp; chấm
                 </m.button>
@@ -772,7 +772,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             {rolePlayStep === "evaluating" && (
               <div className="p-4 flex items-center gap-2">
                 <Loader2 className="animate-spin text-accent-active" size={20} />
-                <span className="text-sm font-black text-accent-active">🤖 AI Grading...</span>
+                <span className="text-sm font-bold text-accent-active">🤖 AI Grading...</span>
               </div>
             )}
 
@@ -783,10 +783,10 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   referenceText={dlg.dialogue!.lines[rolePlayLineIndex]?.text ?? ""}
                 />
                 <m.button
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={continueAfterRolePlay}
-                  className="w-full p-3 border-2 border-border bg-accent text-text-on-accent text-sm font-black uppercase tracking-tight cursor-pointer font-display shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                  className="w-full p-3 border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight cursor-pointer font-display shadow hover:shadow-md active:shadow-none transition-shadow"
                 >
                   {rolePlayLineIndex < dlg.dialogue!.lines.length - 1 ? "Tiếp tục" : "Hoàn thành"}
                 </m.button>

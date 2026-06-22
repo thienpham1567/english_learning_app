@@ -28,7 +28,7 @@ export function WordFamilySection({ wordFamily, onSearch }: WordFamilySectionPro
                 key={word}
                 type="button"
                 onClick={() => onSearch(word)}
-                className="rounded-lg bg-surface px-3 py-1 text-[13px] text-text-primary border-2 border-border cursor-pointer transition-all duration-150 hover:bg-accent/10 hover:text-accent hover:border-accent/30"
+                className="rounded-lg bg-surface px-3 py-1 text-[13px] text-text-primary border border-border cursor-pointer transition-all duration-150 hover:bg-accent/10 hover:text-accent hover:border-accent/30"
               >
                 {word}
               </button>

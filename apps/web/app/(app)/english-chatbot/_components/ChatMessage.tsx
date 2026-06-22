@@ -55,7 +55,7 @@ function ActionButton({
       disabled={loading}
       aria-label={label}
       title={label}
-      className={`inline-flex items-center gap-1 border-2 px-2 py-1.5 text-[11px] font-semibold transition-all duration-150 cursor-pointer active:scale-95 ${
+      className={`inline-flex items-center gap-1 border px-2 py-1.5 text-[11px] font-semibold transition-all duration-150 cursor-pointer active:scale-95 ${
         active
           ? "border-accent/40 text-accent-active bg-accent-light"
           : "border-transparent text-text-muted hover:border-border hover:text-text-primary hover:bg-chat-surface-hover"
@@ -99,7 +99,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="w-7 h-7 object-cover border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]"
+        className="w-7 h-7 object-cover border border-border shadow-sm"
         referrerPolicy="no-referrer"
       />
     );
@@ -113,7 +113,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid place-items-center w-7 h-7 bg-ink border-2 border-border text-[9px] font-black text-bg shadow-[2px_2px_0_var(--shadow-color)]">
+    <div className="grid place-items-center w-7 h-7 bg-ink border border-border text-[9px] font-bold text-bg shadow-sm">
       {initials}
     </div>
   );
@@ -145,8 +145,8 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   };
 
   return (
-    <div className="relative my-3 border-2 border-border bg-chat-code-bg overflow-hidden shadow-[3px_3px_0_var(--shadow-color)]">
-      <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border bg-chat-code-header text-[10px] text-text-muted font-mono font-bold uppercase tracking-wider">
+    <div className="relative my-3 border border-border bg-chat-code-bg overflow-hidden shadow">
+      <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border bg-chat-code-header text-[10px] text-text-muted font-semibold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
           onClick={onCopy}
@@ -328,12 +328,12 @@ export function ChatMessage({
         <div className="mx-auto max-w-2xl px-2">
           <div className="flex flex-col items-end">
             <div className="mb-1.5 flex items-center gap-2">
-              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700/70">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-700/70">
                 Bạn
               </span>
               <UserAvatar />
             </div>
-            <div className="max-w-[85%] border-2 border-amber-600/40 bg-accent-light px-4 py-2.5 shadow-[3px_3px_0_rgba(180,83,9,0.25)]">
+            <div className="max-w-[85%] border border-amber-600/40 bg-accent-light px-4 py-2.5 shadow-[3px_3px_0_rgba(180,83,9,0.25)]">
               <div className="whitespace-pre-wrap text-sm leading-relaxed text-amber-950">
                 {text}
               </div>
@@ -362,11 +362,11 @@ export function ChatMessage({
           {/* Avatar rail */}
           <div className="flex shrink-0 flex-col items-center">
             {persona ? (
-              <div className="grid h-7 w-7 place-items-center overflow-hidden border-2 border-border bg-bg-deep shadow-[2px_2px_0_var(--shadow-color)]">
+              <div className="grid h-7 w-7 place-items-center overflow-hidden border border-border bg-bg-deep shadow-sm">
                 <persona.avatar size={26} />
               </div>
             ) : (
-              <div className="h-7 w-7 border-2 border-border bg-chat-surface" />
+              <div className="h-7 w-7 border border-border bg-chat-surface" />
             )}
             <div className="mt-1.5 w-0.5 flex-1 bg-border/30" />
           </div>
@@ -374,12 +374,12 @@ export function ChatMessage({
           {/* Content column */}
           <div className="min-w-0 flex-1 pb-1">
             <div className="mb-1.5 flex items-center gap-2">
-              <span className="font-mono text-[10px] font-black uppercase tracking-[0.18em] text-accent-active">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-active">
                 {persona?.label.split(" —")[0] ?? "Tutor"}
                 <span className="ml-1 text-text-muted/50">//</span>
               </span>
               {isStreaming && (
-                <span className="animate-pulse font-mono text-[10px] font-bold uppercase tracking-wider text-accent">
+                <span className="animate-pulse text-[10px] font-semibold uppercase tracking-wider text-accent">
                   ▸ đang gõ
                 </span>
               )}

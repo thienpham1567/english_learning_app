@@ -75,7 +75,7 @@ export function LessonComplete({
           <Star size={20} className="absolute -top-1 -right-3 text-xp" />
         </div>
 
-        <h2 className="mb-2 text-2xl font-black text-text-primary font-display flex items-center justify-center">
+        <h2 className="mb-2 text-2xl font-bold text-text-primary font-display flex items-center justify-center">
           {renderMedal(scorePct)} Lesson Completed!
         </h2>
         <p className="text-text-secondary mb-4 font-medium text-[14.5px] leading-normal">
@@ -89,7 +89,7 @@ export function LessonComplete({
         </p>
 
         {xpAwarded > 0 && (
-          <div className="inline-flex items-center gap-1.5 rounded-lg text-accent-active text-base font-black mb-2 py-2 px-5 bg-accent-light shadow-sm">
+          <div className="inline-flex items-center gap-1.5 rounded-lg text-accent-active text-base font-bold mb-2 py-2 px-5 bg-accent-light shadow-sm">
             <Star size={18} /> +{xpAwarded} XP earned
           </div>
         )}
@@ -105,7 +105,7 @@ export function LessonComplete({
             <button
               type="button"
               onClick={() => setShowReview((v) => !v)}
-              className="flex items-center gap-2 w-full py-3 px-4 rounded-lg cursor-pointer text-[13px] font-black text-error border-2 border-error/20 bg-error/5"
+              className="flex items-center gap-2 w-full py-3 px-4 rounded-lg cursor-pointer text-[13px] font-bold text-error border border-error/20 bg-error/5"
             >
               <AlertTriangle size={15} /> Review {wrongAnswers.length} incorrect{" "}
               {wrongAnswers.length === 1 ? "item" : "items"} · {showReview ? "Collapse" : "Expand"}
@@ -117,7 +117,7 @@ export function LessonComplete({
                 className="flex flex-col gap-2 mt-2 overflow-hidden"
               >
                 {wrongAnswers.map((wItem, idx) => (
-                  <div key={idx} className="rounded-lg bg-surface-alt border-2 border-border p-3.5">
+                  <div key={idx} className="rounded-lg bg-surface-alt border border-border p-3.5">
                     <p className="mb-2 font-bold text-text-primary text-[13.5px]">
                       {wItem.questionStem}
                     </p>
@@ -147,7 +147,7 @@ export function LessonComplete({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onBack}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-surface text-text-primary cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-border shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-surface text-text-primary cursor-pointer font-bold text-[13.5px] py-2.5 px-5 border border-border shadow-sm"
           >
             <ArrowLeft size={15} /> Back
           </m.button>
@@ -156,7 +156,7 @@ export function LessonComplete({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onRetry}
-            className="inline-flex items-center gap-1.5 rounded-lg text-accent-active cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-accent bg-accent-light shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-lg text-accent-active cursor-pointer font-bold text-[13.5px] py-2.5 px-5 border border-accent bg-accent-light shadow-sm"
           >
             <RefreshCw size={15} /> Retry Practice
           </m.button>
@@ -165,7 +165,7 @@ export function LessonComplete({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onPracticeChat}
-            className="inline-flex items-center gap-1.5 rounded-lg text-accent-active cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-accent/25 bg-accent-light shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-lg text-accent-active cursor-pointer font-bold text-[13.5px] py-2.5 px-5 border border-accent/25 bg-accent-light shadow-sm"
           >
             <MessageSquare size={15} /> Luyện với Chatbot
           </m.button>
@@ -174,7 +174,7 @@ export function LessonComplete({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => router.push("/grammar-quiz")}
-            className="inline-flex items-center rounded-lg text-text-on-accent cursor-pointer font-black text-[13.5px] py-2.5 px-5 border-2 border-border bg-accent shadow-sm hover:bg-accent-hover"
+            className="inline-flex items-center rounded-lg text-text-on-accent cursor-pointer font-bold text-[13.5px] py-2.5 px-5 border border-border bg-accent shadow-sm hover:bg-accent-hover"
           >
             Review Quiz
           </m.button>

@@ -76,7 +76,7 @@ export function ReviewTab() {
           <div>
             <button
               onClick={srs.fetchQueue}
-              className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body transition-colors hover:bg-surface-alt/80"
+              className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body transition-colors hover:bg-surface-alt/80"
             >
               <RefreshCw className="h-3.5 w-3.5" /> Check again
             </button>
@@ -93,8 +93,8 @@ export function ReviewTab() {
       <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
         <Card className="py-10 px-6 text-center gap-4" shadowSize="default">
           <Trophy className={`h-10 w-10 mx-auto ${pct >= 80 ? "text-success" : "text-accent"}`} />
-          <h3 className="text-xl font-black text-text-primary m-0">Review Complete!</h3>
-          <div className="text-4xl font-black text-accent-active font-display">
+          <h3 className="text-xl font-bold text-text-primary m-0">Review Complete!</h3>
+          <div className="text-4xl font-bold text-accent-active font-display">
             {srs.correct}/{srs.reviewed}
           </div>
           <div>
@@ -114,7 +114,7 @@ export function ReviewTab() {
                 srs.resetSession();
                 srs.fetchQueue();
               }}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-accent text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-sm transition-opacity hover:opacity-90"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-border bg-accent text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-sm transition-opacity hover:opacity-90"
             >
               <RefreshCw className="h-4 w-4" /> Continue
             </button>
@@ -174,7 +174,7 @@ export function ReviewTab() {
                 {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
               </span>
               {error.grammarTopic && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border-2 border-accent/15">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-active border border-accent/15">
                   {error.grammarTopic}
                 </span>
               )}
@@ -201,10 +201,10 @@ export function ReviewTab() {
                         key={i}
                         className={`px-3.5 py-2 rounded-xl text-sm ${
                           isCorrect
-                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-2 border-success text-success font-bold"
+                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border border-success text-success font-bold"
                             : isWrong
-                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-2 border-error text-error font-bold"
-                              : "bg-surface-alt border-2 border-border text-text-primary font-medium"
+                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border border-error text-error font-bold"
+                              : "bg-surface-alt border border-border text-text-primary font-medium"
                         }`}
                       >
                         {isCorrect && <CheckCircle className="h-3 w-3 inline mr-1.5" />}
@@ -232,7 +232,7 @@ export function ReviewTab() {
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   onClick={handleReveal}
-                  className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-2 border-border bg-accent text-text-on-accent text-[15px] font-extrabold cursor-pointer font-body shadow-sm"
+                  className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border border-border bg-accent text-text-on-accent text-[15px] font-extrabold cursor-pointer font-body shadow-sm"
                 >
                   <Lightbulb className="h-4 w-4" /> Reveal Answer
                 </m.button>
@@ -245,7 +245,7 @@ export function ReviewTab() {
               >
                 {/* Answer comparison */}
                 <div className="flex gap-2 mb-4">
-                  <div className="flex-1 px-3.5 py-2.5 rounded-xl bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-2.5 rounded-xl bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-error uppercase mb-1 flex items-center gap-1">
                       <XCircle className="h-2.5 w-2.5" /> Your Answer
                     </div>
@@ -253,7 +253,7 @@ export function ReviewTab() {
                       {error.userAnswer || "(Empty)"}
                     </div>
                   </div>
-                  <div className="flex-1 px-3.5 py-2.5 rounded-xl bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
+                  <div className="flex-1 px-3.5 py-2.5 rounded-xl bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
                     <div className="text-[10px] font-bold text-success uppercase mb-1 flex items-center gap-1">
                       <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                     </div>

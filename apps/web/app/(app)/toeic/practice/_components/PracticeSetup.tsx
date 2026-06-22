@@ -159,7 +159,7 @@ function CountBtn({
           : "none",
       }}
     >
-      <span className="text-lg font-black leading-none font-display">{value}</span>
+      <span className="text-lg font-bold leading-none font-display">{value}</span>
       <span
         className="text-[10px] font-bold uppercase tracking-wider"
         style={{ opacity: active ? 0.85 : 0.6 }}
@@ -245,7 +245,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
           </m.div>
           <div>
             <h3
-              className="m-0 text-lg font-black text-ink font-display tracking-tight"
+              className="m-0 text-lg font-bold text-ink font-display tracking-tight"
               style={{ lineHeight: 1.2 }}
             >
               Practice Setup
@@ -352,7 +352,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
               count,
             })
           }
-          className="w-full p-4 text-[15px] font-black border-none rounded-lg cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden"
+          className="w-full p-4 text-[15px] font-bold border-none rounded-lg cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden"
           style={{
             background: "var(--accent)",
             color: "var(--text-on-accent)",

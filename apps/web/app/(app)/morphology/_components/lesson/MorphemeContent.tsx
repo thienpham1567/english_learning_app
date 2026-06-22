@@ -31,16 +31,16 @@ export function MorphemeContent({ lesson, onStart, onRegenerate }: MorphemeConte
       >
         <div className="flex items-start gap-3.5">
           <div className="w-12 h-12 rounded-xl bg-accent grid place-items-center shrink-0 shadow-sm">
-            <span className="text-text-on-accent font-black text-lg font-mono">
+            <span className="text-text-on-accent font-bold text-lg font-mono">
               {lesson.morpheme}
             </span>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="m-0 text-xl font-black text-text-primary font-display">
+              <h2 className="m-0 text-xl font-bold text-text-primary font-display">
                 {lesson.gloss}
               </h2>
-              <span className="text-[10.5px] font-black text-accent-active rounded-full bg-accent-light border-2 border-accent/20 py-0.5 px-2.5">
+              <span className="text-[10.5px] font-bold text-accent-active rounded-full bg-accent-light border border-accent/20 py-0.5 px-2.5">
                 {TYPE_BADGE[lesson.type]}
               </span>
             </div>
@@ -51,7 +51,7 @@ export function MorphemeContent({ lesson, onStart, onRegenerate }: MorphemeConte
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={onRegenerate}
-            className="inline-flex items-center gap-1 border-2 border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3 font-bold shadow-sm hover:text-text-primary shrink-0"
+            className="inline-flex items-center gap-1 border border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3 font-bold shadow-sm hover:text-text-primary shrink-0"
           >
             <RefreshCw size={13} /> Regenerate
           </m.button>
@@ -60,7 +60,7 @@ export function MorphemeContent({ lesson, onStart, onRegenerate }: MorphemeConte
 
       {/* Meaning */}
       <Card shadowSize="sm" className="rounded-xl bg-surface">
-        <span className="flex items-center gap-1.5 text-[11.5px] font-black text-text-secondary uppercase tracking-wider mb-3">
+        <span className="flex items-center gap-1.5 text-[11.5px] font-bold text-text-secondary uppercase tracking-wider mb-3">
           <BookOpen size={14} /> What it means
         </span>
         <p className="m-0 text-text-primary font-medium text-[14.5px] leading-relaxed">
@@ -80,7 +80,7 @@ export function MorphemeContent({ lesson, onStart, onRegenerate }: MorphemeConte
 
       {/* Word family */}
       <Card shadowSize="sm" className="rounded-xl bg-surface">
-        <span className="flex items-center gap-1.5 text-[11.5px] font-black text-text-secondary uppercase tracking-wider mb-3.5">
+        <span className="flex items-center gap-1.5 text-[11.5px] font-bold text-text-secondary uppercase tracking-wider mb-3.5">
           <Sparkles size={14} /> Word Family
         </span>
         <div className="flex flex-col gap-2.5">
@@ -96,7 +96,7 @@ export function MorphemeContent({ lesson, onStart, onRegenerate }: MorphemeConte
         whileHover={{ scale: 1.01, y: -2 }}
         whileTap={{ scale: 0.99 }}
         onClick={onStart}
-        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-4 px-6 text-base font-black text-text-on-accent bg-accent border-2 border-border shadow-md hover:bg-accent-hover cursor-pointer font-display"
+        className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl py-4 px-6 text-base font-bold text-text-on-accent bg-accent border border-border shadow-md hover:bg-accent-hover cursor-pointer font-display"
       >
         <Play className="h-4 w-4 fill-current" /> Start Practice — {lesson.exercises.length}{" "}
         exercises

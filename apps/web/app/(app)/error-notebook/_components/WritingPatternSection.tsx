@@ -103,7 +103,7 @@ function InlineQuiz({
               className="transition-all duration-700"
             />
           </svg>
-          <span className="absolute text-lg font-black text-ink">
+          <span className="absolute text-lg font-bold text-ink">
             {score}/{items.length}
           </span>
         </div>
@@ -291,7 +291,7 @@ export function WritingPatternSection() {
       <div className="flex items-center gap-2 mb-3">
         <Pencil className="h-4 w-4 text-accent" />
         <h2 className="m-0 text-[15px] font-bold">Repeated Writing Errors</h2>
-        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-warning/15 text-warning border-2 border-warning/25">
+        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-warning/15 text-warning border border-warning/25">
           {patterns.length} patterns
         </span>
       </div>
@@ -308,13 +308,13 @@ export function WritingPatternSection() {
           return (
             <div
               key={p.id}
-              className="rounded-xl border-2 border-border bg-card-bg overflow-hidden"
+              className="rounded-xl border border-border bg-card-bg overflow-hidden"
             >
               {/* Pattern header */}
               <div className="px-4 py-3 flex items-center gap-2.5">
                 <div className="flex-1">
                   <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-lg bg-error/15 text-error border-2 border-error/25">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-lg bg-error/15 text-error border border-error/25">
                       {p.count}×
                     </span>
                     <span className="text-[13px] font-semibold">{label}</span>
@@ -348,7 +348,7 @@ export function WritingPatternSection() {
                 {state === "done" && (
                   <button
                     onClick={() => generateQuiz(p.tag)}
-                    className="px-3.5 py-1.5 rounded-lg border-2 border-border bg-transparent text-text-secondary text-xs cursor-pointer shrink-0 hover:bg-surface-alt transition-colors"
+                    className="px-3.5 py-1.5 rounded-lg border border-border bg-transparent text-text-secondary text-xs cursor-pointer shrink-0 hover:bg-surface-alt transition-colors"
                   >
                     Retry
                   </button>

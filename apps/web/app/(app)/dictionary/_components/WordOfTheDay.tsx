@@ -245,7 +245,7 @@ export function WordOfTheDay({ onSelect }: Props) {
 
   return (
     <div
-      className="anim-fade-in rounded-lg bg-gradient-to-br from-accent-muted to-accent-light border-2 border-accent p-4 px-4.5 cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-px"
+      className="anim-fade-in rounded-lg bg-gradient-to-br from-accent-muted to-accent-light border border-accent p-4 px-4.5 cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-px"
       onClick={() => onSelect(daily.word)}
     >
       {/* Header */}
@@ -254,7 +254,7 @@ export function WordOfTheDay({ onSelect }: Props) {
           <Calendar className="h-3 w-3 text-accent-hover" />
           Word of the Day
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-accent text-ink border-2 border-border">
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-accent text-ink border border-border">
           {daily.pos}
         </span>
       </div>

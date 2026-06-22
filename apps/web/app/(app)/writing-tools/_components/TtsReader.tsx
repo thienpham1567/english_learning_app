@@ -171,7 +171,7 @@ export function TtsReader() {
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
         {/* Accent selector */}
         <Card shadowSize="sm" size="sm">
-          <span className="font-black uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
+          <span className="font-bold uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
             Accent
           </span>
           <div className="flex flex-col gap-1.5">
@@ -183,7 +183,7 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setAccent(acc.key)}
                   whileTap={{ scale: 0.98 }}
-                  className={`flex items-center gap-2 py-2 px-3 rounded-lg font-extrabold text-[13px] cursor-pointer text-left border-2 transition-all duration-100 ${
+                  className={`flex items-center gap-2 py-2 px-3 rounded-lg font-extrabold text-[13px] cursor-pointer text-left border transition-all duration-100 ${
                     isActive
                       ? "bg-accent text-text-on-accent border-border shadow-sm"
                       : "bg-surface-alt text-text-secondary border-transparent hover:border-border hover:shadow-sm"
@@ -205,7 +205,7 @@ export function TtsReader() {
 
         {/* Gender selector */}
         <Card shadowSize="sm" size="sm">
-          <span className="font-black uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
+          <span className="font-bold uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
             Voice Gender
           </span>
           <div className="flex flex-col gap-1.5">
@@ -217,7 +217,7 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setGender(g.key)}
                   whileTap={{ scale: 0.98 }}
-                  className={`py-2 px-3 rounded-lg font-extrabold text-[13px] cursor-pointer text-center border-2 transition-all duration-100 ${
+                  className={`py-2 px-3 rounded-lg font-extrabold text-[13px] cursor-pointer text-center border transition-all duration-100 ${
                     isActive
                       ? "bg-accent text-text-on-accent border-border shadow-sm"
                       : "bg-surface-alt text-text-secondary border-transparent hover:border-border hover:shadow-sm"
@@ -232,7 +232,7 @@ export function TtsReader() {
 
         {/* Speed selector */}
         <Card shadowSize="sm" size="sm">
-          <span className="font-black uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
+          <span className="font-bold uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
             Playback Speed
           </span>
           <div className="grid gap-1.5 grid-cols-2">
@@ -244,7 +244,7 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setSpeed(s)}
                   whileTap={{ scale: 0.98 }}
-                  className={`py-2 px-1 rounded-lg font-extrabold cursor-pointer text-center text-[12.5px] border-2 transition-all duration-100 ${
+                  className={`py-2 px-1 rounded-lg font-extrabold cursor-pointer text-center text-[12.5px] border transition-all duration-100 ${
                     isActive
                       ? "bg-accent text-text-on-accent border-border shadow-sm"
                       : "bg-surface-alt text-text-secondary border-transparent hover:border-border hover:shadow-sm"

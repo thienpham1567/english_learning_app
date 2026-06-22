@@ -130,7 +130,7 @@ export function WordOfTheDay() {
               transition={{ delay: 0.15 }}
               className="flex items-baseline gap-3 mb-2 relative z-[1]"
             >
-              <span className="text-4xl font-extrabold text-ink tracking-tight">
+              <span className="text-4xl font-bold text-ink tracking-tight">
                 {word.headword}
               </span>
               <m.button
@@ -208,8 +208,8 @@ export function WordOfTheDay() {
               disabled={isSaved || saving}
               className={`flex items-center gap-2.5 py-3 px-5 text-sm font-bold w-full justify-center relative z-[1] rounded-xl transition-all duration-300 ${
                 isSaved
-                  ? "border-2 border-success/30 bg-success-bg text-success cursor-default shadow-none"
-                  : "border-2 border-border bg-accent text-[var(--text-on-accent)] cursor-pointer shadow-[3px_3px_0px_var(--ink)] hover:bg-accent-hover hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
+                  ? "border border-success/30 bg-success-bg text-success cursor-default shadow-none"
+                  : "border border-border bg-accent text-[var(--text-on-accent)] cursor-pointer shadow-[3px_3px_0px_var(--ink)] hover:bg-accent-hover hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
               }`}
             >
               {saving ? (

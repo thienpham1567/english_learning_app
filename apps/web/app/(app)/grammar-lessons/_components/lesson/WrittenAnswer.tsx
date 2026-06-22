@@ -35,7 +35,7 @@ export function WrittenAnswer({
         disabled={revealed}
         rows={3}
         placeholder={instructionVi ?? "Type your answer here…"}
-        className="w-full rounded-xl bg-surface text-text-primary text-sm leading-normal py-3 px-4 border-2 border-border outline-none transition-colors focus:border-accent disabled:opacity-70 resize-y"
+        className="w-full rounded-xl bg-surface text-text-primary text-sm leading-normal py-3 px-4 border border-border outline-none transition-colors focus:border-accent disabled:opacity-70 resize-y"
       />
 
       {!revealed && (
@@ -45,7 +45,7 @@ export function WrittenAnswer({
           whileTap={trimmed ? { scale: 0.98 } : undefined}
           onClick={onSubmit}
           disabled={!trimmed}
-          className={`self-end inline-flex items-center gap-2 rounded-xl text-[13px] font-black py-2.5 px-5 border-2 transition-colors ${
+          className={`self-end inline-flex items-center gap-2 rounded-xl text-[13px] font-bold py-2.5 px-5 border transition-colors ${
             trimmed
               ? "bg-accent text-text-on-accent border-border cursor-pointer hover:bg-accent-hover"
               : "bg-surface-alt text-text-muted border-border cursor-default"
@@ -58,14 +58,14 @@ export function WrittenAnswer({
       {revealed && (
         <div className="flex flex-col gap-2">
           <div
-            className={`rounded-xl border-2 py-3 px-3.5 text-[13px] font-medium ${
+            className={`rounded-xl border py-3 px-3.5 text-[13px] font-medium ${
               isCorrect ? "border-success/40 bg-success/10" : "border-error/40 bg-error/10"
             }`}
           >
             <span className="font-bold text-text-secondary">Your answer: </span>
             <span className="text-text-primary">{typedAnswer}</span>
           </div>
-          <div className="rounded-xl border-2 border-success bg-success/10 py-3 px-3.5 text-[13px] font-bold text-success inline-flex items-start gap-2">
+          <div className="rounded-xl border border-success bg-success/10 py-3 px-3.5 text-[13px] font-bold text-success inline-flex items-start gap-2">
             <CircleCheckBig size={15} className="shrink-0 mt-0.5" />
             <span>{answer}</span>
           </div>

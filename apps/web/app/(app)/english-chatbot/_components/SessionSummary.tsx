@@ -75,7 +75,7 @@ function ScoreRing({
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-sm font-black font-mono" style={{ color }}>
+        <span className="text-sm font-bold font-mono" style={{ color }}>
           {score}
         </span>
       </div>
@@ -170,8 +170,8 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
                   <ScoreRing score={analysis.fluencyScore} label="Fluency" color={fluencyColor} />
                 </div>
                 <div className="flex flex-col items-center gap-1.5">
-                  <div className="w-14 h-14 rounded-xl border-2 border-accent bg-accent/10 grid place-items-center">
-                    <span className="text-sm font-black text-accent">{analysis.cefrEstimate}</span>
+                  <div className="w-14 h-14 rounded-xl border border-accent bg-accent/10 grid place-items-center">
+                    <span className="text-sm font-bold text-accent">{analysis.cefrEstimate}</span>
                   </div>
                   <span className="text-[9px] font-extrabold uppercase tracking-widest text-text-muted">
                     Level
@@ -181,24 +181,24 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-xl border-2 border-border bg-surface-alt p-3 text-center">
-                  <div className="text-lg font-black text-ink font-mono">
+                <div className="rounded-xl border border-border bg-surface-alt p-3 text-center">
+                  <div className="text-lg font-bold text-ink font-mono">
                     {analysis.exchangeCount}
                   </div>
                   <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-wide mt-0.5">
                     Exchanges
                   </div>
                 </div>
-                <div className="rounded-xl border-2 border-border bg-surface-alt p-3 text-center">
-                  <div className="text-lg font-black text-success font-mono">
+                <div className="rounded-xl border border-border bg-surface-alt p-3 text-center">
+                  <div className="text-lg font-bold text-success font-mono">
                     {analysis.newVocabUsed.length}
                   </div>
                   <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-wide mt-0.5">
                     New Words
                   </div>
                 </div>
-                <div className="rounded-xl border-2 border-border bg-surface-alt p-3 text-center">
-                  <div className="text-lg font-black font-mono" style={{ color: fluencyColor }}>
+                <div className="rounded-xl border border-border bg-surface-alt p-3 text-center">
+                  <div className="text-lg font-bold font-mono" style={{ color: fluencyColor }}>
                     {fluencyIcon} {analysis.fluencyScore}%
                   </div>
                   <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-wide mt-0.5">
@@ -217,7 +217,7 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
                     {analysis.repeatedErrors.slice(0, 3).map((err, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-border bg-surface text-xs"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-surface text-xs"
                       >
                         <span className="text-error font-bold line-through">{err.wrong}</span>
                         <ChevronRight size={10} className="text-text-muted" />
@@ -239,7 +239,7 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
                     {analysis.newVocabUsed.map((word) => (
                       <span
                         key={word}
-                        className="px-2.5 py-1 rounded-lg border-2 border-success/20 bg-success/5 text-[11px] font-bold text-success"
+                        className="px-2.5 py-1 rounded-lg border border-success/20 bg-success/5 text-[11px] font-bold text-success"
                       >
                         {word}
                       </span>
@@ -251,7 +251,7 @@ export function SessionSummary({ conversationId, messageCount }: SessionSummaryP
               {/* Recommendation */}
               <Link
                 href={analysis.recommendation.actionUrl}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-accent/20 bg-accent/5 no-underline transition-colors hover:bg-accent/10"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-accent/20 bg-accent/5 no-underline transition-colors hover:bg-accent/10"
               >
                 <BookOpen size={16} className="text-accent shrink-0" />
                 <div className="flex-1">

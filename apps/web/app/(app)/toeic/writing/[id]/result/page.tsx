@@ -35,7 +35,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4 w-full max-w-[800px] mx-auto">
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+        <div className="border border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>
               {s.scaledScore ?? "—"}
@@ -52,7 +52,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
             return (
               <div
                 key={p.id}
-                className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
+                className="border border-border rounded-xl bg-surface shadow-sm p-4"
               >
                 <div className="flex justify-between items-center mb-3">
                   <strong>
@@ -106,7 +106,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
         <div className="flex gap-2">
           <Link
             href="/toeic/writing"
-            className="py-2 px-4 rounded-lg text-ink border-2 border-border"
+            className="py-2 px-4 rounded-lg text-ink border border-border"
             style={{ background: "var(--surface-hover)", textDecoration: "none" }}
           >
             Back to Hub

@@ -64,11 +64,11 @@ export function ShadowingStage({
         key={currentIdx}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className={`bg-surface flex flex-col gap-5 py-6 px-5 border-2 shadow-[4px_4px_0_var(--shadow-color)] transition-colors duration-200 ${borderClass}`}
+        className={`bg-surface flex flex-col gap-5 py-6 px-5 border shadow-md transition-colors duration-200 ${borderClass}`}
       >
         {/* Model sentence */}
         <div>
-          <span className="font-mono text-[10px] font-bold text-text-muted uppercase tracking-[0.18em] mb-2 flex items-center gap-1.5">
+          <span className="text-[10px] font-semibold text-text-muted uppercase tracking-[0.12em] mb-2 flex items-center gap-1.5">
             <span className="text-accent">▶</span> Câu mẫu
           </span>
           <span
@@ -88,10 +88,10 @@ export function ShadowingStage({
               exit={{ opacity: 0 }}
             >
               <m.button
-                whileHover={{ x: -1, y: -1 }}
-                whileTap={{ x: 0, y: 0 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={onPlayReference}
-                className="w-full flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 bg-accent text-text-on-accent text-[15px] font-black uppercase tracking-tight font-display cursor-pointer shadow-[4px_4px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] active:shadow-[1px_1px_0_var(--shadow-color)]"
+                className="w-full flex items-center justify-center gap-2.5 border border-border py-3.5 px-5 bg-accent text-text-on-accent text-[15px] font-bold uppercase tracking-tight font-display cursor-pointer shadow-md hover:shadow-lg active:shadow-sm"
               >
                 <Volume2 /> Nghe câu mẫu
               </m.button>
@@ -112,7 +112,7 @@ export function ShadowingStage({
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="w-[12px] h-[12px] rounded-full bg-accent"
                 />
-                <span className="text-sm font-black text-accent-active">
+                <span className="text-sm font-bold text-accent-active">
                   Playing model sentence… Listen carefully
                 </span>
               </div>
@@ -128,18 +128,18 @@ export function ShadowingStage({
             >
               <div className="flex gap-3">
                 <m.button
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={onPlayReference}
-                  className="flex items-center justify-center gap-1.5 py-3 px-4 border-2 border-border bg-surface-alt text-text-secondary text-[12px] font-bold uppercase font-mono cursor-pointer shrink-0 shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none"
+                  className="flex items-center justify-center gap-1.5 py-3 px-4 border border-border bg-surface-alt text-text-secondary text-[12px] font-bold uppercase font-mono cursor-pointer shrink-0 shadow-sm hover:shadow active:shadow-none"
                 >
                   <PlayCircle size={13} /> Nghe lại
                 </m.button>
                 <m.button
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={onStartRecording}
-                  className="flex-1 flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 bg-error text-white text-[15px] font-black uppercase tracking-tight font-display cursor-pointer shadow-[4px_4px_0_var(--shadow-color)] hover:shadow-[5px_5px_0_var(--shadow-color)] active:shadow-[1px_1px_0_var(--shadow-color)]"
+                  className="flex-1 flex items-center justify-center gap-2.5 border border-border py-3.5 px-5 bg-error text-white text-[15px] font-bold uppercase tracking-tight font-display cursor-pointer shadow-md hover:shadow-lg active:shadow-sm"
                 >
                   <Mic size={14} /> Nói ngay
                 </m.button>
@@ -164,10 +164,10 @@ export function ShadowingStage({
                   Recording <RecordingTimer />
                 </div>
                 <m.button
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={onStopAndEvaluate}
-                  className="flex items-center justify-center gap-2 text-error text-sm font-black uppercase font-mono cursor-pointer py-3 px-7 border-2 border-border bg-error/10 shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                  className="flex items-center justify-center gap-2 text-error text-sm font-bold uppercase font-mono cursor-pointer py-3 px-7 border border-border bg-error/10 shadow hover:shadow-md active:shadow-none transition-shadow"
                 >
                   <StopCircle size={13} /> Dừng &amp; chấm
                 </m.button>
@@ -184,7 +184,7 @@ export function ShadowingStage({
               className="text-center py-4 flex flex-col items-center justify-center gap-2"
             >
               <Loader2 className="animate-spin text-accent-active" size={24} />
-              <div className="font-mono text-sm font-black uppercase tracking-wide text-accent-active">
+              <div className="font-mono text-sm font-bold uppercase tracking-wide text-accent-active">
                 AI đang chấm phát âm…
               </div>
             </m.div>
@@ -204,19 +204,19 @@ export function ShadowingStage({
             <ShadowResult result={evalResult} referenceText={currentSentence} />
             <div className="mt-3 flex gap-3">
               <m.button
-                whileHover={{ x: -1, y: -1 }}
-                whileTap={{ x: 0, y: 0 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={onRetry}
-                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border-2 border-border bg-surface text-text-primary text-sm font-bold uppercase font-mono cursor-pointer shadow-[2px_2px_0_var(--shadow-color)] hover:shadow-[3px_3px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border border-border bg-surface text-text-primary text-sm font-bold uppercase font-mono cursor-pointer shadow-sm hover:shadow active:shadow-none transition-shadow"
               >
                 <Redo size={13} /> Thử lại
               </m.button>
               {currentIdx < total - 1 && (
                 <m.button
-                  whileHover={{ x: -1, y: -1 }}
-                  whileTap={{ x: 0, y: 0 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={onNext}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border-2 border-border bg-accent text-text-on-accent text-sm font-black uppercase tracking-tight font-display cursor-pointer shadow-[3px_3px_0_var(--shadow-color)] hover:shadow-[4px_4px_0_var(--shadow-color)] active:shadow-none transition-shadow"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight font-display cursor-pointer shadow hover:shadow-md active:shadow-none transition-shadow"
                 >
                   Câu tiếp <ChevronRight size={14} />
                 </m.button>

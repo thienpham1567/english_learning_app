@@ -69,11 +69,11 @@ export function BatchConvertToFlashcards({ errorIds }: BatchConvertProps) {
         {state === "idle" && (
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div className="flex items-center gap-3 flex-1">
-              <div className="w-10 h-10 rounded-xl bg-accent/10 border-2 border-accent/15 grid place-items-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/15 grid place-items-center shrink-0">
                 <Sparkles className="h-5 w-5 text-accent" />
               </div>
               <div>
-                <div className="text-sm font-black text-ink font-display">
+                <div className="text-sm font-bold text-ink font-display">
                   Convert Errors to Flashcards
                 </div>
                 <div className="text-[11px] text-text-muted font-medium mt-0.5">
@@ -85,7 +85,7 @@ export function BatchConvertToFlashcards({ errorIds }: BatchConvertProps) {
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleConvert}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent bg-accent text-text-on-accent text-xs font-extrabold cursor-pointer shadow-sm shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent bg-accent text-text-on-accent text-xs font-extrabold cursor-pointer shadow-sm shrink-0"
             >
               <CreditCard size={14} />
               Convert All ({errorIds.length})
@@ -107,11 +107,11 @@ export function BatchConvertToFlashcards({ errorIds }: BatchConvertProps) {
 
         {state === "done" && (
           <div className="flex items-center gap-3 py-1">
-            <div className="w-10 h-10 rounded-xl bg-success/10 border-2 border-success/20 grid place-items-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-success/10 border border-success/20 grid place-items-center shrink-0">
               <Check className="h-5 w-5 text-success" />
             </div>
             <div className="flex-1">
-              <div className="text-sm font-black text-success font-display">
+              <div className="text-sm font-bold text-success font-display">
                 {converted} flashcards created!
               </div>
               <div className="text-[11px] text-text-muted font-medium mt-0.5">
@@ -120,7 +120,7 @@ export function BatchConvertToFlashcards({ errorIds }: BatchConvertProps) {
             </div>
             <a
               href="/flashcards"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border-2 border-accent bg-accent/10 text-accent text-xs font-extrabold no-underline hover:bg-accent/20 transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-accent bg-accent/10 text-accent text-xs font-extrabold no-underline hover:bg-accent/20 transition-colors"
             >
               Go to Flashcards <ArrowRight size={12} />
             </a>

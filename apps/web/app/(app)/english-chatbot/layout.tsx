@@ -42,7 +42,7 @@ export default function EnglishChatbotLayout({ children: _children }: { children
         {/* Mobile hamburger button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="md:hidden absolute top-4 left-4 z-40 flex h-9 w-9 items-center justify-center rounded-xl border-2 border-border bg-chat-surface text-text-secondary hover:text-ink transition-all cursor-pointer shadow-md active:scale-95"
+          className="md:hidden absolute top-4 left-4 z-40 flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-chat-surface text-text-secondary hover:text-ink transition-all cursor-pointer shadow-md active:scale-95"
           aria-label={sidebarOpen ? "Close menu" : "Open menu"}
         >
           {sidebarOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}

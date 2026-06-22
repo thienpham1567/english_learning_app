@@ -219,12 +219,12 @@ export function QuestionRunner({
         className="flex justify-between items-center bg-surface-alt rounded-xl"
         style={{ border: "1.5px solid var(--border)", padding: "10px 14px" }}
       >
-        <span className="font-black text-text-secondary" style={{ fontSize: 13.5 }}>
+        <span className="font-bold text-text-secondary" style={{ fontSize: 13.5 }}>
           Question {currentIndex + 1} / {total}
         </span>
         <div className="flex gap-1.5 items-center">
           <span
-            className="text-[10.5px] font-black rounded-md text-accent"
+            className="text-[10.5px] font-bold rounded-md text-accent"
             style={{
               padding: "2px 8px",
               background: "var(--accent-light)",
@@ -235,7 +235,7 @@ export function QuestionRunner({
           </span>
           {remainingSec !== null && (
             <span
-              className="text-[11px] font-black font-mono rounded-md"
+              className="text-[11px] font-bold font-mono rounded-md"
               style={{
                 padding: "2px 8px",
                 background:
@@ -358,7 +358,7 @@ export function QuestionRunner({
       {/* Question Text */}
       {question.questionText && (
         <div
-          className="text-base font-black text-text-primary font-display"
+          className="text-base font-bold text-text-primary font-display"
           style={{ padding: "4px 2px" }}
         >
           {question.questionText}
@@ -420,7 +420,7 @@ export function QuestionRunner({
                 transition: "background 0.2s, border-color 0.2s",
               }}
             >
-              <span className="font-black w-[22px]" style={{ opacity: 0.7 }}>
+              <span className="font-bold w-[22px]" style={{ opacity: 0.7 }}>
                 {String.fromCharCode(65 + idx)}.
               </span>
               <span className="flex-1">{isLabelOnly ? "" : opt}</span>
@@ -438,7 +438,7 @@ export function QuestionRunner({
           className="bg-surface-alt p-4 rounded-xl text-text-secondary leading-relaxed font-medium"
           style={{ border: "1.5px solid var(--border)", fontSize: 13.5 }}
         >
-          <div className="flex items-center gap-1.5 font-black text-text-primary mb-1.5">
+          <div className="flex items-center gap-1.5 font-bold text-text-primary mb-1.5">
             <CheckCircle className="text-success" />
             <span>Detailed Explanation:</span>
           </div>
@@ -511,35 +511,35 @@ export function QuestionRunner({
       <div className="mt-1.5 text-[11px] text-text-muted text-center font-semibold">
         Shortcuts:{" "}
         <kbd
-          className="bg-surface-alt rounded border-2 border-border"
+          className="bg-surface-alt rounded border border-border"
           style={{ padding: "2px 5px" }}
         >
           1-4
         </kbd>{" "}
         or{" "}
         <kbd
-          className="bg-surface-alt rounded border-2 border-border"
+          className="bg-surface-alt rounded border border-border"
           style={{ padding: "2px 5px" }}
         >
           A-D
         </kbd>{" "}
         to select ·{" "}
         <kbd
-          className="bg-surface-alt rounded border-2 border-border"
+          className="bg-surface-alt rounded border border-border"
           style={{ padding: "2px 5px" }}
         >
           Space
         </kbd>{" "}
         play/pause audio ·{" "}
         <kbd
-          className="bg-surface-alt rounded border-2 border-border"
+          className="bg-surface-alt rounded border border-border"
           style={{ padding: "2px 5px" }}
         >
           F
         </kbd>{" "}
         to flag ·{" "}
         <kbd
-          className="bg-surface-alt rounded border-2 border-border"
+          className="bg-surface-alt rounded border border-border"
           style={{ padding: "2px 5px" }}
         >
           Enter

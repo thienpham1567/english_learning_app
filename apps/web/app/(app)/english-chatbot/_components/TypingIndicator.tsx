@@ -7,7 +7,7 @@ type Props = {
 export function TypingIndicator({ personaName = "Tutor" }: Props) {
   return (
     <div
-      className="flex items-center gap-2.5 border-2 border-border bg-chat-surface px-3 py-2 shadow-[2px_2px_0_var(--shadow-color)] animate-in fade-in slide-in-from-bottom-2 duration-200"
+      className="flex items-center gap-2.5 border border-border bg-chat-surface px-3 py-2 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-200"
       role="status"
       aria-live="polite"
       aria-label={`${personaName} is replying...`}
@@ -18,7 +18,7 @@ export function TypingIndicator({ personaName = "Tutor" }: Props) {
         <div className="h-2 w-2 bg-accent animate-bounce [animation-delay:-0.15s] [animation-duration:0.8s]" />
         <div className="h-2 w-2 bg-accent animate-bounce [animation-duration:0.8s]" />
       </div>
-      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-text-muted">
         {personaName} đang soạn
       </span>
     </div>

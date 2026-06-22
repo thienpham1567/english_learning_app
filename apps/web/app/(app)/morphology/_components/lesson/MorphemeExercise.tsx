@@ -65,7 +65,7 @@ export function MorphemeExercise({
           animate={{ scale: [1, 1.1, 1], y: 0 }}
           className="flex justify-center"
         >
-          <span className="inline-flex items-center gap-1.5 rounded-lg text-sm font-black py-1.5 px-4 text-text-on-accent bg-gradient-to-r from-fire to-xp shadow-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-lg text-sm font-bold py-1.5 px-4 text-text-on-accent bg-gradient-to-r from-fire to-xp shadow-sm">
             <Flame size={15} /> {combo} COMBO! 🔥
           </span>
         </m.div>
@@ -78,7 +78,7 @@ export function MorphemeExercise({
         shadowSize="sm"
         className="p-5 md:p-6 bg-surface"
       >
-        <span className="inline-flex self-start text-[10.5px] font-black text-accent-active rounded-md bg-accent-light py-0.5 px-2 mb-3.5">
+        <span className="inline-flex self-start text-[10.5px] font-bold text-accent-active rounded-md bg-accent-light py-0.5 px-2 mb-3.5">
           {TYPE_LABELS[exercise.type]}
         </span>
 
@@ -98,7 +98,7 @@ export function MorphemeExercise({
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
           onClick={onNext}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 px-6 text-[15px] font-black text-text-on-accent bg-accent border-2 border-border shadow-sm hover:bg-accent-hover cursor-pointer"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 px-6 text-[15px] font-bold text-text-on-accent bg-accent border border-border shadow-sm hover:bg-accent-hover cursor-pointer"
         >
           {isLast ? (
             <>

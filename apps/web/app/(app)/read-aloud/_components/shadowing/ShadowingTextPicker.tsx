@@ -23,14 +23,14 @@ export function ShadowingTextPicker({ text, onTextChange }: ShadowingTextPickerP
       <m.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-surface border-2 border-border shadow-[4px_4px_0_var(--shadow-color)] p-5 flex flex-col gap-4"
+        className="bg-surface border border-border shadow-md p-5 flex flex-col gap-4"
       >
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 bg-accent-light border-2 border-border grid place-items-center shrink-0 shadow-[2px_2px_0_var(--shadow-color)]">
+          <div className="w-11 h-11 bg-accent-light border border-border grid place-items-center shrink-0 shadow-sm">
             <Mic className="text-accent-active" size={20} />
           </div>
           <div>
-            <h3 className="font-display font-black uppercase tracking-tight text-text-primary text-base leading-tight">
+            <h3 className="font-display font-bold uppercase tracking-tight text-text-primary text-base leading-tight">
               Luyện Shadowing
             </h3>
             <p className="text-text-secondary text-[12.5px]">
@@ -44,7 +44,7 @@ export function ShadowingTextPicker({ text, onTextChange }: ShadowingTextPickerP
           onChange={(e) => onTextChange(e.target.value)}
           placeholder={"Dán hoặc gõ đoạn tiếng Anh để shadow…\n\nHoặc chọn đoạn mẫu bên dưới."}
           maxLength={MAX_CHARS}
-          className="read-aloud-textarea w-full h-[220px] text-base font-body leading-[1.75] outline-none p-4 border-2 border-border bg-surface-alt text-ink focus:border-accent transition-colors"
+          className="read-aloud-textarea w-full h-[220px] text-base font-body leading-[1.75] outline-none p-4 border border-border bg-surface-alt text-ink focus:border-accent transition-colors"
           style={{ resize: "vertical" }}
         />
 

@@ -38,7 +38,7 @@ export function QuestionCards({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: qi * 0.05, type: "spring", stiffness: 300, damping: 30 }}
-          className="bg-surface border-2 border-border rounded-lg p-4 shadow-sm"
+          className="bg-surface border border-border rounded-lg p-4 shadow-sm"
         >
           <div className="text-sm font-bold text-text-primary mb-3">
             {qi + 1}. {q.question}
@@ -54,15 +54,15 @@ export function QuestionCards({
                   whileTap={{ scale: 0.99 }}
                   className={`flex items-center gap-2.5 rounded-lg cursor-pointer text-[13px] text-left w-full p-2.5 px-3.5 transition-all duration-100 ${
                     isSelected
-                      ? "border-2 border-accent bg-accent-light text-text-primary shadow-sm -translate-y-0.5"
-                      : "border-2 border-border bg-transparent text-text-primary hover:bg-surface-hover"
+                      ? "border border-accent bg-accent-light text-text-primary shadow-sm -translate-y-0.5"
+                      : "border border-border bg-transparent text-text-primary hover:bg-surface-hover"
                   }`}
                 >
                   <span
                     className={`w-[22px] h-[22px] rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0 transition-all duration-100 ${
                       isSelected
-                        ? "border-2 border-accent bg-accent text-ink"
-                        : "border-2 border-border bg-transparent text-text-muted"
+                        ? "border border-accent bg-accent text-ink"
+                        : "border border-border bg-transparent text-text-muted"
                     }`}
                   >
                     {isSelected ? <CircleCheckBig size={12} /> : String.fromCharCode(65 + oi)}
@@ -79,7 +79,7 @@ export function QuestionCards({
       <Button
         onClick={onSubmit}
         disabled={!allAnswered || isSubmitting}
-        className="w-full h-12 text-[15px] font-black flex items-center justify-center gap-2.5"
+        className="w-full h-12 text-[15px] font-bold flex items-center justify-center gap-2.5"
       >
         {isSubmitting ? <Loader2 className="animate-spin" /> : <Send size={16} />}
         {isSubmitting ? "Scoring..." : "Submit Answers"}

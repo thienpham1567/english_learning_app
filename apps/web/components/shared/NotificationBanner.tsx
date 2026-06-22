@@ -68,7 +68,7 @@ export function NotificationBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-[1000] flex items-center gap-3 rounded-2xl bg-surface border-2 border-border w-[360px] py-3.5 px-4.5 shadow-[0_8px_32px_rgba(0,0,0,0.2)] animate-[slideDown_0.4s_ease-out]">
+    <div className="fixed top-4 right-4 z-[1000] flex items-center gap-3 rounded-2xl bg-surface border border-border w-[360px] py-3.5 px-4.5 shadow-[0_8px_32px_rgba(0,0,0,0.2)] animate-[slideDown_0.4s_ease-out]">
       <div
         className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
         style={{

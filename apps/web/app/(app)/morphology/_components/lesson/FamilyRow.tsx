@@ -50,11 +50,11 @@ export function FamilyRow({ fw }: { fw: FamilyWord }) {
   };
 
   return (
-    <div className="rounded-lg bg-surface-alt border-2 border-border p-3.5">
+    <div className="rounded-lg bg-surface-alt border border-border p-3.5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
-            <span className="font-black text-text-primary text-[15px]">{fw.word}</span>
+            <span className="font-bold text-text-primary text-[15px]">{fw.word}</span>
             <span className="text-[11px] font-bold text-text-muted italic">{fw.partOfSpeech}</span>
           </div>
           <p className="mt-0.5 text-[13px] text-text-secondary font-semibold">{fw.meaningVi}</p>
@@ -65,7 +65,7 @@ export function FamilyRow({ fw }: { fw: FamilyWord }) {
           onClick={save}
           disabled={saving || saved}
           aria-label={saved ? "Saved" : "Save word"}
-          className={`w-8 h-8 grid place-items-center rounded-lg border-2 shrink-0 transition-colors ${
+          className={`w-8 h-8 grid place-items-center rounded-lg border shrink-0 transition-colors ${
             saved
               ? "border-success/40 bg-success/10 text-success cursor-default"
               : "border-border bg-surface text-accent-active hover:bg-accent-light cursor-pointer"

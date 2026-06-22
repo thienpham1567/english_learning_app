@@ -103,7 +103,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04, type: "spring", stiffness: 400, damping: 25 }}
-                className={`relative cursor-pointer text-center rounded-lg border-2 border-border py-3.5 px-2.5 transition-all duration-100 ${
+                className={`relative cursor-pointer text-center rounded-lg border border-border py-3.5 px-2.5 transition-all duration-100 ${
                   isSelected
                     ? `${meta.twBg} shadow-sm -translate-y-0.5 ${meta.darkText ? "text-ink" : "text-white"}`
                     : "bg-surface text-text-secondary hover:bg-surface-hover"
@@ -115,14 +115,14 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     initial={{ scale: 0.9 }}
                     animate={{ scale: [0.9, 1.05, 0.9] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute -top-2 -right-2 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border-2 border-border shadow-sm z-10"
+                    className="absolute -top-2 -right-2 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border border-border shadow-sm z-10"
                   >
                     <Star size={9} className="fill-current" />
                     <span>Rec</span>
                   </motion.span>
                 )}
                 <div
-                  className={`text-xl font-black font-mono leading-none ${
+                  className={`text-xl font-bold font-mono leading-none ${
                     isSelected ? "" : LEVEL_ACCENT[l]
                   }`}
                 >
@@ -167,7 +167,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05, type: "spring", stiffness: 350, damping: 25 }}
-                className={`flex items-center gap-3.5 rounded-lg border-2 border-border cursor-pointer text-left py-3 px-4 transition-all duration-100 ${
+                className={`flex items-center gap-3.5 rounded-lg border border-border cursor-pointer text-left py-3 px-4 transition-all duration-100 ${
                   isSelected
                     ? "bg-accent-light border-l-4 border-l-accent shadow-sm -translate-y-0.5"
                     : "bg-surface hover:bg-surface-hover"
@@ -183,7 +183,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 <div className="flex-1">
                   <div
                     className={`text-sm ${
-                      isSelected ? "font-extrabold text-ink" : "font-bold text-text-primary"
+                      isSelected ? "font-bold text-ink" : "font-bold text-text-primary"
                     }`}
                   >
                     {meta.label}
@@ -216,7 +216,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
       <Button
         onClick={() => activeLevel && onStart(activeLevel, exerciseType)}
         disabled={!activeLevel || isLoading}
-        className="w-full h-13 text-base font-black flex items-center justify-center gap-2.5"
+        className="w-full h-13 text-base font-bold flex items-center justify-center gap-2.5"
       >
         {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 size={18} />}
         {isLoading ? "Generating listening exercise..." : "Start Listening Practice"}

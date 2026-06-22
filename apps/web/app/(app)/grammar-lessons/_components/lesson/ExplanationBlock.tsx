@@ -24,19 +24,19 @@ export function ExplanationBlock({
     <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-4 rounded-xl bg-surface-alt border-2 border-accent/15 p-4"
+      className="mt-4 rounded-xl bg-surface-alt border border-accent/15 p-4"
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-black text-accent-active uppercase tracking-wider">
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-accent-active uppercase tracking-wider">
           <Lightbulb size={13} /> Explanation
         </span>
-        <div className="flex overflow-hidden rounded-md border-2 border-border">
+        <div className="flex overflow-hidden rounded-md border border-border">
           {(["vi", "en"] as const).map((opt) => (
             <button
               key={opt}
               type="button"
               onClick={() => onLangChange(opt)}
-              className={`text-[10.5px] font-black py-1 px-2.5 cursor-pointer transition-colors ${
+              className={`text-[10.5px] font-bold py-1 px-2.5 cursor-pointer transition-colors ${
                 lang === opt
                   ? "bg-accent text-text-on-accent"
                   : "bg-surface text-text-secondary hover:text-text-primary"

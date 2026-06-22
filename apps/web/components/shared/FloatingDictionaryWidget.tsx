@@ -156,7 +156,7 @@ export function FloatingDictionaryWidget() {
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.85, x: 20 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="flex items-center gap-1.5 bg-surface rounded-2xl py-1.5 pl-4 pr-1.5 border-2 border-border shadow-lg origin-right backdrop-blur-sm focus-within:border-accent/50 transition-all duration-200"
+              className="flex items-center gap-1.5 bg-surface rounded-2xl py-1.5 pl-4 pr-1.5 border border-border shadow-lg origin-right backdrop-blur-sm focus-within:border-accent/50 transition-all duration-200"
             >
               <Search className="text-accent shrink-0" size={15} />
               <input
@@ -182,7 +182,7 @@ export function FloatingDictionaryWidget() {
                   disabled={!query.trim()}
                   whileHover={query.trim() ? { scale: 1.08 } : {}}
                   whileTap={query.trim() ? { scale: 0.92 } : {}}
-                  className={`w-8 h-8 rounded-xl border-2 grid place-items-center shrink-0 transition-all duration-150 ${
+                  className={`w-8 h-8 rounded-xl border grid place-items-center shrink-0 transition-all duration-150 ${
                     query.trim()
                       ? "bg-accent border-accent text-text-on-accent cursor-pointer shadow-sm"
                       : "bg-bg-deep border-border text-text-muted cursor-default"
@@ -194,7 +194,7 @@ export function FloatingDictionaryWidget() {
               <button
                 type="button"
                 onClick={handleCollapse}
-                className="w-7 h-7 rounded-lg border-2 border-border bg-surface-alt text-text-muted grid place-items-center cursor-pointer shrink-0 transition-all duration-150 hover:bg-surface-hover hover:text-ink hover:border-border-strong"
+                className="w-7 h-7 rounded-lg border border-border bg-surface-alt text-text-muted grid place-items-center cursor-pointer shrink-0 transition-all duration-150 hover:bg-surface-hover hover:text-ink hover:border-border-strong"
               >
                 <X size={11} strokeWidth={2.5} />
               </button>
@@ -211,7 +211,7 @@ export function FloatingDictionaryWidget() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.92 }}
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
-              className="w-12 h-12 rounded-2xl cursor-pointer bg-accent text-text-on-accent flex items-center justify-center border-2 border-accent shadow-lg hover:shadow-xl transition-shadow duration-200"
+              className="w-12 h-12 rounded-2xl cursor-pointer bg-accent text-text-on-accent flex items-center justify-center border border-accent shadow-lg hover:shadow-xl transition-shadow duration-200"
             >
               <BookOpen size={20} strokeWidth={2.2} />
             </m.button>
@@ -226,7 +226,7 @@ export function FloatingDictionaryWidget() {
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
-            className="fixed text-[11px] font-bold rounded-xl w-[220px] z-[901] text-white py-2 px-3 shadow-lg bg-error border-2 border-error"
+            className="fixed text-[11px] font-bold rounded-xl w-[220px] z-[901] text-white py-2 px-3 shadow-lg bg-error border border-error"
             style={{
               bottom: dictBottom + 52,
               right: 20,

@@ -375,7 +375,7 @@ export function AudioPlayer({
 
       {/* Audio error message */}
       {audioError && (
-        <div className="rounded-lg text-[var(--error)] text-xs text-center py-2 px-3.5 bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_20%,var(--border))] flex items-center justify-center gap-1.5">
+        <div className="rounded-lg text-[var(--error)] text-xs text-center py-2 px-3.5 bg-error-bg border border-[color-mix(in_srgb,var(--error)_20%,var(--border))] flex items-center justify-center gap-1.5">
           <AlertTriangle size={14} /> {audioError}
         </div>
       )}
@@ -456,7 +456,7 @@ export function AudioPlayer({
           disabled={replaysUsed >= maxReplays}
           whileHover={replaysUsed < maxReplays ? { y: -2 } : {}}
           whileTap={replaysUsed < maxReplays ? { scale: 0.97 } : {}}
-          className={`flex items-center gap-1.5 rounded-lg border-2 border-border text-xs font-bold py-2 px-3.5 transition-all duration-100 ${
+          className={`flex items-center gap-1.5 rounded-lg border border-border text-xs font-bold py-2 px-3.5 transition-all duration-100 ${
             replaysUsed >= maxReplays
               ? "bg-bg-deep text-text-muted cursor-not-allowed"
               : "bg-surface text-text-primary cursor-pointer hover:bg-surface-hover hover:shadow-sm hover:-translate-y-0.5"
@@ -471,7 +471,7 @@ export function AudioPlayer({
           onClick={handleCycleSpeed}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className={`flex items-center gap-1.5 rounded-lg border-2 border-border cursor-pointer text-xs font-bold w-[80px] justify-center py-2 px-3.5 transition-all duration-100 ${
+          className={`flex items-center gap-1.5 rounded-lg border border-border cursor-pointer text-xs font-bold w-[80px] justify-center py-2 px-3.5 transition-all duration-100 ${
             speed !== 1
               ? "bg-accent-muted text-accent"
               : "bg-surface text-text-primary hover:bg-surface-hover"
@@ -490,7 +490,7 @@ export function AudioPlayer({
           disabled={isLoading}
           whileHover={{ y: -1 }}
           title="Set A marker [ [ ]"
-          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg cursor-pointer text-[11px] font-bold border-2 transition-all duration-100 ${
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg cursor-pointer text-[11px] font-bold border transition-all duration-100 ${
             markerA != null
               ? "border-[var(--success)] bg-success-bg text-[var(--success)]"
               : "border-border bg-surface text-text-muted hover:bg-surface-hover"
@@ -505,7 +505,7 @@ export function AudioPlayer({
           disabled={!canSetB || isLoading}
           whileHover={canSetB ? { y: -1 } : {}}
           title="Set B marker [ ] ]"
-          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-[11px] font-bold border-2 transition-all duration-100 ${
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-[11px] font-bold border transition-all duration-100 ${
             markerB != null
               ? "border-[var(--error)] bg-error-bg text-[var(--error)] cursor-pointer"
               : canSetB
@@ -522,7 +522,7 @@ export function AudioPlayer({
           disabled={!canLoop}
           whileHover={canLoop ? { y: -1 } : {}}
           title="Toggle loop [ L ]"
-          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-[11px] font-bold border-2 transition-all duration-100 ${
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-[11px] font-bold border transition-all duration-100 ${
             looping
               ? "border-[var(--success)] bg-success-bg text-[var(--success)] cursor-pointer"
               : canLoop
@@ -540,7 +540,7 @@ export function AudioPlayer({
           disabled={markerA == null && markerB == null}
           whileHover={markerA != null || markerB != null ? { y: -1 } : {}}
           title="Clear markers"
-          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg border-2 border-border bg-surface text-[11px] font-bold transition-all duration-100 ${
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg border border-border bg-surface text-[11px] font-bold transition-all duration-100 ${
             markerA != null || markerB != null
               ? "text-text-primary cursor-pointer hover:bg-surface-hover"
               : "text-border cursor-not-allowed"

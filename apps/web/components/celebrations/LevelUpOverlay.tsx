@@ -71,7 +71,7 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 w-8 h-8 grid place-items-center rounded-lg bg-transparent border-2 border-border text-text-muted cursor-pointer hover:bg-surface-alt transition-colors"
+              className="absolute top-3 right-3 w-8 h-8 grid place-items-center rounded-lg bg-transparent border border-border text-text-muted cursor-pointer hover:bg-surface-alt transition-colors"
             >
               <X size={14} />
             </button>
@@ -99,7 +99,7 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
               transition={{ type: "spring", delay: 0.2, damping: 12 }}
               className="mx-auto w-20 h-20 rounded-2xl border-3 border-accent bg-gradient-to-br from-accent to-accent-hover grid place-items-center mb-5 shadow-lg"
             >
-              <span className="text-3xl font-black text-text-on-accent font-display">
+              <span className="text-3xl font-bold text-text-on-accent font-display">
                 {newLevel}
               </span>
             </m.div>
@@ -115,7 +115,7 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
                 Level Up!
                 <Sparkles size={12} className="text-xp" />
               </div>
-              <h2 className="text-2xl font-black font-display text-ink m-0 mb-1">
+              <h2 className="text-2xl font-bold font-display text-ink m-0 mb-1">
                 {getLevelTitle(newLevel)}
               </h2>
               <p className="text-xs text-text-muted font-semibold m-0">
@@ -136,8 +136,8 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
               <div className="text-[9px] font-extrabold uppercase tracking-widest text-text-muted mb-1">
                 Unlocked
               </div>
-              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-left">
-                <span className="w-8 h-8 rounded-lg bg-accent/10 border-2 border-accent/20 grid place-items-center text-accent shrink-0">
+              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-border bg-surface-alt text-left">
+                <span className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 grid place-items-center text-accent shrink-0">
                   <Target size={16} />
                 </span>
                 <div>
@@ -145,8 +145,8 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
                   <div className="text-[10px] text-text-muted">Harder questions = more XP</div>
                 </div>
               </div>
-              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-left">
-                <span className="w-8 h-8 rounded-lg bg-xp/10 border-2 border-xp/20 grid place-items-center text-xp shrink-0">
+              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-border bg-surface-alt text-left">
+                <span className="w-8 h-8 rounded-lg bg-xp/10 border border-xp/20 grid place-items-center text-xp shrink-0">
                   <Zap size={16} className="fill-current" />
                 </span>
                 <div>
@@ -164,7 +164,7 @@ export function LevelUpOverlay({ isOpen, onClose, newLevel, totalXP }: LevelUpOv
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
               onClick={onClose}
-              className="mt-6 w-full py-3 px-6 rounded-xl border-2 border-accent bg-accent text-text-on-accent font-extrabold text-sm cursor-pointer shadow-sm"
+              className="mt-6 w-full py-3 px-6 rounded-xl border border-accent bg-accent text-text-on-accent font-extrabold text-sm cursor-pointer shadow-sm"
             >
               Continue Learning →
             </m.button>
