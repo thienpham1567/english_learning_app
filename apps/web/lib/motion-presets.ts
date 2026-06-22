@@ -1,9 +1,8 @@
 /**
  * Standardized motion presets for Framer Motion interactions.
  *
- * Neo-Brutalism prefers translation-based hover (button "presses into" page)
- * over scale-based hover. Use `tapBrutalist` for buttons/CTAs.
- * Use scale presets only for decorative elements (icons, badges).
+ * Soft UI uses subtle scale-based hover for depth and tactile feel.
+ * Use `TAP_SOFT` for most interactive elements.
  */
 
 /** Subtle feedback for cards and list items */
@@ -25,13 +24,18 @@ export const TAP_STRONG = {
 } as const;
 
 /**
- * Neo-Brutalist: offset-based hover instead of scale.
- * Button appears to "lift" then "press" into the surface.
+ * Soft UI: gentle scale + subtle lift for interactive elements.
+ * Gives a soft "press" feeling without layout shift.
  */
-export const TAP_BRUTALIST = {
-  whileHover: { x: -1, y: -1 },
-  whileTap: { x: 1, y: 1 },
+export const TAP_SOFT = {
+  whileHover: { scale: 1.015, y: -1 },
+  whileTap: { scale: 0.985, y: 0 },
 } as const;
+
+/**
+ * @deprecated Use TAP_SOFT instead. Kept for backwards compatibility.
+ */
+export const TAP_BRUTALIST = TAP_SOFT;
 
 /** Stagger children animation variants */
 export const STAGGER_CONTAINER = {

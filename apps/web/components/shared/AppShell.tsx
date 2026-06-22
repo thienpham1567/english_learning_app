@@ -86,9 +86,9 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
                   : undefined
               }
             >
-              {/* Dot pattern background */}
+              {/* Soft ambient background glow */}
               {!isChatPage && (
-                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px] z-0" />
+                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,color-mix(in_srgb,var(--accent)_3%,transparent),transparent)] z-0" />
               )}
               <div className="relative z-[1] flex flex-col flex-1 overflow-hidden min-h-0">
                 {children}

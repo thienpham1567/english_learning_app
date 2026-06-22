@@ -9,7 +9,7 @@ interface SectionHeaderProps {
 }
 
 /**
- * Neo-Brutalist section header with accent bar + uppercase label + divider line.
+ * Soft UI section header with accent bar + uppercase label + divider line.
  * Replaces the copy-pasted `sectionLabelClass` + `accentBarClass` pattern.
  */
 export function SectionHeader({ children, className, barClassName }: SectionHeaderProps) {

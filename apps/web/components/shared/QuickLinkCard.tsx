@@ -13,7 +13,7 @@ export interface QuickLinkCardProps {
 
 /**
  * Shared card for navigation shortcuts across the app.
- * Uses the Neo-Brutalist Card with interactive shadow (hard-offset).
+ * Uses the Soft UI Card with interactive shadow lift.
  */
 export function QuickLinkCard({
   href,
@@ -31,7 +31,7 @@ export function QuickLinkCard({
         className="flex flex-row items-center gap-3.5 rounded-2xl py-3.5 px-4 bg-surface"
       >
         {Icon ? (
-          <div className="w-8 h-8 rounded-lg bg-accent/10 text-accent-active border-2 border-accent/20 grid place-items-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-accent/10 text-accent-active border border-accent/20 grid place-items-center shrink-0">
             <Icon className="h-4.5 w-4.5" />
           </div>
         ) : (

@@ -226,23 +226,23 @@
   --chat-code-header: var(--bg);
 
   /* ── Shadcn/ui Token Mapping ── */
-  --background: #F8FAFC;
-  --foreground: #0F172A;
-  --card: #ffffff;
-  --card-foreground: #0F172A;
-  --popover: #ffffff;
-  --popover-foreground: #0F172A;
-  --primary: #6366F1;
-  --primary-foreground: #ffffff;
-  --secondary: #0EA5E9;
-  --secondary-foreground: #ffffff;
-  --muted: #F1F5F9;
-  --muted-foreground: #475569;
-  --accent: #EEF2FF;
-  --accent-foreground: #4F46E5;
-  --destructive: #EF4444;
-  --input: #E2E8F0;
-  --ring: #6366F1;
+  --background: var(--bg);
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: var(--text-on-accent);
+  --secondary: var(--secondary);
+  --secondary-foreground: var(--text-on-accent);
+  --muted: var(--bg-deep);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--accent-light);
+  --accent-foreground: var(--accent-active);
+  --destructive: var(--error);
+  --input: var(--border);
+  --ring: var(--accent);
 }
 
 /* ── Dark Theme Tokens ── */
@@ -339,23 +339,23 @@
   --chat-code-header: rgba(7, 10, 19, 0.4);
 
   /* Shadcn dark mapping */
-  --background: #0B0F19;
-  --foreground: #F8FAFC;
-  --card: #1E293B;
-  --card-foreground: #F8FAFC;
-  --popover: #1E293B;
-  --popover-foreground: #F8FAFC;
-  --primary: #818CF8;
-  --primary-foreground: #0B0F19;
-  --secondary: #38BDF8;
-  --secondary-foreground: #F1F5F9;
-  --muted: #334155;
-  --muted-foreground: #CBD5E1;
-  --accent: #1E293B;
-  --accent-foreground: #818CF8;
-  --destructive: #F87171;
-  --input: #334155;
-  --ring: #818CF8;
+  --background: var(--bg);
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: var(--text-on-accent);
+  --secondary: var(--secondary);
+  --secondary-foreground: var(--text-on-accent);
+  --muted: var(--surface-hover);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--accent-light);
+  --accent-foreground: var(--accent-active);
+  --destructive: var(--error);
+  --input: var(--border);
+  --ring: var(--accent);
 }
 
 
@@ -964,17 +964,17 @@ button:focus-visible {
   --color-cefr-b2: var(--cefr-b2);
   --color-cefr-c1: var(--cefr-c1);
   --color-cefr-c2: var(--cefr-c2);
-  --radius-sm: 0px;
-  --radius-md: 2px;
-  --radius-lg: 4px;
-  --radius-xl: 4px;
-  --radius-2xl: 6px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
 }
 
 /* Dark mode handled by [data-theme="dark"] above */
 
 /* ══════════════════════════════════════════════
-   SONNER TOAST — NEO-BRUTALIST THEME
+   SONNER TOAST — SOFT UI THEME
    ══════════════════════════════════════════════ */
 
 /* ── Base toast ── */
@@ -1038,18 +1038,18 @@ button:focus-visible {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  box-shadow: 2px 2px 0 var(--shadow-color);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   margin-left: auto;
   flex-shrink: 0;
 }
 .neo-toast-action:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--shadow-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
 }
 .neo-toast-action:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--shadow-color);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .neo-toast-cancel {
@@ -1071,7 +1071,7 @@ button:focus-visible {
 /* ── Success variant ── */
 .neo-toast--success {
   border-color: var(--success);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--success) 40%, transparent);
+  box-shadow: 0 4px 12px -2px color-mix(in srgb, var(--success) 20%, transparent);
 }
 .neo-toast--success::before {
   background: var(--success);
@@ -1083,7 +1083,7 @@ button:focus-visible {
 /* ── Error variant ── */
 .neo-toast--error {
   border-color: var(--error);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--error) 40%, transparent);
+  box-shadow: 0 4px 12px -2px color-mix(in srgb, var(--error) 20%, transparent);
 }
 .neo-toast--error::before {
   background: var(--error);
@@ -1095,7 +1095,7 @@ button:focus-visible {
 /* ── Warning variant ── */
 .neo-toast--warning {
   border-color: var(--warning);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--warning) 40%, transparent);
+  box-shadow: 0 4px 12px -2px color-mix(in srgb, var(--warning) 20%, transparent);
 }
 .neo-toast--warning::before {
   background: var(--warning);
@@ -1107,7 +1107,7 @@ button:focus-visible {
 /* ── Info variant ── */
 .neo-toast--info {
   border-color: var(--info);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--info) 40%, transparent);
+  box-shadow: 0 4px 12px -2px color-mix(in srgb, var(--info) 20%, transparent);
 }
 .neo-toast--info::before {
   background: var(--info);

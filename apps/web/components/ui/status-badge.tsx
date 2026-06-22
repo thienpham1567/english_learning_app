@@ -19,14 +19,14 @@ interface StatusBadgeProps {
 }
 
 /**
- * Neo-Brutalist status badge.
+ * Soft UI status badge.
  * Replaces the 25+ copy-pasted `text-[10px] font-extrabold uppercase tracking-widest` patterns.
  */
 export function StatusBadge({ variant = "accent", children, className }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-lg border-2",
+        "inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest px-2.5 py-0.5 rounded-full border",
         VARIANT_CLASSES[variant],
         className,
       )}

@@ -19,7 +19,7 @@ export const CEFR_COLORS: Record<string, string> = {
   C2: "var(--cefr-c2)",
 };
 
-/** Tailwind utility classes for CEFR level badges (Neo-Brutalist) */
+/** Tailwind utility classes for CEFR level badges (Soft UI) */
 export const CEFR_BADGE_CLASSES: Record<string, string> = {
   A1: "text-cefr-a1 border-cefr-a1/30 bg-cefr-a1/5",
   A2: "text-cefr-a2 border-cefr-a2/30 bg-cefr-a2/5",
