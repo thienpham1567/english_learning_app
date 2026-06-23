@@ -247,8 +247,8 @@
   --secondary-foreground: var(--text-on-accent);
   --muted: var(--bg-deep);
   --muted-foreground: var(--text-secondary);
-  --accent: var(--accent-light);
-  --accent-foreground: var(--accent-active);
+  --shadcn-accent: var(--accent-light);
+  --shadcn-accent-foreground: var(--accent-active);
   --destructive: var(--error);
   --input: var(--border);
   --ring: #4F46E5;
@@ -367,8 +367,8 @@
   --secondary-foreground: var(--text-on-accent);
   --muted: var(--surface-hover);
   --muted-foreground: var(--text-secondary);
-  --accent: var(--accent-light);
-  --accent-foreground: var(--accent-active);
+  --shadcn-accent: var(--accent-light);
+  --shadcn-accent-foreground: var(--accent-active);
   --destructive: var(--error);
   --input: var(--border);
   --ring: #818CF8;
@@ -959,7 +959,7 @@ button:focus-visible {
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-foreground: var(--accent-active);
   --color-accent: var(--accent);
   --color-accent-active: var(--accent-active);
   --color-muted-foreground: var(--muted-foreground);
