@@ -33,7 +33,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
         <m.button
           whileHover={{ background: "var(--bg-deep)" }}
           whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2.5 rounded h-10 bg-surface cursor-pointer pl-1.5 pr-3.5 border border-border shadow-sm transition-colors duration-200"
+          className="flex items-center gap-2.5 rounded-xl h-10 bg-surface cursor-pointer pl-1.5 pr-3.5 border border-border shadow-sm transition-colors duration-200"
         >
           <m.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -44,10 +44,10 @@ export function UserMenu({ user }: { user: AuthUser }) {
               <img
                 src={user.image}
                 alt={user.name}
-                className="w-7 h-7 rounded-sm object-cover border border-border"
+                className="w-7 h-7 rounded-lg object-cover border border-border"
               />
             ) : (
-              <div className="w-7 h-7 rounded-sm flex items-center justify-center text-[10px] font-bold bg-accent text-white border border-border">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold bg-accent text-white border border-border">
                 {initials}
               </div>
             )}

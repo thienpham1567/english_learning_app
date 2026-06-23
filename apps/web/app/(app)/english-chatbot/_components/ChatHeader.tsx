@@ -16,7 +16,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
     <div className="z-30 flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-chat-surface px-4 md:px-6">
       <div key={personaId} className="flex animate-in items-center gap-3 fade-in duration-300">
         {/* Square portrait frame */}
-        <div className="grid h-9 w-9 place-items-center overflow-hidden border border-border bg-bg-deep shadow-sm">
+        <div className="grid h-9 w-9 place-items-center overflow-hidden rounded-xl border border-border bg-bg-deep shadow-sm">
           <Avatar size={34} />
         </div>
 
@@ -26,7 +26,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
           </span>
           <span className="mt-1 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.16em]">
             <span
-              className={`inline-block h-1.5 w-1.5 ${
+              className={`inline-block h-1.5 w-1.5 rounded-full ${
                 isLoading ? "animate-pulse bg-accent" : "bg-success"
               }`}
             />

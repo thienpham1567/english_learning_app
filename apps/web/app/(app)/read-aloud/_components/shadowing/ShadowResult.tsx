@@ -38,7 +38,7 @@ interface ShadowResultProps {
 
 const SCORE_COLORS: Record<string, string> = {
   good: "var(--success)",
-  fair: "var(--warning, #f59e0b)",
+  fair: "var(--warning)",
   poor: "var(--error)",
 };
 
@@ -51,7 +51,7 @@ const SCORE_ICONS: Record<string, React.ComponentType<any>> = {
 function getGrade(score: number): { label: string; color: string } {
   if (score >= 85) return { label: "Excellent", color: "var(--success)" };
   if (score >= 70) return { label: "Good", color: "var(--info)" };
-  if (score >= 50) return { label: "Needs Improvement", color: "var(--warning, #f59e0b)" };
+  if (score >= 50) return { label: "Needs Improvement", color: "var(--warning)" };
   return { label: "Needs Practice", color: "var(--error)" };
 }
 

@@ -25,12 +25,12 @@ const TYPE_META: Record<string, { label: string; color: string; icon: React.Reac
   grammar: { label: "Grammar", color: "var(--error)", icon: <Bug /> },
   spelling: {
     label: "Spelling",
-    color: "var(--warning, #e8a838)",
+    color: "var(--warning)",
     icon: <AlertTriangle />,
   },
   style: {
     label: "Style",
-    color: "var(--info, #5b8def)",
+    color: "var(--info)",
     icon: <Lightbulb />,
   },
 };
@@ -46,7 +46,7 @@ const EXAMPLE_PROMPTS = [
   {
     label: "Uncountable nouns",
     text: "The informations is very important for us. We need more evidences.",
-    color: "var(--warning, #e8a838)",
+    color: "var(--warning)",
   },
   {
     label: "Tense errors",
@@ -56,7 +56,7 @@ const EXAMPLE_PROMPTS = [
   {
     label: "Article & preposition",
     text: "She is interested on learning the English. He arrived to the office in Monday morning.",
-    color: "var(--info, #5b8def)",
+    color: "var(--info)",
   },
 ];
 
@@ -73,7 +73,7 @@ function ScoreGauge({ score, label }: { score: number; label: string }) {
       : score >= 70
         ? "var(--accent)"
         : score >= 50
-          ? "var(--warning, #e8a838)"
+          ? "var(--warning)"
           : "var(--error)";
 
   return (
@@ -509,13 +509,13 @@ export function GrammarChecker() {
                     {
                       label: "Spelling",
                       value: result.stats.spelling,
-                      color: "var(--warning, #e8a838)",
+                      color: "var(--warning)",
                       icon: <AlertTriangle size={14} />,
                     },
                     {
                       label: "Style",
                       value: result.stats.style,
-                      color: "var(--info, #5b8def)",
+                      color: "var(--info)",
                       icon: <Lightbulb size={14} />,
                     },
                   ].map((s) => (

@@ -148,7 +148,7 @@ const MORE_HUB_ITEMS: HubItem[] = [
     label: "IPA Chart",
     icon: <Languages size={22} />,
     href: "/ipa-chart",
-    accent: "var(--tertiary, #8B5CF6)",
+    accent: "var(--module-grammar)",
   },
   {
     label: "Writing Tools",

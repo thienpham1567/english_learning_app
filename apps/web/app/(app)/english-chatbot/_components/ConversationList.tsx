@@ -77,7 +77,7 @@ export function ConversationList({ activeId }: Props) {
       {/* ── Header ── */}
       <div className="relative z-10 px-4 pt-5 pb-3 space-y-3">
         <div className="flex items-center gap-2.5">
-          <div className="grid h-7 w-7 place-items-center border border-border bg-accent text-text-on-accent shadow-sm">
+          <div className="grid h-7 w-7 place-items-center rounded-xl border border-border bg-accent text-text-on-accent shadow-sm">
             <Trophy className="h-3.5 w-3.5" />
           </div>
           <div className="flex flex-col">
@@ -107,7 +107,7 @@ export function ConversationList({ activeId }: Props) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Tìm phiên…"
-            className="w-full border border-border bg-chat-surface pl-8 pr-3 py-2 text-[11px] font-semibold text-ink placeholder-text-muted outline-none focus:border-accent transition-colors"
+            className="w-full rounded-xl border border-border bg-chat-surface pl-8 pr-3 py-2 text-[11px] font-semibold text-ink placeholder-text-muted outline-none focus:border-accent transition-colors"
           />
           {search && (
             <button
@@ -151,7 +151,7 @@ export function ConversationList({ activeId }: Props) {
                     return (
                       <div
                         key={conv.id}
-                        className="flex items-center gap-2 border border-error bg-error/10 p-2.5 mx-1 animate-in fade-in zoom-in-95 duration-150"
+                        className="flex items-center gap-2 rounded-xl border border-error bg-error/10 p-2.5 mx-1 animate-in fade-in zoom-in-95 duration-150"
                       >
                         <span className="flex-1 text-[10px] font-semibold uppercase tracking-wider text-error">
                           Xoá phiên?
@@ -162,14 +162,14 @@ export function ConversationList({ activeId }: Props) {
                             setConfirmingId(null);
                             if (conv.id === activeId) router.push("/english-chatbot");
                           }}
-                          className="flex h-6 w-6 items-center justify-center border border-border bg-error text-white cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-border bg-error text-white cursor-pointer"
                           aria-label="Confirm delete"
                         >
                           <Check className="h-3 w-3" strokeWidth={3} />
                         </button>
                         <button
                           onClick={() => setConfirmingId(null)}
-                          className="flex h-6 w-6 items-center justify-center border border-border bg-surface text-text-secondary hover:text-ink cursor-pointer"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-ink cursor-pointer"
                           aria-label="Cancel delete"
                         >
                           <X className="h-3 w-3" strokeWidth={3} />
@@ -182,7 +182,7 @@ export function ConversationList({ activeId }: Props) {
                     <div key={conv.id} className="group relative mx-1">
                       <Link
                         href={`/english-chatbot/${conv.id}`}
-                        className={`flex w-full items-center gap-2 px-3 py-2.5 text-left transition-all duration-150 ${
+                        className={`flex w-full items-center gap-2 px-3 py-2.5 rounded-xl text-left transition-all duration-150 ${
                           isActive
                             ? "border border-border bg-accent-light text-ink shadow-sm"
                             : "border border-transparent text-text-secondary hover:border-border hover:bg-chat-surface-hover hover:text-text-primary"

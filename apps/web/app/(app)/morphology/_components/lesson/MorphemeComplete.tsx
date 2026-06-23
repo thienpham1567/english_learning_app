@@ -18,7 +18,7 @@ interface MorphemeCompleteProps {
 function scoreColor(pct: number): string {
   if (pct >= 85) return "var(--success)";
   if (pct >= 70) return "var(--info)";
-  if (pct >= 50) return "var(--warning, #f59e0b)";
+  if (pct >= 50) return "var(--warning)";
   return "var(--error)";
 }
 

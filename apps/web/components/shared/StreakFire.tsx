@@ -110,7 +110,7 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
           style={{
             fontSize: size === "large" ? 18 : 14,
             fontWeight: 800,
-            color: "var(--fire, #f97316)",
+            color: "var(--fire)",
             lineHeight: 1,
             fontFamily: "var(--font-display)",
           }}

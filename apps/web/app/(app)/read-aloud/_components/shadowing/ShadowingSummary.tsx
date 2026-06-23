@@ -16,7 +16,7 @@ interface ShadowingSummaryProps {
 function scoreColor(score: number): string {
   if (score >= 85) return "var(--success)";
   if (score >= 70) return "var(--info)";
-  if (score >= 50) return "var(--warning, #f59e0b)";
+  if (score >= 50) return "var(--warning)";
   return "var(--error)";
 }
 

@@ -117,12 +117,12 @@ export function ToeicExerciseCard({
   const scorePct = result ? Math.round((result.score / total) * 100) : 0;
 
   return (
-    <div className="my-3 rounded-xl border border-amber-400/40 bg-amber-50 overflow-hidden">
+    <div className="my-3 rounded-xl border border-warning/30 bg-warning/5 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-amber-100/70 border-b border-amber-300/40">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-warning/10 border-b border-warning/20">
         <div className="flex items-center gap-2">
-          <Pencil className="h-3.5 w-3.5 text-accent shrink-0" />
-          <span className="text-xs font-bold text-accent">
+          <Pencil className="h-3.5 w-3.5 text-warning shrink-0" />
+          <span className="text-xs font-bold text-warning">
             {exercise.partLabel ?? "TOEIC Practice"}
           </span>
           <span className="text-[9px] font-bold text-text-muted bg-bg-deep px-1.5 py-0.5 rounded-md">
@@ -259,7 +259,7 @@ export function ToeicExerciseCard({
 
       {/* Footer: submit OR score */}
       {!submitted ? (
-        <div className="px-4 py-2.5 border-t border-amber-300/40 flex items-center justify-between">
+        <div className="px-4 py-2.5 border-t border-warning/20 flex items-center justify-between">
           <span className="text-[10px] text-text-muted">Answer every question, then check</span>
           <button
             onClick={handleSubmit}
@@ -275,7 +275,7 @@ export function ToeicExerciseCard({
           </button>
         </div>
       ) : (
-        <div className="px-4 py-3 border-t border-amber-300/40 flex items-center justify-between gap-3">
+        <div className="px-4 py-3 border-t border-warning/20 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="text-sm font-bold text-ink">
               {result.score}/{total}
