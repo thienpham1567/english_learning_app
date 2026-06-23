@@ -90,7 +90,7 @@ export function ListTab() {
                   onClick={() => list.setFilter("resolved", opt.value)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border cursor-pointer transition-all duration-150 ${
                     list.filters.resolved === opt.value
-                      ? "border-accent bg-accent text-text-on-accent"
+                      ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-transparent text-text-secondary hover:border-accent/40"
                   }`}
                 >

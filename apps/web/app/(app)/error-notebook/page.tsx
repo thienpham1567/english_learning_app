@@ -71,7 +71,7 @@ export default function ErrorNotebookPage() {
               whileTap={{ scale: 0.97 }}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-[12.5px] cursor-pointer transition-all duration-150 min-w-0 ${
                 tab === t.key
-                  ? "bg-accent text-text-on-accent font-bold border-none shadow-sm"
+                  ? "bg-primary text-primary-foreground font-bold border-none shadow-sm"
                   : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
               }`}
             >

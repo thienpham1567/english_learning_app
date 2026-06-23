@@ -263,7 +263,7 @@ export function ExerciseCard({ text, title, onSubmitAnswers, isLoading }: Props)
             disabled={!allFilled || isLoading}
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95 ${
               allFilled && !isLoading
-                ? "bg-accent text-white shadow-sm hover:brightness-110"
+                ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                 : "bg-surface-hover border border-border text-text-muted cursor-not-allowed opacity-50"
             }`}
           >

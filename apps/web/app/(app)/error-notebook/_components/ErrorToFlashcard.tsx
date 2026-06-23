@@ -178,7 +178,7 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={saveToSession}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl border-none bg-accent text-ink text-xs font-extrabold cursor-pointer shadow-sm"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl border-none bg-primary text-primary-foreground text-xs font-extrabold cursor-pointer shadow-sm"
               >
                 <Check size={12} />
                 Save to Deck

@@ -298,7 +298,7 @@ export default function SmartReaderPage() {
                     disabled={!input.trim() || isLoading}
                     className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95 ${
                       input.trim() && !isLoading
-                        ? "bg-accent text-white shadow-sm hover:brightness-110"
+                        ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                         : "bg-surface-hover border border-border text-text-muted cursor-not-allowed opacity-50"
                     }`}
                   >

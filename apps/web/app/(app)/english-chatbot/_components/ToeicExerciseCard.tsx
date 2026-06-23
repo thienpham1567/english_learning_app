@@ -146,7 +146,7 @@ export function ToeicExerciseCard({
           {exercise.isListening && onPlayAudio && (
             <button
               onClick={() => onPlayAudio(exercise.passage ?? "")}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-bold cursor-pointer active:scale-95 transition-all hover:brightness-110"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-bold cursor-pointer active:scale-95 transition-all hover:bg-primary/90"
             >
               {isPlaying ? (
                 <Volume2 className="h-3.5 w-3.5 animate-pulse" />
@@ -266,7 +266,7 @@ export function ToeicExerciseCard({
             disabled={!allAnswered || isLoading}
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
               allAnswered && !isLoading
-                ? "bg-accent text-white shadow-sm hover:brightness-110"
+                ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                 : "bg-surface-hover border border-border text-text-muted cursor-not-allowed opacity-50"
             }`}
           >

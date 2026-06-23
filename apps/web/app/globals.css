@@ -241,7 +241,7 @@
   --card-foreground: var(--text-primary);
   --popover: var(--surface);
   --popover-foreground: var(--text-primary);
-  --primary: var(--accent);
+  --primary: #4F46E5;
   --primary-foreground: var(--text-on-accent);
   --secondary: var(--secondary);
   --secondary-foreground: var(--text-on-accent);
@@ -251,7 +251,7 @@
   --accent-foreground: var(--accent-active);
   --destructive: var(--error);
   --input: var(--border);
-  --ring: var(--accent);
+  --ring: #4F46E5;
 }
 
 /* ── Dark Theme Tokens ── */
@@ -361,7 +361,7 @@
   --card-foreground: var(--text-primary);
   --popover: var(--surface);
   --popover-foreground: var(--text-primary);
-  --primary: var(--accent);
+  --primary: #818CF8;
   --primary-foreground: var(--text-on-accent);
   --secondary: var(--secondary);
   --secondary-foreground: var(--text-on-accent);
@@ -371,7 +371,7 @@
   --accent-foreground: var(--accent-active);
   --destructive: var(--error);
   --input: var(--border);
-  --ring: var(--accent);
+  --ring: #818CF8;
 }
 
 

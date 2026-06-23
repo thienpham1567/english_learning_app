@@ -180,7 +180,7 @@ export default function SummarizeMode({ examMode }: Props) {
                   whileTap={{ scale: 0.97 }}
                   className={`py-1.5 px-3.5 rounded-lg font-bold text-[13px] cursor-pointer border transition-all duration-100 ${
                     selectedLevel === l
-                      ? "border-accent bg-accent text-ink shadow-sm -translate-y-0.5"
+                      ? "border-primary bg-primary text-primary-foreground shadow-sm -translate-y-0.5"
                       : "border-border bg-surface text-text-primary hover:bg-surface-hover"
                   }`}
                 >

@@ -138,7 +138,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                       onClick={() => history.setMode(m.value === "all" ? null : m.value)}
                       className={`flex-1 min-w-[60px] py-1.5 px-2 rounded-md text-[11px] font-bold cursor-pointer transition-all duration-100 ${
                         isActive
-                          ? "bg-accent text-ink border border-border shadow-sm -translate-y-0.5"
+                          ? "bg-primary text-primary-foreground border border-border shadow-sm -translate-y-0.5"
                           : "bg-transparent text-text-secondary hover:bg-surface-hover"
                       }`}
                     >

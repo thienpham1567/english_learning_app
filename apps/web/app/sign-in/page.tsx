@@ -227,7 +227,7 @@ function SignInContent() {
             x: 1,
           }}
           transition={{ type: "spring", stiffness: 400 }}
-          className="w-11 h-11 shrink-0 grid place-items-center rounded-lg border border-ink bg-accent text-ink shadow-[3px_3px_0px_var(--ink)] cursor-pointer"
+          className="w-11 h-11 shrink-0 grid place-items-center rounded-lg border border-ink bg-primary text-primary-foreground shadow-[3px_3px_0px_var(--ink)] cursor-pointer"
         >
           <LogoMark size={22} />
         </m.div>

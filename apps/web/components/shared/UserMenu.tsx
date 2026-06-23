@@ -47,7 +47,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
                 className="w-7 h-7 rounded-lg object-cover border border-border"
               />
             ) : (
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold bg-accent text-white border border-border">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold bg-primary text-primary-foreground border border-border">
                 {initials}
               </div>
             )}

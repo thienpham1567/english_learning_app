@@ -9,38 +9,43 @@ import { CEFR_LEVELS, EXERCISE_TYPES } from "@/lib/listening/types";
 
 const LEVEL_META: Record<
   CefrLevel,
-  { label: string; twBg: string; desc: string; darkText: boolean }
+  { label: string; twBg: string; twText: string; desc: string }
 > = {
   A1: {
     label: "Beginner",
-    twBg: "bg-[var(--success)]",
+    twBg: "bg-success",
+    twText: "text-success-foreground",
     desc: "Short sentences, basic words",
-    darkText: true,
   },
   A2: {
     label: "Elementary",
-    twBg: "bg-[var(--success)]",
+    twBg: "bg-success",
+    twText: "text-success-foreground",
     desc: "Simple conversations",
-    darkText: true,
   },
-  B1: { label: "Intermediate", twBg: "bg-accent", desc: "Familiar topics", darkText: true },
+  B1: {
+    label: "Intermediate",
+    twBg: "bg-primary",
+    twText: "text-primary-foreground",
+    desc: "Familiar topics",
+  },
   B2: {
     label: "Upper-Int",
-    twBg: "bg-[var(--secondary)]",
+    twBg: "bg-secondary",
+    twText: "text-secondary-foreground",
     desc: "Detailed discussions",
-    darkText: false,
   },
   C1: {
     label: "Advanced",
-    twBg: "bg-[var(--tertiary)]",
+    twBg: "bg-tertiary",
+    twText: "text-white",
     desc: "In-depth analysis",
-    darkText: false,
   },
   C2: {
     label: "Proficiency",
-    twBg: "bg-[var(--error)]",
+    twBg: "bg-error",
+    twText: "text-error-foreground",
     desc: "Complex language",
-    darkText: false,
   },
 };
 
@@ -105,7 +110,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 transition={{ delay: i * 0.04, type: "spring", stiffness: 400, damping: 25 }}
                 className={`relative cursor-pointer text-center rounded-lg border border-border py-3.5 px-2.5 transition-all duration-100 ${
                   isSelected
-                    ? `${meta.twBg} shadow-sm -translate-y-0.5 ${meta.darkText ? "text-ink" : "text-white"}`
+                    ? `${meta.twBg} ${meta.twText} shadow-sm -translate-y-0.5`
                     : "bg-surface text-text-secondary hover:bg-surface-hover"
                 }`}
               >
@@ -115,7 +120,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     initial={{ scale: 0.9 }}
                     animate={{ scale: [0.9, 1.05, 0.9] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute -top-2 -right-2 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border border-border shadow-sm z-10"
+                    className="absolute -top-2 -right-2 rounded-lg text-[9px] font-extrabold flex items-center gap-0.5 bg-primary text-primary-foreground py-0.5 px-1.5 border border-border shadow-sm z-10"
                   >
                     <Star size={9} className="fill-current" />
                     <span>Rec</span>
@@ -175,7 +180,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
               >
                 <span
                   className={`grid w-[42px] h-[42px] shrink-0 rounded-lg place-items-center transition-all duration-150 ${
-                    isSelected ? "bg-accent text-ink shadow-sm" : "bg-bg-deep text-text-muted"
+                    isSelected ? "bg-primary text-primary-foreground shadow-sm" : "bg-bg-deep text-text-muted"
                   }`}
                 >
                   {meta.icon}

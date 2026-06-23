@@ -402,7 +402,7 @@ export function ExamWordLists({ onSelect }: Props) {
             }}
             className={`flex-1 py-2.5 text-[13px] font-bold tracking-wider uppercase border-none cursor-pointer transition-all duration-200 ${
               activeTab === tab
-                ? "bg-accent text-ink font-bold"
+                ? "bg-primary text-primary-foreground font-bold"
                 : "bg-transparent text-text-muted hover:text-text-primary"
             }`}
           >
@@ -442,7 +442,7 @@ export function ExamWordLists({ onSelect }: Props) {
                   <span
                     className={`text-[11px] font-extrabold px-2 py-0.5 rounded-lg ${
                       isExpanded
-                        ? "bg-accent text-ink border border-border"
+                        ? "bg-primary text-primary-foreground border border-border"
                         : "bg-bg-deep text-text-muted border border-border/20"
                     }`}
                   >

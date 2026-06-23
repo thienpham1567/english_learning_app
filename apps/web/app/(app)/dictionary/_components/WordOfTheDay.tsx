@@ -254,7 +254,7 @@ export function WordOfTheDay({ onSelect }: Props) {
           <Calendar className="h-3 w-3 text-accent-hover" />
           Word of the Day
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-accent text-ink border border-border">
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-primary text-primary-foreground border border-border">
           {daily.pos}
         </span>
       </div>
