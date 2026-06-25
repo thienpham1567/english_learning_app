@@ -133,7 +133,7 @@
   --ink: #0F172A;
   --text-primary: #0F172A;
   --text-secondary: #334155;
-  --text-muted: #57687C;
+  --text-muted: #475569;
   --text: var(--text-primary);
 
   /* ── Borders — thin, subtle slate divider ── */
@@ -178,7 +178,7 @@
 
   --accent-rgb: 79, 70, 229;
   --success: #15803D;
-  --error: #DC2626;
+  --error: #B91C1C;
   --warning: #B45309;
   --info: #0369A1;
   --info-rgb: 3, 105, 161;
@@ -194,7 +194,7 @@
   --xp: #B45309;
   --fire: #C2410C;
   --success-bg: rgba(21, 128, 61, 0.08);
-  --error-bg: rgba(220, 38, 38, 0.08);
+  --error-bg: rgba(185, 28, 28, 0.08);
   --warning-bg: rgba(180, 83, 9, 0.08);
   --info-bg: rgba(3, 105, 161, 0.08);
 
@@ -307,7 +307,7 @@
   /* Semantic colors ── */
   --accent-rgb: 129, 140, 248;
   --success: #34D399;
-  --error: #F87171;
+  --error: #F88383;
   --warning: #FBBF24;
   --info: #38BDF8;
   --info-rgb: 56, 189, 248;
@@ -322,7 +322,7 @@
   --xp: #818CF8;
   --fire: #FB923C;
   --success-bg: rgba(52, 211, 153, 0.1);
-  --error-bg: rgba(248, 113, 113, 0.1);
+  --error-bg: rgba(248, 131, 131, 0.1);
   --warning-bg: rgba(251, 191, 36, 0.1);
   --info-bg: rgba(56, 189, 248, 0.1);
 

@@ -207,7 +207,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
         <m.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-surface border border-border flex flex-col gap-4 p-6 shadow-md"
+          className="bg-surface border border-border flex flex-col gap-4 p-6 rounded-2xl shadow-sm"
         >
           <h3 className="m-0 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted flex items-center gap-1.5">
             <span className="text-accent">◆</span> Tạo hội thoại mới
@@ -223,7 +223,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="vd: gọi cà phê, phỏng vấn xin việc…"
-              className="w-full border border-border bg-surface-alt text-text-primary text-sm font-body px-3.5 py-2.5 outline-none focus:border-accent transition-colors"
+              className="w-full border border-border bg-surface-alt text-text-primary text-sm font-body px-3.5 py-2.5 rounded-xl outline-none focus:border-accent transition-colors"
             />
           </div>
 
@@ -285,7 +285,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             whileTap={dlg.generating ? {} : { scale: 0.98 }}
             onClick={handleGenerate}
             disabled={dlg.generating}
-            className={`flex items-center justify-center gap-2.5 border border-border text-[15px] font-bold font-display uppercase tracking-tight py-3.5 px-5 transition-all ${
+            className={`flex items-center justify-center gap-2.5 rounded-xl border border-border text-[15px] font-bold font-display uppercase tracking-tight py-3.5 px-5 transition-all ${
               dlg.generating
                 ? "bg-bg-deep text-text-muted cursor-wait"
                 : "bg-accent text-text-on-accent cursor-pointer shadow-md hover:shadow-lg active:shadow-sm"
@@ -309,7 +309,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-surface border border-border p-5 shadow-md"
+            className="bg-surface border border-border p-5 rounded-2xl shadow-sm"
           >
             <span className="text-[11px] font-semibold text-text-muted flex items-center gap-1.5 mb-3 uppercase tracking-[0.18em]">
               <Bookmark size={13} className="text-accent" /> Hội thoại đã lưu (
@@ -324,7 +324,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   transition={{ delay: idx * 0.03 }}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => dlg.loadDialogue(saved)}
-                  className="flex items-center gap-3 border border-border bg-surface-alt cursor-pointer p-3 shadow-sm transition-all duration-150 hover:shadow"
+                  className="flex items-center gap-3 border border-border bg-surface-alt cursor-pointer p-3 rounded-xl shadow-sm transition-all duration-150 hover:shadow"
                 >
                   {/* Speaker flags */}
                   <div className="flex shrink-0 gap-0.5">
@@ -415,7 +415,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="bg-surface border border-border py-4 px-5 shadow-md">
+      <div className="bg-surface border border-border py-4 px-5 rounded-2xl shadow-sm">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <span className="text-base font-bold font-display text-text-primary flex items-center gap-1.5">
@@ -466,14 +466,14 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             return (
               <div
                 key={a.speaker}
-                className={`flex items-center gap-2 py-1.5 pr-3 pl-1 border border-border ${colors.tw}`}
+                className={`flex items-center gap-2 py-1.5 pr-3 pl-1 rounded-xl border border-border ${colors.tw}`}
               >
                 <img
                   src={a.avatar}
                   alt={a.voiceName}
                   width={24}
                   height={24}
-                  className="object-cover border border-border"
+                  className="object-cover border border-border rounded-full"
                 />
                 <span className="text-xs font-bold" style={{ color: colors.text }}>
                   {a.voiceName}
@@ -486,7 +486,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
       </div>
 
       {/* Chat bubbles */}
-      <div className="flex flex-col gap-3.5 bg-surface-alt border border-border p-5 shadow-md">
+      <div className="flex flex-col gap-3.5 bg-surface-alt border border-border p-5 rounded-2xl shadow-sm">
         {dlg.dialogue.lines.map((line, i) => {
           const isLeft = line.speaker === "A";
           const colors = SPEAKER_COLORS[line.speaker] ?? SPEAKER_COLORS.A;
@@ -504,7 +504,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               className={`flex gap-3 items-start ${isLeft ? "flex-row" : "flex-row-reverse"}`}
             >
               {/* Avatar */}
-              <div className="dialogue-avatar w-[42px] h-[42px] overflow-hidden shrink-0 border border-border shadow-sm">
+              <div className="dialogue-avatar w-[42px] h-[42px] overflow-hidden shrink-0 border border-border rounded-full shadow-sm">
                 <img
                   src={assignment?.avatar ?? "/avatars/austin.png"}
                   alt={assignment?.voiceName ?? "Speaker"}
@@ -519,7 +519,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                 className="dialogue-bubble-content relative max-w-[78%] py-3.5 px-4.5 transition-all duration-200"
                 onClick={() => !dlg.isPlaying && dlg.playSingleLine(i, speed)}
                 style={{
-                  borderRadius: 0,
+                  borderRadius: "var(--radius-xl)",
                   background: isActive
                     ? `color-mix(in srgb, ${colors.accent} 12%, var(--surface))`
                     : "var(--surface)",
@@ -571,7 +571,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center border border-border p-5 shadow-md bg-accent-light"
+          className="text-center border border-border p-5 rounded-2xl shadow-sm bg-accent-light"
         >
           <div className="flex justify-center mb-2.5">
             <m.div
@@ -595,7 +595,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
               whileTap={dlg.isLoading ? {} : { scale: 0.98 }}
               onClick={isListeningPreview ? dlg.stop : listenPreview}
               disabled={dlg.isLoading}
-              className={`w-[210px] justify-center flex items-center gap-2 text-[14px] font-bold font-display uppercase tracking-tight py-3.5 px-6 border border-border transition-all shadow hover:shadow-md active:shadow-none ${
+              className={`w-[210px] justify-center flex items-center gap-2 text-[14px] font-bold font-display uppercase tracking-tight py-3.5 px-6 rounded-xl border border-border transition-all shadow hover:shadow-md active:shadow-none ${
                 isListeningPreview ? "bg-error text-white" : "bg-accent text-text-on-accent"
               }`}
             >
@@ -653,7 +653,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-surface border border-border py-4 px-5 shadow-md"
+          className="bg-surface border border-border py-4 px-5 rounded-2xl shadow-sm"
         >
           {/* Replay button */}
           <div className="mb-3 flex items-center justify-between gap-2 flex-wrap">
@@ -678,7 +678,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => startRolePlay(a.speaker)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-bold cursor-pointer font-body border border-border shadow-sm hover:shadow active:shadow-none transition-shadow"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-bold cursor-pointer font-body rounded-xl border border-border shadow-sm hover:shadow active:shadow-none transition-shadow"
                   style={{
                     background: SPEAKER_COLORS[a.speaker]?.bg ?? "var(--surface-alt)",
                     color: SPEAKER_COLORS[a.speaker]?.text ?? "var(--text-primary)",
@@ -699,7 +699,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="bg-surface border border-accent py-4 px-5 flex flex-col gap-3 shadow-md"
+            className="bg-surface border border-accent py-4 px-5 rounded-2xl flex flex-col gap-3 shadow-sm"
           >
             <div className="flex justify-between items-center gap-2 flex-wrap">
               <span className="text-[12px] font-semibold uppercase tracking-wide text-accent-active flex items-center gap-1.5">
@@ -724,7 +724,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => playRolePlayLine(0)}
-                className="w-full p-3 border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight cursor-pointer font-display shadow hover:shadow-md active:shadow-none transition-shadow"
+                className="w-full p-3 rounded-xl border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight cursor-pointer font-display shadow hover:shadow-md active:shadow-none transition-shadow"
               >
                 Bắt đầu
               </m.button>
@@ -762,7 +762,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={stopAndEvaluateRolePlay}
-                  className="flex items-center gap-2 text-error text-sm font-bold uppercase font-mono cursor-pointer py-2.5 px-6 border border-border bg-error/10 shadow hover:shadow-md active:shadow-none transition-shadow"
+                  className="flex items-center gap-2 text-error text-sm font-bold uppercase font-mono cursor-pointer py-2.5 px-6 rounded-xl border border-border bg-error/10 shadow hover:shadow-md active:shadow-none transition-shadow"
                 >
                   <StopCircle size={16} /> Dừng &amp; chấm
                 </m.button>
@@ -786,7 +786,7 @@ export function DialoguePlayer({ speed, speakerCount, onSpeakerCountChange }: Di
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={continueAfterRolePlay}
-                  className="w-full p-3 border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight cursor-pointer font-display shadow hover:shadow-md active:shadow-none transition-shadow"
+                  className="w-full p-3 rounded-xl border border-border bg-accent text-text-on-accent text-sm font-bold uppercase tracking-tight cursor-pointer font-display shadow hover:shadow-md active:shadow-none transition-shadow"
                 >
                   {rolePlayLineIndex < dlg.dialogue!.lines.length - 1 ? "Tiếp tục" : "Hoàn thành"}
                 </m.button>

@@ -117,7 +117,7 @@ export function VerbFormsSection({ verbForms }: Props) {
             return (
               <div
                 key={vf.label}
-                className={`flex flex-col gap-1.5 rounded-lg p-3.5 px-4 transition-shadow duration-200 min-h-[110px] ${cardClass}`}
+                className={`flex flex-col gap-1.5 rounded-xl p-3.5 px-4 transition-shadow duration-200 min-h-[110px] ${cardClass}`}
               >
                 {/* Label */}
                 <span

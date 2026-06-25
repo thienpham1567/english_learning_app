@@ -99,7 +99,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="w-7 h-7 object-cover border border-border shadow-sm"
+        className="w-7 h-7 object-cover border border-border rounded-full shadow-sm"
         referrerPolicy="no-referrer"
       />
     );
@@ -113,7 +113,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid place-items-center w-7 h-7 bg-ink border border-border text-[9px] font-bold text-bg shadow-sm">
+    <div className="grid place-items-center w-7 h-7 bg-ink border border-border rounded-full text-[9px] font-bold text-bg shadow-sm">
       {initials}
     </div>
   );
@@ -145,7 +145,7 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   };
 
   return (
-    <div className="relative my-3 border border-border bg-chat-code-bg overflow-hidden shadow">
+    <div className="relative my-3 border border-border bg-chat-code-bg rounded-xl overflow-hidden shadow">
       <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border bg-chat-code-header text-[10px] text-text-muted font-semibold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
@@ -333,7 +333,7 @@ export function ChatMessage({
               </span>
               <UserAvatar />
             </div>
-            <div className="max-w-[85%] border border-accent/20 bg-accent-light px-4 py-2.5 shadow-[3px_3px_0_var(--accent-muted)]">
+            <div className="max-w-[85%] border border-accent/20 bg-accent-light px-4 py-2.5 rounded-2xl shadow-[3px_3px_0_var(--accent-muted)]">
               <div className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
                 {text}
               </div>
@@ -362,11 +362,11 @@ export function ChatMessage({
           {/* Avatar rail */}
           <div className="flex shrink-0 flex-col items-center">
             {persona ? (
-              <div className="grid h-7 w-7 place-items-center overflow-hidden border border-border bg-bg-deep shadow-sm">
+              <div className="grid h-7 w-7 place-items-center overflow-hidden border border-border rounded-full bg-bg-deep shadow-sm">
                 <persona.avatar size={26} />
               </div>
             ) : (
-              <div className="h-7 w-7 border border-border bg-chat-surface" />
+              <div className="h-7 w-7 border border-border rounded-full bg-chat-surface" />
             )}
             <div className="mt-1.5 w-0.5 flex-1 bg-border/30" />
           </div>

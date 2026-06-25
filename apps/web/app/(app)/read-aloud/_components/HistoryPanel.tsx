@@ -90,7 +90,7 @@ export function HistoryPanel({
                       transition={{ delay: idx * 0.03 }}
                       whileHover={{ scale: 1.02 }}
                       onClick={() => onReplay(entry)}
-                      className="flex items-center gap-3 border border-border bg-surface-alt cursor-pointer py-3 px-3.5 shadow-sm transition-all duration-150 hover:bg-accent-light hover:shadow"
+                      className="flex items-center gap-3 border border-border bg-surface-alt cursor-pointer py-3 px-3.5 rounded-xl shadow-sm transition-all duration-150 hover:bg-accent-light hover:shadow"
                     >
                       {/* Voice flag */}
                       <div className="w-9 h-9 bg-surface border border-border rounded-lg grid place-items-center text-lg shrink-0">

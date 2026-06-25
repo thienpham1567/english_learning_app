@@ -120,10 +120,10 @@ export function DictionaryResultCard({
           Đang tra cứu…
         </div>
         <div className="mt-5 flex flex-col gap-4">
-          <div className="h-9 w-3/5 border border-border bg-bg-deep animate-pulse" />
+          <div className="h-9 w-3/5 rounded-lg border border-border bg-bg-deep animate-pulse" />
           <div className="flex gap-2">
-            <div className="h-6 w-20 border border-border bg-bg-deep animate-pulse" />
-            <div className="h-6 w-14 border border-border bg-bg-deep animate-pulse" />
+            <div className="h-6 w-20 rounded-md border border-border bg-bg-deep animate-pulse" />
+            <div className="h-6 w-14 rounded-md border border-border bg-bg-deep animate-pulse" />
           </div>
           {[1, 2, 3].map((i) => (
             <div
@@ -142,7 +142,7 @@ export function DictionaryResultCard({
     return (
       <div className="dictionary-result-card bg-surface min-h-[400px]">
         <div className="flex min-h-[360px] flex-col items-center justify-center gap-4">
-          <div className="grid h-16 w-16 place-items-center border border-border bg-bg-deep text-text-muted shadow-md">
+          <div className="grid h-16 w-16 place-items-center rounded-2xl border border-border bg-bg-deep text-text-muted shadow-md">
             <BookOpen className="h-7 w-7" />
           </div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted">
@@ -187,7 +187,7 @@ export function DictionaryResultCard({
                 {posDisplay}
               </span>
               {numberLabel && (
-                <span className="border border-border bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-text-muted whitespace-nowrap">
+                <span className="border border-border bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-text-muted rounded-lg whitespace-nowrap">
                   {numberLabel}
                 </span>
               )}
@@ -198,7 +198,7 @@ export function DictionaryResultCard({
                     "text-text-secondary border-border bg-bg-deep";
                   return (
                     <span
-                      className={`border px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide ${badgeClass}`}
+                      className={`border px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wide rounded-lg ${badgeClass}`}
                     >
                       {vocabulary.level}
                     </span>
@@ -214,7 +214,7 @@ export function DictionaryResultCard({
                   return (
                     <span className="relative group border border-border bg-accent-light px-2.5 py-0.5 text-[11px] font-semibold text-text-primary rounded-lg cursor-help">
                       {display}
-                      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 border border-border bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow">
+                      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-ink text-white text-[10px] font-medium whitespace-nowrap z-50 shadow">
                         {tooltip}
                       </span>
                     </span>
@@ -227,7 +227,7 @@ export function DictionaryResultCard({
         {saved != null && onToggleSaved && (
           <button
             onClick={onToggleSaved}
-            className={`grid w-9 h-9 shrink-0 place-items-center border border-border cursor-pointer shadow-sm transition-all duration-150 hover:-translate-x-px hover:-translate-y-px hover:shadow active:translate-x-0 active:translate-y-0 active:shadow-none ${
+            className={`grid w-9 h-9 shrink-0 place-items-center rounded-xl border border-border cursor-pointer shadow-sm transition-all duration-150 hover:-translate-x-px hover:-translate-y-px hover:shadow active:translate-x-0 active:translate-y-0 active:shadow-none ${
               saved ? "bg-accent text-text-on-accent" : "bg-surface text-text-muted hover:text-ink"
             }`}
             aria-label={saved ? "Remove word from saved" : "Save this word"}
@@ -241,7 +241,7 @@ export function DictionaryResultCard({
       {hasDualPhonetics ? (
         <div className="anim-fade-in mt-4 flex flex-wrap items-center gap-2.5">
           {vocabulary.phoneticsUs && (
-            <div className="flex items-stretch border border-border bg-bg-deep pr-1.5 shadow-sm">
+            <div className="flex items-stretch rounded-xl overflow-hidden border border-border bg-bg-deep pr-1.5 shadow-sm">
               <span className="grid place-items-center bg-ink px-2 text-[10px] font-bold text-bg">
                 US
               </span>
@@ -252,7 +252,7 @@ export function DictionaryResultCard({
             </div>
           )}
           {vocabulary.phoneticsUk && (
-            <div className="flex items-stretch border border-border bg-bg-deep pr-1.5 shadow-sm">
+            <div className="flex items-stretch rounded-xl overflow-hidden border border-border bg-bg-deep pr-1.5 shadow-sm">
               <span className="grid place-items-center bg-ink px-2 text-[10px] font-bold text-bg">
                 UK
               </span>
@@ -264,7 +264,7 @@ export function DictionaryResultCard({
           )}
         </div>
       ) : vocabulary.phonetic ? (
-        <span className="anim-fade-in mt-4 inline-block border border-border bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-accent-active">
+        <span className="anim-fade-in mt-4 inline-block rounded-lg border border-border bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-accent-active">
           {vocabulary.phonetic}
         </span>
       ) : null}
