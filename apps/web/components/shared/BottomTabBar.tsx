@@ -6,14 +6,11 @@ import {
   BookOpenText,
   Brain,
   CircleCheckBig,
-  ClipboardList,
   FileWarning,
   GraduationCap,
-  Headphones,
   Languages,
   LayoutGrid,
   MessageSquare,
-  Mic,
   Pencil,
   RefreshCw,
   Target,
@@ -48,7 +45,7 @@ const TABS: TabItem[] = [
     key: "toeic",
     label: "TOEIC",
     icon: <Target size={21} />,
-    action: "toeic-hub",
+    href: "/toeic/grammar",
   },
   {
     key: "learn",
@@ -71,38 +68,7 @@ const TABS: TabItem[] = [
 ];
 
 /* ─── Hub Items Config ─── */
-const TOEIC_HUB_ITEMS: HubItem[] = [
-  {
-    label: "ETS Practice",
-    icon: <ClipboardList size={22} />,
-    href: "/toeic/practice",
-    accent: "var(--accent)",
-  },
-  {
-    label: "Listening",
-    icon: <Headphones size={22} />,
-    href: "/toeic/listening",
-    accent: "var(--module-listening)",
-  },
-  {
-    label: "Writing",
-    icon: <Pencil size={22} />,
-    href: "/toeic/writing",
-    accent: "var(--module-writing)",
-  },
-  {
-    label: "Speaking",
-    icon: <Mic size={22} />,
-    href: "/toeic/speaking",
-    accent: "var(--module-speaking)",
-  },
-  {
-    label: "Dictation",
-    icon: <Volume2 size={22} />,
-    href: "/toeic/dictation",
-    accent: "var(--info)",
-  },
-];
+
 
 const LEARN_HUB_ITEMS: HubItem[] = [
   {
@@ -159,7 +125,6 @@ const MORE_HUB_ITEMS: HubItem[] = [
 ];
 
 const HUB_MAP: Record<string, { title: string; items: HubItem[] }> = {
-  toeic: { title: "TOEIC Practice", items: TOEIC_HUB_ITEMS },
   learn: { title: "Learn & Review", items: LEARN_HUB_ITEMS },
   more: { title: "More Features", items: MORE_HUB_ITEMS },
 };

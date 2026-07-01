@@ -5,15 +5,12 @@ import {
   BookOpenCheck,
   BookOpenText,
   CircleCheckBig,
-  ClipboardList,
   FileText,
   FileWarning,
   Flame,
   GraduationCap,
-  Headphones,
   LayoutDashboard,
   MessageSquare,
-  Mic,
   Pencil,
 
   Star,
@@ -36,12 +33,6 @@ type BreadcrumbEntry = {
 const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
 
   "/toeic": { eyebrow: "TOEIC", title: "TOEIC Skills", icon: <Target /> },
-  "/toeic/practice": { eyebrow: "ETS Practice", title: "TOEIC Practice", icon: <ClipboardList /> },
-  "/toeic/writing": { eyebrow: "TOEIC Writing", title: "Writing Practice", icon: <Pencil /> },
-  "/toeic/writing/runner": { eyebrow: "TOEIC Writing", title: "Writing Task", icon: <Pencil /> },
-  "/toeic/speaking": { eyebrow: "TOEIC Speaking", title: "Speaking Practice", icon: <Mic /> },
-  "/toeic/speaking/runner": { eyebrow: "TOEIC Speaking", title: "Speaking Task", icon: <Mic /> },
-  "/toeic/dictation": { eyebrow: "TOEIC", title: "Dictation", icon: <Headphones /> },
   "/grammar-lessons": { eyebrow: "Grammar", title: "Grammar", icon: <GraduationCap /> },
 
 
@@ -52,14 +43,13 @@ const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
   "/writing-tools": { eyebrow: "Tools", title: "Writing Tools", icon: <Pencil /> },
   "/english-chatbot": { eyebrow: "Tools", title: "AI Chatbot", icon: <MessageSquare /> },
   "/smart-reader": { eyebrow: "Tools", title: "Smart Reader", icon: <BookOpenCheck /> },
-  "/listening": { eyebrow: "TOEIC Listening", title: "Listening Practice", icon: <Mic /> },
 
 };
 
 /**
  * Match pathname to breadcrumb, supporting dynamic routes like
- * /toeic/writing/123/result → tries "/toeic/writing/123/result",
- * then "/toeic/writing" etc.
+ * /grammar-lessons/123 → tries "/grammar-lessons/123",
+ * then "/grammar-lessons" etc.
  */
 function findBreadcrumb(pathname: string): BreadcrumbEntry | null {
   // Exact match first

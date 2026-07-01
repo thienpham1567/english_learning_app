@@ -159,7 +159,7 @@ const phase1Weeks: Week[] = [
             exercises: [
               {
                 targetModule: "toeic-practice",
-                routePath: "/toeic/listening",
+                routePath: "/toeic/grammar",
                 label: "Part 1 Practice",
                 type: "practice",
               },
@@ -186,7 +186,7 @@ const phase1Weeks: Week[] = [
               },
               {
                 targetModule: "toeic-practice",
-                routePath: "/toeic/listening",
+                routePath: "/toeic/grammar",
                 label: "Listening Drill",
                 type: "drill",
               },
@@ -304,7 +304,7 @@ const phase1Weeks: Week[] = [
             exercises: [
               {
                 targetModule: "toeic-practice",
-                routePath: "/toeic/listening",
+                routePath: "/toeic/grammar",
                 label: "Part 2 Practice",
                 type: "practice",
               },
@@ -449,7 +449,7 @@ const phase1Weeks: Week[] = [
             exercises: [
               {
                 targetModule: "toeic-practice",
-                routePath: "/toeic/listening",
+                routePath: "/toeic/grammar",
                 label: "Part 1-2 Review",
                 type: "practice",
               },
@@ -582,7 +582,7 @@ const phase1Weeks: Week[] = [
             exercises: [
               {
                 targetModule: "toeic-dictation",
-                routePath: "/toeic/dictation",
+                routePath: "/toeic/grammar",
                 label: "Dictation",
                 type: "practice",
               },
@@ -708,7 +708,7 @@ const phase1Weeks: Week[] = [
               exercises: [
                 {
                   targetModule: "toeic-practice",
-                  routePath: "/toeic/listening",
+                  routePath: "/toeic/grammar",
                   label: "Listening Drill",
                   type: "practice" as ExerciseType,
                 },

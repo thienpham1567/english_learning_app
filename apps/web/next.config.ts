@@ -19,16 +19,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/toeic-practice",
-        destination: "/toeic/practice",
-        permanent: true,
-      },
-      {
-        source: "/toeic-practice/:path*",
-        destination: "/toeic/practice/:path*",
-        permanent: true,
-      },
-      {
         source: "/toeic-skills",
         destination: "/toeic",
         permanent: true,
@@ -41,26 +31,6 @@ const nextConfig: NextConfig = {
       {
         source: "/grammar-quiz",
         destination: "/toeic/grammar",
-        permanent: true,
-      },
-      {
-        source: "/writing-practice/score",
-        destination: "/toeic/writing/score",
-        permanent: true,
-      },
-      {
-        source: "/writing-practice",
-        destination: "/toeic/writing",
-        permanent: true,
-      },
-      {
-        source: "/listening",
-        destination: "/toeic/listening",
-        permanent: true,
-      },
-      {
-        source: "/speaking-practice",
-        destination: "/toeic/speaking",
         permanent: true,
       },
     ];

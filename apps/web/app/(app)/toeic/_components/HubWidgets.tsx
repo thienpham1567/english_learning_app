@@ -92,7 +92,7 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
         id: `practice-${weakest.skillId}`,
         title: `Practice ${getSkillLabel(weakest.skillId as ToeicSkill)}`,
         reason: `Skill mastery: ${Math.round(weakest.proficiency * 100)}/100`,
-        href: "/toeic/practice",
+        href: "/toeic/grammar",
         estimatedMinutes: 15,
         priority: "high",
       });
@@ -104,7 +104,7 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
       id: "extra-practice",
       title: "Practice more TOEIC questions",
       reason: "Keep building your skills",
-      href: "/toeic/practice",
+      href: "/toeic/grammar",
       estimatedMinutes: 30,
       priority: "medium",
     });
@@ -258,7 +258,7 @@ export async function HubWidgets() {
           </div>
           {predicted && (
             <Link
-              href="/toeic/practice"
+              href="/toeic/grammar"
               className="text-accent text-xs font-extrabold no-underline hover:underline"
             >
               View detailed chart →
@@ -277,7 +277,7 @@ export async function HubWidgets() {
             </div>
           </div>
           <Link
-            href="/toeic/practice"
+            href="/toeic/grammar"
             className="text-accent text-xs font-extrabold no-underline hover:underline"
           >
             Start practice →
@@ -300,7 +300,7 @@ export async function HubWidgets() {
             </div>
           </div>
           <Link
-            href="/toeic/practice"
+            href="/toeic/grammar"
             className="text-accent text-xs font-extrabold no-underline hover:underline"
           >
             Practice new exam →

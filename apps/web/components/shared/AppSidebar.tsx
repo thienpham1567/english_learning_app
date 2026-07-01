@@ -8,13 +8,10 @@ import {
   Brain,
   ChevronDown,
   CircleCheckBig,
-  ClipboardList,
   FileWarning,
   GraduationCap,
-  Headphones,
   Languages,
   MessageSquare,
-  Mic,
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
@@ -53,17 +50,7 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
-  {
-    key: "toeic",
-    label: "TOEIC",
-    items: [
-      { href: "/toeic/practice", label: "ETS Practice", icon: ClipboardList },
-      { href: "/toeic/listening", label: "Listening", icon: Headphones },
-      { href: "/toeic/writing", label: "Writing", icon: Pencil },
-      { href: "/toeic/speaking", label: "Speaking", icon: Mic },
-      { href: "/toeic/dictation", label: "Dictation", icon: Volume2 },
-    ],
-  },
+
   {
     key: "foundation",
     label: "Foundation",

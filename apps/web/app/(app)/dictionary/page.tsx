@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
  * Redirect to TOEIC practice.
  */
 export default function RedirectPage() {
-  redirect("/toeic/practice");
+  redirect("/toeic/grammar");
 }

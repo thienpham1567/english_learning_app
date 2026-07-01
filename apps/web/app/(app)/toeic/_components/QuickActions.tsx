@@ -24,14 +24,9 @@ const ACTIONS: Array<{
   icon: ComponentType<{ size?: number; className?: string }>;
   available: boolean;
 }> = [
-  { href: "/toeic/practice", label: "Practice Tests", icon: BookOpenText, available: true },
   { href: "/error-notebook", label: "Review Errors", icon: Repeat, available: true },
-  { href: "/toeic/listening", label: "Listening Hub", icon: Headphones, available: true },
-  { href: "/toeic/dictation", label: "Dictation", icon: PenTool, available: true },
   { href: "/toeic/grammar", label: "Grammar Drills", icon: BookOpen, available: true },
   { href: "/toeic/vocab", label: "Vocabulary", icon: Type, available: true },
-  { href: "/toeic/speaking", label: "Speaking 1-1", icon: MessageSquare, available: true },
-  { href: "/toeic/writing", label: "Writing 1-1", icon: Pencil, available: true },
 ];
 
 export function QuickActions() {

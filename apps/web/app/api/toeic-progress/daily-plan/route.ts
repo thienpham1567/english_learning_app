@@ -108,7 +108,7 @@ export async function GET(req: Request) {
         id: `practice-${weakest.skillId}`,
         title: `Luyện 10 câu ${getSkillLabel(weakest.skillId as ToeicSkill)}`,
         reason: `Mastery ${Math.round(weakest.proficiency * 100)}/100`,
-        href: `/toeic/practice`,
+        href: `/toeic/grammar`,
         estimatedMinutes: 15,
         priority: "high",
         skillId: weakest.skillId,
